@@ -15,6 +15,7 @@ import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
@@ -143,7 +144,7 @@ public class MainFrame extends JFrame {
 	private JButton btnStartFragmentList;
 	private double lastTime = 0.0;
 	private JButton btnRunAllFragment;
-	private JButton btnSaveExperimentResult;
+	private JButton btnAnalysisExperimentResult;
 
 	/**
 	 * 更换UI风格
@@ -1026,7 +1027,6 @@ public class MainFrame extends JFrame {
 						}
 						// 取消禁用UI
 						enabledUI();
-						btnSaveExperimentResult.setEnabled(true);
 					}
 				});
 
@@ -1036,9 +1036,8 @@ public class MainFrame extends JFrame {
 			}
 		});
 		HBox10.add(btnStartForExperiment);
-		btnSaveExperimentResult = new JButton("结果分析");
-		btnSaveExperimentResult.setEnabled(false);
-		btnSaveExperimentResult.addActionListener(new ActionListener() {
+		btnAnalysisExperimentResult = new JButton("结果分析");
+		btnAnalysisExperimentResult.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -1050,19 +1049,25 @@ public class MainFrame extends JFrame {
 					MatlabScriptHelper.GenerateBoxPlotMatlabScript("result/runTimes.csv");
 					MatlabScriptHelper.GenerateConvergenceMatlabScript("result/Experiment/", problemNames,
 							algorithmNames, Arrays.asList("EP", "IGD+", "HV"));
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				String message = "生成如下分析结果：\r\n";
-				message += "每次实验的指标值：data/experiment.csv \r\n";
-				message += "Pareto解集可视化：result/Experiment/Matlab/plot5D.m \r\n";
-				message += "算法运行时间对比：result/Experiment/Matlab/runTimeCompare.m \r\n";
-				tool.show("分析结果生成完成", message);
 
-				createParameterInputUI();
+					String message = "生成如下分析结果：\r\n";
+					message += "每次实验的指标值：data/experiment.csv \r\n";
+					message += "Pareto解集可视化：result/Experiment/Matlab/plot5D.m \r\n";
+					message += "算法运行时间对比：result/Experiment/Matlab/runTimeCompare.m \r\n";
+					tool.show("分析结果生成完成", message);
+
+					// 显示结果分析界面
+					createParameterInputUI();
+				} catch (Exception ex) {
+					if (ex instanceof FileNotFoundException) {
+						tool.show("错误", "实验数据文件不存在，请重新运行实验后再分析");
+					} else {
+						ex.printStackTrace();
+					}
+				}
 			}
 		});
-		HBox10.add(btnSaveExperimentResult);
+		HBox10.add(btnAnalysisExperimentResult);
 		box.add(HBox10);
 
 		return box;

@@ -2,156 +2,69 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2019-09-23T12:19:51</date>
-  <millis>1569212391068</millis>
+  <date>2019-09-23T13:45:30</date>
+  <millis>1569217530601</millis>
   <sequence>0</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
   <class>org.uma.jmetal.util.JMetalLogger</class>
   <method>configureLoggers</method>
-  <thread>21</thread>
+  <thread>22</thread>
   <message>Loggers configured with null</message>
 </record>
 <record>
-  <date>2019-09-23T12:19:51</date>
-  <millis>1569212391092</millis>
+  <date>2019-09-23T13:45:30</date>
+  <millis>1569217530616</millis>
   <sequence>1</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
   <class>org.uma.jmetal.algorithm.multiobjective.nsgaiii.NSGAIII</class>
   <method>&lt;init&gt;</method>
-  <thread>21</thread>
+  <thread>22</thread>
   <message>参考平面点数: 70</message>
 </record>
 <record>
-  <date>2019-09-23T12:19:51</date>
-  <millis>1569212391139</millis>
+  <date>2019-09-23T13:45:30</date>
+  <millis>1569217530647</millis>
   <sequence>2</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
   <class>org.uma.jmetal.algorithm.multiobjective.nsgaiii.NSGAIII</class>
   <method>&lt;init&gt;</method>
-  <thread>21</thread>
+  <thread>22</thread>
   <message>参考平面点数: 70</message>
 </record>
 <record>
-  <date>2019-09-23T12:19:51</date>
-  <millis>1569212391140</millis>
+  <date>2019-09-23T13:45:30</date>
+  <millis>1569217530661</millis>
   <sequence>3</sequence>
-  <logger>org.uma.jmetal.util.JMetalLogger</logger>
-  <level>INFO</level>
-  <class>org.uma.jmetal.algorithm.multiobjective.nsgaiii.NSGAIII</class>
-  <method>&lt;init&gt;</method>
-  <thread>21</thread>
-  <message>参考平面点数: 70</message>
-</record>
-<record>
-  <date>2019-09-23T12:19:51</date>
-  <millis>1569212391142</millis>
-  <sequence>4</sequence>
-  <logger>org.uma.jmetal.util.JMetalLogger</logger>
-  <level>INFO</level>
-  <class>org.uma.jmetal.algorithm.multiobjective.nsgaiii.NSGAIII</class>
-  <method>&lt;init&gt;</method>
-  <thread>21</thread>
-  <message>参考平面点数: 70</message>
-</record>
-<record>
-  <date>2019-09-23T12:19:51</date>
-  <millis>1569212391143</millis>
-  <sequence>5</sequence>
-  <logger>org.uma.jmetal.util.JMetalLogger</logger>
-  <level>INFO</level>
-  <class>org.uma.jmetal.algorithm.multiobjective.nsgaiii.NSGAIII</class>
-  <method>&lt;init&gt;</method>
-  <thread>21</thread>
-  <message>参考平面点数: 70</message>
-</record>
-<record>
-  <date>2019-09-23T12:19:51</date>
-  <millis>1569212391144</millis>
-  <sequence>6</sequence>
-  <logger>org.uma.jmetal.util.JMetalLogger</logger>
-  <level>INFO</level>
-  <class>org.uma.jmetal.algorithm.multiobjective.nsgaiii.NSGAIII</class>
-  <method>&lt;init&gt;</method>
-  <thread>21</thread>
-  <message>参考平面点数: 70</message>
-</record>
-<record>
-  <date>2019-09-23T12:19:51</date>
-  <millis>1569212391145</millis>
-  <sequence>7</sequence>
-  <logger>org.uma.jmetal.util.JMetalLogger</logger>
-  <level>INFO</level>
-  <class>org.uma.jmetal.algorithm.multiobjective.nsgaiii.NSGAIII</class>
-  <method>&lt;init&gt;</method>
-  <thread>21</thread>
-  <message>参考平面点数: 70</message>
-</record>
-<record>
-  <date>2019-09-23T12:19:51</date>
-  <millis>1569212391146</millis>
-  <sequence>8</sequence>
-  <logger>org.uma.jmetal.util.JMetalLogger</logger>
-  <level>INFO</level>
-  <class>org.uma.jmetal.algorithm.multiobjective.nsgaiii.NSGAIII</class>
-  <method>&lt;init&gt;</method>
-  <thread>21</thread>
-  <message>参考平面点数: 70</message>
-</record>
-<record>
-  <date>2019-09-23T12:19:51</date>
-  <millis>1569212391148</millis>
-  <sequence>9</sequence>
-  <logger>org.uma.jmetal.util.JMetalLogger</logger>
-  <level>INFO</level>
-  <class>org.uma.jmetal.algorithm.multiobjective.nsgaiii.NSGAIII</class>
-  <method>&lt;init&gt;</method>
-  <thread>21</thread>
-  <message>参考平面点数: 70</message>
-</record>
-<record>
-  <date>2019-09-23T12:19:51</date>
-  <millis>1569212391148</millis>
-  <sequence>10</sequence>
-  <logger>org.uma.jmetal.util.JMetalLogger</logger>
-  <level>INFO</level>
-  <class>org.uma.jmetal.algorithm.multiobjective.nsgaiii.NSGAIII</class>
-  <method>&lt;init&gt;</method>
-  <thread>21</thread>
-  <message>参考平面点数: 70</message>
-</record>
-<record>
-  <date>2019-09-23T12:19:51</date>
-  <millis>1569212391166</millis>
-  <sequence>11</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
   <class>org.uma.jmetal.util.experiment.component.ExecuteAlgorithms</class>
   <method>run</method>
-  <thread>21</thread>
+  <thread>22</thread>
   <message>ExecuteAlgorithms: Preparing output directory</message>
 </record>
 <record>
-  <date>2019-09-23T12:19:51</date>
-  <millis>1569212391227</millis>
-  <sequence>12</sequence>
+  <date>2019-09-23T13:45:30</date>
+  <millis>1569217530695</millis>
+  <sequence>4</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
   <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
   <method>runAlgorithm</method>
-  <thread>21</thread>
+  <thread>22</thread>
   <message>Creating result/Experiment/data/NSGAII/EDF_PS</message>
 </record>
 <record>
-  <date>2019-09-23T12:19:51</date>
-  <millis>1569212391227</millis>
-  <sequence>13</sequence>
+  <date>2019-09-23T13:45:30</date>
+  <millis>1569217530696</millis>
+  <sequence>5</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
   <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
   <method>runAlgorithm</method>
-  <thread>21</thread>
+  <thread>22</thread>
   <message> Running algorithm: NSGAII, problem: EDF_PS, run: 0, funFile: result/Experiment/data/NSGAII/EDF_PS/FUN0.tsv</message>
 </record>
+</log>
