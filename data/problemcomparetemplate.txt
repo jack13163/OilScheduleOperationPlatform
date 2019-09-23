@@ -1,0 +1,22 @@
+data=[@data@];
+
+%策略对比，每一列对应一种策略
+algorithm = '@algorithm@';
+indicator = '@indicator@';
+problems = split('@problems@',',');
+cols = length(problems);
+
+figure;
+hold on;
+
+%计算每次迭代的指标值
+for i = 1:cols
+    ndata = data(:,i);
+    plot(ndata);
+end
+
+grid on;
+title(sprintf('%s%s%s','$$',strrep(algorithm,'_','\_'),'$$'),'Interpreter','latex');
+xlabel('$$Iterations$$','Interpreter','latex');
+ylabel(sprintf('$$%s$$',indicator),'Interpreter','latex');    
+legend(strrep(problems,'_','\_'),'Interpreter','latex');

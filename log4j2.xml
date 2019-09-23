@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">    
+  <appenders>
+    <Console name="Console" target="SYSTEM_OUT">    
+      <PatternLayout pattern="%logger{36} - %msg%n"/>    
+    </Console>
+  </appenders>    
+  <loggers>    
+    <root level="warn">    
+      <appender-ref ref="Console"/>    
+    </root>
+    <logger name="com.sim.operation.Operation" level="warn" additivity="false">    
+   	  <appender-ref ref="Console"/>
+  	</logger>
+    <logger name="com.sim.twostep.OilScheduleProblem" level="info" additivity="false">    
+   	  <appender-ref ref="Console"/>
+  	</logger> 
+    <logger name="com.sim.safetwostep.SafeOilScheduleProblem" level="warn" additivity="false">    
+   	  <appender-ref ref="Console"/>
+  	</logger> 
+    <logger name="com.sim.twostep.Main" level="warn" additivity="false">    
+   	  <appender-ref ref="Console"/>
+  	</logger> 
+    <logger name="com.sim.twostep.SimulationObject" level="warn" additivity="false">    
+   	  <appender-ref ref="Console"/>
+  	</logger> 
+    <logger name="com.sim.twostep.SimulationScheduler" level="warn" additivity="false">    
+   	  <appender-ref ref="Console"/>
+  	</logger> 
+  </loggers>    
+</configuration>  

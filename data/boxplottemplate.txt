@@ -1,0 +1,22 @@
+data={@data@};
+
+algorithms = unique(data(:,2));
+problems = unique(data(:,3));
+
+% 按照问题分组绘图
+for i=1:length(problems)
+    problem = problems{i};
+    tmp = data(find(strcmp({data{:,3}},problem)),:);
+    newData = [];
+    for j=1:length(algorithms)
+        algorithm = algorithms{j};
+        newData = [newData cell2mat(tmp(find(strcmp({tmp{:,2}},algorithm)),4))]
+    end
+    figure;
+    boxplot(newData);
+    title(sprintf('%s%s%s','$$',strrep(problem,'_','\_'),'$$'),'Interpreter','latex');
+    xlabel('$$algorithm$$','Interpreter','latex');
+    ylabel('$$time$$','Interpreter','latex');    
+    set(gca,'TickLabelInterpreter','latex');
+    set(gca,'xticklabel',algorithms);
+end
