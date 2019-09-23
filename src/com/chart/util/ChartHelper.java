@@ -94,7 +94,7 @@ public class ChartHelper {
 		XYPlot plot = (XYPlot) jfreechart.getPlot();
 		plot.setDataset(dataset);
 		// 设置背景色和背景色的透明度
-		plot.setBackgroundAlpha(0.5f);
+		plot.setBackgroundAlpha(0f);
 		plot.setForegroundAlpha(0.5f);
 
 		// 其它设置可以参考XYPlot类

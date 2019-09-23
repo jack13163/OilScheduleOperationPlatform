@@ -2,69 +2,1862 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2019-09-23T13:45:30</date>
-  <millis>1569217530601</millis>
+  <date>2019-09-23T14:22:21</date>
+  <millis>1569219741281</millis>
   <sequence>0</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
   <class>org.uma.jmetal.util.JMetalLogger</class>
   <method>configureLoggers</method>
-  <thread>22</thread>
+  <thread>21</thread>
   <message>Loggers configured with null</message>
 </record>
 <record>
-  <date>2019-09-23T13:45:30</date>
-  <millis>1569217530616</millis>
+  <date>2019-09-23T14:22:21</date>
+  <millis>1569219741337</millis>
   <sequence>1</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
   <class>org.uma.jmetal.algorithm.multiobjective.nsgaiii.NSGAIII</class>
   <method>&lt;init&gt;</method>
-  <thread>22</thread>
+  <thread>21</thread>
   <message>参考平面点数: 70</message>
 </record>
 <record>
-  <date>2019-09-23T13:45:30</date>
-  <millis>1569217530647</millis>
+  <date>2019-09-23T14:22:21</date>
+  <millis>1569219741412</millis>
   <sequence>2</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
   <class>org.uma.jmetal.algorithm.multiobjective.nsgaiii.NSGAIII</class>
   <method>&lt;init&gt;</method>
-  <thread>22</thread>
+  <thread>21</thread>
   <message>参考平面点数: 70</message>
 </record>
 <record>
-  <date>2019-09-23T13:45:30</date>
-  <millis>1569217530661</millis>
+  <date>2019-09-23T14:22:21</date>
+  <millis>1569219741438</millis>
   <sequence>3</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
   <class>org.uma.jmetal.util.experiment.component.ExecuteAlgorithms</class>
   <method>run</method>
-  <thread>22</thread>
+  <thread>21</thread>
   <message>ExecuteAlgorithms: Preparing output directory</message>
 </record>
 <record>
-  <date>2019-09-23T13:45:30</date>
-  <millis>1569217530695</millis>
+  <date>2019-09-23T14:22:26</date>
+  <millis>1569219746045</millis>
   <sequence>4</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
   <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
   <method>runAlgorithm</method>
-  <thread>22</thread>
+  <thread>21</thread>
   <message>Creating result/Experiment/data/NSGAII/EDF_PS</message>
 </record>
 <record>
-  <date>2019-09-23T13:45:30</date>
-  <millis>1569217530696</millis>
+  <date>2019-09-23T14:22:26</date>
+  <millis>1569219746046</millis>
   <sequence>5</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
   <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
   <method>runAlgorithm</method>
-  <thread>22</thread>
+  <thread>21</thread>
   <message> Running algorithm: NSGAII, problem: EDF_PS, run: 0, funFile: result/Experiment/data/NSGAII/EDF_PS/FUN0.tsv</message>
+</record>
+<record>
+  <date>2019-09-23T14:24:47</date>
+  <millis>1569219887079</millis>
+  <sequence>6</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>No.0 NSGAII on EDF_PS speed: 141.03s</message>
+</record>
+<record>
+  <date>2019-09-23T14:24:47</date>
+  <millis>1569219887128</millis>
+  <sequence>7</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Saving solutions fun to file: result/Experiment/data/NSGAII/EDF_PS/FUN0.list</message>
+</record>
+<record>
+  <date>2019-09-23T14:24:47</date>
+  <millis>1569219887484</millis>
+  <sequence>8</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Creating result/Experiment/data/NSGAIII/EDF_PS</message>
+</record>
+<record>
+  <date>2019-09-23T14:24:47</date>
+  <millis>1569219887485</millis>
+  <sequence>9</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message> Running algorithm: NSGAIII, problem: EDF_PS, run: 0, funFile: result/Experiment/data/NSGAIII/EDF_PS/FUN0.tsv</message>
+</record>
+<record>
+  <date>2019-09-23T14:27:05</date>
+  <millis>1569220025051</millis>
+  <sequence>10</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>No.0 NSGAIII on EDF_PS speed: 137.57s</message>
+</record>
+<record>
+  <date>2019-09-23T14:27:05</date>
+  <millis>1569220025069</millis>
+  <sequence>11</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Saving solutions fun to file: result/Experiment/data/NSGAIII/EDF_PS/FUN0.list</message>
+</record>
+<record>
+  <date>2019-09-23T14:27:07</date>
+  <millis>1569220027956</millis>
+  <sequence>12</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Creating result/Experiment/data/cMOEAD/EDF_PS</message>
+</record>
+<record>
+  <date>2019-09-23T14:27:07</date>
+  <millis>1569220027957</millis>
+  <sequence>13</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message> Running algorithm: cMOEAD, problem: EDF_PS, run: 0, funFile: result/Experiment/data/cMOEAD/EDF_PS/FUN0.tsv</message>
+</record>
+<record>
+  <date>2019-09-23T14:29:36</date>
+  <millis>1569220176155</millis>
+  <sequence>14</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>No.0 cMOEAD on EDF_PS speed: 148.2s</message>
+</record>
+<record>
+  <date>2019-09-23T14:29:36</date>
+  <millis>1569220176170</millis>
+  <sequence>15</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Saving solutions fun to file: result/Experiment/data/cMOEAD/EDF_PS/FUN0.list</message>
+</record>
+<record>
+  <date>2019-09-23T14:29:38</date>
+  <millis>1569220178946</millis>
+  <sequence>16</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Creating result/Experiment/data/SPEA2/EDF_PS</message>
+</record>
+<record>
+  <date>2019-09-23T14:29:38</date>
+  <millis>1569220178947</millis>
+  <sequence>17</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message> Running algorithm: SPEA2, problem: EDF_PS, run: 0, funFile: result/Experiment/data/SPEA2/EDF_PS/FUN0.tsv</message>
+</record>
+<record>
+  <date>2019-09-23T14:31:53</date>
+  <millis>1569220313209</millis>
+  <sequence>18</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>No.0 SPEA2 on EDF_PS speed: 134.26s</message>
+</record>
+<record>
+  <date>2019-09-23T14:31:53</date>
+  <millis>1569220313225</millis>
+  <sequence>19</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Saving solutions fun to file: result/Experiment/data/SPEA2/EDF_PS/FUN0.list</message>
+</record>
+<record>
+  <date>2019-09-23T14:31:56</date>
+  <millis>1569220316066</millis>
+  <sequence>20</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Creating result/Experiment/data/MOCell/EDF_PS</message>
+</record>
+<record>
+  <date>2019-09-23T14:31:56</date>
+  <millis>1569220316066</millis>
+  <sequence>21</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message> Running algorithm: MOCell, problem: EDF_PS, run: 0, funFile: result/Experiment/data/MOCell/EDF_PS/FUN0.tsv</message>
+</record>
+<record>
+  <date>2019-09-23T14:34:05</date>
+  <millis>1569220445911</millis>
+  <sequence>22</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>No.0 MOCell on EDF_PS speed: 129.84s</message>
+</record>
+<record>
+  <date>2019-09-23T14:34:05</date>
+  <millis>1569220445920</millis>
+  <sequence>23</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Saving solutions fun to file: result/Experiment/data/MOCell/EDF_PS/FUN0.list</message>
+</record>
+<record>
+  <date>2019-09-23T14:34:08</date>
+  <millis>1569220448353</millis>
+  <sequence>24</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Creating result/Experiment/data/NSGAII/EDF_TSS</message>
+</record>
+<record>
+  <date>2019-09-23T14:34:08</date>
+  <millis>1569220448353</millis>
+  <sequence>25</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message> Running algorithm: NSGAII, problem: EDF_TSS, run: 0, funFile: result/Experiment/data/NSGAII/EDF_TSS/FUN0.tsv</message>
+</record>
+<record>
+  <date>2019-09-23T14:36:09</date>
+  <millis>1569220569438</millis>
+  <sequence>26</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>No.0 NSGAII on EDF_TSS speed: 121.08s</message>
+</record>
+<record>
+  <date>2019-09-23T14:36:09</date>
+  <millis>1569220569453</millis>
+  <sequence>27</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Saving solutions fun to file: result/Experiment/data/NSGAII/EDF_TSS/FUN0.list</message>
+</record>
+<record>
+  <date>2019-09-23T14:36:09</date>
+  <millis>1569220569976</millis>
+  <sequence>28</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Creating result/Experiment/data/NSGAIII/EDF_TSS</message>
+</record>
+<record>
+  <date>2019-09-23T14:36:09</date>
+  <millis>1569220569976</millis>
+  <sequence>29</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message> Running algorithm: NSGAIII, problem: EDF_TSS, run: 0, funFile: result/Experiment/data/NSGAIII/EDF_TSS/FUN0.tsv</message>
+</record>
+<record>
+  <date>2019-09-23T14:38:13</date>
+  <millis>1569220693818</millis>
+  <sequence>30</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>No.0 NSGAIII on EDF_TSS speed: 123.84s</message>
+</record>
+<record>
+  <date>2019-09-23T14:38:13</date>
+  <millis>1569220693831</millis>
+  <sequence>31</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Saving solutions fun to file: result/Experiment/data/NSGAIII/EDF_TSS/FUN0.list</message>
+</record>
+<record>
+  <date>2019-09-23T14:38:16</date>
+  <millis>1569220696695</millis>
+  <sequence>32</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Creating result/Experiment/data/cMOEAD/EDF_TSS</message>
+</record>
+<record>
+  <date>2019-09-23T14:38:16</date>
+  <millis>1569220696696</millis>
+  <sequence>33</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message> Running algorithm: cMOEAD, problem: EDF_TSS, run: 0, funFile: result/Experiment/data/cMOEAD/EDF_TSS/FUN0.tsv</message>
+</record>
+<record>
+  <date>2019-09-23T14:40:46</date>
+  <millis>1569220846649</millis>
+  <sequence>34</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>No.0 cMOEAD on EDF_TSS speed: 149.95s</message>
+</record>
+<record>
+  <date>2019-09-23T14:40:46</date>
+  <millis>1569220846661</millis>
+  <sequence>35</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Saving solutions fun to file: result/Experiment/data/cMOEAD/EDF_TSS/FUN0.list</message>
+</record>
+<record>
+  <date>2019-09-23T14:40:49</date>
+  <millis>1569220849457</millis>
+  <sequence>36</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Creating result/Experiment/data/SPEA2/EDF_TSS</message>
+</record>
+<record>
+  <date>2019-09-23T14:40:49</date>
+  <millis>1569220849457</millis>
+  <sequence>37</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message> Running algorithm: SPEA2, problem: EDF_TSS, run: 0, funFile: result/Experiment/data/SPEA2/EDF_TSS/FUN0.tsv</message>
+</record>
+<record>
+  <date>2019-09-23T14:42:54</date>
+  <millis>1569220974633</millis>
+  <sequence>38</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>No.0 SPEA2 on EDF_TSS speed: 125.18s</message>
+</record>
+<record>
+  <date>2019-09-23T14:42:54</date>
+  <millis>1569220974646</millis>
+  <sequence>39</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Saving solutions fun to file: result/Experiment/data/SPEA2/EDF_TSS/FUN0.list</message>
+</record>
+<record>
+  <date>2019-09-23T14:42:57</date>
+  <millis>1569220977488</millis>
+  <sequence>40</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Creating result/Experiment/data/MOCell/EDF_TSS</message>
+</record>
+<record>
+  <date>2019-09-23T14:42:57</date>
+  <millis>1569220977489</millis>
+  <sequence>41</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message> Running algorithm: MOCell, problem: EDF_TSS, run: 0, funFile: result/Experiment/data/MOCell/EDF_TSS/FUN0.tsv</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:54</date>
+  <millis>1569221094999</millis>
+  <sequence>42</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>No.0 MOCell on EDF_TSS speed: 117.51s</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:55</date>
+  <millis>1569221095010</millis>
+  <sequence>43</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
+  <method>runAlgorithm</method>
+  <thread>21</thread>
+  <message>Saving solutions fun to file: result/Experiment/data/MOCell/EDF_TSS/FUN0.list</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:57</date>
+  <millis>1569221097418</millis>
+  <sequence>44</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.GenerateReferenceParetoSetAndFrontFromDoubleSolutions</class>
+  <method>createOutputDirectory</method>
+  <thread>21</thread>
+  <message>Creating result/Experiment/PF. Status = true</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098172</millis>
+  <sequence>45</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAII/EDF_PS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098172</millis>
+  <sequence>46</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAII/EDF_TSS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098173</millis>
+  <sequence>47</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAIII/EDF_PS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098173</millis>
+  <sequence>48</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAIII/EDF_TSS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098174</millis>
+  <sequence>49</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/cMOEAD/EDF_PS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098175</millis>
+  <sequence>50</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/cMOEAD/EDF_TSS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098175</millis>
+  <sequence>51</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/SPEA2/EDF_PS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098176</millis>
+  <sequence>52</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/SPEA2/EDF_TSS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098176</millis>
+  <sequence>53</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/MOCell/EDF_PS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098176</millis>
+  <sequence>54</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/MOCell/EDF_TSS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098177</millis>
+  <sequence>55</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAII/EDF_PS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098178</millis>
+  <sequence>56</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAII/EDF_TSS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098178</millis>
+  <sequence>57</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAIII/EDF_PS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098179</millis>
+  <sequence>58</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAIII/EDF_TSS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098179</millis>
+  <sequence>59</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/cMOEAD/EDF_PS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098180</millis>
+  <sequence>60</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/cMOEAD/EDF_TSS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098180</millis>
+  <sequence>61</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/SPEA2/EDF_PS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098181</millis>
+  <sequence>62</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/SPEA2/EDF_TSS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098181</millis>
+  <sequence>63</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/MOCell/EDF_PS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098182</millis>
+  <sequence>64</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/MOCell/EDF_TSS/EP does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098182</millis>
+  <sequence>65</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAII/EDF_PS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098182</millis>
+  <sequence>66</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAII/EDF_TSS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098183</millis>
+  <sequence>67</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAIII/EDF_PS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098184</millis>
+  <sequence>68</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAIII/EDF_TSS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098184</millis>
+  <sequence>69</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/cMOEAD/EDF_PS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098185</millis>
+  <sequence>70</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/cMOEAD/EDF_TSS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098185</millis>
+  <sequence>71</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/SPEA2/EDF_PS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098186</millis>
+  <sequence>72</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/SPEA2/EDF_TSS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098187</millis>
+  <sequence>73</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/MOCell/EDF_PS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098188</millis>
+  <sequence>74</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/MOCell/EDF_TSS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098188</millis>
+  <sequence>75</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAII/EDF_PS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098189</millis>
+  <sequence>76</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAII/EDF_TSS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098189</millis>
+  <sequence>77</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAIII/EDF_PS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098190</millis>
+  <sequence>78</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAIII/EDF_TSS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098191</millis>
+  <sequence>79</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/cMOEAD/EDF_PS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098191</millis>
+  <sequence>80</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/cMOEAD/EDF_TSS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098192</millis>
+  <sequence>81</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/SPEA2/EDF_PS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098192</millis>
+  <sequence>82</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/SPEA2/EDF_TSS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098193</millis>
+  <sequence>83</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/MOCell/EDF_PS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098193</millis>
+  <sequence>84</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/MOCell/EDF_TSS/HV does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098194</millis>
+  <sequence>85</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAII/EDF_PS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098194</millis>
+  <sequence>86</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAII/EDF_TSS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098195</millis>
+  <sequence>87</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAIII/EDF_PS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098195</millis>
+  <sequence>88</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAIII/EDF_TSS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098196</millis>
+  <sequence>89</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/cMOEAD/EDF_PS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098196</millis>
+  <sequence>90</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/cMOEAD/EDF_TSS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098197</millis>
+  <sequence>91</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/SPEA2/EDF_PS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098197</millis>
+  <sequence>92</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/SPEA2/EDF_TSS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098198</millis>
+  <sequence>93</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/MOCell/EDF_PS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098198</millis>
+  <sequence>94</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/MOCell/EDF_TSS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098199</millis>
+  <sequence>95</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAII/EDF_PS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098199</millis>
+  <sequence>96</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAII/EDF_TSS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098199</millis>
+  <sequence>97</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAIII/EDF_PS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098200</millis>
+  <sequence>98</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/NSGAIII/EDF_TSS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098200</millis>
+  <sequence>99</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/cMOEAD/EDF_PS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098201</millis>
+  <sequence>100</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/cMOEAD/EDF_TSS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098202</millis>
+  <sequence>101</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/SPEA2/EDF_PS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098203</millis>
+  <sequence>102</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/SPEA2/EDF_TSS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098203</millis>
+  <sequence>103</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/MOCell/EDF_PS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098204</millis>
+  <sequence>104</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/data/MOCell/EDF_TSS/IGD+ does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098204</millis>
+  <sequence>105</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>RF: result/Experiment/PF/oilschedule.pf</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098288</millis>
+  <sequence>106</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAII on EDF_PS run 0 indicator: EP</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098316</millis>
+  <sequence>107</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAII on EDF_PS run 0 indicator: EP per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098495</millis>
+  <sequence>108</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAIII on EDF_PS run 0 indicator: EP</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098498</millis>
+  <sequence>109</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAIII on EDF_PS run 0 indicator: EP per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098624</millis>
+  <sequence>110</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing cMOEAD on EDF_PS run 0 indicator: EP</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098627</millis>
+  <sequence>111</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing cMOEAD on EDF_PS run 0 indicator: EP per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098753</millis>
+  <sequence>112</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing SPEA2 on EDF_PS run 0 indicator: EP</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098755</millis>
+  <sequence>113</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing SPEA2 on EDF_PS run 0 indicator: EP per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098859</millis>
+  <sequence>114</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing MOCell on EDF_PS run 0 indicator: EP</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098861</millis>
+  <sequence>115</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing MOCell on EDF_PS run 0 indicator: EP per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098972</millis>
+  <sequence>116</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAII on EDF_TSS run 0 indicator: EP</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:58</date>
+  <millis>1569221098975</millis>
+  <sequence>117</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAII on EDF_TSS run 0 indicator: EP per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:59</date>
+  <millis>1569221099102</millis>
+  <sequence>118</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAIII on EDF_TSS run 0 indicator: EP</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:59</date>
+  <millis>1569221099104</millis>
+  <sequence>119</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAIII on EDF_TSS run 0 indicator: EP per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:59</date>
+  <millis>1569221099210</millis>
+  <sequence>120</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing cMOEAD on EDF_TSS run 0 indicator: EP</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:59</date>
+  <millis>1569221099214</millis>
+  <sequence>121</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing cMOEAD on EDF_TSS run 0 indicator: EP per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:59</date>
+  <millis>1569221099348</millis>
+  <sequence>122</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing SPEA2 on EDF_TSS run 0 indicator: EP</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:59</date>
+  <millis>1569221099352</millis>
+  <sequence>123</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing SPEA2 on EDF_TSS run 0 indicator: EP per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:59</date>
+  <millis>1569221099461</millis>
+  <sequence>124</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing MOCell on EDF_TSS run 0 indicator: EP</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:59</date>
+  <millis>1569221099464</millis>
+  <sequence>125</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing MOCell on EDF_TSS run 0 indicator: EP per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:59</date>
+  <millis>1569221099574</millis>
+  <sequence>126</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAII on EDF_PS run 0 indicator: HV</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:59</date>
+  <millis>1569221099591</millis>
+  <sequence>127</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAII on EDF_PS run 0 indicator: HV per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:59</date>
+  <millis>1569221099760</millis>
+  <sequence>128</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAIII on EDF_PS run 0 indicator: HV</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:59</date>
+  <millis>1569221099764</millis>
+  <sequence>129</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAIII on EDF_PS run 0 indicator: HV per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:59</date>
+  <millis>1569221099876</millis>
+  <sequence>130</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing cMOEAD on EDF_PS run 0 indicator: HV</message>
+</record>
+<record>
+  <date>2019-09-23T14:44:59</date>
+  <millis>1569221099882</millis>
+  <sequence>131</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing cMOEAD on EDF_PS run 0 indicator: HV per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100013</millis>
+  <sequence>132</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing SPEA2 on EDF_PS run 0 indicator: HV</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100016</millis>
+  <sequence>133</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing SPEA2 on EDF_PS run 0 indicator: HV per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100104</millis>
+  <sequence>134</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing MOCell on EDF_PS run 0 indicator: HV</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100106</millis>
+  <sequence>135</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing MOCell on EDF_PS run 0 indicator: HV per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100201</millis>
+  <sequence>136</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAII on EDF_TSS run 0 indicator: HV</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100204</millis>
+  <sequence>137</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAII on EDF_TSS run 0 indicator: HV per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100296</millis>
+  <sequence>138</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAIII on EDF_TSS run 0 indicator: HV</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100298</millis>
+  <sequence>139</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAIII on EDF_TSS run 0 indicator: HV per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100395</millis>
+  <sequence>140</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing cMOEAD on EDF_TSS run 0 indicator: HV</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100397</millis>
+  <sequence>141</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing cMOEAD on EDF_TSS run 0 indicator: HV per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100511</millis>
+  <sequence>142</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing SPEA2 on EDF_TSS run 0 indicator: HV</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100514</millis>
+  <sequence>143</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing SPEA2 on EDF_TSS run 0 indicator: HV per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100605</millis>
+  <sequence>144</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing MOCell on EDF_TSS run 0 indicator: HV</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100610</millis>
+  <sequence>145</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing MOCell on EDF_TSS run 0 indicator: HV per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100705</millis>
+  <sequence>146</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAII on EDF_PS run 0 indicator: IGD+</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100714</millis>
+  <sequence>147</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAII on EDF_PS run 0 indicator: IGD+ per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100846</millis>
+  <sequence>148</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAIII on EDF_PS run 0 indicator: IGD+</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100849</millis>
+  <sequence>149</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAIII on EDF_PS run 0 indicator: IGD+ per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100972</millis>
+  <sequence>150</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing cMOEAD on EDF_PS run 0 indicator: IGD+</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:00</date>
+  <millis>1569221100974</millis>
+  <sequence>151</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing cMOEAD on EDF_PS run 0 indicator: IGD+ per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:01</date>
+  <millis>1569221101092</millis>
+  <sequence>152</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing SPEA2 on EDF_PS run 0 indicator: IGD+</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:01</date>
+  <millis>1569221101095</millis>
+  <sequence>153</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing SPEA2 on EDF_PS run 0 indicator: IGD+ per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:01</date>
+  <millis>1569221101211</millis>
+  <sequence>154</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing MOCell on EDF_PS run 0 indicator: IGD+</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:01</date>
+  <millis>1569221101213</millis>
+  <sequence>155</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing MOCell on EDF_PS run 0 indicator: IGD+ per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:01</date>
+  <millis>1569221101333</millis>
+  <sequence>156</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAII on EDF_TSS run 0 indicator: IGD+</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:01</date>
+  <millis>1569221101336</millis>
+  <sequence>157</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAII on EDF_TSS run 0 indicator: IGD+ per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:01</date>
+  <millis>1569221101451</millis>
+  <sequence>158</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAIII on EDF_TSS run 0 indicator: IGD+</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:01</date>
+  <millis>1569221101454</millis>
+  <sequence>159</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing NSGAIII on EDF_TSS run 0 indicator: IGD+ per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:01</date>
+  <millis>1569221101574</millis>
+  <sequence>160</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing cMOEAD on EDF_TSS run 0 indicator: IGD+</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:01</date>
+  <millis>1569221101577</millis>
+  <sequence>161</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing cMOEAD on EDF_TSS run 0 indicator: IGD+ per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:01</date>
+  <millis>1569221101703</millis>
+  <sequence>162</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing SPEA2 on EDF_TSS run 0 indicator: IGD+</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:01</date>
+  <millis>1569221101705</millis>
+  <sequence>163</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing SPEA2 on EDF_TSS run 0 indicator: IGD+ per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:01</date>
+  <millis>1569221101825</millis>
+  <sequence>164</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing MOCell on EDF_TSS run 0 indicator: IGD+</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:01</date>
+  <millis>1569221101829</millis>
+  <sequence>165</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>com.sim.experiment.ExperimentComputeQualityIndicators</class>
+  <method>run</method>
+  <thread>21</thread>
+  <message>Computing MOCell on EDF_TSS run 0 indicator: IGD+ per generation.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:02</date>
+  <millis>1569221102571</millis>
+  <sequence>166</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>writeSummaryFile</method>
+  <thread>21</thread>
+  <message>Writing experiment summary file</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:02</date>
+  <millis>1569221102571</millis>
+  <sequence>167</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.ComputeQualityIndicators</class>
+  <method>resetFile</method>
+  <thread>21</thread>
+  <message>File result/Experiment/QualityIndicatorSummary.csv does NOT exist.</message>
+</record>
+<record>
+  <date>2019-09-23T14:45:02</date>
+  <millis>1569221102687</millis>
+  <sequence>168</sequence>
+  <logger>org.uma.jmetal.util.JMetalLogger</logger>
+  <level>INFO</level>
+  <class>org.uma.jmetal.util.experiment.component.GenerateLatexTablesWithStatistics</class>
+  <method>generateLatexScript</method>
+  <thread>21</thread>
+  <message>Creating result/Experiment/latex directory</message>
 </record>
 </log>

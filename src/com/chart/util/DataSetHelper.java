@@ -55,6 +55,7 @@ public class DataSetHelper {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			xySeriesCollection.addSeries(xyseries);
 		}
 
 		return xySeriesCollection;
