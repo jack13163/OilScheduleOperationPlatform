@@ -111,9 +111,9 @@ public class FrontNormalizer {
 							"Maximum values of index are small than and minimum values at " + j + ".");
 				}
 
-				// 更改了计算公式
-				normalizedFront.getPoint(i).setValue(j, (front.getPoint(i).getValue(j) - minimumValues[j] + 1.0)
-						/ (maximumValues[j] - minimumValues[j] + 1.0));
+				// 更改了计算公式【防止发生除零错误】
+				normalizedFront.getPoint(i).setValue(j, (front.getPoint(i).getValue(j) - minimumValues[j] + 0.000001)
+						/ (maximumValues[j] - minimumValues[j] + 0.000001));
 			}
 		}
 		return normalizedFront;

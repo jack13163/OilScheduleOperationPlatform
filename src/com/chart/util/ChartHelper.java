@@ -46,11 +46,11 @@ public class ChartHelper {
 		String xlabel = "迭代次数";
 		String ylabel = metricList.get(0);
 		if (problemList.size() == 1) {
-			title = "算法对比";
+			title = "采用" + problemList.get(0) + "策略的情况下的算法对比";
 			dataset = DataSetHelper.createAlgorithmsCompareDataset(problemList.get(0), algorithmList, metricList.get(0),
 					runId);
 		} else if (algorithmList.size() == 1) {
-			title = "策略对比";
+			title = "采用" + algorithmList.get(0) + "算法的情况下的策略对比";
 			dataset = DataSetHelper.createProblemsCompareDataset(problemList, algorithmList.get(0), metricList.get(0),
 					runId);
 		}
