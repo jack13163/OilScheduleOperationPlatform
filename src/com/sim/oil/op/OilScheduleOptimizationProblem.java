@@ -54,7 +54,7 @@ public class OilScheduleOptimizationProblem extends AbstractDoubleProblem {
 		setNumberOfVariables(numOfVariables);// 决策变量的个数
 		setNumberOfObjectives(5);// 目标个数
 		setNumberOfConstraints(0);// 约束个数
-		setName("OneStep");// 问题名
+		setName(ruleName);// 问题名
 		List<Double> lowerLimit = (List<Double>) conf.get("lowerLimit");
 		List<Double> upperLimit = (List<Double>) conf.get("upperLimit");
 		setLowerLimit(lowerLimit);

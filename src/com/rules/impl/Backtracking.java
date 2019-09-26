@@ -33,20 +33,17 @@ public class Backtracking extends AbstractRule {
 	 */
 	private boolean enterUnsafeState(FactObject factObject) {
 		OPOilScheduleSimulationScheduler scheduler = (OPOilScheduleSimulationScheduler) _scheduler;
-		Config config = factObject.getConfig();
-		double[] feedEndTimes = scheduler.getFeedingEndTime();
-		int ds = -1;
 
 		if (Operation.getHardCost(scheduler.getOperations()) > 0) {
 			return true;
 		}
 
-		for (int i = 0; i < feedEndTimes.length; i++) {
-			int pipe = scheduler.getCurrentPipe(ds);
-			double currentTime = scheduler.getCurrentTime(pipe);
+		Config config = factObject.getConfig();
+		double[] usableTime = scheduler.getUsableTime();
+
+		for (int i = 0; i < usableTime.length; i++) {
 			// 判断是否进入不安全状态
-			if (feedEndTimes[i] - currentTime <= config.RT) {
-				ds = i + 1;
+			if (usableTime[i] <= config.RT) {
 				return true;
 			}
 		}

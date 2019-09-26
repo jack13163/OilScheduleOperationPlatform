@@ -164,27 +164,21 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	}
 
 	/**
-	 * 获取最紧急的蒸馏塔【解码时参考】
+	 * 获取可用时间【用于判断是否满足规则1的安全性条件】
 	 * 
 	 * @return
 	 */
-	public int getMostNeedOilDS() {
+	public double[] getUsableTime() {
 		double[] oilEndTime = getFeedingEndTime();
-		int ds = -1;
-		double tmp = Double.MAX_VALUE;
+		double[] result = new double[oilEndTime.length];
+
 		for (int i = 0; i < oilEndTime.length; i++) {
-			int pipe = getCurrentPipe(i);
+			int ds = i + 1;
+			int pipe = getCurrentPipe(ds);
 			double currentTime = getCurrentTime(pipe);
-			if (oilEndTime[i] - currentTime < tmp) {
-				tmp = oilEndTime[i] - currentTime;
-				ds = i + 1;
-			}
+			result[i] = oilEndTime[i] - currentTime;// 炼油结束时间-当前时间
 		}
-		if (tmp <= 24) {
-			return ds;
-		} else {
-			return -1;
-		}
+		return result;
 	}
 
 	/**
@@ -532,13 +526,7 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 				}
 
 				if (backTimes >= Max_Back_Num) {
-					do {
-						last();
-					} while (!operationStack.isEmpty() && operationStack.peek().getType() != OperationType.Stop);
-					if (!operationStack.isEmpty()) {
-						last();
-					}
-					backTimes = 0;
+					superBackTrace();
 				}
 			}
 
@@ -564,6 +552,25 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 		}
 
 		return true;
+	}
+
+	/**
+	 * 超级回溯
+	 */
+	private void superBackTrace() {
+		int k = 3;
+		while (!operationStack.isEmpty() && k > 0) {
+			last();
+			k--;
+		}
+		backTimes = 0;
+	}
+
+	/**
+	 * 将当前速度设置为最大
+	 */
+	private void setCurrentSpeedMax() {
+		solution.setVariableValue(loc * 2 + 1, 0.99);
 	}
 
 	/**
@@ -598,6 +605,7 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	 */
 	private void last() {
 		backTimes++;
+		setCurrentSpeedMax();
 
 		// 回退一步【loc==0时，无法后退】
 		if (loc > 0) {

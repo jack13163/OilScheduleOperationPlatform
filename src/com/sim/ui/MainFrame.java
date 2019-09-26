@@ -71,6 +71,7 @@ import com.sim.experiment.Config;
 import com.sim.experiment.ExperimentConfig;
 import com.sim.oil.cop.COPOilScheduleIndividualDecode;
 import com.sim.oil.cop.OilScheduleConstrainedOptimizationProblem;
+import com.sim.oil.op.OPOilScheduleIndividualDecode;
 import com.sim.oil.op.OilScheduleOptimizationProblem;
 import com.sim.onlineoperation.OnlineOperation;
 import com.sim.operation.Operation;
@@ -806,7 +807,11 @@ public class MainFrame extends JFrame {
 					String path = "result/SingleRun/data/" + algorithmName + "/"
 							+ cbProblemForRun.getSelectedItem().toString() + "/VAR0.tsv";
 					String ruleName = cbProblemForRun.getSelectedItem().toString();
-					COPOilScheduleIndividualDecode.decode(path, row, ruleName);
+					if (ruleName.equals("EDF_PS") || ruleName.equals("EDF_TSS")) {
+						COPOilScheduleIndividualDecode.decode(path, row, ruleName);
+					} else if (ruleName.equals("BT")) {
+						OPOilScheduleIndividualDecode.decode(path, row, ruleName);
+					}
 				}
 			}
 		});
