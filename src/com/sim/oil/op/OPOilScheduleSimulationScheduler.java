@@ -1,7 +1,7 @@
 package com.sim.oil.op;
 
 import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +21,7 @@ import com.models.Fragment;
 import com.models.TankObject;
 import com.rules.AbstractRule;
 import com.rules.RuleFactory;
-import com.sim.common.ArrayHelper;
+import com.rules.impl.Backtracking;
 import com.sim.common.CloneUtils;
 import com.sim.common.MathUtil;
 import com.sim.experiment.Config;
@@ -152,23 +152,26 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	 * @return
 	 */
 	public int getMostEmergencyDS() {
-		double[] oilEndTime = getFeedingEndTime();
-		List<Double> oilEndTimeList = new ArrayList<>();
-		for (int i = 0; i < oilEndTime.length; i++) {
-			oilEndTimeList.add(oilEndTime[i]);
+		double[] deadlines = getDeadlineTime();
+		int ds = -1;
+		double tmp = Double.MAX_VALUE;
+		for (int i = 0; i < deadlines.length; i++) {
+			if (deadlines[i] < tmp) {
+				tmp = deadlines[i];
+				ds = i + 1;
+			}
 		}
-		DoubleSummaryStatistics stat = oilEndTimeList.stream().mapToDouble(x -> x).summaryStatistics();
-		double minTime = stat.getMin();
-		int ds = oilEndTimeList.indexOf(minTime) + 1;
 		return ds;
 	}
 
 	/**
-	 * 获取可用时间【用于判断是否满足规则1的安全性条件】
+	 * 获取当前时刻距离炼油结束的截止时间
+	 * 
+	 * 【用于判断是否满足规则1的安全性条件】
 	 * 
 	 * @return
 	 */
-	public double[] getUsableTime() {
+	public double[] getDeadlineTime() {
 		double[] oilEndTime = getFeedingEndTime();
 		double[] result = new double[oilEndTime.length];
 
@@ -183,6 +186,8 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 
 	/**
 	 * 计算最大安全转运体积，避免罐的占用冲突
+	 * 
+	 * 确保满足定理3的要求
 	 * 
 	 * @param tank
 	 * @param ds
@@ -213,38 +218,7 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	}
 
 	/**
-	 * 计算不正常情况下最大安全转运体积，避免罐的占用冲突
-	 * 
-	 * @param tank
-	 * @param ds
-	 * @param chargingSpeed
-	 * @return
-	 */
-	public double getMaxSafeVolumeUnnormal(int tank, int ds, double chargingSpeed) {
-		double vol = 0;
-
-		// 1.当前时间T
-		int pipe = getCurrentPipe(ds);
-		double currentTime = getCurrentTime(pipe);
-
-		// 2.供油罐开始被用到的时刻T2
-		Map<Integer, Double> usingTimes = getDeadlineTimeOfAllTanks(currentTime);
-		double feedingSpeed = Config.getInstance().getDSs().get(ds - 1).getSpeed();
-
-		if (usingTimes.containsKey(tank)) {
-			vol = MathUtil.round(
-					MathUtil.divide(feedingSpeed * chargingSpeed * (usingTimes.get(tank) - currentTime - config.RT),
-							feedingSpeed + chargingSpeed),
-					config.Precision);
-		} else {
-			vol = Double.MAX_VALUE;
-		}
-
-		return vol;
-	}
-
-	/**
-	 * 在尽量满足赶上蒸馏塔结束炼油时间的同时，如果实在赶不上，就直接运
+	 * 计算满足定理2约束条件的最大原油转运体积
 	 * 
 	 * @param ds
 	 * @param chargingSpeed
@@ -254,26 +228,13 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 		double deadlineTime = getFeedingEndTime()[ds - 1];// 截至时刻
 		int pipe = getCurrentPipe(ds);
 		double currentTime = getCurrentTime(pipe);
-		double volume = MathUtil.round(chargingSpeed * (deadlineTime - currentTime - config.RT), config.Precision);
-		return volume;
+		return MathUtil.round(chargingSpeed * (deadlineTime - currentTime - config.RT), config.Precision);
 	}
 
 	/**
 	 * 确定最多的转运体积
 	 * 
-	 * @param fp_vol
-	 * @param safe_vol
-	 * @param capacity
-	 * @return
-	 */
-	public double getVolume(double fp_vol, double safe_vol, double capacity) {
-		// 必须要考虑的约束：容量、进料包、优化体积【都有上限】
-		double limit = MathUtil.round(Math.min(fp_vol, Math.min(capacity, safe_vol)), config.Precision);// 消除精度问题
-		return limit;
-	}
-
-	/**
-	 * 确定最多的转运体积
+	 * 必须要考虑的资源约束和条件约束：容量、进料包、优化体积
 	 * 
 	 * @param fp_vol
 	 * @param rt_vol
@@ -282,20 +243,18 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	 * @return
 	 */
 	public double getVolume(double fp_vol, double rt_vol, double safe_vol, double capacity) {
-		// 必须要考虑的约束：容量、进料包、优化体积【都有上限】
-		double limit = MathUtil.round(Math.min(safe_vol, Math.min(fp_vol, Math.min(capacity, rt_vol))),
-				config.Precision);// 消除精度问题
-		return limit;
+		return MathUtil.round(Math.max(0, Math.min(safe_vol, Math.min(fp_vol, Math.min(capacity, rt_vol)))),
+				config.Precision);
 	}
 
 	/**
-	 * 过滤掉较差的策略
+	 * 剪枝，过滤掉较差的策略
 	 * 
 	 * @param safe_vol
 	 * @return
 	 */
 	public boolean filterCondition(double vol, double fp_vol) {
-		// 解码时，默认转运记录的体积不得小于一定大小【配置文件指定】
+		// 解码时，默认转运记录的体积不得小于一定大小
 		if (vol < config.VolMin && fp_vol != vol) {
 			return true;
 		} else {
@@ -337,7 +296,9 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	}
 
 	/**
-	 * 计算管道注油结束时间当前系统时间
+	 * 计算系统时间
+	 * 
+	 * 当前管道的注油结束时间为当前系统时间
 	 * 
 	 * @param pipe
 	 * @return
@@ -348,7 +309,7 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	}
 
 	/**
-	 * 获取当前时刻供油罐的状态，是否可用
+	 * 获取当前时刻所有可用的供油罐
 	 * 
 	 * @param currentTime
 	 */
@@ -388,16 +349,6 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	}
 
 	/**
-	 * 获取转运速度
-	 * 
-	 * @param pipe
-	 * @return
-	 */
-	public double[] getCharingSpeed(int pipe) {
-		return config.getPipes().get(pipe).getChargingSpeed();
-	}
-
-	/**
 	 * 单次解码
 	 * 
 	 * @return
@@ -410,12 +361,11 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 		factObject.setLoc(loc);
 
 		AbstractRule rule = new RuleFactory().getRule(ruleName, this);
-		Fragment nextFragment = rule.fireAllRule(factObject);
-		return nextFragment;
+		return rule.fireAllRule(factObject);
 	}
 
 	/**
-	 * 生成推荐策略【应对高熔点管道停运导致的回溯】
+	 * 生成推荐策略
 	 * 
 	 * @param fragment
 	 */
@@ -450,7 +400,7 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 					policyMap[ds - 1][tank] = 1;
 				}
 			} else {
-				// 高熔点管道【不可停运】
+				// 高熔点管道不可停运
 				for (int j = 0; j < pipeTwoList.size(); j++) {
 					int tank = pipeTwoList.get(j);
 					policyMap[ds - 1][tank] = 1;
@@ -462,22 +412,7 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	}
 
 	/**
-	 * 管道选择策略
-	 * 
-	 * @return
-	 */
-	public int selectPipe() {
-		List<Integer> dss = getDSSet();
-		if (dss.contains(config.HighOilDS) && dss.size() == 1) {
-			return 1;
-		} else if (!dss.contains(config.HighOilDS)) {
-			return 0;
-		}
-		return ArrayHelper.Arraysort(getChargingEndTime())[0];
-	}
-
-	/**
-	 * 选择新的应对策略
+	 * 判断是否存在未尝试的策略
 	 * 
 	 * @return
 	 */
@@ -525,6 +460,7 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 					last();
 				}
 
+				// 多次回溯不可行后，后退若干步
 				if (backTimes >= Max_Back_Num) {
 					superBackTrace();
 				}
@@ -540,7 +476,7 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 				next();
 			} catch (Exception e) {
 				if (e.getMessage().equals("高熔点管道不允许停运")) {
-
+					// 这种情况下只是利用tank=0和ds=highoiltower回溯
 				} else if (e.getMessage().equals("供油罐占用冲突")) {
 					logger.fatal("不应该再存在供油罐占用冲突错误");
 					e.printStackTrace();
@@ -555,7 +491,7 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	}
 
 	/**
-	 * 超级回溯
+	 * 多次回溯不可行后，后退若干步
 	 */
 	private void superBackTrace() {
 		int k = 3;
@@ -564,13 +500,6 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 			k--;
 		}
 		backTimes = 0;
-	}
-
-	/**
-	 * 将当前速度设置为最大
-	 */
-	private void setCurrentSpeedMax() {
-		solution.setVariableValue(loc * 2 + 1, 0.99);
 	}
 
 	/**
@@ -605,24 +534,52 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	 */
 	private void last() {
 		backTimes++;
-		setCurrentSpeedMax();
 
 		// 回退一步【loc==0时，无法后退】
 		if (loc > 0) {
+			// 尝试最大速度
 			loc--;
 			policyStack.pop();
-			fragmentStack.pop();
+			Fragment currentFragment = fragmentStack.pop();
+
+			// 判断当前策略是否是使用最大速度，若是，则忽略，否则，执行重新尝试
+			retryCurrentFragment(currentFragment);
+
 			Operation operation = null;
 			do {
 				operation = operationStack.pop();
 				operations.remove(operation);// 移除决策
 			} while (operation.getType() == OperationType.Feeding);
-			removeConfig();// 移除栈顶的配置，并将config指向新的栈顶配置
+			// 移除栈顶的配置，并将config指向新的栈顶配置
+			removeConfig();
 
 			// 绘出返回后的调度计划甘特图
 			if (plotEachStep) {
 				Operation.plotSchedule2(operations);
 			}
+		}
+	}
+
+	/**
+	 * 根据当前策略是否是使用最大速度\是否为停运\转运的原油体积
+	 * 
+	 * 执行重试操作
+	 * 
+	 * @param currentFragment
+	 */
+	private void retryCurrentFragment(Fragment currentFragment) {
+
+		int currentDs = currentFragment.getDs();
+		int currentTank = currentFragment.getTank();
+		double currentSpeed = currentFragment.getSpeed();
+		double currentVolume = currentFragment.getVolume();
+		double maxSpeed = Arrays.stream(getChargingSpeed(currentDs)).max().getAsDouble();
+		// 如果没有尝试过最大速度，再尝试一下最大速度
+		if (currentTank != 0 && currentSpeed != maxSpeed && currentVolume >= config.VolMin) {
+			// 当emergencyDs大于0时，按照最需要转运原油优先选塔，这里为了让策略忽略这一操作，设置其为-1
+			Backtracking.emergencyDs = -1;
+			redo(currentTank, currentDs);
+			solution.setVariableValue(loc * 2 + 1, 0.99);
 		}
 	}
 
@@ -942,14 +899,28 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	}
 
 	/**
-	 * 记录
+	 * 排除
 	 * 
-	 * @param col
-	 * @param row
+	 * @param tank
+	 * @param ds
 	 */
-	private void record(int col, int row) {
+	private void record(int tank, int ds) {
 		try {
-			policyStack.peek()[row - 1][col] = 0;
+			policyStack.peek()[ds - 1][tank] = 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 重做
+	 * 
+	 * @param tank
+	 * @param ds
+	 */
+	private void redo(int tank, int ds) {
+		try {
+			policyStack.peek()[ds - 1][tank] = 1;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

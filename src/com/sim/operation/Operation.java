@@ -511,10 +511,14 @@ public class Operation {
 	}
 
 	/**
-	 * 绘制调度的甘特图【matlab】 格式：蒸馏塔/管道 油罐 开始时间 结束时间 原油类型
+	 * 绘制调度的甘特图【matlab】
+	 * 
+	 * 格式：蒸馏塔/管道 油罐 开始时间 结束时间 原油类型
 	 * 
 	 * @param operations
+	 * @deprecated 该方法未被调用过，已废弃使用
 	 */
+	@Deprecated
 	public static void plotSchedule(List<Operation> operations) {
 
 		try {
@@ -556,7 +560,9 @@ public class Operation {
 	}
 
 	/**
-	 * 绘制调度的甘特图【canvas】 格式：蒸馏塔/管道 油罐 开始时间 结束时间 原油类型
+	 * 绘制调度的甘特图
+	 * 
+	 * 格式：蒸馏塔/管道 油罐 开始时间 结束时间 原油类型
 	 * 
 	 * @param operations
 	 */

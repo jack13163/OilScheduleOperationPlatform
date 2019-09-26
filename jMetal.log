@@ -2,8 +2,8 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2019-09-26T15:53:39</date>
-  <millis>1569484419570</millis>
+  <date>2019-09-26T22:18:20</date>
+  <millis>1569507500590</millis>
   <sequence>0</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
@@ -13,8 +13,8 @@
   <message>Loggers configured with null</message>
 </record>
 <record>
-  <date>2019-09-26T15:53:39</date>
-  <millis>1569484419584</millis>
+  <date>2019-09-26T22:18:20</date>
+  <millis>1569507500611</millis>
   <sequence>1</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
@@ -24,8 +24,8 @@
   <message>ExecuteAlgorithms: Preparing output directory</message>
 </record>
 <record>
-  <date>2019-09-26T15:53:39</date>
-  <millis>1569484419625</millis>
+  <date>2019-09-26T22:18:20</date>
+  <millis>1569507500637</millis>
   <sequence>2</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
@@ -35,8 +35,8 @@
   <message>Creating result/SingleRun/data/NSGAII/BT</message>
 </record>
 <record>
-  <date>2019-09-26T15:53:39</date>
-  <millis>1569484419625</millis>
+  <date>2019-09-26T22:18:20</date>
+  <millis>1569507500638</millis>
   <sequence>3</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
@@ -45,37 +45,3 @@
   <thread>21</thread>
   <message> Running algorithm: NSGAII, problem: BT, run: 0, funFile: result/SingleRun/data/NSGAII/BT/FUN0.tsv</message>
 </record>
-<record>
-  <date>2019-09-26T15:57:48</date>
-  <millis>1569484668590</millis>
-  <sequence>4</sequence>
-  <logger>org.uma.jmetal.util.JMetalLogger</logger>
-  <level>INFO</level>
-  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
-  <method>runAlgorithm</method>
-  <thread>21</thread>
-  <message>No.0 NSGAII on BT speed: 248.96s</message>
-</record>
-<record>
-  <date>2019-09-26T15:57:48</date>
-  <millis>1569484668647</millis>
-  <sequence>5</sequence>
-  <logger>org.uma.jmetal.util.JMetalLogger</logger>
-  <level>INFO</level>
-  <class>org.uma.jmetal.util.experiment.util.ExperimentAlgorithm</class>
-  <method>runAlgorithm</method>
-  <thread>21</thread>
-  <message>Saving solutions fun to file: result/SingleRun/data/NSGAII/BT/FUN0.list</message>
-</record>
-<record>
-  <date>2019-09-26T15:57:48</date>
-  <millis>1569484668963</millis>
-  <sequence>6</sequence>
-  <logger>org.uma.jmetal.util.JMetalLogger</logger>
-  <level>INFO</level>
-  <class>org.uma.jmetal.util.experiment.component.GenerateReferenceParetoSetAndFrontFromDoubleSolutions</class>
-  <method>createOutputDirectory</method>
-  <thread>21</thread>
-  <message>Creating result/SingleRun/referenceFronts. Status = true</message>
-</record>
-</log>

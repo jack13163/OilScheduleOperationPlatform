@@ -27,7 +27,7 @@ public class Backtracking extends AbstractRule {
 	}
 
 	/**
-	 * 判断是否进入不安全状态
+	 * 判断是否满足定理1
 	 * 
 	 * @return
 	 */
@@ -39,10 +39,9 @@ public class Backtracking extends AbstractRule {
 		}
 
 		Config config = factObject.getConfig();
-		double[] usableTime = scheduler.getUsableTime();
+		double[] usableTime = scheduler.getDeadlineTime();
 
 		for (int i = 0; i < usableTime.length; i++) {
-			// 判断是否进入不安全状态
 			if (usableTime[i] <= config.RT) {
 				return true;
 			}
@@ -204,8 +203,7 @@ public class Backtracking extends AbstractRule {
 			double code2 = solution.getVariableValue(loc * 2 + 1).doubleValue();
 
 			// 判断转运管道，并选择转运速度
-			int pipe = scheduler.getCurrentPipe(ds);
-			double[] chargingSpeeds = scheduler.getCharingSpeed(pipe);
+			double[] chargingSpeeds = scheduler.getChargingSpeed(ds);
 			speed = chargingSpeeds[CodeHelper.getRow(code2, 3, 1) - 1];
 		} catch (Exception e) {
 			System.out.println("getSpeed error");

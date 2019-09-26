@@ -138,6 +138,14 @@ public class CodeHelper {
 		if (num < 1 || num > total) {
 			throw new Exception("请输入[" + 1 + "," + total + "]之间的随机数");
 		}
-		return 1.0 / total * (num - 0.5);
+		return MathUtil.multiply(MathUtil.divide(1.0, total), num - 0.5);
+	}
+
+	public static void main(String[] args) {
+		try {
+			System.out.println(mapToReal(1, 1, 4, 12));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
