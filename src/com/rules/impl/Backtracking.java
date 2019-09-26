@@ -3,6 +3,7 @@ package com.rules.impl;
 import java.util.List;
 
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.util.JMetalLogger;
 
 import com.models.FactObject;
 import com.models.Fragment;
@@ -61,6 +62,7 @@ public class Backtracking extends AbstractRule {
 		int tank = -1;
 		int ds = -1;
 		double vol = -1.0;
+		boolean backFlag = false;
 
 		// 1.计算所有策略的最大转运体积
 		double[][] vols = calculateMaxVolume(factObject);
@@ -77,8 +79,7 @@ public class Backtracking extends AbstractRule {
 		// 3.进入不可行状态，标记
 		if (enterUnsafeState(factObject)) {
 			// 回溯，将高熔点塔的所有策略标记为0，低熔点塔的所有策略将会自动在回溯后标记
-			ds = config.HighOilDS;
-			tank = 0;
+			backFlag = true;
 		} else {
 			try {
 				double code1 = solution.getVariableValue(loc * 2).doubleValue();
@@ -162,16 +163,9 @@ public class Backtracking extends AbstractRule {
 					}
 				}
 
-				// 6.未找到可用策略，则利用高熔点管道停运回溯
+				// 5.未找到可用策略，则做设置记号
 				if (policies[ds - 1][tank] == 0) {
-					ds = config.HighOilDS;
-					tank = 0;
-				}
-
-				// 5.解码转运体积
-				vol = vols[ds - 1][tank];
-				if (tank != 0 && vol == 0.0) {
-					throw new Exception("停运异常");
+					backFlag = true;
 				}
 
 				// 出不安全状态做标记
@@ -192,8 +186,17 @@ public class Backtracking extends AbstractRule {
 		}
 
 		// 回溯，优先调度最需要的
-		if (tank == 0 && ds == config.HighOilDS) {
+		if (backFlag) {
+			tank = 0;
+			ds = config.HighOilDS;
 			preemptiveScheduling(scheduler);
+		}
+
+		// 5.解码转运体积
+		vol = vols[ds - 1][tank];
+		if (tank != 0 && vol == 0.0) {
+			JMetalLogger.logger.info("停运异常");
+			System.exit(1);
 		}
 
 		// 6.解码转运速度

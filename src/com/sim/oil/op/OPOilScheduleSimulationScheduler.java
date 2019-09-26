@@ -152,13 +152,20 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	 * @return
 	 */
 	public int getMostEmergencyDS() {
-		double[] deadlines = getDeadlineTime();
 		int ds = -1;
-		double tmp = Double.MAX_VALUE;
-		for (int i = 0; i < deadlines.length; i++) {
-			if (deadlines[i] < tmp) {
-				tmp = deadlines[i];
-				ds = i + 1;
+		if (getTankSet(getCurrentTime(getCurrentPipe(config.HighOilDS))).isEmpty()) {
+			// 高熔点蒸馏塔只会在没有空罐可用的时候回溯
+			// 因此，只需要判断一下当前时刻是否有空罐可用即可知道是否继续转运高熔点蒸馏塔所需要的原油
+			ds = config.HighOilDS;
+		} else {
+			// 低熔点管道只需要看一下炼油结束时间即可
+			double[] deadlines = getFeedingEndTime();
+			double tmp = Double.MAX_VALUE;
+			for (int i = 0; i < deadlines.length; i++) {
+				if (deadlines[i] < tmp) {
+					tmp = deadlines[i];
+					ds = i + 1;
+				}
 			}
 		}
 		return ds;
