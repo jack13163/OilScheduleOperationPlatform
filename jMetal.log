@@ -2,8 +2,8 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2019-09-26T23:00:10</date>
-  <millis>1569510010541</millis>
+  <date>2019-09-27T09:25:27</date>
+  <millis>1569547527208</millis>
   <sequence>0</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
@@ -13,8 +13,8 @@
   <message>Loggers configured with null</message>
 </record>
 <record>
-  <date>2019-09-26T23:00:10</date>
-  <millis>1569510010556</millis>
+  <date>2019-09-27T09:25:27</date>
+  <millis>1569547527229</millis>
   <sequence>1</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
@@ -24,8 +24,8 @@
   <message>ExecuteAlgorithms: Preparing output directory</message>
 </record>
 <record>
-  <date>2019-09-26T23:00:10</date>
-  <millis>1569510010584</millis>
+  <date>2019-09-27T09:25:27</date>
+  <millis>1569547527255</millis>
   <sequence>2</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
@@ -35,8 +35,8 @@
   <message>Creating result/SingleRun/data/NSGAII/BT</message>
 </record>
 <record>
-  <date>2019-09-26T23:00:10</date>
-  <millis>1569510010585</millis>
+  <date>2019-09-27T09:25:27</date>
+  <millis>1569547527255</millis>
   <sequence>3</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>

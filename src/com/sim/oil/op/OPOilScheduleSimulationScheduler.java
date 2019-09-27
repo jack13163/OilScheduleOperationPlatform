@@ -23,6 +23,7 @@ import com.rules.AbstractRule;
 import com.rules.RuleFactory;
 import com.rules.impl.Backtracking;
 import com.sim.common.CloneUtils;
+import com.sim.common.CodeHelper;
 import com.sim.common.MathUtil;
 import com.sim.experiment.Config;
 import com.sim.experiment.ISimulationScheduler;
@@ -834,6 +835,105 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 
 		}
 		return model;
+	}
+
+	/**
+	 * 判断是否满足定理1
+	 * 
+	 * @return
+	 */
+	public boolean enterUnsafeState() {
+		if (Operation.getHardCost(operations) > 0) {
+			return true;
+		}
+
+		double[] usableTime = getDeadlineTime();
+
+		for (int i = 0; i < usableTime.length; i++) {
+			if (usableTime[i] <= config.RT) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 抢占式调度策略
+	 * 
+	 * emergencyDs: 最需要转运原油的蒸馏塔
+	 * 
+	 * @param scheduler
+	 */
+	public void preemptiveScheduling() {
+		try {
+			// 1.设置当前所有的策略为不可用
+			Integer[][] currentPolicies = policyStack.peek();
+			for (int i = 0; i < currentPolicies.length; i++) {
+				for (int j = 0; j < currentPolicies[i].length; j++) {
+					currentPolicies[i][j] = 0;
+				}
+			}
+
+			// 2.获取最需要转运原油的蒸馏塔
+			Backtracking.emergencyDs = getMostEmergencyDS();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 计算所有策略的原油的最大转运体积
+	 * 
+	 * @return
+	 */
+	public double[][] calculateMaxVolume() {
+		Integer[][] policies = policyStack.peek();
+		int rows = policies.length;
+		int cols = policies[0].length;
+		double[][] vols = new double[rows][cols];
+		for (int i = 0; i < vols.length; i++) {
+			for (int j = 0; j < vols[i].length; j++) {
+				vols[i][j] = 0;
+			}
+		}
+
+		// 1.确定转运速度的下标，具体速度需要根据管道确定，而管道又可以通过蒸馏塔确定
+		double code = solution.getVariableValue(loc * 2 + 1).doubleValue();
+		int indexOfSpeed = -1;
+		try {
+			indexOfSpeed = CodeHelper.getRow(code, 3, 1) - 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// 2.筛选可用的策略【是否满足体积下限，供油罐是否可用】
+		for (int i = 0; i < policies.length; i++) {
+			// 每个蒸馏塔对应一条管道，不同管道对应的不同可用罐集合不同
+			int ds = i + 1;
+			int pipe = getCurrentPipe(ds);
+			List<Integer> tankSet = getTankSet(getCurrentTime(pipe));
+
+			for (int j = 0; j < policies[i].length; j++) {
+				int tank = j;
+				if (tank > 0 && policies[i][tank] != 0 && tankSet.contains(tank)) {
+					double chargingSpeed = getChargingSpeed(ds)[indexOfSpeed];// 计算转运速度
+					// 1.进料包
+					double fp_vol = config.getDSs().get(ds - 1).getNextOilVolume();
+					// 2.供油罐容量
+					double capacity = config.getTanks().get(tank - 1).getCapacity();
+					// 3.满足驻留时间约束的安全体积
+					double rt_vol = getRTVolume(ds, chargingSpeed);
+					// 4. 保证供油罐占用不冲突的安全体积
+					double safe_vol = getMaxSafeVolume(tank, ds, chargingSpeed);
+					// 5.判断体积是否低于下限
+					vols[i][j] = getVolume(fp_vol, rt_vol, safe_vol, capacity);
+					if (filterCondition(vols[i][j], fp_vol)) {
+						vols[i][j] = 0;// 【会出现可选该罐，但体积为0的情况】
+					}
+				}
+			}
+		}
+		return vols;
 	}
 
 	/**

@@ -1,7 +1,5 @@
 package com.rules.impl;
 
-import java.util.List;
-
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.JMetalLogger;
 
@@ -12,7 +10,6 @@ import com.sim.common.CodeHelper;
 import com.sim.experiment.Config;
 import com.sim.experiment.ISimulationScheduler;
 import com.sim.oil.op.OPOilScheduleSimulationScheduler;
-import com.sim.operation.Operation;
 
 /**
  * 主动停运策略
@@ -25,29 +22,6 @@ public class Backtracking extends AbstractRule {
 
 	public Backtracking(ISimulationScheduler scheduler) {
 		super(scheduler);
-	}
-
-	/**
-	 * 判断是否满足定理1
-	 * 
-	 * @return
-	 */
-	private boolean enterUnsafeState(FactObject factObject) {
-		OPOilScheduleSimulationScheduler scheduler = (OPOilScheduleSimulationScheduler) _scheduler;
-
-		if (Operation.getHardCost(scheduler.getOperations()) > 0) {
-			return true;
-		}
-
-		Config config = factObject.getConfig();
-		double[] usableTime = scheduler.getDeadlineTime();
-
-		for (int i = 0; i < usableTime.length; i++) {
-			if (usableTime[i] <= config.RT) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override
@@ -65,7 +39,7 @@ public class Backtracking extends AbstractRule {
 		boolean backFlag = false;
 
 		// 1.计算所有策略的最大转运体积
-		double[][] vols = calculateMaxVolume(factObject);
+		double[][] vols = scheduler.calculateMaxVolume();
 
 		// 2.剔除生成策略中的不可用策略，即原油的最大转运体积低于某一个下限或者供油罐不可用的策略
 		for (int i = 0; i < vols.length; i++) {
@@ -77,7 +51,7 @@ public class Backtracking extends AbstractRule {
 		}
 
 		// 3.进入不可行状态，标记
-		if (enterUnsafeState(factObject)) {
+		if (scheduler.enterUnsafeState()) {
 			// 回溯，将高熔点塔的所有策略标记为0，低熔点塔的所有策略将会自动在回溯后标记
 			backFlag = true;
 		} else {
@@ -189,7 +163,7 @@ public class Backtracking extends AbstractRule {
 		if (backFlag) {
 			tank = 0;
 			ds = config.HighOilDS;
-			preemptiveScheduling(scheduler);
+			scheduler.preemptiveScheduling();
 		}
 
 		// 5.解码转运体积
@@ -214,88 +188,6 @@ public class Backtracking extends AbstractRule {
 		}
 
 		return new Fragment(ds, tank, vol, speed);
-	}
-
-	/**
-	 * 计算所有的最大体积
-	 * 
-	 * @return
-	 */
-	public double[][] calculateMaxVolume(FactObject factObjects) {
-		OPOilScheduleSimulationScheduler scheduler = (OPOilScheduleSimulationScheduler) _scheduler;
-		Config config = factObjects.getConfig();
-		Integer[][] policies = scheduler.policyStack.peek();
-		int rows = policies.length;
-		int cols = policies[0].length;
-		double[][] vols = new double[rows][cols];
-		for (int i = 0; i < vols.length; i++) {
-			for (int j = 0; j < vols[i].length; j++) {
-				vols[i][j] = 0;
-			}
-		}
-
-		// 1.确定转运速度的下标，具体速度需要根据管道确定，而管道又可以通过蒸馏塔确定
-		int loc = factObjects.getLoc();
-		DoubleSolution solution = ((DoubleSolution) factObjects.getSolution());
-		double code = solution.getVariableValue(loc * 2 + 1).doubleValue();
-		int indexOfSpeed = -1;
-		try {
-			indexOfSpeed = CodeHelper.getRow(code, 3, 1) - 1;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		// 2.筛选可用的策略【是否满足体积下限，供油罐是否可用】
-		for (int i = 0; i < policies.length; i++) {
-			// 每个蒸馏塔对应一条管道，不同管道对应的不同可用罐集合不同
-			int ds = i + 1;
-			int pipe = scheduler.getCurrentPipe(ds);
-			List<Integer> tankSet = scheduler.getTankSet(scheduler.getCurrentTime(pipe));
-
-			for (int j = 0; j < policies[i].length; j++) {
-				int tank = j;
-				if (tank > 0 && policies[i][tank] != 0 && tankSet.contains(tank)) {
-					double chargingSpeed = scheduler.getChargingSpeed(ds)[indexOfSpeed];// 计算转运速度
-					// 1.进料包
-					double fp_vol = config.getDSs().get(ds - 1).getNextOilVolume();
-					// 2.供油罐容量
-					double capacity = config.getTanks().get(tank - 1).getCapacity();
-					// 3.满足驻留时间约束的安全体积
-					double rt_vol = scheduler.getRTVolume(ds, chargingSpeed);
-					// 4. 保证供油罐占用不冲突的安全体积
-					double safe_vol = scheduler.getMaxSafeVolume(tank, ds, chargingSpeed);
-					// 5.判断体积是否低于下限
-					vols[i][j] = scheduler.getVolume(fp_vol, rt_vol, safe_vol, capacity);
-					if (scheduler.filterCondition(vols[i][j], fp_vol)) {
-						vols[i][j] = 0;// 【会出现可选该罐，但体积为0的情况】
-					}
-				}
-			}
-		}
-		return vols;
-	}
-
-	/**
-	 * 抢占式调度策略
-	 * 
-	 * @param scheduler
-	 */
-	private void preemptiveScheduling(OPOilScheduleSimulationScheduler scheduler) {
-
-		try {
-			// 1.设置当前所有的策略为不可用
-			Integer[][] currentPolicies = scheduler.policyStack.peek();
-			for (int i = 0; i < currentPolicies.length; i++) {
-				for (int j = 0; j < currentPolicies[i].length; j++) {
-					currentPolicies[i][j] = 0;
-				}
-			}
-
-			// 2.获取最需要转运原油的蒸馏塔
-			emergencyDs = scheduler.getMostEmergencyDS();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
