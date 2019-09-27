@@ -3,6 +3,7 @@ package org.uma.jmetal.algorithm.multiobjective.moead;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.uma.jmetal.algorithm.multiobjective.moead.util.MOEADUtils;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
@@ -29,7 +30,7 @@ public class ConstraintMOEAD extends AbstractMOEAD<DoubleSolution> {
 	private DifferentialEvolutionCrossover differentialEvolutionCrossover;
 	private ViolationThresholdComparator<DoubleSolution> violationThresholdComparator;
 
-	protected List<DoubleSolution> solutions = new LinkedList<>();
+	protected List<Double[]> solutions = new LinkedList<>();
 
 	public ConstraintMOEAD(Problem<DoubleSolution> problem, int populationSize, int resultPopulationSize,
 			int maxEvaluations, MutationOperator<DoubleSolution> mutation, CrossoverOperator<DoubleSolution> crossover,
@@ -56,7 +57,7 @@ public class ConstraintMOEAD extends AbstractMOEAD<DoubleSolution> {
 		// 1.保存初始种群并更新进度条
 		MainMethod.frame.updateProcessBar(evaluations);
 		for (int i = 0; i < populationSize; i++) {
-			solutions.add(CloneUtils.clone(population.get(i)));
+			solutions.add(CloneUtils.clone(ArrayUtils.toObject(population.get(i).getObjectives())));
 		}
 
 		while (evaluations < maxEvaluations) {
@@ -85,7 +86,7 @@ public class ConstraintMOEAD extends AbstractMOEAD<DoubleSolution> {
 			// 2.保存当前种群，并更新进度条
 			MainMethod.frame.updateProcessBar(evaluations);
 			for (int i = 0; i < populationSize; i++) {
-				solutions.add(CloneUtils.clone(population.get(i)));
+				solutions.add(CloneUtils.clone(ArrayUtils.toObject(population.get(i).getObjectives())));
 			}
 
 			violationThresholdComparator.updateThreshold(population);
@@ -163,7 +164,7 @@ public class ConstraintMOEAD extends AbstractMOEAD<DoubleSolution> {
 	}
 
 	@Override
-	public List<DoubleSolution> getSolutions() {
+	public List<Double[]> getSolutions() {
 		return solutions;
 	}
 

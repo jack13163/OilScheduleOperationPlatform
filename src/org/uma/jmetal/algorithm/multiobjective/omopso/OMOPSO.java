@@ -258,7 +258,7 @@ public class OMOPSO extends AbstractParticleSwarmOptimization<DoubleSolution, Li
 	}
 
 	@Override
-	public List<DoubleSolution> getSolutions() {
+	public List<Double[]> getSolutions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

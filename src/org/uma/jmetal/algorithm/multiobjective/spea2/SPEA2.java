@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.uma.jmetal.algorithm.impl.AbstractGeneticAlgorithm;
 import org.uma.jmetal.algorithm.multiobjective.spea2.util.EnvironmentalSelection;
 import org.uma.jmetal.operator.CrossoverOperator;
@@ -30,7 +31,7 @@ public class SPEA2<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, Li
 	protected final EnvironmentalSelection<S> environmentalSelection;
 	protected final int k;
 
-	protected List<S> solutions = new LinkedList<>();
+	protected List<Double[]> solutions = new LinkedList<>();
 
 	public SPEA2(Problem<S> problem, int maxIterations, int populationSize, CrossoverOperator<S> crossoverOperator,
 			MutationOperator<S> mutationOperator, SelectionOperator<List<S>, S> selectionOperator,
@@ -74,7 +75,7 @@ public class SPEA2<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, Li
 		population = evaluator.evaluate(population, getProblem());
 		// 2.保存到种群列表中
 		for (S s : population) {
-			solutions.add(CloneUtils.clone(s));
+			solutions.add(CloneUtils.clone(ArrayUtils.toObject(s.getObjectives())));
 		}
 		return population;
 	}
@@ -129,7 +130,7 @@ public class SPEA2<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, Li
 	}
 
 	@Override
-	public List<S> getSolutions() {
+	public List<Double[]> getSolutions() {
 		return solutions;
 	}
 

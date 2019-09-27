@@ -215,7 +215,7 @@ public class CoralReefsOptimization<S> extends AbstractCoralReefsOptimization<S,
 	}
 
 	@Override
-	public List<S> getSolutions() {
+	public List<Double[]> getSolutions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

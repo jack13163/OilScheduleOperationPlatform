@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.uma.jmetal.algorithm.impl.AbstractGeneticAlgorithm;
 import org.uma.jmetal.algorithm.multiobjective.nsgaiii.util.EnvironmentalSelection;
 import org.uma.jmetal.algorithm.multiobjective.nsgaiii.util.ReferencePoint;
@@ -35,7 +36,7 @@ public class NSGAIII<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, 
 	protected Vector<Integer> numberOfDivisions;
 	protected List<ReferencePoint<S>> referencePoints = new Vector<>();
 
-	protected List<S> solutions = new LinkedList<>();
+	protected List<Double[]> solutions = new LinkedList<>();
 
 	/** Constructor */
 	public NSGAIII(NSGAIIIBuilder<S> builder) { // can be created from the NSGAIIIBuilder within the same package
@@ -84,7 +85,7 @@ public class NSGAIII<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, 
 		population = evaluator.evaluate(population, getProblem());
 		// 2.保存到种群列表中
 		for (S s : population) {
-			solutions.add(CloneUtils.clone(s));
+			solutions.add(CloneUtils.clone(ArrayUtils.toObject(s.getObjectives())));
 		}
 
 		return population;
@@ -197,7 +198,7 @@ public class NSGAIII<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, 
 	}
 
 	@Override
-	public List<S> getSolutions() {
+	public List<Double[]> getSolutions() {
 		return solutions;
 	}
 

@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.uma.jmetal.algorithm.impl.AbstractGeneticAlgorithm;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
@@ -16,6 +17,7 @@ import org.uma.jmetal.util.SolutionListUtils;
 import org.uma.jmetal.util.comparator.DominanceComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 
+import com.sim.common.CloneUtils;
 import com.sim.ui.MainMethod;
 
 /**
@@ -33,7 +35,7 @@ public class NSGAII<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
 	protected int matingPoolSize;
 	protected int offspringPopulationSize;
 
-	protected List<S> solutions = new LinkedList<>();
+	protected List<Double[]> solutions = new LinkedList<>();
 
 	/**
 	 * Constructor
@@ -89,7 +91,9 @@ public class NSGAII<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
 		// 1.评价种群中个体的适应度
 		population = evaluator.evaluate(population, getProblem());
 		// 2.保存到种群列表中
-		solutions.addAll(population);
+		for (int i = 0; i < population.size(); i++) {
+			solutions.add(CloneUtils.clone(ArrayUtils.toObject(population.get(i).getObjectives())));
+		}
 
 		return population;
 	}
@@ -178,7 +182,7 @@ public class NSGAII<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
 	}
 
 	@Override
-	public List<S> getSolutions() {
+	public List<Double[]> getSolutions() {
 		return solutions;
 	}
 

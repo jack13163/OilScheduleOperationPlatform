@@ -169,7 +169,7 @@ public class PAES<S extends Solution<?>> extends AbstractEvolutionStrategy<S, Li
 	}
 
 	@Override
-	public List<S> getSolutions() {
+	public List<Double[]> getSolutions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

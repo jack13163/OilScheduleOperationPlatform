@@ -185,7 +185,7 @@ public class CellDE45 implements Algorithm<List<DoubleSolution>> {
 	}
 
 	@Override
-	public List<DoubleSolution> getSolutions() {
+	public List<Double[]> getSolutions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

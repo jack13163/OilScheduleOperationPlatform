@@ -149,7 +149,7 @@ public class DifferentialEvolution extends AbstractDifferentialEvolution<DoubleS
 	}
 
 	@Override
-	public DoubleSolution getSolutions() {
+	public List<Double[]> getSolutions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

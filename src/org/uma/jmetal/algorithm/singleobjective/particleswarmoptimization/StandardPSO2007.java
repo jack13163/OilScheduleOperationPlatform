@@ -276,7 +276,7 @@ public class StandardPSO2007 extends AbstractParticleSwarmOptimization<DoubleSol
 	}
 
 	@Override
-	public DoubleSolution getSolutions() {
+	public List<Double[]> getSolutions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

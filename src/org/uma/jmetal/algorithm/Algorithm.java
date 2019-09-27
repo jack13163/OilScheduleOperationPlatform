@@ -1,6 +1,7 @@
 package org.uma.jmetal.algorithm;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.uma.jmetal.util.naming.DescribedEntity;
 
@@ -16,7 +17,7 @@ public interface Algorithm<Result> extends Runnable, Serializable, DescribedEnti
 
 	Result getResult();
 
-	Result getSolutions();
+	List<Double[]> getSolutions();
 
 	void clearSolutions();
 }

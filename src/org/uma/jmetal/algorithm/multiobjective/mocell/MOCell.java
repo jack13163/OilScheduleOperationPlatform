@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.uma.jmetal.algorithm.impl.AbstractGeneticAlgorithm;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
@@ -22,6 +23,7 @@ import org.uma.jmetal.util.solutionattribute.impl.CrowdingDistance;
 import org.uma.jmetal.util.solutionattribute.impl.DominanceRanking;
 import org.uma.jmetal.util.solutionattribute.impl.LocationAttribute;
 
+import com.sim.common.CloneUtils;
 import com.sim.ui.MainMethod;
 
 /**
@@ -44,7 +46,7 @@ public class MOCell<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
 	protected Comparator<S> dominanceComparator;
 	protected LocationAttribute<S> location;
 
-	protected List<S> solutions = new LinkedList<>();
+	protected List<Double[]> solutions = new LinkedList<>();
 
 	/**
 	 * Constructor
@@ -112,7 +114,7 @@ public class MOCell<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
 			// 2.将深复制的解添加到储备集合中
 			archive.add((S) solution.copy());
 			// 3.保存到种群列表中
-			solutions.add((S) solution.copy());
+			solutions.add(CloneUtils.clone(ArrayUtils.toObject(solution.getObjectives())));
 		}
 
 		return population;
@@ -206,7 +208,7 @@ public class MOCell<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
 	}
 
 	@Override
-	public List<S> getSolutions() {
+	public List<Double[]> getSolutions() {
 		return solutions;
 	}
 

@@ -129,44 +129,18 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	}
 
 	/**
-	 * 获取各个蒸馏塔的炼油持续时间【负值代表已经延误】
-	 * 
-	 * @return
-	 */
-	public double[] getFeedingLastTime() {
-		double[] deadlines = getFeedingEndTime();
-		double tmp = Double.MAX_VALUE;
-		for (int i = 0; i < deadlines.length; i++) {
-			int ds = i + 1;
-			int pipe = getCurrentPipe(ds);
-			double currentTime = getCurrentTime(pipe);
-			if (deadlines[i] - currentTime < tmp) {
-				deadlines[i] = deadlines[i] - currentTime;
-			}
-		}
-		return deadlines;
-	}
-
-	/**
 	 * 获取最需要转运原油的蒸馏塔
 	 * 
 	 * @return
 	 */
 	public int getMostEmergencyDS() {
 		int ds = -1;
-		if (getTankSet(getCurrentTime(getCurrentPipe(config.HighOilDS))).isEmpty()) {
-			// 高熔点蒸馏塔只会在没有空罐可用的时候回溯
-			// 因此，只需要判断一下当前时刻是否有空罐可用即可知道是否继续转运高熔点蒸馏塔所需要的原油
-			ds = config.HighOilDS;
-		} else {
-			// 低熔点管道只需要看一下炼油结束时间即可
-			double[] deadlines = getFeedingEndTime();
-			double tmp = Double.MAX_VALUE;
-			for (int i = 0; i < deadlines.length; i++) {
-				if (deadlines[i] < tmp) {
-					tmp = deadlines[i];
-					ds = i + 1;
-				}
+		double[] deadlines = getFeedingEndTime();
+		double tmp = Double.MAX_VALUE;
+		for (int i = 0; i < deadlines.length; i++) {
+			if (deadlines[i] < tmp) {
+				tmp = deadlines[i];
+				ds = i + 1;
 			}
 		}
 		return ds;
@@ -841,10 +815,6 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	 * @return
 	 */
 	public boolean enterUnsafeState() {
-		if (Operation.getHardCost(operations) > 0) {
-			return true;
-		}
-
 		double[] usableTime = getDeadlineTime();
 
 		for (int i = 0; i < usableTime.length; i++) {

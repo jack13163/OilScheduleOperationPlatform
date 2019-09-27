@@ -118,7 +118,7 @@ public class SteadyStateGeneticAlgorithm<S extends Solution<?>> extends Abstract
 	}
 
 	@Override
-	public S getSolutions() {
+	public List<Double[]> getSolutions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

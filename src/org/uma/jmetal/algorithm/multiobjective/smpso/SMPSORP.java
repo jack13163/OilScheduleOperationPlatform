@@ -411,7 +411,7 @@ public class SMPSORP extends AbstractParticleSwarmOptimization<DoubleSolution, L
 	}
 
 	@Override
-	public List<DoubleSolution> getSolutions() {
+	public List<Double[]> getSolutions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

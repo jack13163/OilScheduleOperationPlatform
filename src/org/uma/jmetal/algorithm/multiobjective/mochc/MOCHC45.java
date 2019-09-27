@@ -200,7 +200,7 @@ public class MOCHC45 implements Algorithm<List<BinarySolution>> {
 	}
 
 	@Override
-	public List<BinarySolution> getSolutions() {
+	public List<Double[]> getSolutions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

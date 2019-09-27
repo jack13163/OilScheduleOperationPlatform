@@ -333,7 +333,7 @@ public class SMPSONovelty extends AbstractParticleSwarmOptimization<DoubleSoluti
 	}
 
 	@Override
-	public List<DoubleSolution> getSolutions() {
+	public List<Double[]> getSolutions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

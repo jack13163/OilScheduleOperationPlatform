@@ -293,7 +293,7 @@ public class IBEA<S extends Solution<?>> implements Algorithm<List<S>> {
 	}
 
 	@Override
-	public List<S> getSolutions() {
+	public List<Double[]> getSolutions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

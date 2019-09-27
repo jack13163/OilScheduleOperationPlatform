@@ -167,7 +167,7 @@ public class ESPEA<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, Li
 	}
 
 	@Override
-	public List<S> getSolutions() {
+	public List<Double[]> getSolutions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

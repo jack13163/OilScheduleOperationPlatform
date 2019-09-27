@@ -10,6 +10,7 @@ import org.uma.jmetal.util.fileoutput.SolutionListOutput;
 import org.uma.jmetal.util.fileoutput.impl.DefaultFileOutputContext;
 
 import com.sim.common.FileHelper;
+import com.sim.common.ListHelper;
 import com.sim.common.MathUtil;
 
 /**
@@ -79,7 +80,10 @@ public class ExperimentAlgorithm<S extends Solution<?>, Result extends List<S>> 
 		// 6.将solutions保存到文件，并释放
 		String solutionFunList = outputDirectoryName + "/FUN" + runId + ".list";
 		JMetalLogger.logger.info("Saving solutions fun to file: " + solutionFunList);
-		new SolutionListOutput(algorithm.getSolutions()).printObjectivesToFile(solutionFunList);
+
+		// 保存到本地
+		ListHelper.saveListToFile(solutionFunList, algorithm.getSolutions());
+
 		algorithm.clearSolutions();
 	}
 
