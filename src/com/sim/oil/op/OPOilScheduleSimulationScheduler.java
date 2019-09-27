@@ -175,11 +175,9 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 	/**
 	 * 获取当前时刻距离炼油结束的截止时间
 	 * 
-	 * 【用于判断是否满足规则1的安全性条件】
-	 * 
 	 * @return
 	 */
-	public double[] getDeadlineTime() {
+	private double[] getDeadlineTime() {
 		double[] oilEndTime = getFeedingEndTime();
 		double[] result = new double[oilEndTime.length];
 
