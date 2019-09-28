@@ -10,6 +10,8 @@ import org.apache.logging.log4j.Logger;
 import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
+import org.uma.jmetal.util.solutionattribute.impl.NumberOfViolatedConstraints;
+import org.uma.jmetal.util.solutionattribute.impl.OverallConstraintViolation;
 
 import com.models.DSObject;
 import com.models.FPObject;
@@ -31,6 +33,10 @@ public class OilScheduleOptimizationProblem extends AbstractDoubleProblem {
 	private Config config;
 	private boolean showEachStep;
 	private String ruleName = "";
+
+	// 约束违背度【与Deb三条准则有关】
+	public OverallConstraintViolation<DoubleSolution> overallConstraintViolationDegree;
+	public NumberOfViolatedConstraints<DoubleSolution> numberOfViolatedConstraints;
 
 	/**
 	 * Creates a new instance of oil schedule problem.
@@ -59,6 +65,9 @@ public class OilScheduleOptimizationProblem extends AbstractDoubleProblem {
 		List<Double> upperLimit = (List<Double>) conf.get("upperLimit");
 		setLowerLimit(lowerLimit);
 		setUpperLimit(upperLimit);
+
+		overallConstraintViolationDegree = new OverallConstraintViolation<DoubleSolution>();
+		numberOfViolatedConstraints = new NumberOfViolatedConstraints<DoubleSolution>();
 	}
 
 	/**
@@ -113,10 +122,23 @@ public class OilScheduleOptimizationProblem extends AbstractDoubleProblem {
 	 */
 	@Override
 	public void evaluate(DoubleSolution solution) {
+		int violatedConstraints = 0;
+		// 解码
 		double[] result = decode(solution);
 		for (int i = 0; i < result.length; i++) {
-			// 设置目标值
-			solution.setObjective(i, result[i]);
+			if (i == 0) {
+				// 设置约束值【最小化约束违背，所以应该将其规划化为最小化问题】
+				double overallConstraintViolation = -result[0];
+				if (Math.abs(overallConstraintViolation) > 0) {
+					violatedConstraints = 1;
+				}
+
+				overallConstraintViolationDegree.setAttribute(solution, overallConstraintViolation);
+				numberOfViolatedConstraints.setAttribute(solution, violatedConstraints);
+			} else {
+				// 设置目标值【目标自动设置】
+				solution.setObjective(i - 1, result[i]);
+			}
 		}
 	}
 
@@ -183,7 +205,8 @@ public class OilScheduleOptimizationProblem extends AbstractDoubleProblem {
 				RealtimeChart.getInstance().plot(hardCost);
 			}
 
-			return new double[] { energyCost, pipeMixingCost, tankMixingCost, numberOfChange, numberOfTankUsed };
+			return new double[] { hardCost, energyCost, pipeMixingCost, tankMixingCost, numberOfChange,
+					numberOfTankUsed };
 		}
 	}
 
