@@ -1,11 +1,7 @@
 package com.sim.experiment;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
+import com.sim.oil.cop.OilScheduleConstrainedOptimizationProblem;
+import com.sim.oil.op.OilScheduleOptimizationProblem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.uma.jmetal.algorithm.Algorithm;
@@ -24,20 +20,9 @@ import org.uma.jmetal.operator.impl.mutation.PolynomialMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.IntegerProblem;
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.problem.multiobjective.Binh2;
-import org.uma.jmetal.problem.multiobjective.ConstrEx;
-import org.uma.jmetal.problem.multiobjective.Golinski;
-import org.uma.jmetal.problem.multiobjective.Srinivas;
-import org.uma.jmetal.problem.multiobjective.Tanaka;
-import org.uma.jmetal.problem.multiobjective.Water;
-import org.uma.jmetal.problem.multiobjective.cdtlz.C1_DTLZ1;
-import org.uma.jmetal.problem.multiobjective.cdtlz.C1_DTLZ3;
-import org.uma.jmetal.problem.multiobjective.cdtlz.C2_DTLZ2;
-import org.uma.jmetal.problem.multiobjective.cdtlz.C3_DTLZ1;
-import org.uma.jmetal.problem.multiobjective.cdtlz.C3_DTLZ4;
-import org.uma.jmetal.problem.multiobjective.cdtlz.ConvexC2_DTLZ2;
-import org.uma.jmetal.qualityindicator.impl.Epsilon;
-import org.uma.jmetal.qualityindicator.impl.InvertedGenerationalDistancePlus;
+import org.uma.jmetal.problem.multiobjective.*;
+import org.uma.jmetal.problem.multiobjective.cdtlz.*;
+import org.uma.jmetal.qualityindicator.impl.*;
 import org.uma.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.IntegerDoubleSolution;
@@ -52,8 +37,11 @@ import org.uma.jmetal.util.experiment.component.GenerateReferenceParetoSetAndFro
 import org.uma.jmetal.util.experiment.util.ExperimentAlgorithm;
 import org.uma.jmetal.util.experiment.util.ExperimentProblem;
 
-import com.sim.oil.cop.OilScheduleConstrainedOptimizationProblem;
-import com.sim.oil.op.OilScheduleOptimizationProblem;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 配置时需要注意，需要先配置problem，后配置algorithm
@@ -157,7 +145,7 @@ public class ExperimentConfig {
 
 	/**
 	 * 为问题配置算法列表【整数编码】
-	 * 
+	 *
 	 * @param problemList
 	 * @return
 	 * @Deprecated 方法已过期
@@ -256,7 +244,7 @@ public class ExperimentConfig {
 
 	/**
 	 * 多次实验【混合编码】
-	 * 
+	 *
 	 * @param experimentName
 	 * @param problem
 	 * @param algorithms
@@ -386,13 +374,12 @@ public class ExperimentConfig {
 
 	/**
 	 * 多次实验【实数编码】
-	 * 
+	 *
 	 * @param problemList
 	 * @param algorithms
 	 * @param popSize
 	 * @param evaluation
 	 * @param runs
-	 * @param numOfThread
 	 * @throws IOException
 	 */
 	public static void doExperimentDoubleCode(List<ExperimentProblem<DoubleSolution>> problemList,
@@ -411,7 +398,11 @@ public class ExperimentConfig {
 						.setExperimentBaseDirectory("result").setOutputParetoFrontFileName("FUN")
 						.setOutputParetoSetFileName("VAR").setReferenceFrontDirectory("result/Experiment/PF")
 						.setIndicatorList(
-								Arrays.asList(new Epsilon<DoubleSolution>(), new PISAHypervolume<DoubleSolution>(),
+								Arrays.asList(new Epsilon<DoubleSolution>(),
+										new GeneralizedSpread<DoubleSolution>(),
+										new PISAHypervolume<DoubleSolution>(),//含有文献说明
+										new GenerationalDistance<DoubleSolution>(),
+										new InvertedGenerationalDistance<DoubleSolution>(),
 										new InvertedGenerationalDistancePlus<DoubleSolution>()))
 						.setIndependentRuns(runs).setNumberOfCores(0).setPopulationsize(popSize)
 						.setEvaluation(evaluation).build();
@@ -429,8 +420,12 @@ public class ExperimentConfig {
 
 	/**
 	 * 为问题配置算法列表【实数编码】
-	 * 
-	 * @param problemList
+	 *
+	 * @param algorithmList
+	 * @param problem
+	 * @param runs
+	 * @param popSize
+	 * @param evaluation
 	 * @return
 	 */
 	public static List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> configureAlgorithmListDoubleCode(
@@ -488,8 +483,12 @@ public class ExperimentConfig {
 
 	/**
 	 * 为问题配置算法列表【实数编码】
-	 * 
-	 * @param problemList
+	 *
+	 * @param algorithmList
+	 * @param problems
+	 * @param runs
+	 * @param popSize
+	 * @param evaluation
 	 * @return
 	 */
 	public static List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> configureAlgorithmListDoubleCode(
@@ -607,8 +606,12 @@ public class ExperimentConfig {
 
 	/**
 	 * 为实数编码问题配置算法列表
-	 * 
-	 * @param problemList
+	 *
+	 * @param algorithmList
+	 * @param problems
+	 * @param runs
+	 * @param popSize
+	 * @param evaluation
 	 * @return
 	 */
 	public static List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> configureAlgorithmListForTest(

@@ -309,5 +309,4 @@ public class PISAHypervolume<S extends Solution<?>> extends Hypervolume<S> {
     }
     return contributions;
   }
-
 }
