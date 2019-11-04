@@ -8,14 +8,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.sim.common.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.canvas.gante.ChartFrame;
-import com.sim.common.CSVHelper;
-import com.sim.common.MathHelper;
-import com.sim.common.MatlabPlotHelper;
-import com.sim.common.ValuesPair;
 import com.sim.experiment.Config;
 
 /**
@@ -618,19 +615,19 @@ public class Operation {
 	 */
 	public static void creatSangSen(List<Operation> operations) {
 		sortOperation(operations);
-		List<String> colors = new ArrayList<String>();
-		colors.add("#4f81bd");
-		colors.add("#E489C4");
-		colors.add("#77D0B4");
-		colors.add("#FC8F62");
-		colors.add("#FB5C4E");
-		colors.add("#3DBE5D");
-		colors.add("#8D9FCC");
-		colors.add("#F00029");
-		colors.add("#FFFF33");
-		colors.add("#c0504d");
-		colors.add("#9bbb59");
-		colors.add("#8064a2");
+		String rgbColors = "colors = {[255,255,255]/255;\n" +
+				"[51,204,255]/255;\n" +
+				"[255,255,0]/255;\n" +
+				"[51,204,102]/255;\n" +
+				"[51,255,204]/255;\n" +
+				"[255,255,153]/255;\n" +
+				"[219,186,119]/255;\n" +
+				"[204,255,255]/255;\n" +
+				"[102,255,51]/255;\n" +
+				"[255,204,0]/255;\n" +
+				"[102,153,255]/255;\n" +
+				"[153,204,51]/255;};";
+		List<String> colors = ColorHelper.RGBArray2HexArray(rgbColors);
 
 		StringBuilder sbBuilder = new StringBuilder("[");
 
