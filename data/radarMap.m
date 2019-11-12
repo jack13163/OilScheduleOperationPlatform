@@ -8,9 +8,14 @@ set(gcf,'Position',[600,162,900,850]);%设置绘图大小和位置
 box off
 axis off
 
+% 数据标准化
 ND = normlization(data, 1);
-% 聚类个数
-k = 9;
+
+% 确定聚类个数
+k = getk(ND,50);
+k = 15;
+
+% 聚类
 colors =  lines(k);
 label = init_methods(ND, k, 2);
 
@@ -29,6 +34,58 @@ end
 set(gcf,'Position',[600,162,900,850]);%设置绘图大小和位置
 box off
 axis off
+
+
+%% 确定聚类个数
+function k=getk(data,K)
+    [n,p]=size(data);
+    for i=1:p
+       minr=min(data(:,i));
+       maxr=max(data(:,i));
+       data(:,i)=(data(:,i)-minr)/(maxr-minr);%归一化
+    end
+    D=zeros(K-1,2);T=0;
+    for k=2:K
+        T=T+1;
+        [lable,c,sumd,d]=kmeans(data,k);
+        %data，n*p原始数据向量
+        %lable，n*1向量，聚类结果标签；
+        %c，k*p向量，k个聚类质心的位置
+        %sumd，1*k向量，类间所有点与该类质心点距离之和
+        %d，n*k向量，每个点与聚类质心的距离
+        %-----求每类数量-----
+        sort_num=zeros(k,1);%每类数量
+        for i=1:k
+            for j=1:n
+                if lable(j,1)==i
+                    sort_num(i,1)=sort_num(i,1)+1;
+                end
+            end
+        end
+        %-----求每类数量-----
+        sort_ind=sumd./sort_num;%每类类内平均距离
+        sort_ind_ave=mean(sort_ind);%类内平均距离
+        %-----求类间平均距离-----
+        h=nchoosek(k,2);A=zeros(h,2);t=0;sort_outd=zeros(h,1);
+        for i=1:k-1
+            for j=i+1:k
+                t=t+1;
+                A(t,1)=i;
+                A(t,2)=j;
+            end
+        end
+        for i=1:h
+            for j=1:p
+                sort_outd(i,1)=sort_outd(i,1)+(c(A(i,1),j)-c(A(i,2),j))^2;
+            end
+        end
+        sort_outd_ave=mean(sort_outd);%类间平均距离
+        %-----求类间平均距离-----
+        D(T,1)=k;
+        D(T,2)=sort_ind_ave/sort_outd_ave;
+    end
+    plot(D(:,1),D(:,2));
+end
 
 %% 数据预处理
     % 输入：无标签数据，聚类数，选择方法
