@@ -1,10 +1,11 @@
 package com.sim.oil.op;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.models.DSObject;
+import com.models.FPObject;
+import com.sim.common.CloneUtils;
+import com.sim.experiment.Config;
+import com.sim.operation.Operation;
+import com.sim.ui.RealtimeChart;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
@@ -13,12 +14,10 @@ import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
 import org.uma.jmetal.util.solutionattribute.impl.NumberOfViolatedConstraints;
 import org.uma.jmetal.util.solutionattribute.impl.OverallConstraintViolation;
 
-import com.models.DSObject;
-import com.models.FPObject;
-import com.sim.common.CloneUtils;
-import com.sim.experiment.Config;
-import com.sim.operation.Operation;
-import com.sim.ui.RealtimeChart;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 原油短期生产调度的无约束求解方法
@@ -97,7 +96,7 @@ public class OilScheduleOptimizationProblem extends AbstractDoubleProblem {
 				}
 			}
 		}
-		numberOfVariables = (N2 + N1 * 2) * 2;
+		numberOfVariables = (N2 + N1) * 2 + Config.stopTimes;//决策变量个数，当设置停运次数过小时，可能导致数组越界异常
 		result.put("numberOfVariables", numberOfVariables);
 		// 上下界
 		List<Double> lowerLimit = new ArrayList<>(numberOfVariables);

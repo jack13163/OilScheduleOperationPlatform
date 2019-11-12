@@ -1,10 +1,11 @@
 package com.sim.oil.cop;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.models.DSObject;
+import com.models.FPObject;
+import com.sim.common.CloneUtils;
+import com.sim.experiment.Config;
+import com.sim.operation.Operation;
+import com.sim.ui.RealtimeChart;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
@@ -13,12 +14,10 @@ import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
 import org.uma.jmetal.util.solutionattribute.impl.NumberOfViolatedConstraints;
 import org.uma.jmetal.util.solutionattribute.impl.OverallConstraintViolation;
 
-import com.models.DSObject;
-import com.models.FPObject;
-import com.sim.common.CloneUtils;
-import com.sim.experiment.Config;
-import com.sim.operation.Operation;
-import com.sim.ui.RealtimeChart;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 原油短期生产调度的约束求解方法
@@ -98,15 +97,15 @@ public class OilScheduleConstrainedOptimizationProblem extends AbstractDoublePro
 				}
 			}
 		}
-		numberOfVariables = (N2 + N1 * 2) * 2;
-		result.put("numberOfVariables", numberOfVariables);
+		numberOfVariables = (N2 + N1) * 2 + Config.stopTimes;
+		result.put("numberOfVariables", numberOfVariables);//决策变量个数，设置较小时，可能会发生数组访问越界异常。
 		// 上下界
 		List<Double> lowerLimit = new ArrayList<>(numberOfVariables);
 		List<Double> upperLimit = new ArrayList<>(numberOfVariables);
 		for (int i = 0; i < numberOfVariables; i++) {
 			if (i % 2 == 0) {
 				lowerLimit.add(0.0);
-				upperLimit.add(1.0);// TK,DS【主动停运或被动停运】
+				upperLimit.add(1.0);// 指派策略，TK->DS
 			} else if (i % 2 == 1) {
 				lowerLimit.add(0.0);
 				upperLimit.add(1.0);// Speed
@@ -147,7 +146,6 @@ public class OilScheduleConstrainedOptimizationProblem extends AbstractDoublePro
 	 * 解码【需要保证解码操作的原子性】
 	 * 
 	 * @param solution
-	 * @param config
 	 * @return
 	 */
 	public double[] decode(DoubleSolution solution) {

@@ -1,23 +1,17 @@
 package com.sim.experiment;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-
 import com.models.DSObject;
 import com.models.FPObject;
 import com.models.PipeObject;
 import com.models.TankObject;
 import com.sim.common.XMLHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+
+import java.io.Serializable;
+import java.util.*;
 
 public class Config implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -36,6 +30,9 @@ public class Config implements Serializable {
 	public static boolean ShowHardCostChart = false;
 	public static boolean ShowEachStep = false;
 	public Map<String, Double> referenceCost;// 参考成本
+
+	// 停运次数
+	public static int stopTimes = 10;
 
 	private List<TankObject> tanks;
 	private List<DSObject> dss;

@@ -1,19 +1,12 @@
 package com.sim.operation;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import com.canvas.gante.ChartFrame;
 import com.sim.common.*;
+import com.sim.experiment.Config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.canvas.gante.ChartFrame;
-import com.sim.experiment.Config;
+import java.util.*;
 
 /**
  * 操作
@@ -402,8 +395,8 @@ public class Operation {
 			}
 
 			for (int i = 0; i < pairs.size(); i++) {
-				int last = pairs.get(i).getLast();
-				int next = pairs.get(i).getNext();
+				int last = pairs.get(i).getLast() - 1;
+				int next = pairs.get(i).getNext() - 1;
 
 				result += costMatrix[last][next];
 			}

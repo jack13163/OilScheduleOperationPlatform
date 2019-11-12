@@ -33,7 +33,7 @@ public class VectorFileUtils {
 		referenceVectors = new double[vectorStrList.size()][];
 		for (int i = 0; i < vectorStrList.size(); i++) {
 			String vectorStr = vectorStrList.get(i);
-			String[] objectArray = vectorStr.split("\\s+|,");// 匹配空格或者逗号
+			String[] objectArray = vectorStr.split("[\\s,]+");// 匹配空格或者逗号
 			referenceVectors[i] = new double[objectArray.length];
 			for (int j = 0; j < objectArray.length; j++) {
 				referenceVectors[i][j] = Double.parseDouble(objectArray[j]);

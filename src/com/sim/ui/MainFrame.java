@@ -639,7 +639,7 @@ public class MainFrame extends JFrame {
 	/**
 	 * 更新下拉输入框
 	 * 
-	 * @param currentTime
+	 * @param fragment
 	 */
 	private void updateInputFragment(Fragment fragment) {
 		// 获取初始时刻供油罐的状态
@@ -1035,6 +1035,7 @@ public class MainFrame extends JFrame {
 	}
 
 	/**
+	 * 【结果分析模块】
 	 * 运行结果分析参数输入界面
 	 * 
 	 * @return
@@ -1085,6 +1086,7 @@ public class MainFrame extends JFrame {
 		selectedMetrics.add(new KeyValuePair("IGD", "IGD"));
 		selectedMetrics.add(new KeyValuePair("GD", "GD"));
 		selectedMetrics.add(new KeyValuePair("GSPREAD", "GSPREAD"));
+		//selectedMetrics.add(new KeyValuePair("C", "C"));
 		List<KeyValuePair> defaultMetrics = new LinkedList<>();
 		defaultMetrics.add(selectedMetrics.get(0));
 		MultiComboBox MetricsMCB = new MultiComboBox(selectedMetrics, defaultMetrics);

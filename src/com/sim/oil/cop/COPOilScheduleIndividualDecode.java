@@ -1,22 +1,20 @@
 package com.sim.oil.cop;
 
-import java.util.List;
-
-import org.uma.jmetal.solution.DoubleSolution;
-import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
-
 import com.sim.common.CSVHelper;
 import com.sim.experiment.Config;
 import com.sim.operation.Operation;
+import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
+
+import java.util.List;
 
 public class COPOilScheduleIndividualDecode {
 
 	/**
 	 * 解码
-	 * 
-	 * @param solution
+	 * @param path
+	 * @param row
 	 * @param ruleName
-	 * @return
 	 */
 	public static void decode(String path, int row, String ruleName) {
 		// 读取对应的记录
