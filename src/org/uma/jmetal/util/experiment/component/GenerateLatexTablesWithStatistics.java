@@ -2,6 +2,8 @@ package org.uma.jmetal.util.experiment.component;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.uma.jmetal.qualityindicator.impl.*;
+import org.uma.jmetal.qualityindicator.impl.hypervolume.WFGHypervolume;
 import org.uma.jmetal.util.JMetalLogger;
 import org.uma.jmetal.util.experiment.Experiment;
 import org.uma.jmetal.util.experiment.ExperimentComponent;
@@ -150,9 +152,9 @@ public class GenerateLatexTablesWithStatistics implements ExperimentComponent {
         // System.out.println("Experiment name: " + experimentName_);
         String latexFile = latexDirectoryName + "/" + "oilschedule.tex";
         printHeaderLatexCommands(latexFile);
-        for (int i = 0; i < experiment.getIndicatorList().size(); i++) {
-            printData(latexFile, i, mean, stdDeviation, "Mean and Standard Deviation");
-            printData(latexFile, i, median, iqr, "Median and Interquartile Range");
+        for (int i = 0; i < indicators.size(); i++) {
+            printData2(latexFile, i, mean, stdDeviation, "Mean and Standard Deviation",indicators,algorithms,problems);
+            printData2(latexFile, i, median, iqr, "Median and Interquartile Range",indicators,algorithms,problems);
         }
         printEndLatexCommands(latexFile);
     }
@@ -293,7 +295,7 @@ public class GenerateLatexTablesWithStatistics implements ExperimentComponent {
     void printHeaderLatexCommands(String fileName) throws IOException {
         try (FileWriter os = new FileWriter(fileName, false)) {
             os.write("\\documentclass{article}" + "\n");
-            os.write("\\title{" + experiment.getExperimentName() + "}" + "\n");
+            os.write("\\title{" + fileName + "}" + "\n");
             os.write("\\usepackage{colortbl}" + "\n");
             os.write("\\usepackage[table*]{xcolor}" + "\n");
             os.write("\\xdefinecolor{gray95}{gray}{0.65}" + "\n");
@@ -433,4 +435,163 @@ public class GenerateLatexTablesWithStatistics implements ExperimentComponent {
         }
     }
 
+    /**
+     * 本地分析
+     * @param latexFile
+     * @param indicatorIndex
+     * @param centralTendency
+     * @param dispersion
+     * @param caption
+     * @param indicators
+     * @param algorithms
+     * @param problems
+     * @throws IOException
+     */
+    private void printData2(String latexFile, int indicatorIndex, double[][][] centralTendency, double[][][] dispersion,
+                           String caption, List<String> indicators, List<String> algorithms, List<String> problems) throws IOException {
+        // Generate header of the table
+        try (FileWriter os = new FileWriter(latexFile, true)) {
+            os.write("\n");
+            os.write("\\begin{table}" + "\n");
+            os.write("\\caption{" + indicators.get(indicatorIndex) + ". " + caption + "}"
+                    + "\n");
+            os.write("\\label{table: " + indicators.get(indicatorIndex) + "}" + "\n");
+            os.write("\\centering" + "\n");
+            os.write("\\begin{scriptsize}" + "\n");
+            os.write("\\begin{tabular}{l");
+
+            // calculate the number of columns
+            os.write(StringUtils.repeat("l", algorithms.size()));
+            os.write("}\n");
+            os.write("\\hline");
+
+            // write table head
+            for (int i = -1; i < algorithms.size(); i++) {
+                if (i == -1) {
+                    os.write(" & ");
+                } else if (i == (algorithms.size() - 1)) {
+                    os.write(" " + algorithms.get(i) + "\\\\" + "\n");
+                } else {
+                    os.write("" + algorithms.get(i) + " & ");
+                }
+            }
+            os.write("\\hline \n");
+
+            // write lines
+            for (int i = 0; i < problems.size(); i++) {
+                // find the best value and second best value
+                double bestCentralTendencyValue;
+                double bestDispersionValue;
+                double secondBestCentralTendencyValue;
+                double secondBestDispersionValue;
+                int bestIndex = -1;
+                int secondBestIndex = -1;
+
+                GenericIndicator<?> indicator = null;
+                switch (indicators.get(indicatorIndex)) {
+                    case "HV":
+                        indicator = new WFGHypervolume<>();
+                        break;
+                    case "IGD":
+                        indicator = new InvertedGenerationalDistance<>();
+                        break;
+                    case "IGD+":
+                        indicator = new InvertedGenerationalDistancePlus<>();
+                        break;
+                    case "GSPREAD":
+                        indicator = new GeneralizedSpread<>();
+                        break;
+                    case "GD":
+                        indicator = new GenerationalDistance<>();
+                        break;
+                    case "EP":
+                        indicator = new Epsilon<>();
+                        break;
+                    default:
+                        indicator = new WFGHypervolume<>();
+                        break;
+                }
+
+                // 部分指标越大越好，这里需要判断
+                if (indicator.isTheLowerTheIndicatorValueTheBetter()) {
+                    bestCentralTendencyValue = Double.MAX_VALUE;
+                    bestDispersionValue = Double.MAX_VALUE;
+                    secondBestCentralTendencyValue = Double.MAX_VALUE;
+                    secondBestDispersionValue = Double.MAX_VALUE;
+                    for (int j = 0; j < (algorithms.size()); j++) {
+                        if ((centralTendency[indicatorIndex][i][j] < bestCentralTendencyValue)
+                                || ((centralTendency[indicatorIndex][i][j] == bestCentralTendencyValue)
+                                && (dispersion[indicatorIndex][i][j] < bestDispersionValue))) {
+                            secondBestIndex = bestIndex;
+                            secondBestCentralTendencyValue = bestCentralTendencyValue;
+                            secondBestDispersionValue = bestDispersionValue;
+                            bestCentralTendencyValue = centralTendency[indicatorIndex][i][j];
+                            bestDispersionValue = dispersion[indicatorIndex][i][j];
+                            bestIndex = j;
+                        } else if ((centralTendency[indicatorIndex][i][j] < secondBestCentralTendencyValue)
+                                || ((centralTendency[indicatorIndex][i][j] == secondBestCentralTendencyValue)
+                                && (dispersion[indicatorIndex][i][j] < secondBestDispersionValue))) {
+                            secondBestIndex = j;
+                            secondBestCentralTendencyValue = centralTendency[indicatorIndex][i][j];
+                            secondBestDispersionValue = dispersion[indicatorIndex][i][j];
+                        }
+                    }
+                } else {
+                    bestCentralTendencyValue = Double.MIN_VALUE;
+                    bestDispersionValue = Double.MIN_VALUE;
+                    secondBestCentralTendencyValue = Double.MIN_VALUE;
+                    secondBestDispersionValue = Double.MIN_VALUE;
+                    for (int j = 0; j < (algorithms.size()); j++) {
+                        if ((centralTendency[indicatorIndex][i][j] > bestCentralTendencyValue)
+                                || ((centralTendency[indicatorIndex][i][j] == bestCentralTendencyValue)
+                                && (dispersion[indicatorIndex][i][j] < bestDispersionValue))) {
+                            secondBestIndex = bestIndex;
+                            secondBestCentralTendencyValue = bestCentralTendencyValue;
+                            secondBestDispersionValue = bestDispersionValue;
+                            bestCentralTendencyValue = centralTendency[indicatorIndex][i][j];
+                            bestDispersionValue = dispersion[indicatorIndex][i][j];
+                            bestIndex = j;
+                        } else if ((centralTendency[indicatorIndex][i][j] > secondBestCentralTendencyValue)
+                                || ((centralTendency[indicatorIndex][i][j] == secondBestCentralTendencyValue)
+                                && (dispersion[indicatorIndex][i][j] < secondBestDispersionValue))) {
+                            secondBestIndex = j;
+                            secondBestCentralTendencyValue = centralTendency[indicatorIndex][i][j];
+                            secondBestDispersionValue = dispersion[indicatorIndex][i][j];
+                        }
+                    }
+                }
+
+                os.write(problems.get(i).replace("_", "\\_") + " & ");
+                for (int j = 0; j < (algorithms.size() - 1); j++) {
+                    if (j == bestIndex) {
+                        os.write("\\cellcolor{gray95}");
+                    }
+                    if (j == secondBestIndex) {
+                        os.write("\\cellcolor{gray25}");
+                    }
+
+                    String m = String.format(Locale.ENGLISH, "%10.2e", centralTendency[indicatorIndex][i][j]);
+                    String s = String.format(Locale.ENGLISH, "%8.1e", dispersion[indicatorIndex][i][j]);
+                    os.write("$" + m + "_{" + s + "}$ & ");
+                }
+                if (bestIndex == (algorithms.size() - 1)) {
+                    os.write("\\cellcolor{gray95}");
+                }
+                if (secondBestIndex == (algorithms.size() - 1)) {
+                    os.write("\\cellcolor{gray25}");
+                }
+                String m = String.format(Locale.ENGLISH, "%10.2e",
+                        centralTendency[indicatorIndex][i][algorithms.size() - 1]);
+                String s = String.format(Locale.ENGLISH, "%8.1e",
+                        dispersion[indicatorIndex][i][algorithms.size() - 1]);
+                os.write("$" + m + "_{" + s + "}$ \\\\" + "\n");
+            }
+
+            // close table
+            os.write("\\hline" + "\n");
+            os.write("\\end{tabular}" + "\n");
+            os.write("\\end{scriptsize}" + "\n");
+            os.write("\\end{table}" + "\n");
+        }
+    }
 }

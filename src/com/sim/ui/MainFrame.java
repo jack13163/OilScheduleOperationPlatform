@@ -1038,7 +1038,7 @@ public class MainFrame extends JFrame {
                             algorithmNames, Arrays.asList("EP", "IGD+", "HV", "GSPREAD", "GD", "IGD"));
 
                     String message = "生成分析结果保存路径：\r\n";
-                    message += experimentBaseDirectory;
+                    message += System.getProperty("user.dir") +"/" +  experimentBaseDirectory;
                     tool.show("分析结果生成完成", message);
 
                     // 显示结果分析界面
