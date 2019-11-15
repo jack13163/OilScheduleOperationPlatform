@@ -3,7 +3,7 @@ package com.rules;
 import com.rules.impl.EarliestDealineFirstAndPreemptiveScheduling;
 import com.rules.impl.EarliestDealineFirstAndTwoStepsScheduling;
 import com.rules.impl.Backtracking;
-import com.sim.experiment.ISimulationScheduler;
+import com.sim.common.ISimulationScheduler;
 
 public class RuleFactory {
 

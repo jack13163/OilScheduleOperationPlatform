@@ -7,8 +7,8 @@ import com.models.FactObject;
 import com.models.Fragment;
 import com.rules.AbstractRule;
 import com.sim.common.CodeHelper;
-import com.sim.experiment.Config;
-import com.sim.experiment.ISimulationScheduler;
+import com.sim.oil.Config;
+import com.sim.common.ISimulationScheduler;
 import com.sim.oil.op.OPOilScheduleSimulationScheduler;
 
 /**

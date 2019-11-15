@@ -2,7 +2,7 @@ package com.sim.operation;
 
 import com.canvas.gante.ChartFrame;
 import com.sim.common.*;
-import com.sim.experiment.Config;
+import com.sim.oil.Config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

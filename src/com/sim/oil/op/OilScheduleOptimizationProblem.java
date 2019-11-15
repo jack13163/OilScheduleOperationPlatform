@@ -3,7 +3,7 @@ package com.sim.oil.op;
 import com.models.DSObject;
 import com.models.FPObject;
 import com.sim.common.CloneUtils;
-import com.sim.experiment.Config;
+import com.sim.oil.Config;
 import com.sim.operation.Operation;
 import com.sim.ui.RealtimeChart;
 import org.apache.logging.log4j.LogManager;

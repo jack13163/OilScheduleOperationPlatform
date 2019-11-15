@@ -2,7 +2,7 @@ package com.rules;
 
 import com.models.FactObject;
 import com.models.Fragment;
-import com.sim.experiment.ISimulationScheduler;
+import com.sim.common.ISimulationScheduler;
 
 public abstract class AbstractRule {
 	protected static ISimulationScheduler _scheduler;

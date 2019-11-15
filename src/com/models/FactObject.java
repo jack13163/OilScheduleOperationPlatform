@@ -3,7 +3,7 @@ package com.models;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 
-import com.sim.experiment.Config;
+import com.sim.oil.Config;
 
 /**
  * 负责和规则引擎通信

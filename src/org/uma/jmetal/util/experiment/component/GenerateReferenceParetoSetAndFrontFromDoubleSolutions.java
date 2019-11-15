@@ -1,12 +1,5 @@
 package org.uma.jmetal.util.experiment.component;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.uma.jmetal.problem.DoubleProblem;
@@ -24,6 +17,13 @@ import org.uma.jmetal.util.fileoutput.SolutionListOutput;
 import org.uma.jmetal.util.front.Front;
 import org.uma.jmetal.util.front.imp.ArrayFront;
 import org.uma.jmetal.util.solutionattribute.impl.GenericSolutionAttribute;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class computes the reference Pareto set and front from a set of data
@@ -73,7 +73,7 @@ public class GenerateReferenceParetoSetAndFrontFromDoubleSolutions implements Ex
 
 		for (ExperimentProblem<?> problem : experiment.getProblemList()) {
 			// 1.获取某一个问题的非支配解集
-			List<DoubleSolution> nonDominatedSolutions = getNonDominatedSolutions(problem);
+			List<DoubleSolution> nonDominatedSolutions = getNonDominatedSolutions(problem.getTag());
 			referenceFrontFileNames.add(problem.getReferenceFront());
 
 			// 2.写入所有算法构成的参考平面到目录：result/Experiment/PF/
@@ -153,13 +153,13 @@ public class GenerateReferenceParetoSetAndFrontFromDoubleSolutions implements Ex
 	 * @return
 	 * @throws FileNotFoundException
 	 */
-	protected List<DoubleSolution> getNonDominatedSolutions(ExperimentProblem<?> problem) throws FileNotFoundException {
+	protected List<DoubleSolution> getNonDominatedSolutions(String problem) throws FileNotFoundException {
 		NonDominatedSolutionListArchive<DoubleSolution> nonDominatedSolutionArchive = new NonDominatedSolutionListArchive<DoubleSolution>();
 
 		for (ExperimentAlgorithm<?, ?> algorithm : experiment.getAlgorithmList()) {
 			// 问题目录结构为：result/data/algorithm/problem
 			String problemDirectory = experiment.getExperimentBaseDirectory() + "/data/" + algorithm.getAlgorithmTag()
-					+ "/" + problem.getTag();
+					+ "/" + problem;
 
 			for (int r = 0; r < experiment.getIndependentRuns(); r++) {
 				String frontFileName = problemDirectory + "/" + experiment.getOutputParetoFrontFileName() + r + ".tsv";
@@ -181,12 +181,51 @@ public class GenerateReferenceParetoSetAndFrontFromDoubleSolutions implements Ex
 	}
 
 	/**
+	 * 根据某一算法的运行结果，创建非支配解集
+	 * @param problem
+	 * @param algorithms
+	 * @param runs
+	 * @param experimentBaseDirectory
+	 * @param outputParetoFrontFileName
+	 * @param outputParetoSetFileName
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	public static List<DoubleSolution> getNonDominatedSolutions(String problem,List<String> algorithms,int runs,String experimentBaseDirectory,
+																   String outputParetoFrontFileName, String outputParetoSetFileName) throws FileNotFoundException {
+		NonDominatedSolutionListArchive<DoubleSolution> nonDominatedSolutionArchive = new NonDominatedSolutionListArchive<DoubleSolution>();
+
+		for (String algorithm : algorithms) {
+			// 问题目录结构为：result/data/algorithm/problem
+			String problemDirectory = experimentBaseDirectory + "/data/" + algorithm
+					+ "/" + problem;
+
+			for (int r = 0; r < runs; r++) {
+				String frontFileName = problemDirectory + "/" + outputParetoFrontFileName + r + ".tsv";
+				String paretoSetFileName = problemDirectory + "/" + outputParetoSetFileName + r
+						+ ".tsv";
+				Front frontWithObjectiveValues = new ArrayFront(frontFileName);
+				Front frontWithVariableValues = new ArrayFront(paretoSetFileName);
+				List<DoubleSolution> solutionList = createSolutionListFrontFiles(algorithm,
+						frontWithVariableValues, frontWithObjectiveValues);
+				if (solutionList != null && !solutionList.isEmpty()) {// 允许部分算法跑不出结果
+					for (DoubleSolution solution : solutionList) {
+						nonDominatedSolutionArchive.add(solution);
+					}
+				}
+			}
+		}
+
+		return nonDominatedSolutionArchive.getSolutionList();
+	}
+
+	/**
 	 * Create the output directory where the result files will be stored
 	 * 
 	 * @param outputDirectoryName
 	 * @return
 	 */
-	protected File createOutputDirectory(String outputDirectoryName) {
+	protected static File createOutputDirectory(String outputDirectoryName) {
 		File outputDirectory = new File(outputDirectoryName);
 
 		// 创建文件夹
@@ -203,7 +242,7 @@ public class GenerateReferenceParetoSetAndFrontFromDoubleSolutions implements Ex
 	 * @param frontWithObjectiveValues
 	 * @return
 	 */
-	protected List<DoubleSolution> createSolutionListFrontFiles(String algorithmName, Front frontWithVariableValues,
+	protected static List<DoubleSolution> createSolutionListFrontFiles(String algorithmName, Front frontWithVariableValues,
 			Front frontWithObjectiveValues) {
 		if (frontWithVariableValues.getNumberOfPoints() != frontWithObjectiveValues.getNumberOfPoints()) {
 			throw new JMetalException("The number of solutions in the variable and objective fronts are not equal");

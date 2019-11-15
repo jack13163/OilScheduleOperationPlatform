@@ -1,26 +1,20 @@
 package org.uma.jmetal.util.front.imp;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.StringTokenizer;
-
+import com.sim.oil.cop.OilScheduleConstrainedOptimizationProblem;
+import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
 import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.fileinput.VectorFileUtils;
 import org.uma.jmetal.util.front.Front;
 import org.uma.jmetal.util.point.Point;
 import org.uma.jmetal.util.point.impl.ArrayPoint;
+
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.*;
 
 /**
  * This class implements the {@link Front} interface by using an array of
@@ -193,6 +187,29 @@ public class ArrayFront implements Front {
 		}
 
 		return this;
+	}
+
+
+	/**
+	 * 转换为doublesolutionlist
+	 * @deprecated 该方法未被调用过，已废弃使用
+	 */
+	@Deprecated
+	public List<DoubleSolution> toDoubleSolutionList() {
+		List<DoubleSolution> solutionList = new ArrayList<>();
+		if (this.numberOfPoints == 0) {
+			throw new JMetalException("The list of solutions is empty");
+		}
+
+		for (int i = 0; i < this.numberOfPoints; i++) {
+			DoubleSolution solution = new DefaultDoubleSolution(new OilScheduleConstrainedOptimizationProblem(""));
+			for (int j = 0; j < this.pointDimensions; j++) {// 忽略最后一个空格
+				Double value = this.getPoint(i).getValue(j);
+				solution.setVariableValue(j, value);
+			}
+			solutionList.add(solution);
+		}
+		return solutionList;
 	}
 
 	public InputStream createInputStream(String fileName) throws FileNotFoundException {

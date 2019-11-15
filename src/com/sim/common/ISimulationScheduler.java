@@ -1,4 +1,4 @@
-package com.sim.experiment;
+package com.sim.common;
 
 public interface ISimulationScheduler {
 

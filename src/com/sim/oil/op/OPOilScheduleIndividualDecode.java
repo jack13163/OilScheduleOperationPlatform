@@ -1,7 +1,7 @@
 package com.sim.oil.op;
 
 import com.sim.common.CSVHelper;
-import com.sim.experiment.Config;
+import com.sim.oil.Config;
 import com.sim.oil.cop.OilScheduleConstrainedOptimizationProblem;
 import com.sim.operation.Operation;
 import org.uma.jmetal.solution.DoubleSolution;

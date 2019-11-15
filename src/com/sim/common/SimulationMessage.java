@@ -1,4 +1,4 @@
-package com.sim.experiment;
+package com.sim.common;
 
 import com.sim.operation.OperationType;
 

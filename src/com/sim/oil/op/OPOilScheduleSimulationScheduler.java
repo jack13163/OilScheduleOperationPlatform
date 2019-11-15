@@ -25,8 +25,8 @@ import com.rules.impl.Backtracking;
 import com.sim.common.CloneUtils;
 import com.sim.common.CodeHelper;
 import com.sim.common.MathUtil;
-import com.sim.experiment.Config;
-import com.sim.experiment.ISimulationScheduler;
+import com.sim.oil.Config;
+import com.sim.common.ISimulationScheduler;
 import com.sim.operation.Operation;
 import com.sim.operation.OperationType;
 
