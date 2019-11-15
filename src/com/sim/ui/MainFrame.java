@@ -6,10 +6,10 @@ import com.sim.common.ExcelHelper;
 import com.sim.common.JTableHelper;
 import com.sim.common.MatlabScriptHelper;
 import com.sim.common.ParetoHelper;
-import com.sim.oil.Config;
 import com.sim.experiment.ExperimentConfig;
 import com.sim.experiment.ExperimentGenerateReferenceParetoSetAndFrontFromDoubleSolutions;
 import com.sim.experiment.TestProblemsExperimentConfig;
+import com.sim.oil.Config;
 import com.sim.oil.cop.COPOilScheduleIndividualDecode;
 import com.sim.oil.cop.OilScheduleConstrainedOptimizationProblem;
 import com.sim.oil.op.OPOilScheduleIndividualDecode;
@@ -24,6 +24,7 @@ import org.javasim.SimulationProcess;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.experiment.component.ComputeQualityIndicators;
+import org.uma.jmetal.util.experiment.component.GenerateLatexTablesWithStatistics;
 import org.uma.jmetal.util.experiment.util.ExperimentProblem;
 
 import javax.swing.*;
@@ -1009,8 +1010,6 @@ public class MainFrame extends JFrame {
                     final List<String> algorithmNames = Arrays.asList(cbAlgorithmsForExperiment.getText().split(","));
                     final List<String> problemNames = Arrays.asList(cbProblemsForExperiment.getText().split(","));
 
-                    // 定义问题"EDF_PS", "EDF_TSS", "BT"
-
                     // 1.生成pareto参考前沿
                     String experimentBaseDirectory = "result/Experiment/";
                     String outputDirectoryName = "PF/";
@@ -1020,29 +1019,26 @@ public class MainFrame extends JFrame {
                             outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames, runs);
 
                     // 2.计算性能指标
-                    List<String> indicators = Arrays.asList("HV","EP","IGD","GD","IGD+","GSPREAD");
+                    List<String> indicators = Arrays.asList("HV", "EP", "IGD", "GD", "IGD+", "GSPREAD");
                     new ComputeQualityIndicators<>(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
-                            outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames, indicators,runs, popSize, evaluation);
-
-                    // 显示实验结果
-                    final DefaultTableModel mm = JTableHelper
-                            .showTable("result/Experiment/" + "QualityIndicatorSummary.csv", true, false);
+                            outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames, indicators, runs, popSize, evaluation);
+                    // 显示指标值
+                    final DefaultTableModel mm = JTableHelper.showTable(experimentBaseDirectory + "QualityIndicatorSummary.csv", true, false);
                     JTableHelper.showTableInSwing(table1, mm);
 
+                    // 3.生成latex统计表格
+                    new GenerateLatexTablesWithStatistics(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
+                            outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames,indicators, runs);
 
-//                    // 3.生成latex统计表格
-//                    new GenerateLatexTablesWithStatistics(experiment).run();
-
+                    // 4.生成matlab脚本
                     ExcelHelper.exportTable(table1, new File("data/experiment.csv"));
                     MatlabScriptHelper.Generate5DPlotMatlabScript("result/Experiment/PF/oilschedule.pf");
                     MatlabScriptHelper.GenerateBoxPlotMatlabScript("result/runTimes.csv");
                     MatlabScriptHelper.GenerateConvergenceMatlabScript("result/Experiment/", problemNames,
                             algorithmNames, Arrays.asList("EP", "IGD+", "HV", "GSPREAD", "GD", "IGD"));
 
-                    String message = "生成如下分析结果：\r\n";
-                    message += "每次实验的指标值：data/experiment.csv \r\n";
-                    message += "Pareto解集可视化：result/Experiment/Matlab/plot5D.m \r\n";
-                    message += "算法运行时间对比：result/Experiment/Matlab/runTimeCompare.m \r\n";
+                    String message = "生成分析结果保存路径：\r\n";
+                    message += experimentBaseDirectory;
                     tool.show("分析结果生成完成", message);
 
                     // 显示结果分析界面
