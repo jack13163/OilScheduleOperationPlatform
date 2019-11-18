@@ -1026,7 +1026,7 @@ public class MainFrame extends JFrame {
                     final DefaultTableModel mm = JTableHelper.showTable(experimentBaseDirectory + "QualityIndicatorSummary.csv", true, false);
                     JTableHelper.showTableInSwing(table1, mm);
 
-                    // 3.生成latex统计表格
+                    // 3.生成latex和excel统计表格
                     new GenerateLatexTablesWithStatistics(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
                             outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames,indicators, runs);
 

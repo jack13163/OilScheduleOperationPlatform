@@ -151,12 +151,46 @@ public class GenerateLatexTablesWithStatistics implements ExperimentComponent {
         }
         // System.out.println("Experiment name: " + experimentName_);
         String latexFile = latexDirectoryName + "/" + "oilschedule.tex";
+        String excelFile = latexDirectoryName + "/" + "oilschedule.csv";
         printHeaderLatexCommands(latexFile);
+        resetFile(excelFile);
         for (int i = 0; i < indicators.size(); i++) {
-            printData2(latexFile, i, mean, stdDeviation, "Mean and Standard Deviation",indicators,algorithms,problems);
-            printData2(latexFile, i, median, iqr, "Median and Interquartile Range",indicators,algorithms,problems);
+            printData2(latexFile, i, mean, stdDeviation, "Mean and Standard Deviation", indicators, algorithms, problems);
+            printData2(latexFile, i, median, iqr, "Median and Interquartile Range", indicators, algorithms, problems);
+            //输出到excel
+            printExcel(excelFile, i, median, stdDeviation, "Mean and Standard Deviation", indicators, algorithms, problems);
         }
         printEndLatexCommands(latexFile);
+    }
+
+    /**
+     * Deletes a file or directory if it does exist
+     *
+     * @param file
+     */
+    private static void resetFile(String file) {
+        File f = new File(file);
+        if (f.exists()) {
+            JMetalLogger.logger.info("Already existing file " + file);
+
+            if (f.isDirectory()) {
+                JMetalLogger.logger.info("Deleting directory " + file);
+                if (f.delete()) {
+                    JMetalLogger.logger.info("Directory successfully deleted.");
+                } else {
+                    JMetalLogger.logger.info("Error deleting directory.");
+                }
+            } else {
+                JMetalLogger.logger.info("Deleting file " + file);
+                if (f.delete()) {
+                    JMetalLogger.logger.info("File successfully deleted.");
+                } else {
+                    JMetalLogger.logger.info("Error deleting file.");
+                }
+            }
+        } else {
+            JMetalLogger.logger.info("File " + file + " does NOT exist.");
+        }
     }
 
     /**
@@ -437,6 +471,7 @@ public class GenerateLatexTablesWithStatistics implements ExperimentComponent {
 
     /**
      * 本地分析
+     *
      * @param latexFile
      * @param indicatorIndex
      * @param centralTendency
@@ -448,7 +483,7 @@ public class GenerateLatexTablesWithStatistics implements ExperimentComponent {
      * @throws IOException
      */
     private void printData2(String latexFile, int indicatorIndex, double[][][] centralTendency, double[][][] dispersion,
-                           String caption, List<String> indicators, List<String> algorithms, List<String> problems) throws IOException {
+                            String caption, List<String> indicators, List<String> algorithms, List<String> problems) throws IOException {
         // Generate header of the table
         try (FileWriter os = new FileWriter(latexFile, true)) {
             os.write("\n");
@@ -592,6 +627,158 @@ public class GenerateLatexTablesWithStatistics implements ExperimentComponent {
             os.write("\\end{tabular}" + "\n");
             os.write("\\end{scriptsize}" + "\n");
             os.write("\\end{table}" + "\n");
+        }
+    }
+
+
+    /**
+     * 本地分析，生成excel
+     *
+     * @param excelPath
+     * @param indicatorIndex
+     * @param centralTendency
+     * @param dispersion
+     * @param caption
+     * @param indicators
+     * @param algorithms
+     * @param problems
+     * @throws IOException
+     */
+    private void printExcel(String excelPath, int indicatorIndex, double[][][] centralTendency, double[][][] dispersion,
+                            String caption, List<String> indicators, List<String> algorithms, List<String> problems) throws IOException {
+        // Generate header of the table
+        try (FileWriter os = new FileWriter(excelPath, true)) {
+            os.write(indicators.get(indicatorIndex) + " " + caption + "\n");
+
+            // 标题
+            for (int i = -1; i < algorithms.size(); i++) {
+                if (i == -1) {
+                    // 第一个位置
+                    os.write(",");
+                } else if (i == (algorithms.size() - 1)) {
+                    os.write(algorithms.get(i));
+                } else {
+                    os.write(algorithms.get(i) + ",");
+                }
+            }
+            os.write("\n");
+
+            // 每一行数据
+            for (int i = 0; i < problems.size(); i++) {
+
+                os.write(problems.get(i) + ",");
+
+                // find the best value and second best value
+                double bestCentralTendencyValue;
+                double bestDispersionValue;
+                double secondBestCentralTendencyValue;
+                double secondBestDispersionValue;
+                int bestIndex = -1;
+                int secondBestIndex = -1;
+
+                GenericIndicator<?> indicator = null;
+                switch (indicators.get(indicatorIndex)) {
+                    case "HV":
+                        indicator = new WFGHypervolume<>();
+                        break;
+                    case "IGD":
+                        indicator = new InvertedGenerationalDistance<>();
+                        break;
+                    case "IGD+":
+                        indicator = new InvertedGenerationalDistancePlus<>();
+                        break;
+                    case "GSPREAD":
+                        indicator = new GeneralizedSpread<>();
+                        break;
+                    case "GD":
+                        indicator = new GenerationalDistance<>();
+                        break;
+                    case "EP":
+                        indicator = new Epsilon<>();
+                        break;
+                    default:
+                        indicator = new WFGHypervolume<>();
+                        break;
+                }
+
+                // 部分指标越大越好，这里需要判断
+                if (indicator.isTheLowerTheIndicatorValueTheBetter()) {
+                    bestCentralTendencyValue = Double.MAX_VALUE;
+                    bestDispersionValue = Double.MAX_VALUE;
+                    secondBestCentralTendencyValue = Double.MAX_VALUE;
+                    secondBestDispersionValue = Double.MAX_VALUE;
+                    for (int j = 0; j < (algorithms.size()); j++) {
+                        if ((centralTendency[indicatorIndex][i][j] < bestCentralTendencyValue)
+                                || ((centralTendency[indicatorIndex][i][j] == bestCentralTendencyValue)
+                                && (dispersion[indicatorIndex][i][j] < bestDispersionValue))) {
+                            secondBestIndex = bestIndex;
+                            secondBestCentralTendencyValue = bestCentralTendencyValue;
+                            secondBestDispersionValue = bestDispersionValue;
+                            bestCentralTendencyValue = centralTendency[indicatorIndex][i][j];
+                            bestDispersionValue = dispersion[indicatorIndex][i][j];
+                            bestIndex = j;
+                        } else if ((centralTendency[indicatorIndex][i][j] < secondBestCentralTendencyValue)
+                                || ((centralTendency[indicatorIndex][i][j] == secondBestCentralTendencyValue)
+                                && (dispersion[indicatorIndex][i][j] < secondBestDispersionValue))) {
+                            secondBestIndex = j;
+                            secondBestCentralTendencyValue = centralTendency[indicatorIndex][i][j];
+                            secondBestDispersionValue = dispersion[indicatorIndex][i][j];
+                        }
+                    }
+                } else {
+                    bestCentralTendencyValue = Double.MIN_VALUE;
+                    bestDispersionValue = Double.MIN_VALUE;
+                    secondBestCentralTendencyValue = Double.MIN_VALUE;
+                    secondBestDispersionValue = Double.MIN_VALUE;
+                    for (int j = 0; j < (algorithms.size()); j++) {
+                        if ((centralTendency[indicatorIndex][i][j] > bestCentralTendencyValue)
+                                || ((centralTendency[indicatorIndex][i][j] == bestCentralTendencyValue)
+                                && (dispersion[indicatorIndex][i][j] < bestDispersionValue))) {
+                            secondBestIndex = bestIndex;
+                            secondBestCentralTendencyValue = bestCentralTendencyValue;
+                            secondBestDispersionValue = bestDispersionValue;
+                            bestCentralTendencyValue = centralTendency[indicatorIndex][i][j];
+                            bestDispersionValue = dispersion[indicatorIndex][i][j];
+                            bestIndex = j;
+                        } else if ((centralTendency[indicatorIndex][i][j] > secondBestCentralTendencyValue)
+                                || ((centralTendency[indicatorIndex][i][j] == secondBestCentralTendencyValue)
+                                && (dispersion[indicatorIndex][i][j] < secondBestDispersionValue))) {
+                            secondBestIndex = j;
+                            secondBestCentralTendencyValue = centralTendency[indicatorIndex][i][j];
+                            secondBestDispersionValue = dispersion[indicatorIndex][i][j];
+                        }
+                    }
+                }
+
+                //前若干列
+                for (int j = 0; j < (algorithms.size() - 1); j++) {
+                    if (j == bestIndex) {
+                        os.write("++");
+                    }
+                    if (j == secondBestIndex) {
+                        os.write("+");
+                    }
+
+                    String m = String.format(Locale.ENGLISH, "%.2e", centralTendency[indicatorIndex][i][j]);
+                    String s = String.format(Locale.ENGLISH, "%.1e", dispersion[indicatorIndex][i][j]);
+                    os.write(m + "_" + s + ",");
+                }
+                //最后一列
+                if (bestIndex == (algorithms.size() - 1)) {
+                    os.write("++");
+                }
+                if (secondBestIndex == (algorithms.size() - 1)) {
+                    os.write("+");
+                }
+                String m = String.format(Locale.ENGLISH, "%.2e",
+                        centralTendency[indicatorIndex][i][algorithms.size() - 1]);
+                String s = String.format(Locale.ENGLISH, "%.1e",
+                        dispersion[indicatorIndex][i][algorithms.size() - 1]);
+                os.write(m + "_" + s + "\n");
+            }
+
+            // close table
+            os.write("\n\n\n\n");
         }
     }
 }

@@ -331,39 +331,35 @@ public class ComputeQualityIndicators<S extends Solution<?>, Result extends List
 
         try {
             Front referenceFront = new ArrayFront(experimentBaseDirectory + outputDirectoryName + "oilschedule.pf");
+            FrontNormalizer frontNormalizer = new FrontNormalizer(FrontUtils.getMinimumValues(referenceFront), FrontUtils.getMaximumValues(referenceFront));
+            Front normalizedReferenceFront = frontNormalizer.normalize(referenceFront);
 
             for (String ind : indicators) {
                 // 3. 以规范化后的整个运行结果所产生的的解为参考平面
                 GenericIndicator<S> indicator = null;
                 switch (ind) {
                     case "HV":
-                        indicator = new WFGHypervolume<>();
+                        indicator = new WFGHypervolume<>(normalizedReferenceFront);
                         break;
                     case "IGD":
-                        indicator = new InvertedGenerationalDistance<>();
+                        indicator = new InvertedGenerationalDistance<>(normalizedReferenceFront);
                         break;
                     case "IGD+":
-                        indicator = new InvertedGenerationalDistancePlus<>();
+                        indicator = new InvertedGenerationalDistancePlus<>(normalizedReferenceFront);
                         break;
                     case "GSPREAD":
-                        indicator = new GeneralizedSpread<>();
+                        indicator = new GeneralizedSpread<>(normalizedReferenceFront);
                         break;
                     case "GD":
-                        indicator = new GenerationalDistance<>();
+                        indicator = new GenerationalDistance<>(normalizedReferenceFront);
                         break;
                     case "EP":
-                        indicator = new Epsilon<>();
+                        indicator = new Epsilon<>(normalizedReferenceFront);
                         break;
                     default:
-                        indicator = new WFGHypervolume<>();
+                        indicator = new WFGHypervolume<>(normalizedReferenceFront);
                         break;
                 }
-
-                // 2. 根据所有运行结果中的最大值和最小值标准化
-                double[][] maxminvalue = NormalizationHelper.getMaxMinObjectValue();
-                FrontNormalizer frontNormalizer = new FrontNormalizer(maxminvalue[0], maxminvalue[1]);
-                Front normalizedReferenceFront = frontNormalizer.normalize(referenceFront);
-                indicator.setReferenceParetoFront(normalizedReferenceFront);
 
                 for (String problem : problems) {
                     for (String algorithm : algorithms) {
@@ -371,31 +367,24 @@ public class ComputeQualityIndicators<S extends Solution<?>, Result extends List
                         for (int r = 0; r < runs; r++) {
                             JMetalLogger.logger.info("Computing " + algorithm + " on " + problem + " run: " + r);
 
-                            // 4. 运行结果前沿
+                            // 1.标准化运行结果前沿，最终结果的指标值
                             Front front = new ArrayFront(dirName + outputParetoFrontFileName + r + ".tsv");
-
                             if (front.getNumberOfPoints() == 0) {
                                 JMetalLogger.logger.severe("运行结果为空，无法计算其指标");
                                 continue;
                             } else {
-                                // 5. 标准化运行结果前沿
                                 Front normalizedFront = frontNormalizer.normalize(front);
                                 List<PointSolution> normalizedPopulation = FrontUtils.convertFrontToSolutionList(normalizedFront);
-
-                                // 6. 计算指标值
                                 Double indicatorValue = (Double) indicator.evaluate((List<S>) normalizedPopulation);
-
-                                // 7. 写入指标值到当前目录下的指标文件中
                                 String qualityIndicatorFile = experimentBaseDirectory + "data/" + algorithm + "/" + problem + "/" + indicator.getName();
                                 writeQualityIndicatorValueToFile(indicatorValue, qualityIndicatorFile);
                             }
 
+                            // 2.随迭代而产生的指标值
                             int iterations = (int) Math.ceil(evaluation / popSize);
                             String solutionFunListFilePath = dirName + "FUN" + r + ".list";
                             List<S> solutionFunList = (List<S>) FrontUtils
                                     .convertFrontToSolutionList(new ArrayFront(solutionFunListFilePath));
-
-                            // 7. 写入指标值到当前目录下的指标文件中
                             String qualityIndicatorFile = dirName + indicator.getName() + ".r" + r;
                             resetFile(qualityIndicatorFile);
                             for (int i = 0; i < iterations; i++) {
@@ -403,8 +392,6 @@ public class ComputeQualityIndicators<S extends Solution<?>, Result extends List
                                 List<S> solutionList = solutionFunList.subList(i * popSize, (i + 1) * popSize);
                                 Front normalizedFront = frontNormalizer.normalize(new ArrayFront(solutionList));
                                 List<PointSolution> normalizedPopulation = FrontUtils.convertFrontToSolutionList(normalizedFront);
-
-                                // 6. 计算指标值
                                 Double indicatorValue = (Double) indicator.evaluate((List<S>) normalizedPopulation);
                                 writeQualityIndicatorValueToFile(indicatorValue, qualityIndicatorFile);
                             }
@@ -421,12 +408,12 @@ public class ComputeQualityIndicators<S extends Solution<?>, Result extends List
             FileWriter os = new FileWriter(csvFileName, true);
             os.write("" + headerOfCSVFile + "\n");
 
-            for (String indicator : indicators) {
-                for (String algorithm : algorithms) {
-                    String algorithmDirectory;
-                    algorithmDirectory = experimentBaseDirectory + "data/" + algorithm;
+            for (String algorithm : algorithms) {
+                String algorithmDirectory;
+                algorithmDirectory = experimentBaseDirectory + "data/" + algorithm;
 
-                    for (String problem : problems) {
+                for (String problem : problems) {
+                    for (String indicator : indicators) {
                         String indicatorFileName = algorithmDirectory + "/" + problem + "/" + indicator;
                         Path indicatorFile = Paths.get(indicatorFileName);
                         if (indicatorFile == null) {
@@ -434,9 +421,7 @@ public class ComputeQualityIndicators<S extends Solution<?>, Result extends List
                         }
                         System.out.println("-----");
                         System.out.println(indicatorFileName);
-
-                        List<String> fileArray;
-                        fileArray = Files.readAllLines(indicatorFile, StandardCharsets.UTF_8);
+                        List<String> fileArray = Files.readAllLines(indicatorFile, StandardCharsets.UTF_8);
                         System.out.println(fileArray);
                         System.out.println("++++++");
 

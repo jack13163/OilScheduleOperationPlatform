@@ -192,7 +192,7 @@ public class ArrayFront implements Front {
 
 	/**
 	 * 转换为doublesolutionlist
-	 * @deprecated 该方法未被调用过，已废弃使用
+	 * @deprecated 该方法未被调用过，已废弃使用，请使用FrontUtils.convertFrontToSolutionList
 	 */
 	@Deprecated
 	public List<DoubleSolution> toDoubleSolutionList() {

@@ -54,7 +54,6 @@ public class WfgHypervolumeVersion {
     for (int i = 1; i < front.getNumberOfPoints(); i++) {
       hv += Math.abs((front.getPoint(i).getValue(0) - referencePoint.getValue(0)) *
           (front.getPoint(i).getValue(1) - front.getPoint(i - 1).getValue(1)));
-
     }
 
     return hv;
