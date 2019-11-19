@@ -164,7 +164,9 @@ public class OilScheduleConstrainedOptimizationProblem extends AbstractDoublePro
 			}
 
 			// 计算硬约束
-			double hardCost = Operation.getHardCost(operations);
+			double delayCost = Operation.getDelayCost(operations);
+			double maintenanceCost = Operation.getTankMaintenanceTime(operations);
+			double hardCost = delayCost + maintenanceCost;
 
 			// 计算软约束
 			double energyCost = Operation.getEnergyCost(operations);

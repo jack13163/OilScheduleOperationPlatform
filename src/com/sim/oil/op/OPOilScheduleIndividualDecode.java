@@ -50,7 +50,7 @@ public class OPOilScheduleIndividualDecode {
 		}
 
 		// 计算硬约束
-		double hardCost = Operation.getHardCost(operations);
+		double hardCost = Operation.getDelayCost(operations);
 
 		// 计算软约束
 		double energyCost = Operation.getEnergyCost(operations);

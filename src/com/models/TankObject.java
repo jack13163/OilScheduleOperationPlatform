@@ -1,16 +1,8 @@
 package com.models;
 
-import java.io.Serializable;
+import com.statemode.*;
 
-import com.statemode.EmptyState;
-import com.statemode.HotReadyState;
-import com.statemode.HotingPipeState;
-import com.statemode.InputState;
-import com.statemode.OilTankState;
-import com.statemode.OutputState;
-import com.statemode.ReadyState;
-import com.statemode.StateException;
-import com.statemode.StayState;
+import java.io.Serializable;
 
 /**
  * 供油罐
@@ -40,6 +32,8 @@ public class TankObject implements OilTankState, Serializable {
 	private int oiltype;
 
 	private int assign;
+
+	private boolean maintenance;
 
 	public int getAssign() {
 		return assign;
@@ -132,5 +126,13 @@ public class TankObject implements OilTankState, Serializable {
 	@Override
 	public void hotEnd() throws StateException {
 		this.status.hotEnd();
+	}
+
+	public boolean isMaintenance() {
+		return maintenance;
+	}
+
+	public void setMaintenance(boolean maintenance) {
+		this.maintenance = maintenance;
 	}
 }

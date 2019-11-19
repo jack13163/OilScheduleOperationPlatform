@@ -48,7 +48,9 @@ public class COPOilScheduleIndividualDecode {
 		}
 
 		// 计算硬约束
-		double hardCost = Operation.getHardCost(operations);
+		double delayCost = Operation.getDelayCost(operations);
+		double maintenanceCost = Operation.getTankMaintenanceTime(operations);
+		double hardCost = delayCost + maintenanceCost;
 
 		// 计算软约束
 		double energyCost = Operation.getEnergyCost(operations);
@@ -78,6 +80,7 @@ public class COPOilScheduleIndividualDecode {
 		// 绘制甘特图
 		Operation.plotSchedule2(operations);
 		Operation.creatSangSen(operations);
+		double[] freeTimes = Operation.getTankMaxFreeTime(operations);
 
 		return new double[] { hardCost, energyCost, pipeMixingCost, tankMixingCost, numberOfChange, numberOfTankUsed };
 	}

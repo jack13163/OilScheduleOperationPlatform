@@ -1,16 +1,5 @@
 package com.sim.onlineoperation;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.models.DSObject;
 import com.models.FPObject;
 import com.models.Fragment;
@@ -19,6 +8,15 @@ import com.sim.common.MathHelper;
 import com.sim.oil.Config;
 import com.sim.operation.Operation;
 import com.sim.operation.OperationType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 关键在于冲突检查
@@ -497,7 +495,10 @@ public class OnlineSimulationController {
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columnNames);
 		Object[] data = new Object[columnNames.length];
-		data[0] = Operation.getHardCost(operations);
+		double delayCost = Operation.getDelayCost(operations);
+		double maintenanceCost = Operation.getTankMaintenanceTime(operations);
+		double hardCost = delayCost + maintenanceCost;
+		data[0] = hardCost;
 		data[1] = Operation.getNumberOfChange(operations);
 		data[2] = Operation.getTankMixingCost(operations);
 		data[3] = Operation.getPipeMixingCost(operations);

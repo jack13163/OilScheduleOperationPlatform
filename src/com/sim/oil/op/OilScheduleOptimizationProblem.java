@@ -164,7 +164,7 @@ public class OilScheduleOptimizationProblem extends AbstractDoubleProblem {
 			}
 
 			// 计算硬约束
-			double hardCost = Operation.getHardCost(operations);
+			double hardCost = Operation.getDelayCost(operations);
 			if (hardCost != 0.0) {
 				logger.fatal("optimization problem's hardCost don't equals to 0.");
 			}
