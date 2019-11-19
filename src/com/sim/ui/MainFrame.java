@@ -944,6 +944,16 @@ public class MainFrame extends JFrame {
         btnStartForExperiment = new JButton("开始实验");
         btnStartForExperiment.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+                // 如果存在实验数据，提示用户是否覆盖
+                if(new File("result/Experiment/data/").exists()) {
+                    int result = JOptionPane.showConfirmDialog(null, "确认要覆盖已有的实验结果吗?", "确认", JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE);
+                    if (result != JOptionPane.OK_OPTION) {
+                        return;
+                    }
+                }
+
                 // 不显示任何可视化界面
                 Config.ShowHardCostChart = false;
                 Config.ShowDetail = false;
