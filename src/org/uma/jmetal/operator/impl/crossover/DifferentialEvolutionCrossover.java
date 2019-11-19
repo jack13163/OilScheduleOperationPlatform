@@ -68,8 +68,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<DoubleS
    * @param cr
    * @param f
    * @param variant
-   * @param jRandomGenerator
-   * @param crRandomGenerator
+   * @param randomGenerator
    */
   public DifferentialEvolutionCrossover(double cr, double f, String variant, RandomGenerator<Double> randomGenerator) {
 	  this(cr, f, variant, BoundedRandomGenerator.fromDoubleToInteger(randomGenerator), BoundedRandomGenerator.bound(randomGenerator));
@@ -150,8 +149,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<DoubleS
             "best/1/bin".equals(variant)) {
       for (int j = 0; j < numberOfVariables; j++) {
         if (crRandomGenerator.getRandomValue(0.0, 1.0) < cr || j == jrand) {
-          double value;
-          value = parentSolutions.get(2).getVariableValue(j) + f * (parentSolutions.get(0).getVariableValue(
+          double value = parentSolutions.get(2).getVariableValue(j) + f * (parentSolutions.get(0).getVariableValue(
             j) -
             parentSolutions.get(1).getVariableValue(j));
 
@@ -172,8 +170,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<DoubleS
             "best/1/exp".equals(variant)) {
       for (int j = 0; j < numberOfVariables; j++) {
         if (crRandomGenerator.getRandomValue(0.0, 1.0) < cr || j == jrand) {
-          double value;
-          value = parentSolutions.get(2).getVariableValue(j) + f * (parentSolutions.get(0).getVariableValue(j) -
+          double value = parentSolutions.get(2).getVariableValue(j) + f * (parentSolutions.get(0).getVariableValue(j) -
                   parentSolutions.get(1).getVariableValue(j));
 
           if (value < child.getLowerBound(j)) {
@@ -194,8 +191,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<DoubleS
     } else if ("current-to-rand/1".equals(variant) ||
             "current-to-best/1".equals(variant)) {
       for (int j = 0; j < numberOfVariables; j++) {
-        double value;
-        value = currentSolution.getVariableValue(j) + k * (parentSolutions.get(2).getVariableValue(j) -
+        double value = currentSolution.getVariableValue(j) + k * (parentSolutions.get(2).getVariableValue(j) -
                 currentSolution.getVariableValue(j)) +
                 f * (parentSolutions.get(0).getVariableValue(j) - parentSolutions.get(1).getVariableValue(j));
 
@@ -212,8 +208,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<DoubleS
             "current-to-best/1/bin".equals(variant)) {
       for (int j = 0; j < numberOfVariables; j++) {
         if (crRandomGenerator.getRandomValue(0.0, 1.0) < cr || j == jrand) {
-          double value;
-          value = currentSolution.getVariableValue(j) + k * (parentSolutions.get(2).getVariableValue(j) -
+          double value = currentSolution.getVariableValue(j) + k * (parentSolutions.get(2).getVariableValue(j) -
                   currentSolution.getVariableValue(j)) +
                   f * (parentSolutions.get(0).getVariableValue(j) - parentSolutions.get(1).getVariableValue(j));
 
@@ -235,8 +230,7 @@ public class DifferentialEvolutionCrossover implements CrossoverOperator<DoubleS
             "current-to-best/1/exp".equals(variant)) {
       for (int j = 0; j < numberOfVariables; j++) {
         if (crRandomGenerator.getRandomValue(0.0, 1.0) < cr || j == jrand) {
-          double value;
-          value = currentSolution.getVariableValue(j) + k * (parentSolutions.get(2).getVariableValue(j) -
+          double value = currentSolution.getVariableValue(j) + k * (parentSolutions.get(2).getVariableValue(j) -
                   currentSolution.getVariableValue(j)) +
                   f * (parentSolutions.get(0).getVariableValue(j) - parentSolutions.get(1).getVariableValue(j));
 

@@ -1,21 +1,22 @@
 package com.chart.util;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.swing.JFrame;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.labels.StandardXYSeriesLabelGenerator;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleEdge;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class ChartHelper {
 	/**
@@ -80,37 +81,82 @@ public class ChartHelper {
 	 * @return
 	 */
 	public static JFreeChart createChart(String title, String xlabel, String ylabel, XYDataset dataset) {
+		Font titleFont = new Font("宋体", Font.BOLD, 20);
+		Font numFont = new Font("Times New Roman", 10, 16);
+		Font labelFont = new Font("宋体", 10, 16); // 设定字体、类型、字号
+
 		// 创建JFreeChart对象
 		JFreeChart jfreechart = ChartFactory.createXYLineChart(title, xlabel, ylabel, dataset, PlotOrientation.VERTICAL,
 				true, true, false);
-		jfreechart.setBackgroundPaint(Color.white);// 设置背景色为白色
 
-		Font titleFont = new Font("黑体", Font.BOLD, 18);
-		Font font1 = new Font("宋体", 10, 12);
-		Font font2 = new Font("宋体", 10, 16); // 设定字体、类型、字号
+		// 设置背景色为白色
+		jfreechart.setBackgroundPaint(Color.white);
 
+		// 设置标题字体
 		jfreechart.getTitle().setFont(titleFont);
-		// 使用CategoryPlot设置各种参数
+
+		// 设置数据集
 		XYPlot plot = (XYPlot) jfreechart.getPlot();
 		plot.setDataset(dataset);
+
 		// 设置背景色和背景色的透明度
 		plot.setBackgroundAlpha(0f);
 		plot.setForegroundAlpha(0.5f);
 
-		// 其它设置可以参考XYPlot类
-		ValueAxis categoryAxis = plot.getDomainAxis(); // 横轴上的
-		categoryAxis.setPositiveArrowVisible(true);// 增加横轴的箭头
-		categoryAxis.setTickLabelFont(font1);
-		categoryAxis.setLabelFont(font2);// 相当于横轴或理解为X轴
+		// 设置外边框是否可见
+		plot.setOutlineVisible(false);
 
+		// 设置横轴属性
+		ValueAxis categoryAxis = plot.getDomainAxis();
+		categoryAxis.setPositiveArrowVisible(true);// 增加横轴的箭头
+		categoryAxis.setTickLabelFont(numFont);
+		categoryAxis.setLabelFont(labelFont);
+
+		// 设置纵轴属性
 		ValueAxis rangeAxis = plot.getRangeAxis();
 		rangeAxis.setPositiveArrowVisible(true);// 增加纵轴的箭头
-		rangeAxis.setTickLabelFont(font1);
-		rangeAxis.setLabelFont(font2);// 相当于竖轴理解为Y轴
+		rangeAxis.setTickLabelFont(numFont);
+		rangeAxis.setLabelFont(labelFont);
 
+		// 设置网格线
+		plot.setDomainGridlinePaint(Color.gray);  // 设置横向网格线灰色
+		plot.setDomainGridlinesVisible(true);     // 设置显示横向网格线
+		plot.setRangeGridlinePaint(Color.gray);   // 设置纵向网格线灰色
+		plot.setRangeGridlinesVisible(true);      // 设置显示纵向网格线
+
+		// 设置图例属性
 		LegendTitle legendTitle = jfreechart.getLegend();
-		legendTitle.setItemFont(font2);// 设置图例字体样式
+		legendTitle.setItemFont(labelFont);
 		legendTitle.setPosition(RectangleEdge.BOTTOM);
+
+		// 设置每一个序列线和数据点
+		XYItemRenderer r = plot.getRenderer();
+		if (r instanceof XYLineAndShapeRenderer) {
+			XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;
+			// 数据点样式设置
+			renderer.setBaseShapesVisible(true);    // 数据点显示外框
+			renderer.setBaseShapesFilled(true);     // 数据点外框内是否填充
+			renderer.setUseFillPaint(true); // 如果要在数据点外框内填充自定义的颜色，这个标志位必须为真
+			renderer.setLegendItemToolTipGenerator(new StandardXYSeriesLabelGenerator("{0}"));// 鼠标移到序列线上提示信息为“序列线的名字”
+
+			Color[] colors=new Color[]{
+					Color.RED,
+					Color.GREEN,
+					Color.BLUE,
+					Color.ORANGE,
+					Color.CYAN,
+					Color.lightGray
+			};
+
+			for (int i = 0; i < colors.length; i++) {
+				// 设置折线加粗
+				renderer.setSeriesStroke(i, new BasicStroke(1.5F));
+				// 设置数据点填充颜色
+				renderer.setSeriesFillPaint(i, Color.WHITE);    // 第二条序列线上数据点外框内填充颜色为白色
+				// 设置序列线颜色
+				renderer.setSeriesPaint(i, colors[i]);
+			}
+		}
 
 		return jfreechart;
 	}

@@ -147,7 +147,7 @@ public class MainFrame extends JFrame {
             }
         });
         // 设置窗体大小并居中
-        setWindowSizeAndCenter(1200, 800);
+        setWindowSizeAndCenter(this,1200, 800);
         setTitle(s);
         menubar = new JMenuBar();
         menuSystem = new JMenu("系统(S)");
@@ -877,6 +877,8 @@ public class MainFrame extends JFrame {
         problemList.add(new KeyValuePair("BT", "BT"));
         List<KeyValuePair> defaultValue1 = new LinkedList<>();
         defaultValue1.add(new KeyValuePair("EDF_PS", "EDF_PS"));
+        defaultValue1.add(new KeyValuePair("EDF_TSS", "EDF_TSS"));
+        defaultValue1.add(new KeyValuePair("BT", "BT"));
         cbProblemsForExperiment = new MultiComboBox(problemList, defaultValue1);
         HBox5.add(cbProblemsForExperiment);
         box.add(HBox5);
@@ -893,6 +895,9 @@ public class MainFrame extends JFrame {
         algorithmList.add(new KeyValuePair("MoCell", "MoCell"));
         List<KeyValuePair> defaultValue2 = new LinkedList<>();
         defaultValue2.add(new KeyValuePair("NSGAII", "NSGAII"));
+        defaultValue2.add(new KeyValuePair("NSGAIII", "NSGAIII"));
+        defaultValue2.add(new KeyValuePair("cMOEAD", "cMOEAD"));
+        defaultValue2.add(new KeyValuePair("SPEA2", "SPEA2"));
         cbAlgorithmsForExperiment = new MultiComboBox(algorithmList, defaultValue2);
         HBox4.add(cbAlgorithmsForExperiment);
         // 添加标签到面板
@@ -911,7 +916,7 @@ public class MainFrame extends JFrame {
         JLabel lblEvaluation = new JLabel("评价次数：");
         HBox2.add(lblEvaluation);
         txtEvaluationForExperiment = new JTextField();
-        txtEvaluationForExperiment.setText("10000");
+        txtEvaluationForExperiment.setText("25000");
         txtEvaluationForExperiment.setColumns(10);
         HBox2.add(txtEvaluationForExperiment);
         box.add(HBox2);
@@ -921,7 +926,7 @@ public class MainFrame extends JFrame {
         JLabel label = new JLabel("运行次数：");
         HBox3.add(label);
         txtRuns = new JTextField();
-        txtRuns.setText("5");
+        txtRuns.setText("10");
         txtRuns.setColumns(10);
         HBox3.add(txtRuns);
         box.add(HBox3);
@@ -1010,36 +1015,43 @@ public class MainFrame extends JFrame {
                     final List<String> algorithmNames = Arrays.asList(cbAlgorithmsForExperiment.getText().split(","));
                     final List<String> problemNames = Arrays.asList(cbProblemsForExperiment.getText().split(","));
 
-                    // 1.生成pareto参考前沿
+                    // 生成结果的路径
                     String experimentBaseDirectory = "result/Experiment/";
                     String outputDirectoryName = "PF/";
                     String outputParetoFrontFileName = "FUN";
                     String outputParetoSetFileName = "VAR";
-                    new ExperimentGenerateReferenceParetoSetAndFrontFromDoubleSolutions(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
-                            outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames, runs);
+                    String summaryFileName = "QualityIndicatorSummary.csv";
 
-                    // 2.计算性能指标
-                    List<String> indicators = Arrays.asList("HV", "EP", "IGD", "GD", "IGD+", "GSPREAD");
-                    new ComputeQualityIndicators<>(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
-                            outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames, indicators, runs, popSize, evaluation);
-                    // 显示指标值
-                    final DefaultTableModel mm = JTableHelper.showTable(experimentBaseDirectory + "QualityIndicatorSummary.csv", true, false);
-                    JTableHelper.showTableInSwing(table1, mm);
+                    // 判断是否已经分析过结果，避免重复分析，如果想重复得到结果，请删除summaryFileName文件
+                    if (!new File(experimentBaseDirectory + summaryFileName).exists()) {
 
-                    // 3.生成latex和excel统计表格
-                    new GenerateLatexTablesWithStatistics(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
-                            outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames,indicators, runs);
+                        // 1.生成pareto参考前沿
+                        new ExperimentGenerateReferenceParetoSetAndFrontFromDoubleSolutions(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
+                                outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames, runs);
 
-                    // 4.生成matlab脚本
-                    ExcelHelper.exportTable(table1, new File("data/experiment.csv"));
-                    MatlabScriptHelper.Generate5DPlotMatlabScript("result/Experiment/PF/oilschedule.pf");
-                    MatlabScriptHelper.GenerateBoxPlotMatlabScript("result/runTimes.csv");
-                    MatlabScriptHelper.GenerateConvergenceMatlabScript("result/Experiment/", problemNames,
-                            algorithmNames, Arrays.asList("EP", "IGD+", "HV", "GSPREAD", "GD", "IGD"));
+                        // 2.计算性能指标
+                        List<String> indicators = Arrays.asList("HV", "EP", "IGD", "GD", "IGD+", "GSPREAD");
+                        new ComputeQualityIndicators<>(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
+                                outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames, indicators, runs, popSize, evaluation);
+                        // 显示指标值到UI表格中
+                        final DefaultTableModel mm = JTableHelper.showTable(experimentBaseDirectory + summaryFileName, true, false);
+                        JTableHelper.showTableInSwing(table1, mm);
 
-                    String message = "生成分析结果保存路径：\r\n";
-                    message += System.getProperty("user.dir") +"/" +  experimentBaseDirectory;
-                    tool.show("分析结果生成完成", message);
+                        // 3.生成latex和excel统计表格
+                        new GenerateLatexTablesWithStatistics(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
+                                outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames, indicators, runs);
+
+                        // 4.生成matlab脚本
+                        ExcelHelper.exportTable(table1, new File("data/experiment.csv"));
+                        MatlabScriptHelper.Generate5DPlotMatlabScript("result/Experiment/PF/oilschedule.pf");
+                        MatlabScriptHelper.GenerateBoxPlotMatlabScript("result/runTimes.csv");
+                        MatlabScriptHelper.GenerateConvergenceMatlabScript("result/Experiment/", problemNames,
+                                algorithmNames, Arrays.asList("EP", "IGD+", "HV", "GSPREAD", "GD", "IGD"));
+
+                        String message = "生成分析结果保存路径：\r\n";
+                        message += System.getProperty("user.dir") + "/" + experimentBaseDirectory;
+                        tool.show("分析结果生成完成", message);
+                    }
 
                     // 显示结果分析界面
                     createParameterInputUI();
@@ -1123,15 +1135,18 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int runId = Integer.parseInt(txtRunId.getText().trim());
-                ChartHelper.createLineChart(problemsMCB.getText(), algorithmsMCB.getText(), MetricsMCB.getText(),
+                JFrame frame = ChartHelper.createLineChart(problemsMCB.getText(), algorithmsMCB.getText(), MetricsMCB.getText(),
                         runId);
+                // 设置窗口大小并居中
+                setWindowSizeAndCenter(frame,800, 600);
             }
         });
         hBox5.add(btnAnalysis);
         box.add(hBox5);
-
         parametersInputFrame.add(box);
-        parametersInputFrame.setSize(360, 180);
+
+        // 设置窗口大小并居中
+        setWindowSizeAndCenter(parametersInputFrame,360, 180);
         parametersInputFrame.setVisible(true);
     }
 
@@ -1413,13 +1428,13 @@ public class MainFrame extends JFrame {
 
     /**
      * 自动将窗口放到屏幕正中间
-     *
+     * @param frame
      * @param width
      * @param height
      */
-    public void setWindowSizeAndCenter(int width, int height) {
+    public void setWindowSizeAndCenter(JFrame frame, int width, int height) {
         int screenWidth = (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
         int screenHeight = (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
-        setBounds(screenWidth / 2 - width / 2, screenHeight / 2 - height / 2, width, height);
+        frame.setBounds(screenWidth / 2 - width / 2, screenHeight / 2 - height / 2, width, height);
     }
 }
