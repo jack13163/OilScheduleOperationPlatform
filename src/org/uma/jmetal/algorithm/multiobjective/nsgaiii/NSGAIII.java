@@ -1,10 +1,8 @@
 package org.uma.jmetal.algorithm.multiobjective.nsgaiii;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
-
+import com.sim.common.CloneUtils;
+import com.sim.common.UniformPointHelper;
+import com.sim.ui.MainMethod;
 import org.apache.commons.lang3.ArrayUtils;
 import org.uma.jmetal.algorithm.impl.AbstractGeneticAlgorithm;
 import org.uma.jmetal.algorithm.multiobjective.nsgaiii.util.EnvironmentalSelection;
@@ -16,9 +14,10 @@ import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.solutionattribute.Ranking;
 import org.uma.jmetal.util.solutionattribute.impl.DominanceRanking;
 
-import com.sim.common.CloneUtils;
-import com.sim.common.UniformPointHelper;
-import com.sim.ui.MainMethod;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by ajnebro on 30/10/14. Modified by Juanjo on 13/11/14
@@ -53,7 +52,7 @@ public class NSGAIII<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, 
 		numberOfDivisions = new Vector<>(1);
 		int div = UniformPointHelper.getNumOfDivide(builder.getPopulationSize(),
 				builder.getProblem().getNumberOfObjectives());
-		numberOfDivisions.add(div);// 自适应确定参考点集大小和种群大小
+		numberOfDivisions.add(div + 1);// 自适应确定参考点集大小和种群大小
 		(new ReferencePoint<S>()).generateReferencePoints(referencePoints, getProblem().getNumberOfObjectives(),
 				numberOfDivisions);
 		setMaxPopulationSize(builder.getPopulationSize());

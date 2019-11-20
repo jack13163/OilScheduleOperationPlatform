@@ -147,7 +147,7 @@ public class MainFrame extends JFrame {
             }
         });
         // 设置窗体大小并居中
-        setWindowSizeAndCenter(this,1200, 800);
+        setWindowSizeAndCenter(this, 1200, 800);
         setTitle(s);
         menubar = new JMenuBar();
         menuSystem = new JMenu("系统(S)");
@@ -878,7 +878,6 @@ public class MainFrame extends JFrame {
         List<KeyValuePair> defaultValue1 = new LinkedList<>();
         defaultValue1.add(new KeyValuePair("EDF_PS", "EDF_PS"));
         defaultValue1.add(new KeyValuePair("EDF_TSS", "EDF_TSS"));
-        defaultValue1.add(new KeyValuePair("BT", "BT"));
         cbProblemsForExperiment = new MultiComboBox(problemList, defaultValue1);
         HBox5.add(cbProblemsForExperiment);
         box.add(HBox5);
@@ -896,7 +895,6 @@ public class MainFrame extends JFrame {
         List<KeyValuePair> defaultValue2 = new LinkedList<>();
         defaultValue2.add(new KeyValuePair("NSGAII", "NSGAII"));
         defaultValue2.add(new KeyValuePair("NSGAIII", "NSGAIII"));
-        defaultValue2.add(new KeyValuePair("cMOEAD", "cMOEAD"));
         defaultValue2.add(new KeyValuePair("SPEA2", "SPEA2"));
         cbAlgorithmsForExperiment = new MultiComboBox(algorithmList, defaultValue2);
         HBox4.add(cbAlgorithmsForExperiment);
@@ -946,7 +944,7 @@ public class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 // 如果存在实验数据，提示用户是否覆盖
-                if(new File("result/Experiment/data/").exists()) {
+                if (new File("result/Experiment/data/").exists()) {
                     int result = JOptionPane.showConfirmDialog(null, "确认要覆盖已有的实验结果吗?", "确认", JOptionPane.OK_CANCEL_OPTION,
                             JOptionPane.INFORMATION_MESSAGE);
                     if (result != JOptionPane.OK_OPTION) {
@@ -993,8 +991,7 @@ public class MainFrame extends JFrame {
                                     problems.add(new ExperimentProblem<DoubleSolution>(
                                             new OilScheduleOptimizationProblem("BT")));
                                 }
-                                ExperimentConfig.doExperimentDoubleCode(problems, algorithmNames, popSize, evaluation,
-                                        runs);
+                                ExperimentConfig.doExperimentDoubleCode(problems, algorithmNames, popSize, evaluation, runs);
                             } else {
                                 logger.fatal("请选择一个问题");
                                 return;
@@ -1002,8 +999,11 @@ public class MainFrame extends JFrame {
                         } catch (IOException e) {
                             logger.fatal(e.getMessage() + "");
                         }
+
                         // 取消禁用UI
                         enabledUI();
+                        // 显示运行结束
+                        JOptionPane.showMessageDialog(null, "运行结束，您可以开始分析结果了。", "运行结束", JOptionPane.OK_CANCEL_OPTION);
                     }
                 });
 
@@ -1043,9 +1043,9 @@ public class MainFrame extends JFrame {
                         List<String> indicators = Arrays.asList("HV", "EP", "IGD", "GD", "IGD+", "GSPREAD");
                         new ComputeQualityIndicators<>(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
                                 outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames, indicators, runs, popSize, evaluation);
-                        // 显示指标值到UI表格中
-                        final DefaultTableModel mm = JTableHelper.showTable(experimentBaseDirectory + summaryFileName, true, false);
-                        JTableHelper.showTableInSwing(table1, mm);
+//                        // 显示指标值到UI表格中
+//                        final DefaultTableModel mm = JTableHelper.showTable(experimentBaseDirectory + summaryFileName, true, false);
+//                        JTableHelper.showTableInSwing(table1, mm);
 
                         // 3.生成latex和excel统计表格
                         new GenerateLatexTablesWithStatistics(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
@@ -1061,6 +1061,13 @@ public class MainFrame extends JFrame {
                         String message = "生成分析结果保存路径：\r\n";
                         message += System.getProperty("user.dir") + "/" + experimentBaseDirectory;
                         tool.show("分析结果生成完成", message);
+                    }
+
+                    //显示参考前沿
+                    try {
+                        paintNodominanceSolution(table1, "result/Experiment/PF/oilschedule.pf");
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
 
                     // 显示结果分析界面
@@ -1148,7 +1155,7 @@ public class MainFrame extends JFrame {
                 JFrame frame = ChartHelper.createLineChart(problemsMCB.getText(), algorithmsMCB.getText(), MetricsMCB.getText(),
                         runId);
                 // 设置窗口大小并居中
-                setWindowSizeAndCenter(frame,800, 600);
+                setWindowSizeAndCenter(frame, 800, 600);
             }
         });
         hBox5.add(btnAnalysis);
@@ -1156,7 +1163,7 @@ public class MainFrame extends JFrame {
         parametersInputFrame.add(box);
 
         // 设置窗口大小并居中
-        setWindowSizeAndCenter(parametersInputFrame,360, 180);
+        setWindowSizeAndCenter(parametersInputFrame, 360, 180);
         parametersInputFrame.setVisible(true);
     }
 
@@ -1438,6 +1445,7 @@ public class MainFrame extends JFrame {
 
     /**
      * 自动将窗口放到屏幕正中间
+     *
      * @param frame
      * @param width
      * @param height

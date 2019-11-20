@@ -11,7 +11,7 @@
 	<auto-stop>0</auto-stop>
 	<!--为期两天的维护时间-->
 	<maintenance-time>48</maintenance-time>
-	<reference-cost>chargeTime=23,tankMix=243,pipeMix=216,energyCost=1304.24,tankUsed=11</reference-cost>
+	<reference-cost>chargeTime=23,tankMix=223,pipeMix=200,energyCost=1304.24,tankUsed=11</reference-cost>
 
 	<tanks>
 	    <tank id="1">
@@ -47,49 +47,49 @@
 	    	<capacity>30000</capacity>
 	    	<oil-type>3</oil-type>
 	    	<assign>1</assign>
-			<maintenance>1</maintenance>
+			<maintenance>0</maintenance>
 	    </tank>
 	    <tank id="6">
 	    	<volume>15000</volume>
 	    	<capacity>34000</capacity>
 	    	<oil-type>5</oil-type>
 	    	<assign>3</assign>
-			<maintenance>1</maintenance>
+			<maintenance>0</maintenance>
 	    </tank>
 	    <tank id="7">
 	    	<volume>17000</volume>
 	    	<capacity>20000</capacity>
 	    	<oil-type>4</oil-type>
 	    	<assign>3</assign>
-			<maintenance>1</maintenance>
+			<maintenance>0</maintenance>
 	    </tank>
 	    <tank id="8">
 	    	<volume>25000</volume>
 	    	<capacity>30000</capacity>
 	    	<oil-type>6</oil-type>
 	    	<assign>3</assign>
-			<maintenance>1</maintenance>
+			<maintenance>0</maintenance>
 	    </tank>
 	    <tank id="9">
 	    	<volume>22000</volume>
 	    	<capacity>34000</capacity>
 	    	<oil-type>7</oil-type>
 	    	<assign>4</assign>
-			<maintenance>1</maintenance>
+			<maintenance>0</maintenance>
 	    </tank>
 	    <tank id="10">
 	    	<volume>19000</volume>
 	    	<capacity>34000</capacity>
 	    	<oil-type>8</oil-type>
 	    	<assign>4</assign>
-			<maintenance>1</maintenance>
+			<maintenance>0</maintenance>
 	    </tank>
 	    <tank id="11">
 	    	<volume>0</volume>
 	    	<capacity>20000</capacity>
 	    	<oil-type>0</oil-type>
 	    	<assign>-1</assign>
-			<maintenance>1</maintenance>
+			<maintenance>0</maintenance>
 	    </tank>
 	</tanks>
   
