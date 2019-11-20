@@ -19,28 +19,28 @@
 	    	<capacity>20000</capacity>
 	    	<oil-type>0</oil-type>
 			<assign>-1</assign>
-			<maintenance>1</maintenance>
+			<maintenance>0</maintenance>
 	    </tank>
 	    <tank id="2">
 	    	<volume>16000</volume>
 	    	<capacity>34000</capacity>
 	    	<oil-type>1</oil-type>
 	    	<assign>2</assign>
-			<maintenance>1</maintenance>
+			<maintenance>0</maintenance>
 	    </tank>
 	    <tank id="3">
 	    	<volume>26000</volume>
 	    	<capacity>34000</capacity>
 	    	<oil-type>2</oil-type>
 	    	<assign>2</assign>
-			<maintenance>1</maintenance>
+			<maintenance>0</maintenance>
 	    </tank>
 	    <tank id="4">
 	    	<volume>0</volume>
 	    	<capacity>25000</capacity>
 	    	<oil-type>0</oil-type>
 	    	<assign>-1</assign>
-			<maintenance>1</maintenance>
+			<maintenance>0</maintenance>
 	    </tank>
 	    <tank id="5">
 	    	<volume>25000</volume>

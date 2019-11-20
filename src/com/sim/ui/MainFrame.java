@@ -1063,7 +1063,7 @@ public class MainFrame extends JFrame {
                         tool.show("分析结果生成完成", message);
                     }
 
-                    //显示参考前沿
+                    // 显示所有结果产生的非支配解集
                     try {
                         paintNodominanceSolution(table1, "result/Experiment/PF/oilschedule.pf");
                     } catch (Exception ex) {

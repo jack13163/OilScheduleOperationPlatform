@@ -1,18 +1,17 @@
 package com.sim.ui;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.swing.JFrame;
-
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.Styler.ChartTheme;
 import org.knowm.xchart.style.Styler.LegendLayout;
 import org.knowm.xchart.style.Styler.LegendPosition;
+
+import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Logarithmic Y-Axis

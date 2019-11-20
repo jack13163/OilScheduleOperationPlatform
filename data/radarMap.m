@@ -1,26 +1,26 @@
 %雷达图
 data = csvread('100-100-NSGAII/Experiment/PF/oilschedule.pf');
+data = data(61:160,:);
 varNames = { 'energyCost', 'pipeMixingCost', 'tankMixingCost', 'numberOfChange', 'numberOfTankUsed'};
 
-figure;
+subplot(1,2,1);
 glyphplot(data,'glyph','star','varLabels',{ 'energyCost', 'pipeMixingCost', 'tankMixingCost', 'numberOfChange', 'numberOfTankUsed'});
-set(gcf,'Position',[600,162,900,850]);%设置绘图大小和位置
-box off
+box on
 axis off
 
 % 数据标准化
-ND = normlization(data, 1);
+ND = normlization(data, 2);
 
 % 确定聚类个数
 k = getk(ND,50);
-k = 15;
+k = 16;
 
 % 聚类
 colors =  lines(k);
 label = init_methods(ND, k, 2);
 
-figure;
 [data,ind] = sortrows([data,label],6);
+subplot(1,2,2);
 h=glyphplot(data(:,1:5),'glyph','star','varLabels',{ 'energyCost', 'pipeMixingCost', 'tankMixingCost', 'numberOfChange', 'numberOfTankUsed'},...
     'ObsLabels',num2str(ind));
 for i=1:k
@@ -31,9 +31,10 @@ for i=1:k
         ha(j).Color=colors(i,:);
     end
 end
-set(gcf,'Position',[600,162,900,850]);%设置绘图大小和位置
-box off
+box on
 axis off
+
+set(gcf,'Position',[600,162,900,400]);%设置绘图大小和位置
 
 
 %% 确定聚类个数
@@ -84,7 +85,7 @@ function k=getk(data,K)
         D(T,1)=k;
         D(T,2)=sort_ind_ave/sort_outd_ave;
     end
-    plot(D(:,1),D(:,2));
+    % plot(D(:,1),D(:,2));
 end
 
 %% 数据预处理
