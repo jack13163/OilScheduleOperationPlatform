@@ -56,8 +56,6 @@ public class MainFrame extends JFrame {
         SINGRUN, Experiment, Online, Test
     }
 
-    ;
-
     // 公共UI
     private JMenuBar menubar; // 菜单条
     private JMenu menuSystem; // 菜单
@@ -825,8 +823,7 @@ public class MainFrame extends JFrame {
                         }
 
                         // 单次运行的结果路径
-                        String filePath = "result" + "/SingleRun/data/" + algorithm + "/" + problemName + "/" + "FUN"
-                                + 0 + ".tsv";// 0代表运行的标号，因为SingleRun模式下算法只运行一次
+                        String filePath = "result" + "/SingleRun/data/" + algorithm + "/" + problemName + "/" + "FUN" + 0 + ".tsv";// 0代表运行的标号，因为SingleRun模式下算法只运行一次
                         // 获取单次运行结果，并高亮显示非支配解
                         paintNodominanceSolution(resultTable, filePath);
                     } catch (IOException e) {
@@ -1033,8 +1030,10 @@ public class MainFrame extends JFrame {
                     String summaryFileName = "QualityIndicatorSummary.csv";
 
                     // 判断是否已经分析过结果，避免重复分析，如果想重复得到结果，请删除summaryFileName文件
-                    if (!new File(experimentBaseDirectory + summaryFileName).exists()) {
-
+                    if (!new File(experimentBaseDirectory + summaryFileName).exists() ||
+                            JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(null, "确认要覆盖已有的分析结果吗?", "确认", JOptionPane.YES_NO_CANCEL_OPTION,
+                                    JOptionPane.INFORMATION_MESSAGE)) {
+                        ;
                         // 1.生成pareto参考前沿
                         new ExperimentGenerateReferenceParetoSetAndFrontFromDoubleSolutions(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
                                 outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames, runs);
@@ -1043,9 +1042,6 @@ public class MainFrame extends JFrame {
                         List<String> indicators = Arrays.asList("HV", "EP", "IGD", "GD", "IGD+", "GSPREAD");
                         new ComputeQualityIndicators<>(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
                                 outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames, indicators, runs, popSize, evaluation);
-//                        // 显示指标值到UI表格中
-//                        final DefaultTableModel mm = JTableHelper.showTable(experimentBaseDirectory + summaryFileName, true, false);
-//                        JTableHelper.showTableInSwing(table1, mm);
 
                         // 3.生成latex和excel统计表格
                         new GenerateLatexTablesWithStatistics(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
