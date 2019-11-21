@@ -151,7 +151,7 @@ public class GenerateLatexTablesWithStatistics implements ExperimentComponent {
         }
         // System.out.println("Experiment name: " + experimentName_);
         String latexFile = latexDirectoryName + "/" + "oilschedule.tex";
-        String excelFile = latexDirectoryName + "/" + "oilschedule.csv";
+        String excelFile = experimentBaseDirectory + "/excel/" + "oilschedule.csv";
         printHeaderLatexCommands(latexFile);
         resetFile(excelFile);
         for (int i = 0; i < indicators.size(); i++) {
