@@ -1,11 +1,11 @@
 package com.sim.ui;
 
+import com.analysis.CMetrics;
+import com.analysis.MatlabScriptHelper;
+import com.analysis.RunTimeAnalysis;
 import com.chart.util.ChartHelper;
 import com.models.Fragment;
-import com.sim.common.ExcelHelper;
-import com.sim.common.JTableHelper;
-import com.sim.common.MatlabScriptHelper;
-import com.sim.common.ParetoHelper;
+import com.sim.common.*;
 import com.sim.experiment.ExperimentConfig;
 import com.sim.experiment.ExperimentGenerateReferenceParetoSetAndFrontFromDoubleSolutions;
 import com.sim.experiment.TestProblemsExperimentConfig;
@@ -1053,6 +1053,12 @@ public class MainFrame extends JFrame {
                         MatlabScriptHelper.GenerateBoxPlotMatlabScript("result/runTimes.csv");
                         MatlabScriptHelper.GenerateConvergenceMatlabScript("result/Experiment/", problemNames,
                                 algorithmNames, Arrays.asList("EP", "IGD+", "HV", "GSPREAD", "GD", "IGD"));
+
+                        // 5.生成运行时间分析的excel表格
+                        RunTimeAnalysis.GenerateRunTimeReport(problemNames, algorithmNames);
+
+                        // 6.计算C指标
+                        CMetrics.calculateCMetrics(algorithmNames, problemNames);
 
                         String message = "生成分析结果保存路径：\r\n";
                         message += System.getProperty("user.dir") + "/" + experimentBaseDirectory;

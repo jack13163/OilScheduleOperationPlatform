@@ -1,6 +1,7 @@
-package com.sim.common;
+package com.analysis;
 
 
+import com.sim.common.MathUtil;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
@@ -11,13 +12,23 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MeanStdHelper {
+public class RunTimeAnalysis {
 
     public static void main(String[] args) {
-        String fileDir = "result/runTimes.csv";
+
         List<String> problems = Arrays.asList("EDF_PS", "EDF_TSS");
         List<String> algorithms = Arrays.asList("NSGAII", "NSGAIII", "SPEA2");
+        GenerateRunTimeReport(problems, algorithms);
+    }
 
+    /**
+     * 生成运行时间
+     * @param problems
+     * @param algorithms
+     */
+    public static void GenerateRunTimeReport(List<String> problems, List<String> algorithms){
+
+        String fileDir = "result/runTimes.csv";
         // 初始化
         Map<String, Map<String, List<Double>>> map = new TreeMap<>();
         for (int i = 0; i < problems.size(); i++) {
@@ -92,7 +103,7 @@ public class MeanStdHelper {
         // 计算均值和方差
         for (String key : map.keySet()) {
             List<Double> tmp = map.get(key);
-            double[] result = MeanStdHelper.getAverageAndStandardDevition(tmp);
+            double[] result = RunTimeAnalysis.getAverageAndStandardDevition(tmp);
             System.out.println("[" + key + "]  mean:" + result[0] + "  std:" + result[1]);
         }
 

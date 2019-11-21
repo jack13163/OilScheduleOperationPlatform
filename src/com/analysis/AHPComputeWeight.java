@@ -1,4 +1,4 @@
-package com.sim.common;
+package com.analysis;
 
 import org.uma.jmetal.util.fileinput.VectorFileUtils;
 

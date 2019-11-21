@@ -1,4 +1,4 @@
-package com.sim.common;
+package com.analysis;
 
 import com.mathworks.toolbox.javabuilder.MWArray;
 import com.mathworks.toolbox.javabuilder.MWClassID;
