@@ -6,7 +6,94 @@
 	<artifactId>OilScheduleOperationPlatform</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+	<properties>
+		<!-- Change the nd4j.backend property to nd4j-cuda-9.2-platform,nd4j-cuda-10.0-platform or nd4j-cuda-10.1-platform to use CUDA GPUs -->
+		<nd4j.backend>nd4j-native-platform</nd4j.backend>
+		<!--<nd4j.backend>nd4j-cuda-10.1-platform</nd4j.backend>-->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<shadedClassifier>bin</shadedClassifier>
+
+
+		<java.version>1.8</java.version>
+		<nd4j.version>1.0.0-beta5</nd4j.version>
+		<dl4j.version>1.0.0-beta5</dl4j.version>
+		<datavec.version>1.0.0-beta5</datavec.version>
+		<arbiter.version>1.0.0-beta5</arbiter.version>
+		<rl4j.version>1.0.0-beta5</rl4j.version>
+
+		<!-- Scala binary version: DL4J's Spark and UI functionality are released with both Scala 2.10 and 2.11 support -->
+		<scala.binary.version>2.11</scala.binary.version>
+		<spark.version>2.4.3</spark.version>
+
+		<hadoop.version>2.2.0</hadoop.version>  <!-- Hadoop version used by Spark 1.6.3 and 2.2.1 (and likely others) -->
+		<guava.version>19.0</guava.version>
+		<logback.version>1.1.7</logback.version>
+		<jfreechart.version>1.0.13</jfreechart.version>
+		<jcommon.version>1.0.23</jcommon.version>
+		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+		<maven-shade-plugin.version>2.4.3</maven-shade-plugin.version>
+		<exec-maven-plugin.version>1.4.0</exec-maven-plugin.version>
+		<maven.minimum.version>3.3.1</maven.minimum.version>
+		<aws.sdk.version>1.11.109</aws.sdk.version>
+		<jackson.version>2.5.1</jackson.version>
+		<scala.plugin.version>3.2.2</scala.plugin.version>
+	</properties>
+
 	<dependencies>
+		<!-- ND4J backend. You need one in every DL4J project. Normally define artifactId as either nd4j-native-platform or nd4j-cuda-X.X-platform to use CUDA GPUs (check parent pom for supported cuda versions) -->
+		<dependency>
+			<groupId>org.nd4j</groupId>
+			<artifactId>${nd4j.backend}</artifactId>
+			<version>${nd4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.deeplearning4j</groupId>
+			<artifactId>rl4j-core</artifactId>
+			<version>${rl4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.deeplearning4j</groupId>
+			<artifactId>rl4j-gym</artifactId>
+			<version>${rl4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.deeplearning4j</groupId>
+			<artifactId>rl4j-ale</artifactId>
+			<version>${rl4j.version}</version>
+		</dependency>
+		<!-- The Arcade Learning Environment (ALE) is under GPL license, so we cannot use it as a dependency of RL4J. -->
+		<!--
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>ale-platform</artifactId>
+                    <version>0.6.0-1.5</version>
+                </dependency>
+        -->
+
+		<dependency>
+			<groupId>org.deeplearning4j</groupId>
+			<artifactId>rl4j-malmo</artifactId>
+			<version>${rl4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.msr.malmo</groupId>
+			<artifactId>MalmoJavaJar</artifactId>
+			<version>0.30.0</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+
+
 		<!-- native jar file -->
 		<dependency>
 		 	<groupId>coupon-pojo</groupId>
