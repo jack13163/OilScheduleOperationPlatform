@@ -65,7 +65,7 @@ public abstract class FlyingObject {
 	
 	/**
 	 * 检查当前飞行物体是否被子弹(x,y)击(shoot)中
-	 * @param Bullet 子弹对象
+	 * @param bullet 子弹对象
 	 * @return true表示被击中了
 	 */
 	public boolean shootBy(Bullet bullet){
