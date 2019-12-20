@@ -10,83 +10,11 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.learning.config.Adam;
 import org.rl4j.maze.util.Point;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 
-class GameBoard extends JFrame
-{
-	private static final long serialVersionUID = -6746198472689601833L;
-	private GridLayout grid;
-    private JPanel chessboard;
-    private int curX = 0, curY = 0;
-    
-    public void dialog(String msg, String title){
-    	JOptionPane.showMessageDialog(chessboard, msg, title,JOptionPane.WARNING_MESSAGE);
-    }
-    
-    public void shiftSoilder(int x , int y){
-    	assert(chessboard.getComponentCount() == 100);
-    	Component[] components = chessboard.getComponents();
-    	JLabel labelLast = (JLabel)components[curX * 10 + curY];
-    	labelLast.setIcon(null);
-    	//
-    	JLabel labelCur = (JLabel)components[x * 10 + y];
-    	labelCur.setIcon(new ImageIcon("img/dunk.jpg"));
-    	curX = x;
-    	curY = y;
-    	return;
-    }
-    
-    public void setTrap(Point[] traps){
-    	Component[] components = chessboard.getComponents();
-    	for( Point trap : traps ){
-    		JLabel label = (JLabel)components[ trap.getX() * 10 + trap.getY() ];
-    		label.setIcon(new ImageIcon("img/trap.jpg"));
-    	}
-    }
-    
-    GameBoard (int x, int y)
-    {
-    	chessboard = new JPanel ();
-        grid = new GridLayout (10, 10);
-        chessboard.setLayout (grid);
-        JLabel[][] label = new JLabel[10][10];
-        //
-        ImageIcon image = new ImageIcon("img/dunk.jpg");
-        ImageIcon imageDst = new ImageIcon("img/princess.png");
-        this.curX = x;
-        this.curY = y;
-        //
-        for ( int i = 0; i < label.length; i++ )
-        {
-            for ( int j = 0; j < label[i].length; j++ )
-            {
-                label[i][j] = new JLabel ();
-                label[i][j].setOpaque(true);
-                if( i == x && j == y ){
-                	label[i][j] = new JLabel (image);
-                }
-                else if( i == 9 && j == 9 ){
-                	label[i][j] = new JLabel (imageDst);
-                }
-                else if (( i + j ) % 2 == 0)
-                    label[i][j].setBackground (Color.white);
-                else
-                    label[i][j].setBackground (Color.gray);
-                chessboard.add (label[i][j]);
-            }
-        }
-        add (chessboard, BorderLayout.CENTER);
-        setBounds (10, 10, 1000, 1000);
-        setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
-        setVisible (true);
-    }
-}
-
 public class GameMain {
-    public static QLearning.QLConfiguration QL_CONFIG =
-            new QLearning.QLConfiguration(
+	// 深度学习网络配置
+    public static QLearning.QLConfiguration QL_CONFIG = new QLearning.QLConfiguration(
                     123,   	//Random seed
                     30,	//Max step Every epoch 批次下最大执行的步数
                     100*2000, //Max step            总执行的部署
@@ -101,57 +29,57 @@ public class GameMain {
                     100,  //num step for eps greedy anneal
                     false   //double DQN
             );
-	
-    public static DQNFactoryStdDense.Configuration DQN_NET =
-            DQNFactoryStdDense.Configuration.builder()
+
+    // 网络结构参数配置
+    public static DQNFactoryStdDense.Configuration DQN_NET = DQNFactoryStdDense.Configuration.builder()
                     .updater(new Adam(0.001))
                     .numLayer(2)
                     .numHiddenNodes(16)
                     .build();
-    
-    public static void learning() throws IOException {
 
+	/**
+	 * 训练Deep Q-Learn Network
+	 * @throws IOException
+	 */
+	public static void learning() throws IOException {
+
+    	// 初始化
         DataManager manager = new DataManager();
-
-        GameMDP mdp = new GameMDP();
-
+		GameMDP mdp = new GameMDP();
         QLearningDiscreteDense<GameState> dql = new QLearningDiscreteDense<GameState>(mdp, DQN_NET, QL_CONFIG, manager);
-
         DQNPolicy<GameState> pol = dql.getPolicy();
 
+        // 开始训练
         dql.train();
 
+		// 保存模型
         pol.save("data/game1.policy");
-
         mdp.close();
-
     }
     
     public static Point playByStep(GameMDP mdp, DQNPolicy<GameState> policy) throws IOException{
     	Point ret = new Point();
     	GameState curState = mdp.getCurState();
-        //
+
+        // 前向传递
         INDArray input = Learning.getInput(mdp, curState);
         int action = policy.nextAction(input).intValue();
+
+        // 返回的状态是之前的还是之后的？
         ret.setX((int)curState.getX());
         ret.setY((int)curState.getY());
-        //
+
+        // 执行策略
         mdp.step(action);
-    	//
     	return ret;
-    }
-    
-    public static GameMDP initMDP(){
-    	GameMDP mdp = new GameMDP();
-    	return mdp;
     }
     
     public static boolean isSuccess(GameMDP mdp){
     	boolean ret= false;
-    	//
     	GameState state = mdp.getCurState();
-    	if( (int)state.getX()  == 9 && (int)state.getY() == 9)ret = true;
-    	//
+    	if( (int)state.getX()  == 9 && (int)state.getY() == 9){
+    		ret = true;
+		}
     	return ret;
     }
     
@@ -175,36 +103,46 @@ public class GameMain {
 		GameState initState = initMdp.getLastObs();
 		int x = (int)initState.getX();
 		int y = (int)initState.getY();
+
+		// 初始化游戏界面
 		GameBoard board = new GameBoard(x,y);
+
+		// 设置陷阱
 		board.setTrap(mdp.getTraps());
-		//
 		return board;
     }
     
 	public static void main(String[] args) throws IOException, InterruptedException {
-		learning();
+		// 训练网络
+    	//learning();
 
-		GameMDP mdp = initMDP();
+		// 初始化
+		GameMDP mdp = new GameMDP();
 		GameBoard board = initGameBoard(mdp);
-		//
+
+		// 加载网络
 		boolean success = false, trap = false;
 		DQNPolicy<GameState> policy = DQNPolicy.load("data/game.policy");
+
 		while( true ){
 			Point p = playByStep(mdp ,policy);
 			board.shiftSoilder(p.getX(), p.getY());
-			//
+			// 判断是否成功到达终点
 			success = isSuccess(mdp);
 			if( success ){
-				board.dialog("成功救到公主", "Game Over");
+				board.dialog("success", "Game Over");
 				board = initGameBoard(mdp);
 			}
+
+			// 判断是否陷入陷阱
 			trap = isTraped(mdp);
 			if( trap ){
-				board.dialog("掉入陷阱", "Game Over");
+				board.dialog("fail", "Game Over");
 				board = initGameBoard(mdp);
 			}
-			//
-			Thread.sleep(1000);
+
+			// 休眠指定的时间
+			Thread.sleep(500);
 		}
 	}
 }

@@ -53,7 +53,9 @@ public class GameMDP implements MDP<GameState,Integer, DiscreteSpace>{
 	private boolean isTraped(){
 		Point curPoint = new Point((int)curState.getX(), (int)curState.getY());
 		for( Point trap : traps ){
-			if( trap.equals(curPoint) )return true;	//掉入陷阱
+			if( trap.equals(curPoint) ){
+				return true;	//掉入陷阱
+			}
 		}
 		return false;
 	}
@@ -61,12 +63,16 @@ public class GameMDP implements MDP<GameState,Integer, DiscreteSpace>{
 	
 	private boolean isOutOfBox(){
 		if( curState.getX() < 0.0 || curState.getX() > 9.0
-				|| curState.getY() < 0.0 || curState.getY() > 9.0 )return true;
+				|| curState.getY() < 0.0 || curState.getY() > 9.0 ){
+			return true;
+		}
 		return false;
 	}
 	
 	private boolean isSuccess(){
-		if( curState.getX() == 9.0 && curState.getY() == 9.0 )return true;
+		if( curState.getX() == 9.0 && curState.getY() == 9.0 ){
+			return true;
+		}
 		return false;
 	}
 	
@@ -78,7 +84,9 @@ public class GameMDP implements MDP<GameState,Integer, DiscreteSpace>{
 		boolean bIsDone = bIsSuccess || bIsTraped;
 		if( bIsDone ){
 			log.info("Game Over, Total Step:{}, Trap State:{}, Success State:{}" , step, bIsTraped, bIsSuccess);
-			for( Point t : trace )log.info(t.toString() + "->");
+			for( Point t : trace ){
+				log.info(t.toString() + "->");
+			}
 		}
 		return bIsDone;
 	}
