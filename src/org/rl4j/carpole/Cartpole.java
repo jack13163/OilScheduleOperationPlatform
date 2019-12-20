@@ -14,7 +14,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ******************************************************************************/
 
-package org.rl4j;
+package org.rl4j.carpole;
 
 import org.deeplearning4j.rl4j.learning.sync.qlearning.QLearning;
 import org.deeplearning4j.rl4j.learning.sync.qlearning.discrete.QLearningDiscreteDense;
@@ -25,6 +25,7 @@ import org.deeplearning4j.rl4j.space.Box;
 import org.deeplearning4j.rl4j.space.DiscreteSpace;
 import org.deeplearning4j.rl4j.util.DataManager;
 import org.nd4j.linalg.learning.config.Sgd;
+import org.rl4j.CMDHelper;
 
 import java.io.IOException;
 import java.util.logging.Logger;

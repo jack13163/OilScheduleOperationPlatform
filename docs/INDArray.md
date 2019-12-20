@@ -80,6 +80,40 @@
 
     INDArray put(INDArrayIndex[] indices, INDArray element):对应维度处设置INDArray
 
-    8、其他操作
+    8、控制张量形状
 
     INDArray reshape(int... newShape)：重新定义张量形状
+    
+    9、ND4J序列化和反序列INDArray
+    
+    import org.nd4j.linalg.api.ndarray.INDArray;
+    import org.nd4j.linalg.factory.Nd4j;
+    import org.nd4j.serde.binary.BinarySerde;
+    
+    import java.io.*;
+    import java.nio.ByteBuffer;
+    
+    INDArray arrWrite = Nd4j.linspace(1,10,10);
+    INDArray arrRead;
+    
+    //1. Binary format  二进制格式
+    //   Close the streams manually or use try with resources.
+    try (DataOutputStream sWrite = new DataOutputStream(new FileOutputStream(new File("tmp.bin")))) {
+        Nd4j.write(arrWrite, sWrite);
+        }
+    
+    try (DataInputStream sRead = new DataInputStream(new FileInputStream(new File("tmp.bin")))) {
+        arrRead = Nd4j.read(sRead);
+        }
+    
+    //2. Binary format using java.nio.ByteBuffer; 使用特定类库存储二进制格式
+    ByteBuffer buffer = BinarySerde.toByteBuffer(arrWrite);
+    arrRead = BinarySerde.toArray(buffer);
+    
+    //3. Text format 存储文本格式
+    Nd4j.writeTxt(arrWrite, "tmp.txt");
+    arrRead = Nd4j.readTxt("tmp.txt");
+    
+    // To read csv format: 存储成为CSV格式，但是该方法已经标记为过时
+    // The writeNumpy method has been deprecated.
+    arrRead =Nd4j.readNumpy("tmp.csv", ", ");

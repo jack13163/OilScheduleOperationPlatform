@@ -14,7 +14,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ******************************************************************************/
 
-package org.rl4j;
+package org.rl4j.carpole;
 
 import org.deeplearning4j.rl4j.learning.async.a3c.discrete.A3CDiscrete;
 import org.deeplearning4j.rl4j.learning.async.a3c.discrete.A3CDiscreteDense;
@@ -24,6 +24,7 @@ import org.deeplearning4j.rl4j.policy.ACPolicy;
 import org.deeplearning4j.rl4j.space.Box;
 import org.deeplearning4j.rl4j.util.DataManager;
 import org.nd4j.linalg.learning.config.Adam;
+import org.rl4j.CMDHelper;
 
 import java.io.IOException;
 
