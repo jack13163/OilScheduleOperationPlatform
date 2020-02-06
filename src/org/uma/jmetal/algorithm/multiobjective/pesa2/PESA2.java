@@ -19,125 +19,125 @@ import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
  */
 @SuppressWarnings("serial")
 public class PESA2<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, List<S>> {
-	private int maxEvaluations;
-	private int archiveSize;
-	private int populationSize;
-	private int biSections;
+    private int maxEvaluations;
+    private int archiveSize;
+    private int populationSize;
+    private int biSections;
 
-	private int evaluations;
+    private int evaluations;
 
-	protected SelectionOperator<AdaptiveGridArchive<S>, S> selectionOperator;
+    protected SelectionOperator<AdaptiveGridArchive<S>, S> selectionOperator;
 
-	private AdaptiveGridArchive<S> archive;
-	protected final SolutionListEvaluator<S> evaluator;
+    private AdaptiveGridArchive<S> archive;
+    protected final SolutionListEvaluator<S> evaluator;
 
-	public PESA2(Problem<S> problem, int maxEvaluations, int populationSize, int archiveSize, int biSections,
-			CrossoverOperator<S> crossoverOperator, MutationOperator<S> mutationOperator,
-			SolutionListEvaluator<S> evaluator) {
-		super(problem);
-		this.maxEvaluations = maxEvaluations;
-		this.populationSize = populationSize;
-		this.archiveSize = archiveSize;
-		this.biSections = biSections;
+    public PESA2(Problem<S> problem, int maxEvaluations, int populationSize, int archiveSize, int biSections,
+                 CrossoverOperator<S> crossoverOperator, MutationOperator<S> mutationOperator,
+                 SolutionListEvaluator<S> evaluator) {
+        super(problem);
+        this.maxEvaluations = maxEvaluations;
+        this.populationSize = populationSize;
+        this.archiveSize = archiveSize;
+        this.biSections = biSections;
 
-		this.crossoverOperator = crossoverOperator;
-		this.mutationOperator = mutationOperator;
-		this.selectionOperator = new PESA2Selection<S>();
+        this.crossoverOperator = crossoverOperator;
+        this.mutationOperator = mutationOperator;
+        this.selectionOperator = new PESA2Selection<S>();
 
-		this.evaluator = evaluator;
+        this.evaluator = evaluator;
 
-		archive = new AdaptiveGridArchive<>(this.archiveSize, this.biSections, problem.getNumberOfObjectives());
-	}
+        archive = new AdaptiveGridArchive<>(this.archiveSize, this.biSections, problem.getNumberOfObjectives());
+    }
 
-	@Override
-	protected void initProgress() {
-		evaluations = populationSize;
-	}
+    @Override
+    protected void initProgress() {
+        evaluations = populationSize;
+    }
 
-	@Override
-	protected void updateProgress() {
-		evaluations += populationSize;
-	}
+    @Override
+    protected void updateProgress() {
+        evaluations += populationSize;
+    }
 
-	@Override
-	protected boolean isStoppingConditionReached() {
-		return evaluations >= maxEvaluations;
-	}
+    @Override
+    protected boolean isStoppingConditionReached() {
+        return evaluations >= maxEvaluations;
+    }
 
-	@Override
-	protected List<S> evaluatePopulation(List<S> population) {
-		population = evaluator.evaluate(population, getProblem());
+    @Override
+    protected List<S> evaluatePopulation(List<S> population) {
+        population = evaluator.evaluate(population, getProblem());
 
-		return population;
-	}
+        return population;
+    }
 
-	@Override
-	protected List<S> selection(List<S> population) {
-		List<S> matingPopulation = new ArrayList<>(populationSize);
+    @Override
+    protected List<S> selection(List<S> population) {
+        List<S> matingPopulation = new ArrayList<>(populationSize);
 
-		for (S solution : population) {
-			archive.add(solution);
-		}
+        for (S solution : population) {
+            archive.add(solution);
+        }
 
-		while (matingPopulation.size() < populationSize) {
-			S solution = selectionOperator.execute(archive);
+        while (matingPopulation.size() < populationSize) {
+            S solution = selectionOperator.execute(archive);
 
-			matingPopulation.add(solution);
-		}
+            matingPopulation.add(solution);
+        }
 
-		return matingPopulation;
-	}
+        return matingPopulation;
+    }
 
-	@Override
-	protected List<S> reproduction(List<S> population) {
-		List<S> offspringPopulation = new ArrayList<>(populationSize);
-		for (int i = 0; i < populationSize; i += 2) {
-			List<S> parents = new ArrayList<>(2);
-			parents.add(population.get(i));
-			parents.add(population.get(i + 1));
+    @Override
+    protected List<S> reproduction(List<S> population) {
+        List<S> offspringPopulation = new ArrayList<>(populationSize);
+        for (int i = 0; i < populationSize; i += 2) {
+            List<S> parents = new ArrayList<>(2);
+            parents.add(population.get(i));
+            parents.add(population.get(i + 1));
 
-			List<S> offspring = crossoverOperator.execute(parents);
+            List<S> offspring = crossoverOperator.execute(parents);
 
-			mutationOperator.execute(offspring.get(0));
+            mutationOperator.execute(offspring.get(0));
 
-			offspringPopulation.add(offspring.get(0));
-		}
-		return offspringPopulation;
-	}
+            offspringPopulation.add(offspring.get(0));
+        }
+        return offspringPopulation;
+    }
 
-	@Override
-	protected List<S> replacement(List<S> population, List<S> offspringPopulation) {
-		for (S solution : offspringPopulation) {
-			archive.add(solution);
-		}
+    @Override
+    protected List<S> replacement(List<S> population, List<S> offspringPopulation) {
+        for (S solution : offspringPopulation) {
+            archive.add(solution);
+        }
 
-		return Collections.emptyList();
-	}
+        return Collections.emptyList();
+    }
 
-	@Override
-	public List<S> getResult() {
-		return archive.getSolutionList();
-	}
+    @Override
+    public List<S> getResult() {
+        return archive.getSolutionList();
+    }
 
-	@Override
-	public String getName() {
-		return "PESA2";
-	}
+    @Override
+    public String getName() {
+        return "PESA2";
+    }
 
-	@Override
-	public String getDescription() {
-		return "Pareto Envelope-based Selection Algorithm ";
-	}
+    @Override
+    public String getDescription() {
+        return "Pareto Envelope-based Selection Algorithm ";
+    }
 
-	@Override
-	public List<Double[]> getSolutions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<Double[]> getSolutions() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public void clearSolutions() {
-		// TODO Auto-generated method stub
+    @Override
+    public void clearSolutions() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 }

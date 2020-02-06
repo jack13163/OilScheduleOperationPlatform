@@ -19,96 +19,101 @@ import java.util.List;
  * @author Juan J. Durillo
  */
 @SuppressWarnings("serial")
-public class Spread <S extends Solution<?>> extends GenericIndicator<S> {
+public class Spread<S extends Solution<?>> extends GenericIndicator<S> {
 
-  /**
-   * Default constructor
-   */
-  public Spread() {
-  }
-
-  /**
-   * Constructor
-   *
-   * @param referenceParetoFrontFile
-   * @throws FileNotFoundException
-   */
-  public Spread(String referenceParetoFrontFile) throws FileNotFoundException {
-    super(referenceParetoFrontFile) ;
-  }
-
-  /**
-   * Constructor
-   *
-   * @param referenceParetoFront
-   * @throws FileNotFoundException
-   */
-  public Spread(Front referenceParetoFront) {
-    super(referenceParetoFront) ;
-  }
-
-  /**
-   * Evaluate() method
-   * @param solutionList
-   * @return
-   */
-  @Override public Double evaluate(List<S> solutionList) {
-    return spread(new ArrayFront(solutionList), referenceParetoFront);
-  }
-
-  /**
-   * Calculates the Spread metric.
-   *
-   * @param front              The front.
-   * @param referenceFront    The true pareto front.
-   */
-  public double spread(Front front, Front referenceFront) {
-    PointDistance distance = new EuclideanDistance() ;
-
-    // STEP 1. Sort normalizedFront and normalizedParetoFront;
-    front.sort(new LexicographicalPointComparator());
-    referenceFront.sort(new LexicographicalPointComparator());
-
-    // STEP 2. Compute df and dl (See specifications in Deb's description of the metric)
-    double df = distance.compute(front.getPoint(0), referenceFront.getPoint(0)) ;
-    double dl = distance.compute(front.getPoint(front.getNumberOfPoints() - 1),
-        referenceFront.getPoint(referenceFront.getNumberOfPoints() - 1)) ;
-
-    double mean = 0.0;
-    double diversitySum = df + dl;
-
-    int numberOfPoints = front.getNumberOfPoints() ;
-
-    // STEP 3. Calculate the mean of distances between points i and (i - 1).
-    // (the points are in lexicografical order)
-    for (int i = 0; i < (numberOfPoints - 1); i++) {
-      mean += distance.compute(front.getPoint(i), front.getPoint(i + 1));
+    /**
+     * Default constructor
+     */
+    public Spread() {
     }
 
-    mean = mean / (double) (numberOfPoints - 1);
-
-    // STEP 4. If there are more than a single point, continue computing the
-    // metric. In other case, return the worse value (1.0, see metric's description).
-    if (numberOfPoints > 1) {
-      for (int i = 0; i < (numberOfPoints - 1); i++) {
-        diversitySum += Math.abs(distance.compute(front.getPoint(i),
-            front.getPoint(i + 1)) - mean);
-      }
-      return diversitySum / (df + dl + (numberOfPoints - 1) * mean);
-    } else {
-      return 1.0;
+    /**
+     * Constructor
+     *
+     * @param referenceParetoFrontFile
+     * @throws FileNotFoundException
+     */
+    public Spread(String referenceParetoFrontFile) throws FileNotFoundException {
+        super(referenceParetoFrontFile);
     }
-  }
 
-  @Override public String getName() {
-    return "SPREAD" ;
-  }
-  @Override public String getDescription() {
-    return "Spread quality indicator" ;
-  }
+    /**
+     * Constructor
+     *
+     * @param referenceParetoFront
+     * @throws FileNotFoundException
+     */
+    public Spread(Front referenceParetoFront) {
+        super(referenceParetoFront);
+    }
 
-  @Override
-  public boolean isTheLowerTheIndicatorValueTheBetter() {
-    return true ;
-  }
+    /**
+     * Evaluate() method
+     *
+     * @param solutionList
+     * @return
+     */
+    @Override
+    public Double evaluate(List<S> solutionList) {
+        return spread(new ArrayFront(solutionList), referenceParetoFront);
+    }
+
+    /**
+     * Calculates the Spread metric.
+     *
+     * @param front          The front.
+     * @param referenceFront The true pareto front.
+     */
+    public double spread(Front front, Front referenceFront) {
+        PointDistance distance = new EuclideanDistance();
+
+        // STEP 1. Sort normalizedFront and normalizedParetoFront;
+        front.sort(new LexicographicalPointComparator());
+        referenceFront.sort(new LexicographicalPointComparator());
+
+        // STEP 2. Compute df and dl (See specifications in Deb's description of the metric)
+        double df = distance.compute(front.getPoint(0), referenceFront.getPoint(0));
+        double dl = distance.compute(front.getPoint(front.getNumberOfPoints() - 1),
+                referenceFront.getPoint(referenceFront.getNumberOfPoints() - 1));
+
+        double mean = 0.0;
+        double diversitySum = df + dl;
+
+        int numberOfPoints = front.getNumberOfPoints();
+
+        // STEP 3. Calculate the mean of distances between points i and (i - 1).
+        // (the points are in lexicografical order)
+        for (int i = 0; i < (numberOfPoints - 1); i++) {
+            mean += distance.compute(front.getPoint(i), front.getPoint(i + 1));
+        }
+
+        mean = mean / (double) (numberOfPoints - 1);
+
+        // STEP 4. If there are more than a single point, continue computing the
+        // metric. In other case, return the worse value (1.0, see metric's description).
+        if (numberOfPoints > 1) {
+            for (int i = 0; i < (numberOfPoints - 1); i++) {
+                diversitySum += Math.abs(distance.compute(front.getPoint(i),
+                        front.getPoint(i + 1)) - mean);
+            }
+            return diversitySum / (df + dl + (numberOfPoints - 1) * mean);
+        } else {
+            return 1.0;
+        }
+    }
+
+    @Override
+    public String getName() {
+        return "SPREAD";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Spread quality indicator";
+    }
+
+    @Override
+    public boolean isTheLowerTheIndicatorValueTheBetter() {
+        return true;
+    }
 }

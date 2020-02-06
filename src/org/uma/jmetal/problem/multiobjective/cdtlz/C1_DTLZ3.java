@@ -19,65 +19,65 @@ import org.uma.jmetal.util.solutionattribute.impl.OverallConstraintViolation;
  */
 @SuppressWarnings("serial")
 public class C1_DTLZ3 extends DTLZ3 {
-	public OverallConstraintViolation<DoubleSolution> overallConstraintViolationDegree;
-	public NumberOfViolatedConstraints<DoubleSolution> numberOfViolatedConstraints;
+    public OverallConstraintViolation<DoubleSolution> overallConstraintViolationDegree;
+    public NumberOfViolatedConstraints<DoubleSolution> numberOfViolatedConstraints;
 
-	private static Map<Integer, Double> rValue;
+    private static Map<Integer, Double> rValue;
 
-	static {
-		rValue = new HashMap<Integer, Double>();
-		rValue.put(3, 9.0);
-		rValue.put(5, 12.5);
-		rValue.put(8, 12.5);
-		rValue.put(10, 15.0);
-		rValue.put(15, 15.0);
-	}
+    static {
+        rValue = new HashMap<Integer, Double>();
+        rValue.put(3, 9.0);
+        rValue.put(5, 12.5);
+        rValue.put(8, 12.5);
+        rValue.put(10, 15.0);
+        rValue.put(15, 15.0);
+    }
 
-	/**
-	 * Constructor
-	 * 
-	 * @param numberOfVariables
-	 * @param numberOfObjectives
-	 */
-	public C1_DTLZ3(int numberOfVariables, int numberOfObjectives) {
-		super(numberOfVariables, numberOfObjectives);
+    /**
+     * Constructor
+     *
+     * @param numberOfVariables
+     * @param numberOfObjectives
+     */
+    public C1_DTLZ3(int numberOfVariables, int numberOfObjectives) {
+        super(numberOfVariables, numberOfObjectives);
 
-		setNumberOfConstraints(1);
-		setName("C1_DTLZ3" + "-" + numberOfObjectives);
+        setNumberOfConstraints(1);
+        setName("C1_DTLZ3" + "-" + numberOfObjectives);
 
-		overallConstraintViolationDegree = new OverallConstraintViolation<DoubleSolution>();
-		numberOfViolatedConstraints = new NumberOfViolatedConstraints<DoubleSolution>();
-	}
+        overallConstraintViolationDegree = new OverallConstraintViolation<DoubleSolution>();
+        numberOfViolatedConstraints = new NumberOfViolatedConstraints<DoubleSolution>();
+    }
 
-	@Override
-	public void evaluate(DoubleSolution solution) {
-		super.evaluate(solution);
-		this.evaluateConstraints(solution);
-	}
+    @Override
+    public void evaluate(DoubleSolution solution) {
+        super.evaluate(solution);
+        this.evaluateConstraints(solution);
+    }
 
-	private void evaluateConstraints(DoubleSolution solution) {
-		double[] constraint = new double[this.getNumberOfConstraints()];
+    private void evaluateConstraints(DoubleSolution solution) {
+        double[] constraint = new double[this.getNumberOfConstraints()];
 
-		double sum1 = 0;
-		double sum2 = 0;
-		for (int i = 0; i < getNumberOfObjectives(); i++) {
-			double v = Math.pow(solution.getObjective(i), 2);
-			sum1 += v - 16.0;
-			sum2 += v - Math.pow(rValue.get(getNumberOfObjectives()), 2.0);
-		}
+        double sum1 = 0;
+        double sum2 = 0;
+        for (int i = 0; i < getNumberOfObjectives(); i++) {
+            double v = Math.pow(solution.getObjective(i), 2);
+            sum1 += v - 16.0;
+            sum2 += v - Math.pow(rValue.get(getNumberOfObjectives()), 2.0);
+        }
 
-		constraint[0] = sum1 * sum2;
+        constraint[0] = sum1 * sum2;
 
-		double overallConstraintViolation = 0.0;
-		int violatedConstraints = 0;
-		for (int i = 0; i < getNumberOfConstraints(); i++) {
-			if (constraint[i] < 0.0) {
-				overallConstraintViolation += constraint[i];
-				violatedConstraints++;
-			}
-		}
+        double overallConstraintViolation = 0.0;
+        int violatedConstraints = 0;
+        for (int i = 0; i < getNumberOfConstraints(); i++) {
+            if (constraint[i] < 0.0) {
+                overallConstraintViolation += constraint[i];
+                violatedConstraints++;
+            }
+        }
 
-		overallConstraintViolationDegree.setAttribute(solution, overallConstraintViolation);
-		numberOfViolatedConstraints.setAttribute(solution, violatedConstraints);
-	}
+        overallConstraintViolationDegree.setAttribute(solution, overallConstraintViolation);
+        numberOfViolatedConstraints.setAttribute(solution, violatedConstraints);
+    }
 }

@@ -14,48 +14,48 @@ import java.util.Comparator;
  */
 public class PointDimensionComparator implements Comparator<Point> {
 
-  /**
-   * Stores the value of the index to compare
-   */
-  private int index;
+    /**
+     * Stores the value of the index to compare
+     */
+    private int index;
 
-  /**
-   * Constructor
-   */
-  public PointDimensionComparator(int index) {
-    if (index < 0) {
-      throw new JMetalException("The index value is negative");
-    }
-    this.index = index;
-  }
-
-  /**
-   * Compares the objects o1 and o2.
-   *
-   * @param pointOne An object that reference a double[]
-   * @param pointTwo An object that reference a double[]
-   * @return -1 if o1 < o1, 1 if o1 > o2 or 0 in other case.
-   */
-  @Override
-  public int compare(Point pointOne, Point pointTwo) {
-    if (pointOne ==  null) {
-      throw new JMetalException("PointOne is null") ;
-    } else if (pointTwo == null) {
-      throw new JMetalException("PointTwo is null") ;
-    } else if (index >= pointOne.getDimension()) {
-      throw new JMetalException("The index value " + index
-          + " is out of range (0,  " + (pointOne.getDimension()-1) + ")") ;
-    } else if (index >= pointTwo.getDimension()) {
-      throw new JMetalException("The index value " + index
-          + " is out of range (0,  " + (pointTwo.getDimension()-1) + ")") ;
+    /**
+     * Constructor
+     */
+    public PointDimensionComparator(int index) {
+        if (index < 0) {
+            throw new JMetalException("The index value is negative");
+        }
+        this.index = index;
     }
 
-    if (pointOne.getValue(index) < pointTwo.getValue(index)) {
-      return -1;
-    } else if (pointOne.getValue(index) > pointTwo.getValue(index)) {
-      return 1;
-    } else {
-      return 0;
+    /**
+     * Compares the objects o1 and o2.
+     *
+     * @param pointOne An object that reference a double[]
+     * @param pointTwo An object that reference a double[]
+     * @return -1 if o1 < o1, 1 if o1 > o2 or 0 in other case.
+     */
+    @Override
+    public int compare(Point pointOne, Point pointTwo) {
+        if (pointOne == null) {
+            throw new JMetalException("PointOne is null");
+        } else if (pointTwo == null) {
+            throw new JMetalException("PointTwo is null");
+        } else if (index >= pointOne.getDimension()) {
+            throw new JMetalException("The index value " + index
+                    + " is out of range (0,  " + (pointOne.getDimension() - 1) + ")");
+        } else if (index >= pointTwo.getDimension()) {
+            throw new JMetalException("The index value " + index
+                    + " is out of range (0,  " + (pointTwo.getDimension() - 1) + ")");
+        }
+
+        if (pointOne.getValue(index) < pointTwo.getValue(index)) {
+            return -1;
+        } else if (pointOne.getValue(index) > pointTwo.getValue(index)) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
-  }
 }

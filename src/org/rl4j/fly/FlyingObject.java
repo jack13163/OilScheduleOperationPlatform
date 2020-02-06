@@ -3,75 +3,77 @@ package org.rl4j.fly;
 import java.awt.image.BufferedImage;
 
 /**
- * ·ÉÐÐÎï(µÐ»ú£¬ÃÛ·ä£¬×Óµ¯£¬Ó¢ÐÛ»ú)
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½Ð»ï¿½ï¿½ï¿½ï¿½Û·ä£¬ï¿½Óµï¿½ï¿½ï¿½Ó¢ï¿½Û»ï¿½)
  */
 public abstract class FlyingObject {
-	protected int x;    //x×ø±ê
-	protected int y;    //y×ø±ê
-	protected int width;    //¿í
-	protected int height;   //¸ß
-	protected BufferedImage image;   //Í¼Æ¬
+    protected int x;    //xï¿½ï¿½ï¿½ï¿½
+    protected int y;    //yï¿½ï¿½ï¿½ï¿½
+    protected int width;    //ï¿½ï¿½
+    protected int height;   //ï¿½ï¿½
+    protected BufferedImage image;   //Í¼Æ¬
 
-	public int getX() {
-		return x;
-	}
+    public int getX() {
+        return x;
+    }
 
-	public void setX(int x) {
-		this.x = x;
-	}
+    public void setX(int x) {
+        this.x = x;
+    }
 
-	public int getY() {
-		return y;
-	}
+    public int getY() {
+        return y;
+    }
 
-	public void setY(int y) {
-		this.y = y;
-	}
+    public void setY(int y) {
+        this.y = y;
+    }
 
-	public int getWidth() {
-		return width;
-	}
+    public int getWidth() {
+        return width;
+    }
 
-	public void setWidth(int width) {
-		this.width = width;
-	}
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
-	public int getHeight() {
-		return height;
-	}
+    public int getHeight() {
+        return height;
+    }
 
-	public void setHeight(int height) {
-		this.height = height;
-	}
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
-	public BufferedImage getImage() {
-		return image;
-	}
+    public BufferedImage getImage() {
+        return image;
+    }
 
-	public void setImage(BufferedImage image) {
-		this.image = image;
-	}
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
 
-	/**
-	 * ¼ì²éÊÇ·ñ³ö½ç
-	 * @return true ³ö½çÓë·ñ
-	 */
-	public abstract boolean outOfBounds();
-	
-	/**
-	 * ·ÉÐÐÎïÒÆ¶¯Ò»²½
-	 */
-	public abstract void step();
-	
-	/**
-	 * ¼ì²éµ±Ç°·ÉÐÐÎïÌåÊÇ·ñ±»×Óµ¯(x,y)»÷(shoot)ÖÐ
-	 * @param bullet ×Óµ¯¶ÔÏó
-	 * @return true±íÊ¾±»»÷ÖÐÁË
-	 */
-	public boolean shootBy(Bullet bullet){
-		int x = bullet.x;  //×Óµ¯ºá×ø±ê
-		int y = bullet.y;  //×Óµ¯×Ý×ø±ê
-		return this.x<x && x<this.x+width && this.y<y && y<this.y+height;
-	}
+    /**
+     * ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
+     *
+     * @return true ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     */
+    public abstract boolean outOfBounds();
+
+    /**
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½Ò»ï¿½ï¿½
+     */
+    public abstract void step();
+
+    /**
+     * ï¿½ï¿½éµ±Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Óµï¿½(x,y)ï¿½ï¿½(shoot)ï¿½ï¿½
+     *
+     * @param bullet ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½
+     * @return trueï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     */
+    public boolean shootBy(Bullet bullet) {
+        int x = bullet.x;  //ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        int y = bullet.y;  //ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        return this.x < x && x < this.x + width && this.y < y && y < this.y + height;
+    }
 
 }

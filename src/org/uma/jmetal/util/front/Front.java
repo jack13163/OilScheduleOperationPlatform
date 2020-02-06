@@ -11,9 +11,13 @@ import java.util.Comparator;
  * @author Antonio J. Nebro
  */
 public interface Front extends Serializable {
-  public int getNumberOfPoints() ;
-  public int getPointDimensions() ;
-  public Point getPoint(int index) ;
-  public void setPoint(int index, Point point) ;
-  public void sort(Comparator<Point> comparator) ;
+    public int getNumberOfPoints();
+
+    public int getPointDimensions();
+
+    public Point getPoint(int index);
+
+    public void setPoint(int index, Point point);
+
+    public void sort(Comparator<Point> comparator);
 }

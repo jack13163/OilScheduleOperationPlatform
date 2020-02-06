@@ -32,26 +32,27 @@ import java.util.logging.Logger;
 /**
  * More complex example for Malmo DQN w/ block grid as input. After the network learns how to find the reward
  * on a simple open plane, the mission is made more complex by putting lava in the way.
+ *
  * @author howard-abrams (howard.abrams@ca.com) on 1/12/17.
  */
 public class MalmoBlocks {
     public static QLearning.QLConfiguration MALMO_QL = new QLearning.QLConfiguration(123, //Random seed
-                    200, //Max step By epoch
-                    200000, //Max step
-                    50000, //Max size of experience replay
-                    32, //size of batches
-                    50, //target update (hard)
-                    10, //num step noop warmup
-                    0.01, //reward scaling
-                    0.99, //gamma
-                    1.0, //td-error clipping
-                    0.1f, //min epsilon
-                    1000, //num step for eps greedy anneal
-                    true //double DQN
+            200, //Max step By epoch
+            200000, //Max step
+            50000, //Max size of experience replay
+            32, //size of batches
+            50, //target update (hard)
+            10, //num step noop warmup
+            0.01, //reward scaling
+            0.99, //gamma
+            1.0, //td-error clipping
+            0.1f, //min epsilon
+            1000, //num step for eps greedy anneal
+            true //double DQN
     );
 
     public static DQNFactoryStdDense.Configuration MALMO_NET = DQNFactoryStdDense.Configuration.builder().l2(0.00)
-                    .updater(new Adam(0.01)).numHiddenNodes(50).numLayer(3).build();
+            .updater(new Adam(0.01)).numHiddenNodes(50).numLayer(3).build();
 
     public static void main(String[] args) throws IOException {
         try {
@@ -59,7 +60,7 @@ public class MalmoBlocks {
             loadMalmoCliffWalk();
         } catch (MalmoConnectionError e) {
             System.out.println(
-                            "To run this example, download and start Project Malmo found at https://github.com/Microsoft/malmo.");
+                    "To run this example, download and start Project Malmo found at https://github.com/Microsoft/malmo.");
         }
     }
 
@@ -69,10 +70,10 @@ public class MalmoBlocks {
 
     private static MalmoEnv createMDP(final int initialCount) {
         MalmoActionSpaceDiscrete actionSpace =
-                        new MalmoActionSpaceDiscrete("movenorth 1", "movesouth 1", "movewest 1", "moveeast 1");
+                new MalmoActionSpaceDiscrete("movenorth 1", "movesouth 1", "movewest 1", "moveeast 1");
         actionSpace.setRandomSeed(123);
         MalmoObservationSpace observationSpace = new MalmoObservationSpaceGrid("floor", 9, 1, 27,
-                        new String[] {"lava", "flowing_lava"}, "lapis_block");
+                new String[]{"lava", "flowing_lava"}, "lapis_block");
         MalmoDescretePositionPolicy obsPolicy = new MalmoDescretePositionPolicy();
 
         MalmoEnv mdp = new MalmoEnv("cliff_walking_rl4j.xml", actionSpace, observationSpace, obsPolicy);

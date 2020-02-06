@@ -35,123 +35,123 @@ import org.uma.jmetal.solution.DoubleSolution;
  */
 @SuppressWarnings("serial")
 public class CDG extends AbstractCDG<DoubleSolution> {
-	private DifferentialEvolutionCrossover differentialEvolutionCrossover;
+    private DifferentialEvolutionCrossover differentialEvolutionCrossover;
 
-	public CDG(Problem<DoubleSolution> problem, int populationSize, int resultPopulationSize, int maxEvaluations,
-			CrossoverOperator<DoubleSolution> crossover, double neighborhoodSelectionProbability, double sigma_, int k_,
-			int t_, int subproblemNum_, int childGrid_, int childGridNum_) {
-		super(problem, populationSize, resultPopulationSize, maxEvaluations, crossover,
-				neighborhoodSelectionProbability, sigma_, k_, t_, subproblemNum_, childGrid_, childGridNum_);
+    public CDG(Problem<DoubleSolution> problem, int populationSize, int resultPopulationSize, int maxEvaluations,
+               CrossoverOperator<DoubleSolution> crossover, double neighborhoodSelectionProbability, double sigma_, int k_,
+               int t_, int subproblemNum_, int childGrid_, int childGridNum_) {
+        super(problem, populationSize, resultPopulationSize, maxEvaluations, crossover,
+                neighborhoodSelectionProbability, sigma_, k_, t_, subproblemNum_, childGrid_, childGridNum_);
 
-		differentialEvolutionCrossover = (DifferentialEvolutionCrossover) crossoverOperator;
-	}
+        differentialEvolutionCrossover = (DifferentialEvolutionCrossover) crossoverOperator;
+    }
 
-	@Override
-	public void run() {
-		initializePopulation();
+    @Override
+    public void run() {
+        initializePopulation();
 
-		initializeIdealPoint();
+        initializeIdealPoint();
 
-		initializeNadirPoint();
+        initializeNadirPoint();
 
-		evaluations = populationSize;
+        evaluations = populationSize;
 
-		int maxGen = (int) (maxEvaluations / populationSize);
-		int gen = 0;
+        int maxGen = (int) (maxEvaluations / populationSize);
+        int gen = 0;
 
-		double mutationProbability = 1.0 / problem.getNumberOfVariables();
+        double mutationProbability = 1.0 / problem.getNumberOfVariables();
 
-		double delta;
+        double delta;
 
-		do {
+        do {
 
-			updateNeighborhood();
+            updateNeighborhood();
 
-			delta = Math.pow((1 - evaluations / maxEvaluations), 0.7);
+            delta = Math.pow((1 - evaluations / maxEvaluations), 0.7);
 
-			int[] permutation = new int[populationSize];
-			MOEADUtils.randomPermutation(permutation, populationSize);
+            int[] permutation = new int[populationSize];
+            MOEADUtils.randomPermutation(permutation, populationSize);
 
-			MutationOperator<DoubleSolution> mutation = new CDGMutation(mutationProbability, delta);
+            MutationOperator<DoubleSolution> mutation = new CDGMutation(mutationProbability, delta);
 
-			for (int i = 0; i < populationSize; i++) {
-				int subProblemId = permutation[i];
+            for (int i = 0; i < populationSize; i++) {
+                int subProblemId = permutation[i];
 
-				NeighborType neighborType = chooseNeighborType(subProblemId);
-				List<DoubleSolution> parents = parentSelection(subProblemId, neighborType);
+                NeighborType neighborType = chooseNeighborType(subProblemId);
+                List<DoubleSolution> parents = parentSelection(subProblemId, neighborType);
 
-				differentialEvolutionCrossover.setCurrentSolution(population.get(subProblemId));
-				List<DoubleSolution> children = differentialEvolutionCrossover.execute(parents);
+                differentialEvolutionCrossover.setCurrentSolution(population.get(subProblemId));
+                List<DoubleSolution> children = differentialEvolutionCrossover.execute(parents);
 
-				DoubleSolution child = children.get(0);
-				mutation.execute(child);
+                DoubleSolution child = children.get(0);
+                mutation.execute(child);
 
-				problem.evaluate(child);
+                problem.evaluate(child);
 
-				evaluations++;
+                evaluations++;
 
-				initialCDGAttributes(child);
+                initialCDGAttributes(child);
 
-				population.add(child);
-			}
+                population.add(child);
+            }
 
-			gen++;
+            gen++;
 
-			for (int i = 0; i < population.size(); i++)
-				updateIdealPoint(population.get(i));
+            for (int i = 0; i < population.size(); i++)
+                updateIdealPoint(population.get(i));
 
-			if (gen % 20 == 0)
-				initializeNadirPoint();
+            if (gen % 20 == 0)
+                initializeNadirPoint();
 
-			if (problem.getNumberOfObjectives() == 3) {
-				updateBorder();
-				excludeBadSolution3();
-				chooseSpecialPopulation();
-				gridSystemSetup3();
-			} else {
-				excludeBadSolution();
-				chooseSpecialPopulation();
-				gridSystemSetup();
-			}
+            if (problem.getNumberOfObjectives() == 3) {
+                updateBorder();
+                excludeBadSolution3();
+                chooseSpecialPopulation();
+                gridSystemSetup3();
+            } else {
+                excludeBadSolution();
+                chooseSpecialPopulation();
+                gridSystemSetup();
+            }
 
-			if (population.size() < populationSize)
-				supplyBadSolution();
-			else
-				rankBasedSelection();
+            if (population.size() < populationSize)
+                supplyBadSolution();
+            else
+                rankBasedSelection();
 
-		} while (gen < maxGen);
-	}
+        } while (gen < maxGen);
+    }
 
-	protected void initializePopulation() {
-		for (int i = 0; i < populationSize; i++) {
-			DoubleSolution newSolution = (DoubleSolution) problem.createSolution();
+    protected void initializePopulation() {
+        for (int i = 0; i < populationSize; i++) {
+            DoubleSolution newSolution = (DoubleSolution) problem.createSolution();
 
-			problem.evaluate(newSolution);
-			initialCDGAttributes(newSolution);
-			population.add(newSolution);
+            problem.evaluate(newSolution);
+            initialCDGAttributes(newSolution);
+            population.add(newSolution);
 
-		}
-	}
+        }
+    }
 
-	@Override
-	public String getName() {
-		return "CDG";
-	}
+    @Override
+    public String getName() {
+        return "CDG";
+    }
 
-	@Override
-	public String getDescription() {
-		return "A Constrained Decomposition Approach with Grids for Evolutionary Multiobjective Optimization";
-	}
+    @Override
+    public String getDescription() {
+        return "A Constrained Decomposition Approach with Grids for Evolutionary Multiobjective Optimization";
+    }
 
-	@Override
-	public List<Double[]> getSolutions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<Double[]> getSolutions() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public void clearSolutions() {
-		// TODO Auto-generated method stub
+    @Override
+    public void clearSolutions() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 }

@@ -8,8 +8,10 @@ import java.io.Serializable;
  *
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
-public interface SolutionAttribute <S, V> extends Serializable {
-  public void setAttribute(S solution, V value) ;
-  public V getAttribute(S solution) ;
-  public Object getAttributeIdentifier() ;
+public interface SolutionAttribute<S, V> extends Serializable {
+    public void setAttribute(S solution, V value);
+
+    public V getAttribute(S solution);
+
+    public Object getAttributeIdentifier();
 }

@@ -51,43 +51,43 @@ import org.uma.jmetal.util.JMetalException;
 
 public class F02ShiftedSchwefel extends TestFunc {
 
-  // Fixed (class) parameters
-  static final public String FUNCTION_NAME = "Shifted Schwefel's Problem 1.2";
-  static final public String DEFAULT_FILE_DATA = Benchmark.CEC2005SUPPORTDATADIRECTORY + "/schwefel_102_data.txt";
+    // Fixed (class) parameters
+    static final public String FUNCTION_NAME = "Shifted Schwefel's Problem 1.2";
+    static final public String DEFAULT_FILE_DATA = Benchmark.CEC2005SUPPORTDATADIRECTORY + "/schwefel_102_data.txt";
 
-  // Shifted global optimum
-  private final double[] m_o;
+    // Shifted global optimum
+    private final double[] m_o;
 
-  // In order to avoid excessive memory allocation,
-  // a fixed memory buffer is allocated for each function object.
-  private double[] m_z;
+    // In order to avoid excessive memory allocation,
+    // a fixed memory buffer is allocated for each function object.
+    private double[] m_z;
 
-  // Constructors
-  public F02ShiftedSchwefel(int dimension, double bias) throws JMetalException {
-    this(dimension, bias, DEFAULT_FILE_DATA);
-  }
+    // Constructors
+    public F02ShiftedSchwefel(int dimension, double bias) throws JMetalException {
+        this(dimension, bias, DEFAULT_FILE_DATA);
+    }
 
-  public F02ShiftedSchwefel(int dimension, double bias, String file_data) throws JMetalException {
-    super(dimension, bias, FUNCTION_NAME);
+    public F02ShiftedSchwefel(int dimension, double bias, String file_data) throws JMetalException {
+        super(dimension, bias, FUNCTION_NAME);
 
-    // Note: dimension starts from 0
-    m_o = new double[mDimension];
-    m_z = new double[mDimension];
+        // Note: dimension starts from 0
+        m_o = new double[mDimension];
+        m_z = new double[mDimension];
 
-    // Load the shifted global optimum
-    Benchmark.loadRowVectorFromFile(file_data, mDimension, m_o);
-  }
+        // Load the shifted global optimum
+        Benchmark.loadRowVectorFromFile(file_data, mDimension, m_o);
+    }
 
-  // Function body
-  public double f(double[] x) {
-    double result = 0.0;
+    // Function body
+    public double f(double[] x) {
+        double result = 0.0;
 
-    Benchmark.shift(m_z, x, m_o);
+        Benchmark.shift(m_z, x, m_o);
 
-    result = Benchmark.schwefel_102(m_z);
+        result = Benchmark.schwefel_102(m_z);
 
-    result += mBias;
+        result += mBias;
 
-    return (result);
-  }
+        return (result);
+    }
 }

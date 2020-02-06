@@ -6,11 +6,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ColorHelper {
-    public static String RGB2Hex(String rgb){
+    public static String RGB2Hex(String rgb) {
         Matcher matcher = Pattern.compile("(?<=[\\(|\\[])[^\\)|\\]]+").matcher(rgb);
         String[] rgbArr = null;
         String hex = "";
-        if(matcher.find()){
+        if (matcher.find()) {
             String tmp = matcher.group();
             rgbArr = tmp.split(",");
         }
@@ -18,10 +18,10 @@ public class ColorHelper {
         return hex;
     }
 
-    public static List<String> RGBArray2HexArray(String rgb){
+    public static List<String> RGBArray2HexArray(String rgb) {
         Matcher matcher = Pattern.compile("(?<=[\\(|\\[])[^\\)|\\]]+").matcher(rgb);
         List<String> rgbArr = new LinkedList<>();
-        while(matcher.find()){
+        while (matcher.find()) {
             String[] tmp = matcher.group().split(",");
             String hex = String.format("#%02X%02X%02X", Integer.parseInt(tmp[0].trim()), Integer.parseInt(tmp[1].trim()), Integer.parseInt(tmp[2].trim()));
             rgbArr.add(hex);

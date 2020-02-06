@@ -1,10 +1,14 @@
 package org.rl4j.fly;
+
 /**
- * ½±Àø
+ * ï¿½ï¿½ï¿½ï¿½
  */
 public interface Award {
-	int DOUBLE_FIRE = 0;  //Ë«±¶»ðÁ¦
-	int LIFE = 1;   //1ÌõÃü
-	/** »ñµÃ½±ÀøÀàÐÍ(ÉÏÃæµÄ0»ò1) */
-	int getType();
+    int DOUBLE_FIRE = 0;  //Ë«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    int LIFE = 1;   //1ï¿½ï¿½ï¿½ï¿½
+
+    /**
+     * ï¿½ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½1)
+     */
+    int getType();
 }

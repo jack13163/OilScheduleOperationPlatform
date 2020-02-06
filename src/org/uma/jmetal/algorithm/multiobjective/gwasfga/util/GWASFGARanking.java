@@ -14,19 +14,18 @@ import java.util.List;
 
 /**
  * @author Rubén Saborido
- *
+ * <p>
  * Implementation of the ranking procedure for the algorithm GWASF-GA on jMetal5.0
- *
+ * <p>
  * It classifies solutions into different fronts.
- *
- *
+ * <p>
+ * <p>
  * If the problem contains constraints, after feasible solutions it classifies the unfeasible solutions into fronts:
- *
+ * <p>
  * - Each unfeasible solution goes into a different front.
  * - Unfeasible solutions with lower number of violated constraints are preferred.
  * - If two solutions have equal number of violated constraints it compares the overall constraint values.
  * - If two solutions have equal overall constraint values it compares de values of the utility function.
- *
  */
 @SuppressWarnings("serial")
 public class GWASFGARanking<S extends Solution<?>> extends GenericSolutionAttribute<S, Integer>
@@ -43,7 +42,7 @@ public class GWASFGARanking<S extends Solution<?>> extends GenericSolutionAttrib
         this.numberOfRanks = 0;
         this.utilityFunctionsUtopia = utilityFunctionsUtopia;
         this.utilityFunctionsNadir = utilityFunctionsNadir;
-        this.numberOfViolatedConstraints = new NumberOfViolatedConstraints<S>() ;
+        this.numberOfViolatedConstraints = new NumberOfViolatedConstraints<S>();
         this.overallConstraintViolation = new OverallConstraintViolation<S>();
     }
 
@@ -59,27 +58,24 @@ public class GWASFGARanking<S extends Solution<?>> extends GenericSolutionAttrib
         S solutionToInsert;
 
         //Split the population in feasible and unfeasible solutions
-        for (S solution:population) {
-            if((numberOfViolatedConstraints.getAttribute(solution)!= null
+        for (S solution : population) {
+            if ((numberOfViolatedConstraints.getAttribute(solution) != null
                     &&
-                    numberOfViolatedConstraints.getAttribute(solution)>0)) {
+                    numberOfViolatedConstraints.getAttribute(solution) > 0)) {
                 unfeasibleSolutions.add(solution);
-            }
-            else {
+            } else {
                 feasibleSolutions.add(solution);
             }
         }
 
         //Compute the number of fronts for feasible solutions
-        if(feasibleSolutions.size() > 0){
-            if(feasibleSolutions.size() > numberOfWeights){
+        if (feasibleSolutions.size() > 0) {
+            if (feasibleSolutions.size() > numberOfWeights) {
                 numberOfRanksForFeasibleSolutions = (feasibleSolutions.size() + 1) / numberOfWeights;
-            }
-            else{
+            } else {
                 numberOfRanksForFeasibleSolutions = 1;
             }
-        }
-        else {
+        } else {
             numberOfRanksForFeasibleSolutions = 0;
         }
 
@@ -98,7 +94,7 @@ public class GWASFGARanking<S extends Solution<?>> extends GenericSolutionAttrib
             //Iteration for each front
             for (index = 0; index < numberOfRanksForFeasibleSolutions; index++) {
                 //Iteration over weight vectors
-                for (indexOfWeight = 0; indexOfWeight < numberOfWeights/2; indexOfWeight++) {
+                for (indexOfWeight = 0; indexOfWeight < numberOfWeights / 2; indexOfWeight++) {
                     if (!feasibleSolutions.isEmpty()) {
                         //Obtain the best solution using the current index of the weight vector and the utopian point
                         indexOfBestSolution = 0;
@@ -159,7 +155,7 @@ public class GWASFGARanking<S extends Solution<?>> extends GenericSolutionAttrib
      * @param population List of unfeasible solutions
      * @return The rank of each unfeasible solutions
      */
-    protected int[] rankUnfeasibleSolutions(List<S> population){
+    protected int[] rankUnfeasibleSolutions(List<S> population) {
         int numberOfViolatedConstraintsBySolution1, numberOfViolatedConstraintsBySolution2;
         int indexOfFirstSolution, indexOfSecondSolution, indexOfWeight;
         double overallConstraintViolationSolution1, overallConstraintViolationSolution2;
@@ -168,7 +164,7 @@ public class GWASFGARanking<S extends Solution<?>> extends GenericSolutionAttrib
         Arrays.fill(rank, 0);
 
         //Iteration for each solution
-        for (indexOfFirstSolution = 0; indexOfFirstSolution < population.size()-1; indexOfFirstSolution++ ) {
+        for (indexOfFirstSolution = 0; indexOfFirstSolution < population.size() - 1; indexOfFirstSolution++) {
             //The current solution is compared with the following ones
             for (indexOfSecondSolution = indexOfFirstSolution + 1; indexOfSecondSolution < population.size(); indexOfSecondSolution++) {
                 numberOfViolatedConstraintsBySolution1 = numberOfViolatedConstraints.getAttribute(population.get(indexOfFirstSolution));

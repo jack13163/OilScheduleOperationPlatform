@@ -21,82 +21,86 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class InvertedGenerationalDistance<S extends Solution<?>> extends GenericIndicator<S> {
 
-  private double pow = 2.0;
+    private double pow = 2.0;
 
-  /**
-   * Default constructor
-   */
-  public InvertedGenerationalDistance() {
-  }
-
-  /**
-   * Constructor
-   *
-   * @param referenceParetoFrontFile
-   * @throws FileNotFoundException
-   */
-  public InvertedGenerationalDistance(String referenceParetoFrontFile, double p) throws FileNotFoundException {
-    super(referenceParetoFrontFile) ;
-    pow = p ;
-  }
-
-  /**
-   * Constructor
-   *
-   * @param referenceParetoFrontFile
-   * @throws FileNotFoundException
-   */
-  public InvertedGenerationalDistance(String referenceParetoFrontFile) throws FileNotFoundException {
-    this(referenceParetoFrontFile, 2.0) ;
-  }
-
-  /**
-   * Constructor
-   *
-   * @param referenceParetoFront
-   * @throws FileNotFoundException
-   */
-  public InvertedGenerationalDistance(Front referenceParetoFront) {
-    super(referenceParetoFront) ;
-  }
-
-  /**
-   * Evaluate() method
-   * @param solutionList
-   * @return
-   */
-  @Override public Double evaluate(List<S> solutionList) {
-    return invertedGenerationalDistance(new ArrayFront(solutionList), referenceParetoFront);
-  }
-
-  /**
-   * Returns the inverted generational distance value for a given front
-   *
-   * @param front The front
-   * @param referenceFront The reference pareto front
-   */
-  public double invertedGenerationalDistance(Front front, Front referenceFront) {
-    double sum = 0.0;
-    for (int i = 0 ; i < referenceFront.getNumberOfPoints(); i++) {
-      sum += Math.pow(FrontUtils.distanceToClosestPoint(referenceFront.getPoint(i),
-          front), pow);
+    /**
+     * Default constructor
+     */
+    public InvertedGenerationalDistance() {
     }
 
-    sum = Math.pow(sum, 1.0 / pow);
+    /**
+     * Constructor
+     *
+     * @param referenceParetoFrontFile
+     * @throws FileNotFoundException
+     */
+    public InvertedGenerationalDistance(String referenceParetoFrontFile, double p) throws FileNotFoundException {
+        super(referenceParetoFrontFile);
+        pow = p;
+    }
 
-    return sum / referenceFront.getNumberOfPoints();
-  }
+    /**
+     * Constructor
+     *
+     * @param referenceParetoFrontFile
+     * @throws FileNotFoundException
+     */
+    public InvertedGenerationalDistance(String referenceParetoFrontFile) throws FileNotFoundException {
+        this(referenceParetoFrontFile, 2.0);
+    }
 
-  @Override public String getName() {
-    return "IGD" ;
-  }
+    /**
+     * Constructor
+     *
+     * @param referenceParetoFront
+     * @throws FileNotFoundException
+     */
+    public InvertedGenerationalDistance(Front referenceParetoFront) {
+        super(referenceParetoFront);
+    }
 
-  @Override public String getDescription() {
-    return "Inverted generational distance quality indicator" ;
-  }
+    /**
+     * Evaluate() method
+     *
+     * @param solutionList
+     * @return
+     */
+    @Override
+    public Double evaluate(List<S> solutionList) {
+        return invertedGenerationalDistance(new ArrayFront(solutionList), referenceParetoFront);
+    }
 
-  @Override
-  public boolean isTheLowerTheIndicatorValueTheBetter() {
-    return true ;
-  }
+    /**
+     * Returns the inverted generational distance value for a given front
+     *
+     * @param front          The front
+     * @param referenceFront The reference pareto front
+     */
+    public double invertedGenerationalDistance(Front front, Front referenceFront) {
+        double sum = 0.0;
+        for (int i = 0; i < referenceFront.getNumberOfPoints(); i++) {
+            sum += Math.pow(FrontUtils.distanceToClosestPoint(referenceFront.getPoint(i),
+                    front), pow);
+        }
+
+        sum = Math.pow(sum, 1.0 / pow);
+
+        return sum / referenceFront.getNumberOfPoints();
+    }
+
+    @Override
+    public String getName() {
+        return "IGD";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Inverted generational distance quality indicator";
+    }
+
+    @Override
+    public boolean isTheLowerTheIndicatorValueTheBetter() {
+        return true;
+    }
 }

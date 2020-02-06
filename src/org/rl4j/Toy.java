@@ -36,9 +36,8 @@ import java.io.IOException;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/11/16.
- *
+ * <p>
  * main example for toy DQN
- *
  */
 public class Toy {
 
@@ -79,8 +78,8 @@ public class Toy {
 
 
     public static DQNFactoryStdDense.Configuration TOY_NET =
-             DQNFactoryStdDense.Configuration.builder()
-        .l2(0.01).updater(new Adam(1e-2)).numLayer(3).numHiddenNodes(16).build();
+            DQNFactoryStdDense.Configuration.builder()
+                    .l2(0.01).updater(new Adam(1e-2)).numLayer(3).numHiddenNodes(16).build();
 
     public static void main(String[] args) throws IOException {
         simpleToy();

@@ -33,7 +33,8 @@ public class IntegerDoubleProblemsExperimentConfig {
     private static Logger logger = LogManager.getLogger(IntegerDoubleProblemsExperimentConfig.class.getName());
 
     /**
-     *  单次运行
+     * 单次运行
+     *
      * @param problem
      * @param algorithm
      * @param popSize
@@ -76,6 +77,7 @@ public class IntegerDoubleProblemsExperimentConfig {
 
     /**
      * 实验
+     *
      * @param problem
      * @param algorithms
      * @param popSize
@@ -117,6 +119,7 @@ public class IntegerDoubleProblemsExperimentConfig {
 
     /**
      * 为问题配置算法列表
+     *
      * @param algorithmList
      * @param problem
      * @param runs

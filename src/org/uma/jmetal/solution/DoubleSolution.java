@@ -6,6 +6,7 @@ package org.uma.jmetal.solution;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
 public interface DoubleSolution extends Solution<Double> {
-  public Double getLowerBound(int index) ;
-  public Double getUpperBound(int index) ;
+    public Double getLowerBound(int index);
+
+    public Double getUpperBound(int index);
 }

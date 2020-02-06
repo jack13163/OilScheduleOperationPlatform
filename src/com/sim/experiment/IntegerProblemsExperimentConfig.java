@@ -82,6 +82,7 @@ public class IntegerProblemsExperimentConfig {
 
     /**
      * 实验
+     *
      * @param problem
      * @param algorithms
      * @param popSize
@@ -124,6 +125,7 @@ public class IntegerProblemsExperimentConfig {
 
     /**
      * 为问题配置算法列表
+     *
      * @param algorithmList
      * @param problem
      * @param runs

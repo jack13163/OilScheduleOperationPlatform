@@ -1,9 +1,11 @@
 package org.rl4j.fly;
 
 /**
- * 敌人，可以有分数
+ * 锟斤拷锟剿ｏ拷锟斤拷锟斤拷锟叫凤拷锟斤拷
  */
 public interface Enemy {
-	/** 敌人的分数  */
-	int getScore();
+    /**
+     * 锟斤拷锟剿的凤拷锟斤拷
+     */
+    int getScore();
 }

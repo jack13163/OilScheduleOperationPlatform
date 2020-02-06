@@ -3,38 +3,46 @@ package org.rl4j.fly;
 import java.util.Random;
 
 /**
- * µÐ·É»ú: ÊÇ·ÉÐÐÎï£¬Ò²ÊÇµÐÈË
+ * ï¿½Ð·É»ï¿½: ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï£¬Ò²ï¿½Çµï¿½ï¿½ï¿½
  */
 public class Airplane extends FlyingObject implements Enemy {
-	private int speed = 3;  //ÒÆ¶¯²½Öè
-	
-	/** ³õÊ¼»¯Êý¾Ý */
-	public Airplane(){
-		this.image = ShootGame.airplane;
-		width = image.getWidth();
-		height = image.getHeight();
-		y = -height;          
-		Random rand = new Random();
-		x = rand.nextInt(ShootGame.WIDTH - width);
-	}
-	
-	/** »ñÈ¡·ÖÊý */
-	@Override
-	public int getScore() {  
-		return 5;
-	}
+    private int speed = 3;  //ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	/** //Ô½½ç´¦Àí */
-	@Override
-	public 	boolean outOfBounds() {   
-		return y>ShootGame.HEIGHT;
-	}
+    /**
+     * ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     */
+    public Airplane() {
+        this.image = ShootGame.airplane;
+        width = image.getWidth();
+        height = image.getHeight();
+        y = -height;
+        Random rand = new Random();
+        x = rand.nextInt(ShootGame.WIDTH - width);
+    }
 
-	/** ÒÆ¶¯ */
-	@Override
-	public void step() {   
-		y += speed;
-	}
+    /**
+     * ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½
+     */
+    @Override
+    public int getScore() {
+        return 5;
+    }
+
+    /**
+     * //Ô½ï¿½ç´¦ï¿½ï¿½
+     */
+    @Override
+    public boolean outOfBounds() {
+        return y > ShootGame.HEIGHT;
+    }
+
+    /**
+     * ï¿½Æ¶ï¿½
+     */
+    @Override
+    public void step() {
+        y += speed;
+    }
 
 }
 

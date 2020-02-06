@@ -27,108 +27,114 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 public class NSGAIIMeasures<S extends Solution<?>> extends NSGAII<S> implements Measurable {
-  protected CountingMeasure evaluations ;
-  protected DurationMeasure durationMeasure ;
-  protected SimpleMeasureManager measureManager ;
+    protected CountingMeasure evaluations;
+    protected DurationMeasure durationMeasure;
+    protected SimpleMeasureManager measureManager;
 
-  protected BasicMeasure<List<S>> solutionListMeasure ;
-  protected BasicMeasure<Integer> numberOfNonDominatedSolutionsInPopulation ;
-  protected BasicMeasure<Double> hypervolumeValue ;
+    protected BasicMeasure<List<S>> solutionListMeasure;
+    protected BasicMeasure<Integer> numberOfNonDominatedSolutionsInPopulation;
+    protected BasicMeasure<Double> hypervolumeValue;
 
-  protected Front referenceFront ;
+    protected Front referenceFront;
 
-  /**
-   * Constructor
-   */
-  public NSGAIIMeasures(Problem<S> problem, int maxIterations, int populationSize,
-                        int matingPoolSize, int offspringPopulationSize,
-                        CrossoverOperator<S> crossoverOperator, MutationOperator<S> mutationOperator,
-                        SelectionOperator<List<S>, S> selectionOperator, Comparator<S> dominanceComparator, SolutionListEvaluator<S> evaluator) {
-    super(problem, maxIterations, populationSize, matingPoolSize, offspringPopulationSize,
-            crossoverOperator, mutationOperator, selectionOperator, dominanceComparator, evaluator) ;
+    /**
+     * Constructor
+     */
+    public NSGAIIMeasures(Problem<S> problem, int maxIterations, int populationSize,
+                          int matingPoolSize, int offspringPopulationSize,
+                          CrossoverOperator<S> crossoverOperator, MutationOperator<S> mutationOperator,
+                          SelectionOperator<List<S>, S> selectionOperator, Comparator<S> dominanceComparator, SolutionListEvaluator<S> evaluator) {
+        super(problem, maxIterations, populationSize, matingPoolSize, offspringPopulationSize,
+                crossoverOperator, mutationOperator, selectionOperator, dominanceComparator, evaluator);
 
-    referenceFront = new ArrayFront() ;
+        referenceFront = new ArrayFront();
 
-    initMeasures() ;
-  }
-
-  @Override protected void initProgress() {
-    evaluations.reset(getMaxPopulationSize());
-  }
-
-  @Override protected void updateProgress() {
-    evaluations.increment(getMaxPopulationSize());
-
-    solutionListMeasure.push(getPopulation());
-
-    if (referenceFront.getNumberOfPoints() > 0) {
-      hypervolumeValue.push(
-              new PISAHypervolume<S>(referenceFront).evaluate(
-                  SolutionListUtils.getNondominatedSolutions(getPopulation())));
+        initMeasures();
     }
-  }
 
-  @Override protected boolean isStoppingConditionReached() {
-    return evaluations.get() >= maxEvaluations;
-  }
+    @Override
+    protected void initProgress() {
+        evaluations.reset(getMaxPopulationSize());
+    }
 
-  @Override
-  public void run() {
-    durationMeasure.reset();
-    durationMeasure.start();
-    super.run();
-    durationMeasure.stop();
-  }
+    @Override
+    protected void updateProgress() {
+        evaluations.increment(getMaxPopulationSize());
 
-  /* Measures code */
-  private void initMeasures() {
-    durationMeasure = new DurationMeasure() ;
-    evaluations = new CountingMeasure(0) ;
-    numberOfNonDominatedSolutionsInPopulation = new BasicMeasure<>() ;
-    solutionListMeasure = new BasicMeasure<>() ;
-    hypervolumeValue = new BasicMeasure<>() ;
+        solutionListMeasure.push(getPopulation());
 
-    measureManager = new SimpleMeasureManager() ;
-    measureManager.setPullMeasure("currentExecutionTime", durationMeasure);
-    measureManager.setPullMeasure("currentEvaluation", evaluations);
-    measureManager.setPullMeasure("numberOfNonDominatedSolutionsInPopulation",
-        numberOfNonDominatedSolutionsInPopulation);
+        if (referenceFront.getNumberOfPoints() > 0) {
+            hypervolumeValue.push(
+                    new PISAHypervolume<S>(referenceFront).evaluate(
+                            SolutionListUtils.getNondominatedSolutions(getPopulation())));
+        }
+    }
 
-    measureManager.setPushMeasure("currentPopulation", solutionListMeasure);
-    measureManager.setPushMeasure("currentEvaluation", evaluations);
-    measureManager.setPushMeasure("hypervolume", hypervolumeValue);
-  }
+    @Override
+    protected boolean isStoppingConditionReached() {
+        return evaluations.get() >= maxEvaluations;
+    }
 
-  @Override
-  public MeasureManager getMeasureManager() {
-    return measureManager ;
-  }
+    @Override
+    public void run() {
+        durationMeasure.reset();
+        durationMeasure.start();
+        super.run();
+        durationMeasure.stop();
+    }
 
-  @Override protected List<S> replacement(List<S> population,
-      List<S> offspringPopulation) {
-    List<S> pop = super.replacement(population, offspringPopulation) ;
+    /* Measures code */
+    private void initMeasures() {
+        durationMeasure = new DurationMeasure();
+        evaluations = new CountingMeasure(0);
+        numberOfNonDominatedSolutionsInPopulation = new BasicMeasure<>();
+        solutionListMeasure = new BasicMeasure<>();
+        hypervolumeValue = new BasicMeasure<>();
 
-    Ranking<S> ranking = new DominanceRanking<S>(dominanceComparator);
-    ranking.computeRanking(population);
+        measureManager = new SimpleMeasureManager();
+        measureManager.setPullMeasure("currentExecutionTime", durationMeasure);
+        measureManager.setPullMeasure("currentEvaluation", evaluations);
+        measureManager.setPullMeasure("numberOfNonDominatedSolutionsInPopulation",
+                numberOfNonDominatedSolutionsInPopulation);
 
-    numberOfNonDominatedSolutionsInPopulation.set(ranking.getSubfront(0).size());
+        measureManager.setPushMeasure("currentPopulation", solutionListMeasure);
+        measureManager.setPushMeasure("currentEvaluation", evaluations);
+        measureManager.setPushMeasure("hypervolume", hypervolumeValue);
+    }
 
-    return pop;
-  }
+    @Override
+    public MeasureManager getMeasureManager() {
+        return measureManager;
+    }
 
-  public CountingMeasure getEvaluations() {
-    return evaluations;
-  }
+    @Override
+    protected List<S> replacement(List<S> population,
+                                  List<S> offspringPopulation) {
+        List<S> pop = super.replacement(population, offspringPopulation);
 
-  @Override public String getName() {
-    return "NSGAIIM" ;
-  }
+        Ranking<S> ranking = new DominanceRanking<S>(dominanceComparator);
+        ranking.computeRanking(population);
 
-  @Override public String getDescription() {
-    return "Nondominated Sorting Genetic Algorithm version II. Version using measures" ;
-  }
+        numberOfNonDominatedSolutionsInPopulation.set(ranking.getSubfront(0).size());
 
-  public void setReferenceFront(Front referenceFront) {
-    this.referenceFront = referenceFront ;
-  }
+        return pop;
+    }
+
+    public CountingMeasure getEvaluations() {
+        return evaluations;
+    }
+
+    @Override
+    public String getName() {
+        return "NSGAIIM";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Nondominated Sorting Genetic Algorithm version II. Version using measures";
+    }
+
+    public void setReferenceFront(Front referenceFront) {
+        this.referenceFront = referenceFront;
+    }
 }

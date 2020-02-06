@@ -61,20 +61,20 @@ public class ChartContainer {
             this.displayReferenceFront(referenceFrontFileName);
         }
 
-        double[] xData = new double[] { 0 };
-        double[] yData = new double[] { 0 };
+        double[] xData = new double[]{0};
+        double[] yData = new double[]{0};
         XYSeries frontChartSeries = this.frontChart.addSeries(this.name, xData, yData);
         frontChartSeries.setMarkerColor(Color.blue);
 
         this.charts.put("Front", this.frontChart);
     }
-    
-    public void setReferencePoint(List<Double> referencePoint){
+
+    public void setReferencePoint(List<Double> referencePoint) {
         double rp1 = referencePoint.get(this.objective1);
         double rp2 = referencePoint.get(this.objective2);
-        XYSeries referencePointSeries = this.frontChart.addSeries("Reference Point ["+ rp1 + ", " + rp2 + "]",
-                                                                  new double[] { rp1 },
-                                                                  new double[] { rp2 });
+        XYSeries referencePointSeries = this.frontChart.addSeries("Reference Point [" + rp1 + ", " + rp2 + "]",
+                new double[]{rp1},
+                new double[]{rp2});
         referencePointSeries.setMarkerColor(Color.green);
     }
 
@@ -85,8 +85,8 @@ public class ChartContainer {
                 .yAxisTitle("Variable " + this.variable2).build();
         this.varChart.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Scatter).setMarkerSize(5);
 
-        double[] xData = new double[] { 0 };
-        double[] yData = new double[] { 0 };
+        double[] xData = new double[]{0};
+        double[] yData = new double[]{0};
 
         XYSeries varChartSeries = this.varChart.addSeries(this.name, xData, yData);
         varChartSeries.setMarkerColor(Color.blue);
@@ -102,16 +102,16 @@ public class ChartContainer {
     public void updateFrontCharts(List<DoubleSolution> solutionList) {
         if (this.frontChart != null) {
             this.frontChart.updateXYSeries(this.name,
-                                           this.getSolutionsForObjective(solutionList, this.objective1),
-                                           this.getSolutionsForObjective(solutionList, this.objective2),
-                                           null);
+                    this.getSolutionsForObjective(solutionList, this.objective1),
+                    this.getSolutionsForObjective(solutionList, this.objective2),
+                    null);
         }
 
         if (this.varChart != null) {
             this.varChart.updateXYSeries(this.name,
-                                         this.getVariableValues(solutionList, this.variable1),
-                                         this.getVariableValues(solutionList, this.variable2),
-                                         null);
+                    this.getVariableValues(solutionList, this.variable1),
+                    this.getVariableValues(solutionList, this.variable2),
+                    null);
         }
     }
 

@@ -23,58 +23,60 @@ import java.util.List;
  * @author Juanjo Durillo
  */
 public class GWASFGA<S extends Solution<?>> extends WASFGA<S> {
-  private final AbstractUtilityFunctionsSet<S> achievementScalarizingUtopia;
-  private final AbstractUtilityFunctionsSet<S> achievementScalarizingNadir;
-  private static final long serialVersionUID = 1L;
+    private final AbstractUtilityFunctionsSet<S> achievementScalarizingUtopia;
+    private final AbstractUtilityFunctionsSet<S> achievementScalarizingNadir;
+    private static final long serialVersionUID = 1L;
 
-  public GWASFGA(Problem<S> problem, int populationSize, int maxIterations, CrossoverOperator<S> crossoverOperator,
-                 MutationOperator<S> mutationOperator, SelectionOperator<List<S>, S> selectionOperator,
-                 SolutionListEvaluator<S> evaluator, double epsilon, String weightVectorsFileName) {
-    super(problem, populationSize, maxIterations, crossoverOperator, mutationOperator, selectionOperator, evaluator, epsilon,
-            null, weightVectorsFileName);
+    public GWASFGA(Problem<S> problem, int populationSize, int maxIterations, CrossoverOperator<S> crossoverOperator,
+                   MutationOperator<S> mutationOperator, SelectionOperator<List<S>, S> selectionOperator,
+                   SolutionListEvaluator<S> evaluator, double epsilon, String weightVectorsFileName) {
+        super(problem, populationSize, maxIterations, crossoverOperator, mutationOperator, selectionOperator, evaluator, epsilon,
+                null, weightVectorsFileName);
 
-    setMaxPopulationSize(populationSize);
+        setMaxPopulationSize(populationSize);
 
-    int halfVectorSize = super.weights.length  / 2;
-    int evenVectorsSize    = (super.weights.length%2==0) ? halfVectorSize : (halfVectorSize+1);
+        int halfVectorSize = super.weights.length / 2;
+        int evenVectorsSize = (super.weights.length % 2 == 0) ? halfVectorSize : (halfVectorSize + 1);
 
-    double [][] evenVectors = new double[evenVectorsSize][getProblem().getNumberOfObjectives()];
-    double [][] oddVectors = new double[halfVectorSize][getProblem().getNumberOfObjectives()];
+        double[][] evenVectors = new double[evenVectorsSize][getProblem().getNumberOfObjectives()];
+        double[][] oddVectors = new double[halfVectorSize][getProblem().getNumberOfObjectives()];
 
-    int index = 0;
-    for (int i = 0; i < super.weights.length; i = i + 2)
-      evenVectors[index++] = super.weights[i];
+        int index = 0;
+        for (int i = 0; i < super.weights.length; i = i + 2)
+            evenVectors[index++] = super.weights[i];
 
-    index = 0;
-    for (int i = 1; i < super.weights.length; i = i + 2)
-      oddVectors[index++] = super.weights[i];
+        index = 0;
+        for (int i = 1; i < super.weights.length; i = i + 2)
+            oddVectors[index++] = super.weights[i];
 
-    this.achievementScalarizingNadir  =  createUtilityFunction(this.getNadirPoint(), evenVectors);
-    this.achievementScalarizingUtopia =  createUtilityFunction(this.getReferencePoint(), oddVectors);
-  }
+        this.achievementScalarizingNadir = createUtilityFunction(this.getNadirPoint(), evenVectors);
+        this.achievementScalarizingUtopia = createUtilityFunction(this.getReferencePoint(), oddVectors);
+    }
 
-  public GWASFGA(Problem<S> problem, int populationSize, int maxIterations, CrossoverOperator<S> crossoverOperator,
-                 MutationOperator<S> mutationOperator, SelectionOperator<List<S>, S> selectionOperator,
-                 SolutionListEvaluator<S> evaluator, double epsilon) {
-    this(problem, populationSize, maxIterations, crossoverOperator, mutationOperator, selectionOperator, evaluator, epsilon,
-             "");
-  }
+    public GWASFGA(Problem<S> problem, int populationSize, int maxIterations, CrossoverOperator<S> crossoverOperator,
+                   MutationOperator<S> mutationOperator, SelectionOperator<List<S>, S> selectionOperator,
+                   SolutionListEvaluator<S> evaluator, double epsilon) {
+        this(problem, populationSize, maxIterations, crossoverOperator, mutationOperator, selectionOperator, evaluator, epsilon,
+                "");
+    }
 
-  private AbstractUtilityFunctionsSet<S> createUtilityFunction(List<Double> referencePoint, double[][] weights) {
-    return new ASFWASFGA<>(weights,referencePoint);
-  }
+    private AbstractUtilityFunctionsSet<S> createUtilityFunction(List<Double> referencePoint, double[][] weights) {
+        return new ASFWASFGA<>(weights, referencePoint);
+    }
 
-  protected Ranking<S> computeRanking(List<S> solutionList) {
-    Ranking<S> ranking = new GWASFGARanking<>(this.achievementScalarizingUtopia, this.achievementScalarizingNadir);
-    ranking.computeRanking(solutionList);
-    return ranking;
-  }
+    protected Ranking<S> computeRanking(List<S> solutionList) {
+        Ranking<S> ranking = new GWASFGARanking<>(this.achievementScalarizingUtopia, this.achievementScalarizingNadir);
+        ranking.computeRanking(solutionList);
+        return ranking;
+    }
 
-  @Override public String getName() {
-    return "GWASFGA" ;
-  }
+    @Override
+    public String getName() {
+        return "GWASFGA";
+    }
 
-  @Override public String getDescription() {
-    return "Global Weighting Achievement Scalarizing Function Genetic Algorithm" ;
-  }
+    @Override
+    public String getDescription() {
+        return "Global Weighting Achievement Scalarizing Function Genetic Algorithm";
+    }
 }

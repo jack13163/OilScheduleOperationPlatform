@@ -13,36 +13,36 @@ import java.util.Comparator;
  */
 @SuppressWarnings("serial")
 public class HypervolumeArchive<S extends Solution<?>> extends AbstractBoundedArchive<S> {
-  private Comparator<S> comparator;
-  Hypervolume<S> hypervolume ;
+    private Comparator<S> comparator;
+    Hypervolume<S> hypervolume;
 
-  public HypervolumeArchive(int maxSize, Hypervolume<S> hypervolume) {
-    super(maxSize);
-    comparator = new HypervolumeContributionComparator<S>() ;
-    this.hypervolume = hypervolume ;
-  }
-
-  @Override
-  public void prune() {
-    if (getSolutionList().size() > getMaxSize()) {
-      computeDensityEstimator() ;
-      S worst = new SolutionListUtils().findWorstSolution(getSolutionList(), comparator) ;
-      getSolutionList().remove(worst);
+    public HypervolumeArchive(int maxSize, Hypervolume<S> hypervolume) {
+        super(maxSize);
+        comparator = new HypervolumeContributionComparator<S>();
+        this.hypervolume = hypervolume;
     }
-  }
 
-  @Override
-  public Comparator<S> getComparator() {
-    return comparator ;
-  }
+    @Override
+    public void prune() {
+        if (getSolutionList().size() > getMaxSize()) {
+            computeDensityEstimator();
+            S worst = new SolutionListUtils().findWorstSolution(getSolutionList(), comparator);
+            getSolutionList().remove(worst);
+        }
+    }
 
-  @Override
-  public void computeDensityEstimator() {
-    hypervolume.computeHypervolumeContribution(archive.getSolutionList(), archive.getSolutionList()) ;
-  }
+    @Override
+    public Comparator<S> getComparator() {
+        return comparator;
+    }
 
-  @Override
-  public void sortByDensityEstimator() {
-    Collections.sort(getSolutionList(), new HypervolumeContributionComparator<S>());
-  }
+    @Override
+    public void computeDensityEstimator() {
+        hypervolume.computeHypervolumeContribution(archive.getSolutionList(), archive.getSolutionList());
+    }
+
+    @Override
+    public void sortByDensityEstimator() {
+        Collections.sort(getSolutionList(), new HypervolumeContributionComparator<S>());
+    }
 }

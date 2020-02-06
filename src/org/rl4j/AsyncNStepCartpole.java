@@ -29,7 +29,7 @@ import java.io.IOException;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/18/16.
- *
+ * <p>
  * main example for Async NStep QLearning on cartpole
  */
 public class AsyncNStepCartpole {
@@ -53,8 +53,8 @@ public class AsyncNStepCartpole {
 
 
     public static DQNFactoryStdDense.Configuration CARTPOLE_NET_NSTEP =
-        DQNFactoryStdDense.Configuration.builder()
-        .l2(0.001).updater(new Adam(0.0005)).numHiddenNodes(16).numLayer(3).build();
+            DQNFactoryStdDense.Configuration.builder()
+                    .l2(0.001).updater(new Adam(0.0005)).numHiddenNodes(16).numLayer(3).build();
 
 
     public static void main(String[] args) throws IOException {
@@ -69,8 +69,8 @@ public class AsyncNStepCartpole {
         //define the mdp from gym (name, render)
         GymEnv mdp = null;
         try {
-        mdp = new GymEnv("CartPole-v0", false, false);
-        } catch (RuntimeException e){
+            mdp = new GymEnv("CartPole-v0", false, false);
+        } catch (RuntimeException e) {
             System.out.print("To run this example, download and start the gym-http-api repo found at https://github.com/openai/gym-http-api.");
         }
 
@@ -81,7 +81,7 @@ public class AsyncNStepCartpole {
         dql.train();
 
         //get the final policy
-        DQNPolicy<Box> pol = (DQNPolicy<Box>)dql.getPolicy();
+        DQNPolicy<Box> pol = (DQNPolicy<Box>) dql.getPolicy();
 
         //serialize and save (serialization showcase, but not required)
         pol.save("/tmp/pol1");

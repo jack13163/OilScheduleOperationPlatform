@@ -8,5 +8,5 @@ import org.uma.jmetal.algorithm.Algorithm;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
 public interface AlgorithmBuilder<A extends Algorithm<?>> {
-  public A build() ;
+    public A build();
 }

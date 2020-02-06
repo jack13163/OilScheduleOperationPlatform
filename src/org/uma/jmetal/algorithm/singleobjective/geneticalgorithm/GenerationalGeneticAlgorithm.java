@@ -18,90 +18,90 @@ import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
  */
 @SuppressWarnings("serial")
 public class GenerationalGeneticAlgorithm<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, S> {
-	private Comparator<S> comparator;
-	private int maxEvaluations;
-	private int evaluations;
+    private Comparator<S> comparator;
+    private int maxEvaluations;
+    private int evaluations;
 
-	private SolutionListEvaluator<S> evaluator;
+    private SolutionListEvaluator<S> evaluator;
 
-	/**
-	 * Constructor
-	 */
-	public GenerationalGeneticAlgorithm(Problem<S> problem, int maxEvaluations, int populationSize,
-			CrossoverOperator<S> crossoverOperator, MutationOperator<S> mutationOperator,
-			SelectionOperator<List<S>, S> selectionOperator, SolutionListEvaluator<S> evaluator) {
-		super(problem);
-		this.maxEvaluations = maxEvaluations;
-		this.setMaxPopulationSize(populationSize);
+    /**
+     * Constructor
+     */
+    public GenerationalGeneticAlgorithm(Problem<S> problem, int maxEvaluations, int populationSize,
+                                        CrossoverOperator<S> crossoverOperator, MutationOperator<S> mutationOperator,
+                                        SelectionOperator<List<S>, S> selectionOperator, SolutionListEvaluator<S> evaluator) {
+        super(problem);
+        this.maxEvaluations = maxEvaluations;
+        this.setMaxPopulationSize(populationSize);
 
-		this.crossoverOperator = crossoverOperator;
-		this.mutationOperator = mutationOperator;
-		this.selectionOperator = selectionOperator;
+        this.crossoverOperator = crossoverOperator;
+        this.mutationOperator = mutationOperator;
+        this.selectionOperator = selectionOperator;
 
-		this.evaluator = evaluator;
+        this.evaluator = evaluator;
 
-		comparator = new ObjectiveComparator<S>(0);
-	}
+        comparator = new ObjectiveComparator<S>(0);
+    }
 
-	@Override
-	protected boolean isStoppingConditionReached() {
-		return (evaluations >= maxEvaluations);
-	}
+    @Override
+    protected boolean isStoppingConditionReached() {
+        return (evaluations >= maxEvaluations);
+    }
 
-	@Override
-	protected List<S> replacement(List<S> population, List<S> offspringPopulation) {
-		Collections.sort(population, comparator);
-		offspringPopulation.add(population.get(0));
-		offspringPopulation.add(population.get(1));
-		Collections.sort(offspringPopulation, comparator);
-		offspringPopulation.remove(offspringPopulation.size() - 1);
-		offspringPopulation.remove(offspringPopulation.size() - 1);
+    @Override
+    protected List<S> replacement(List<S> population, List<S> offspringPopulation) {
+        Collections.sort(population, comparator);
+        offspringPopulation.add(population.get(0));
+        offspringPopulation.add(population.get(1));
+        Collections.sort(offspringPopulation, comparator);
+        offspringPopulation.remove(offspringPopulation.size() - 1);
+        offspringPopulation.remove(offspringPopulation.size() - 1);
 
-		return offspringPopulation;
-	}
+        return offspringPopulation;
+    }
 
-	@Override
-	protected List<S> evaluatePopulation(List<S> population) {
-		population = evaluator.evaluate(population, getProblem());
+    @Override
+    protected List<S> evaluatePopulation(List<S> population) {
+        population = evaluator.evaluate(population, getProblem());
 
-		return population;
-	}
+        return population;
+    }
 
-	@Override
-	public S getResult() {
-		Collections.sort(getPopulation(), comparator);
-		return getPopulation().get(0);
-	}
+    @Override
+    public S getResult() {
+        Collections.sort(getPopulation(), comparator);
+        return getPopulation().get(0);
+    }
 
-	@Override
-	public void initProgress() {
-		evaluations = getMaxPopulationSize();
-	}
+    @Override
+    public void initProgress() {
+        evaluations = getMaxPopulationSize();
+    }
 
-	@Override
-	public void updateProgress() {
-		evaluations += getMaxPopulationSize();
-	}
+    @Override
+    public void updateProgress() {
+        evaluations += getMaxPopulationSize();
+    }
 
-	@Override
-	public String getName() {
-		return "gGA";
-	}
+    @Override
+    public String getName() {
+        return "gGA";
+    }
 
-	@Override
-	public String getDescription() {
-		return "Generational Genetic Algorithm";
-	}
+    @Override
+    public String getDescription() {
+        return "Generational Genetic Algorithm";
+    }
 
-	@Override
-	public List<Double[]> getSolutions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<Double[]> getSolutions() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public void clearSolutions() {
-		// TODO Auto-generated method stub
+    @Override
+    public void clearSolutions() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 }

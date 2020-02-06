@@ -32,43 +32,44 @@ import java.util.logging.Logger;
 /**
  * More complex example for Malmo DQN w/ screen pixels as input. After the network learns how to find the reward
  * on a simple open plane, the mission is made more complex by putting lava in the way.
+ *
  * @author howard-abrams (howard.abrams@ca.com) on 1/12/17.
  */
 public class MalmoPixels {
     public static QLearning.QLConfiguration MALMO_QL = new QLearning.QLConfiguration(123, //Random seed
-                    200, //Max step By epoch
-                    100000, //Max step
-                    50000, //Max size of experience replay
-                    32, //size of batches
-                    500, //target update (hard)
-                    10, //num step noop warmup
-                    0.01, //reward scaling
-                    0.99, //gamma
-                    1.0, //td-error clipping
-                    0.1f, //min epsilon
-                    10000, //num step for eps greedy anneal
-                    true //double DQN
+            200, //Max step By epoch
+            100000, //Max step
+            50000, //Max size of experience replay
+            32, //size of batches
+            500, //target update (hard)
+            10, //num step noop warmup
+            0.01, //reward scaling
+            0.99, //gamma
+            1.0, //td-error clipping
+            0.1f, //min epsilon
+            10000, //num step for eps greedy anneal
+            true //double DQN
     );
 
     public static DQNFactoryStdConv.Configuration MALMO_NET = new DQNFactoryStdConv.Configuration(
-    				0.01, //learning rate
-                    0.00, //l2 regularization
-                    null, // updater
-                    null // Listeners
+            0.01, //learning rate
+            0.00, //l2 regularization
+            null, // updater
+            null // Listeners
     );
 
     /*
      * The pixel input is 320x240, but using the history processor we scale that to 160x120
-     * and then crop out a 160x80 segment to remove pixels that aren't needed 
+     * and then crop out a 160x80 segment to remove pixels that aren't needed
      */
     public static HistoryProcessor.Configuration MALMO_HPROC = new HistoryProcessor.Configuration(1, // Number of frames
-                    160, // Scaled width
-                    120, // Scaled height
-                    160, // Cropped width
-                    80, // Cropped height
-                    0, // X offset
-                    30, // Y offset
-                    1 // Number of frames to skip
+            160, // Scaled width
+            120, // Scaled height
+            160, // Cropped width
+            80, // Cropped height
+            0, // X offset
+            30, // Y offset
+            1 // Number of frames to skip
     );
 
     public static void main(String[] args) throws IOException {
@@ -77,7 +78,7 @@ public class MalmoPixels {
             loadMalmoCliffWalk();
         } catch (MalmoConnectionError e) {
             System.out.println(
-                            "To run this example, download and start Project Malmo found at https://github.com/Microsoft/malmo.");
+                    "To run this example, download and start Project Malmo found at https://github.com/Microsoft/malmo.");
         }
     }
 
@@ -87,7 +88,7 @@ public class MalmoPixels {
 
     private static MalmoEnv createMDP(final int initialCount) {
         MalmoActionSpaceDiscrete actionSpace =
-                        new MalmoActionSpaceDiscrete("movenorth 1", "movesouth 1", "movewest 1", "moveeast 1");
+                new MalmoActionSpaceDiscrete("movenorth 1", "movesouth 1", "movewest 1", "moveeast 1");
         actionSpace.setRandomSeed(123);
         MalmoObservationSpace observationSpace = new MalmoObservationSpacePixels(320, 240);
         MalmoDescretePositionPolicy obsPolicy = new MalmoDescretePositionPolicy();
@@ -127,7 +128,7 @@ public class MalmoPixels {
 
         //define the training
         QLearningDiscreteConv<MalmoBox> dql =
-                        new QLearningDiscreteConv<MalmoBox>(mdp, MALMO_NET, MALMO_HPROC, MALMO_QL, manager);
+                new QLearningDiscreteConv<MalmoBox>(mdp, MALMO_NET, MALMO_HPROC, MALMO_QL, manager);
 
         //train
         dql.train();

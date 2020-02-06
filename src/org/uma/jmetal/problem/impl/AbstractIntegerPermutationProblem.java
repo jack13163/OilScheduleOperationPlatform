@@ -6,15 +6,15 @@ import org.uma.jmetal.solution.impl.DefaultIntegerPermutationSolution;
 
 @SuppressWarnings("serial")
 public abstract class AbstractIntegerPermutationProblem
-    extends AbstractGenericProblem<PermutationSolution<Integer>> implements
-    PermutationProblem<PermutationSolution<Integer>> {
+        extends AbstractGenericProblem<PermutationSolution<Integer>> implements
+        PermutationProblem<PermutationSolution<Integer>> {
 
-  /* Getters */
+    /* Getters */
 
-  /* Setters */
+    /* Setters */
 
-  @Override
-  public PermutationSolution<Integer> createSolution() {
-    return new DefaultIntegerPermutationSolution(this) ;
-  }
+    @Override
+    public PermutationSolution<Integer> createSolution() {
+        return new DefaultIntegerPermutationSolution(this);
+    }
 }

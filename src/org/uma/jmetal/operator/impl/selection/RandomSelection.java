@@ -14,16 +14,18 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class RandomSelection<S> implements SelectionOperator<List<S>, S> {
 
-  /** Execute() method */
-  public S execute(List<S> solutionList) {
-    if (null == solutionList) {
-      throw new JMetalException("The solution list is null") ;
-    } else if (solutionList.isEmpty()) {
-      throw new JMetalException("The solution list is empty") ;
+    /**
+     * Execute() method
+     */
+    public S execute(List<S> solutionList) {
+        if (null == solutionList) {
+            throw new JMetalException("The solution list is null");
+        } else if (solutionList.isEmpty()) {
+            throw new JMetalException("The solution list is empty");
+        }
+
+        List<S> list = SolutionListUtils.selectNRandomDifferentSolutions(1, solutionList);
+
+        return list.get(0);
     }
-
-    List<S> list = SolutionListUtils.selectNRandomDifferentSolutions(1, solutionList);
-
-    return list.get(0) ;
-  }
 }

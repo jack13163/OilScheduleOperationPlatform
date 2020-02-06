@@ -15,22 +15,22 @@ public class EuclideanDistanceBetweenSolutionAndASolutionListInObjectiveSpace
         <S extends Solution<?>, L extends List<S>>
         implements Distance<S, L> {
 
-  private EuclideanDistanceBetweenSolutionsInObjectiveSpace<S> distance ;
+    private EuclideanDistanceBetweenSolutionsInObjectiveSpace<S> distance;
 
-  public EuclideanDistanceBetweenSolutionAndASolutionListInObjectiveSpace() {
-    distance = new EuclideanDistanceBetweenSolutionsInObjectiveSpace<S>() ;
-  }
-
-  @Override
-  public double getDistance(S solution, L solutionList) {
-    double bestDistance = Double.MAX_VALUE;
-
-    for (int i = 0; i < solutionList.size();i++){
-      double aux = distance.getDistance(solution, solutionList.get(i));
-      if (aux < bestDistance)
-        bestDistance = aux;
+    public EuclideanDistanceBetweenSolutionAndASolutionListInObjectiveSpace() {
+        distance = new EuclideanDistanceBetweenSolutionsInObjectiveSpace<S>();
     }
 
-    return bestDistance;
-  }
+    @Override
+    public double getDistance(S solution, L solutionList) {
+        double bestDistance = Double.MAX_VALUE;
+
+        for (int i = 0; i < solutionList.size(); i++) {
+            double aux = distance.getDistance(solution, solutionList.get(i));
+            if (aux < bestDistance)
+                bestDistance = aux;
+        }
+
+        return bestDistance;
+    }
 }

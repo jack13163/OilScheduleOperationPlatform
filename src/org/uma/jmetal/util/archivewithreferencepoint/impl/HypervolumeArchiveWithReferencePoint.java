@@ -32,29 +32,29 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 public class HypervolumeArchiveWithReferencePoint<S extends Solution<?>> extends ArchiveWithReferencePoint<S> {
-  private Hypervolume<S> hypervolume ;
+    private Hypervolume<S> hypervolume;
 
-  public HypervolumeArchiveWithReferencePoint(int maxSize, List<Double> refPointDM) {
-    super(maxSize, refPointDM, new HypervolumeContributionComparator<>());
+    public HypervolumeArchiveWithReferencePoint(int maxSize, List<Double> refPointDM) {
+        super(maxSize, refPointDM, new HypervolumeContributionComparator<>());
 
-    hypervolume = new PISAHypervolume<>() ;
-  }
-
-  @Override
-  public Comparator<S> getComparator() {
-    return comparator;
-  }
-
-  @Override
-  public void computeDensityEstimator() {
-    if (archive.size() > 3) {
-      hypervolume
-          .computeHypervolumeContribution(archive.getSolutionList(), archive.getSolutionList());
+        hypervolume = new PISAHypervolume<>();
     }
-  }
 
-  @Override
-  public void sortByDensityEstimator() {
-    Collections.sort(getSolutionList(), new HypervolumeContributionComparator<S>());
-  }
+    @Override
+    public Comparator<S> getComparator() {
+        return comparator;
+    }
+
+    @Override
+    public void computeDensityEstimator() {
+        if (archive.size() > 3) {
+            hypervolume
+                    .computeHypervolumeContribution(archive.getSolutionList(), archive.getSolutionList());
+        }
+    }
+
+    @Override
+    public void sortByDensityEstimator() {
+        Collections.sort(getSolutionList(), new HypervolumeContributionComparator<S>());
+    }
 }

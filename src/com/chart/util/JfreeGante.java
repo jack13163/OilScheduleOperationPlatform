@@ -84,8 +84,8 @@ public class JfreeGante {
             calendar.setTime(date);
 
             // 计算时间
-            int hour = (int)(h / 24.0);
-            int minute = (int)((h / 24.0 - hour) * 60);//精确到分钟
+            int hour = (int) (h / 24.0);
+            int minute = (int) ((h / 24.0 - hour) * 60);//精确到分钟
 
             // 日期加法
             calendar.set(Calendar.HOUR, calendar.get(Calendar.HOUR) + hour);

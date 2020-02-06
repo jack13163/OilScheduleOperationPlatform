@@ -23,97 +23,100 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class Epsilon<S extends Solution<?>> extends GenericIndicator<S> {
 
-  /**
-   * Default constructor
-   */
-  public Epsilon() {
-  }
-
-  /**
-   * Constructor
-   *
-   * @param referenceParetoFrontFile
-   * @throws FileNotFoundException
-   */
-  public Epsilon(String referenceParetoFrontFile) throws FileNotFoundException {
-    super(referenceParetoFrontFile) ;
-  }
-
-  /**
-   * Constructor
-   *
-   * @param referenceParetoFront
-   */
-  public Epsilon(Front referenceParetoFront) {
-    super(referenceParetoFront) ;
-  }
-
-  @Override
-  public boolean isTheLowerTheIndicatorValueTheBetter() {
-    return true ;
-  }
-
-  /**
-   * Evaluate() method
-   *
-   * @param solutionList
-   * @return
-   */
-  @Override public Double evaluate(List<S> solutionList) {
-    if (solutionList == null) {
-      throw new JMetalException("The pareto front approximation list is null") ;
+    /**
+     * Default constructor
+     */
+    public Epsilon() {
     }
 
-    return epsilon(new ArrayFront(solutionList), referenceParetoFront);
-  }
-
-  /**
-   * Returns the value of the epsilon indicator.
-   *
-   * @param front Solution front
-   * @param referenceFront Optimal Pareto front
-   * @return the value of the epsilon indicator
-   * @throws JMetalException
-   */
-  private double epsilon(Front front, Front referenceFront) throws JMetalException {
-
-    double eps, epsJ = 0.0, epsK = 0.0, epsTemp;
-
-    int numberOfObjectives = front.getPointDimensions() ;
-
-    eps = Double.MIN_VALUE;
-
-    for (int i = 0; i < referenceFront.getNumberOfPoints(); i++) {
-      for (int j = 0; j < front.getNumberOfPoints(); j++) {
-        for (int k = 0; k < numberOfObjectives; k++) {
-          epsTemp = front.getPoint(j).getValue(k)
-              - referenceFront.getPoint(i).getValue(k);
-          if (k == 0) {
-            epsK = epsTemp;
-          } else if (epsK < epsTemp) {
-            epsK = epsTemp;
-          }
-        }
-        if (j == 0) {
-          epsJ = epsK;
-        } else if (epsJ > epsK) {
-          epsJ = epsK;
-        }
-      }
-      if (i == 0) {
-        eps = epsJ;
-      } else if (eps < epsJ) {
-        eps = epsJ;
-      }
+    /**
+     * Constructor
+     *
+     * @param referenceParetoFrontFile
+     * @throws FileNotFoundException
+     */
+    public Epsilon(String referenceParetoFrontFile) throws FileNotFoundException {
+        super(referenceParetoFrontFile);
     }
-    return eps;
-  }
 
-  @Override public String getName() {
-    return "EP" ;
-  }
+    /**
+     * Constructor
+     *
+     * @param referenceParetoFront
+     */
+    public Epsilon(Front referenceParetoFront) {
+        super(referenceParetoFront);
+    }
 
-  @Override public String getDescription() {
-    return "Additive Epsilon quality indicator" ;
-  }
+    @Override
+    public boolean isTheLowerTheIndicatorValueTheBetter() {
+        return true;
+    }
+
+    /**
+     * Evaluate() method
+     *
+     * @param solutionList
+     * @return
+     */
+    @Override
+    public Double evaluate(List<S> solutionList) {
+        if (solutionList == null) {
+            throw new JMetalException("The pareto front approximation list is null");
+        }
+
+        return epsilon(new ArrayFront(solutionList), referenceParetoFront);
+    }
+
+    /**
+     * Returns the value of the epsilon indicator.
+     *
+     * @param front          Solution front
+     * @param referenceFront Optimal Pareto front
+     * @return the value of the epsilon indicator
+     * @throws JMetalException
+     */
+    private double epsilon(Front front, Front referenceFront) throws JMetalException {
+
+        double eps, epsJ = 0.0, epsK = 0.0, epsTemp;
+
+        int numberOfObjectives = front.getPointDimensions();
+
+        eps = Double.MIN_VALUE;
+
+        for (int i = 0; i < referenceFront.getNumberOfPoints(); i++) {
+            for (int j = 0; j < front.getNumberOfPoints(); j++) {
+                for (int k = 0; k < numberOfObjectives; k++) {
+                    epsTemp = front.getPoint(j).getValue(k)
+                            - referenceFront.getPoint(i).getValue(k);
+                    if (k == 0) {
+                        epsK = epsTemp;
+                    } else if (epsK < epsTemp) {
+                        epsK = epsTemp;
+                    }
+                }
+                if (j == 0) {
+                    epsJ = epsK;
+                } else if (epsJ > epsK) {
+                    epsJ = epsK;
+                }
+            }
+            if (i == 0) {
+                eps = epsJ;
+            } else if (eps < epsJ) {
+                eps = epsJ;
+            }
+        }
+        return eps;
+    }
+
+    @Override
+    public String getName() {
+        return "EP";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Additive Epsilon quality indicator";
+    }
 }

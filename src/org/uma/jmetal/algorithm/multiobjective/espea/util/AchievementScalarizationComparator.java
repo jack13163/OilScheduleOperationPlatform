@@ -17,46 +17,46 @@ import java.util.Comparator;
  */
 public class AchievementScalarizationComparator<S extends Solution<?>> implements Comparator<S> {
 
-  /**
-   * The objective on which the achievement scalarization value is based.
-   */
-  private final int objective;
+    /**
+     * The objective on which the achievement scalarization value is based.
+     */
+    private final int objective;
 
-  /**
-   * The achievement scalarization comparator requires an objective for which
-   * it is defined.
-   *
-   * @param objective The objective for which achievement scalarizationv alues are
-   *                  computed.
-   */
-  public AchievementScalarizationComparator(int objective) {
-    this.objective = objective;
-  }
-
-  @Override
-  public int compare(S s1, S s2) {
-
-    double max1 = -Double.MAX_VALUE;
-    double max2 = -Double.MAX_VALUE;
-
-    for (int i = 0; i < s1.getNumberOfObjectives(); i++) {
-      if (i != objective) {
-        max1 = Math.max(max1, s1.getObjective(i));
-        max2 = Math.max(max2, s2.getObjective(i));
-      }
+    /**
+     * The achievement scalarization comparator requires an objective for which
+     * it is defined.
+     *
+     * @param objective The objective for which achievement scalarizationv alues are
+     *                  computed.
+     */
+    public AchievementScalarizationComparator(int objective) {
+        this.objective = objective;
     }
 
-    if (max1 < max2)
-      return -1;
-    if (max1 > max2)
-      return 1;
+    @Override
+    public int compare(S s1, S s2) {
 
-    // max1 = max2
-    if (s1.getObjective(objective) < s2.getObjective(objective))
-      return -1;
-    if (s1.getObjective(objective) > s2.getObjective(objective))
-      return 1;
+        double max1 = -Double.MAX_VALUE;
+        double max2 = -Double.MAX_VALUE;
 
-    return 0;
-  }
+        for (int i = 0; i < s1.getNumberOfObjectives(); i++) {
+            if (i != objective) {
+                max1 = Math.max(max1, s1.getObjective(i));
+                max2 = Math.max(max2, s2.getObjective(i));
+            }
+        }
+
+        if (max1 < max2)
+            return -1;
+        if (max1 > max2)
+            return 1;
+
+        // max1 = max2
+        if (s1.getObjective(objective) < s2.getObjective(objective))
+            return -1;
+        if (s1.getObjective(objective) > s2.getObjective(objective))
+            return 1;
+
+        return 0;
+    }
 }

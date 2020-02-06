@@ -33,12 +33,10 @@ import java.util.logging.Logger;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/11/16.
- *
+ * <p>
  * Main example for Cartpole DQN
- *
- * **/
-public class Cartpole
-{
+ **/
+public class Cartpole {
 
     public static QLearning.QLConfiguration CARTPOLE_QL =
             new QLearning.QLConfiguration(
@@ -58,11 +56,11 @@ public class Cartpole
             );
 
     public static DQNFactoryStdDense.Configuration CARTPOLE_NET =
-        DQNFactoryStdDense.Configuration.builder()
-                .l2(0.001)
-                .updater(new Sgd(0.01))
-                .numHiddenNodes(32)
-                .numLayer(3).build();
+            DQNFactoryStdDense.Configuration.builder()
+                    .l2(0.001)
+                    .updater(new Sgd(0.01))
+                    .numHiddenNodes(32)
+                    .numLayer(3).build();
 
     public static void main(String[] args) throws IOException {
         // 启动http服务
@@ -73,6 +71,7 @@ public class Cartpole
 
     /**
      * training
+     *
      * @throws IOException
      */
     public static void cartPole() throws IOException {
@@ -82,7 +81,7 @@ public class Cartpole
         GymEnv<Box, Integer, DiscreteSpace> mdp = null;
         try {
             mdp = new GymEnv("CartPole-v0", false, false);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             System.out.print("To run this example, download and start the gym-http-api repo found at https://github.com/openai/gym-http-api.");
         }
         //define the training
@@ -103,6 +102,7 @@ public class Cartpole
 
     /**
      * showcase serialization by using the trained agent on a new similar mdp (but render it this time)
+     *
      * @throws IOException
      */
     public static void loadCartpole() throws IOException {
@@ -118,9 +118,9 @@ public class Cartpole
             mdp2.reset();
             double reward = pol2.play(mdp2);
             rewards += reward;
-            Logger.getAnonymousLogger().info("[" + (i + 1) +"] "+ "Reward" + ": " + reward);
+            Logger.getAnonymousLogger().info("[" + (i + 1) + "] " + "Reward" + ": " + reward);
         }
 
-        Logger.getAnonymousLogger().info("average: " + rewards/1000);
+        Logger.getAnonymousLogger().info("average: " + rewards / 1000);
     }
 }

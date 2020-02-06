@@ -13,55 +13,63 @@ import org.uma.jmetal.util.pseudorandom.RandomGenerator;
  */
 @SuppressWarnings("serial")
 public class SimpleRandomMutation implements MutationOperator<DoubleSolution> {
-  private double mutationProbability ;
-  private RandomGenerator<Double> randomGenerator ;
+    private double mutationProbability;
+    private RandomGenerator<Double> randomGenerator;
 
-  /**  Constructor */
-  public SimpleRandomMutation(double probability) {
-	  this(probability, () -> JMetalRandom.getInstance().nextDouble());
-  }
-
-  /**  Constructor */
-  public SimpleRandomMutation(double probability, RandomGenerator<Double> randomGenerator) {
-    if (probability < 0) {
-      throw new JMetalException("Mutation probability is negative: " + mutationProbability) ;
+    /**
+     * Constructor
+     */
+    public SimpleRandomMutation(double probability) {
+        this(probability, () -> JMetalRandom.getInstance().nextDouble());
     }
 
-  	this.mutationProbability = probability ;
-    this.randomGenerator = randomGenerator ;
-  }
+    /**
+     * Constructor
+     */
+    public SimpleRandomMutation(double probability, RandomGenerator<Double> randomGenerator) {
+        if (probability < 0) {
+            throw new JMetalException("Mutation probability is negative: " + mutationProbability);
+        }
 
-  /* Getters */
-  public double getMutationProbability() {
-    return mutationProbability;
-  }
-
-  /* Setters */
-  public void setMutationProbability(double mutationProbability) {
-    this.mutationProbability = mutationProbability;
-  }
-
-  /** Execute() method */
-	@Override
-  public DoubleSolution execute(DoubleSolution solution) throws JMetalException {
-    if (null == solution) {
-      throw new JMetalException("Null parameter") ;
+        this.mutationProbability = probability;
+        this.randomGenerator = randomGenerator;
     }
 
-    doMutation(mutationProbability, solution) ;
-    
-    return solution;
-  }
-
-  /** Implements the mutation operation */
-	private void doMutation(double probability, DoubleSolution solution) {
-    for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-      if (randomGenerator.getRandomValue() <= probability) {
-      	Double value = solution.getLowerBound(i) +
-      			((solution.getUpperBound(i) - solution.getLowerBound(i)) * randomGenerator.getRandomValue()) ;
-      	
-      	solution.setVariableValue(i, value) ;
-      }
+    /* Getters */
+    public double getMutationProbability() {
+        return mutationProbability;
     }
-	}
+
+    /* Setters */
+    public void setMutationProbability(double mutationProbability) {
+        this.mutationProbability = mutationProbability;
+    }
+
+    /**
+     * Execute() method
+     */
+    @Override
+    public DoubleSolution execute(DoubleSolution solution) throws JMetalException {
+        if (null == solution) {
+            throw new JMetalException("Null parameter");
+        }
+
+        doMutation(mutationProbability, solution);
+
+        return solution;
+    }
+
+    /**
+     * Implements the mutation operation
+     */
+    private void doMutation(double probability, DoubleSolution solution) {
+        for (int i = 0; i < solution.getNumberOfVariables(); i++) {
+            if (randomGenerator.getRandomValue() <= probability) {
+                Double value = solution.getLowerBound(i) +
+                        ((solution.getUpperBound(i) - solution.getLowerBound(i)) * randomGenerator.getRandomValue());
+
+                solution.setVariableValue(i, value);
+            }
+        }
+    }
 }

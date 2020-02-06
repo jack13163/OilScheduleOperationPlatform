@@ -11,37 +11,38 @@ import org.uma.jmetal.util.solutionattribute.SolutionAttribute;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
 @SuppressWarnings("serial")
-public class GenericSolutionAttribute <S extends Solution<?>, V> implements SolutionAttribute<S, V>{
-  private Object identifier;
+public class GenericSolutionAttribute<S extends Solution<?>, V> implements SolutionAttribute<S, V> {
+    private Object identifier;
 
-  /**
-   * Constructor
-   */
-  public GenericSolutionAttribute() {
-    identifier = this.getClass() ;
-  }
+    /**
+     * Constructor
+     */
+    public GenericSolutionAttribute() {
+        identifier = this.getClass();
+    }
 
-  /**
-   * Constructor
-   * @param id Attribute identifier
-   */
-  public GenericSolutionAttribute(Object id) {
-    this.identifier = id ;
-  }
+    /**
+     * Constructor
+     *
+     * @param id Attribute identifier
+     */
+    public GenericSolutionAttribute(Object id) {
+        this.identifier = id;
+    }
 
-  @SuppressWarnings("unchecked")
-  @Override
-  public V getAttribute(S solution) {
-    return (V)solution.getAttribute(getAttributeIdentifier());
-  }
+    @SuppressWarnings("unchecked")
+    @Override
+    public V getAttribute(S solution) {
+        return (V) solution.getAttribute(getAttributeIdentifier());
+    }
 
-  @Override
-  public void setAttribute(S solution, V value) {
-     solution.setAttribute(getAttributeIdentifier(), value);
-  }
+    @Override
+    public void setAttribute(S solution, V value) {
+        solution.setAttribute(getAttributeIdentifier(), value);
+    }
 
-  @Override
-  public Object getAttributeIdentifier() {
-    return identifier;
-  }
+    @Override
+    public Object getAttributeIdentifier() {
+        return identifier;
+    }
 }

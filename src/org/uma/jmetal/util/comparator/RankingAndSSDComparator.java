@@ -21,29 +21,29 @@ import java.util.Comparator;
 /**
  * @author Alejandro Santiago <aurelio.santiago@upalt.edu.mx>
  * @version 1.0
- *
+ * <p>
  * This class implements a comparator based on the rank of the solutions; if the rank is the same
  * then the crowding distance is used.
  */
 public class RankingAndSSDComparator<S extends Solution<?>> implements Comparator<S>, Serializable {
-  private final Comparator<S> rankComparator = new RankingComparator<S>();
-  private final Comparator<S> NewcrowdingDistanceComparator = new SpatialSpreadDeviationComparator<S>() ;
+    private final Comparator<S> rankComparator = new RankingComparator<S>();
+    private final Comparator<S> NewcrowdingDistanceComparator = new SpatialSpreadDeviationComparator<S>();
 
-  /**
-   * Compares two solutions.
-   *
-   * @param solution1 Object representing the first solution
-   * @param solution2 Object representing the second solution.
-   * @return -1, or 0, or 1 if solution1 is less than, equal, or greater than solution2,
-   * respectively.
-   */
-  @Override
-  public int compare(S solution1, S solution2) {
-    int result = rankComparator.compare(solution1, solution2) ;
-    if (result == 0) {
-      result = NewcrowdingDistanceComparator.compare(solution1, solution2);
+    /**
+     * Compares two solutions.
+     *
+     * @param solution1 Object representing the first solution
+     * @param solution2 Object representing the second solution.
+     * @return -1, or 0, or 1 if solution1 is less than, equal, or greater than solution2,
+     * respectively.
+     */
+    @Override
+    public int compare(S solution1, S solution2) {
+        int result = rankComparator.compare(solution1, solution2);
+        if (result == 0) {
+            result = NewcrowdingDistanceComparator.compare(solution1, solution2);
+        }
+
+        return result;
     }
-
-    return result;
-  }
 }

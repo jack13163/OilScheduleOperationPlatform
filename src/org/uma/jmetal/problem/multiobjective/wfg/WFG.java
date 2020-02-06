@@ -19,122 +19,123 @@ import java.util.Random;
 @SuppressWarnings("serial")
 public abstract class WFG extends AbstractDoubleProblem {
 
-  /**
-   * stores a epsilon default value
-   */
-  private final float epsilon = (float) 1e-7;
+    /**
+     * stores a epsilon default value
+     */
+    private final float epsilon = (float) 1e-7;
 
-  protected int k;
-  protected int m;
-  protected int l;
-  protected int[] a;
-  protected int[] s;
-  protected int d = 1;
-  protected Random random = new Random();
+    protected int k;
+    protected int m;
+    protected int l;
+    protected int[] a;
+    protected int[] s;
+    protected int d = 1;
+    protected Random random = new Random();
 
-  /**
-   * Constructor
-   * Creates a wfg problem
-   *
-   * @param k            position-related parameters
-   * @param l            distance-related parameters
-   * @param M            Number of objectives
-   */
-  public WFG(Integer k, Integer l, Integer M) {
-    this.k = k;
-    this.l = l;
-    this.m = M;
+    /**
+     * Constructor
+     * Creates a wfg problem
+     *
+     * @param k position-related parameters
+     * @param l distance-related parameters
+     * @param M Number of objectives
+     */
+    public WFG(Integer k, Integer l, Integer M) {
+        this.k = k;
+        this.l = l;
+        this.m = M;
 
-    setNumberOfVariables(this.k + this.l);
-    setNumberOfObjectives(this.m);
-    setNumberOfConstraints(0);
+        setNumberOfVariables(this.k + this.l);
+        setNumberOfObjectives(this.m);
+        setNumberOfConstraints(0);
 
-    List<Double> lowerLimit = new ArrayList<>(getNumberOfVariables()) ;
-    List<Double> upperLimit = new ArrayList<>(getNumberOfVariables()) ;
+        List<Double> lowerLimit = new ArrayList<>(getNumberOfVariables());
+        List<Double> upperLimit = new ArrayList<>(getNumberOfVariables());
 
-    for (int i = 0; i < getNumberOfVariables(); i++) {
-      lowerLimit.add(0.0);
-      upperLimit.add(2.0*(i+1));
+        for (int i = 0; i < getNumberOfVariables(); i++) {
+            lowerLimit.add(0.0);
+            upperLimit.add(2.0 * (i + 1));
+        }
+
+        setLowerLimit(lowerLimit);
+        setUpperLimit(upperLimit);
     }
 
-    setLowerLimit(lowerLimit);
-    setUpperLimit(upperLimit);
-  }
-
-  @Override
-  public DoubleSolution createSolution() {
-    return new DefaultDoubleSolution(this)  ;
-  }
-
-  /**
-   * Gets the x vector
-   */
-  public float[] calculateX(float[] t) {
-    float[] x = new float[m];
-
-    for (int i = 0; i < m - 1; i++) {
-      x[i] = Math.max(t[m - 1], a[i]) * (t[i] - (float) 0.5) + (float) 0.5;
+    @Override
+    public DoubleSolution createSolution() {
+        return new DefaultDoubleSolution(this);
     }
 
-    x[m - 1] = t[m - 1];
+    /**
+     * Gets the x vector
+     */
+    public float[] calculateX(float[] t) {
+        float[] x = new float[m];
 
-    return x;
-  }
+        for (int i = 0; i < m - 1; i++) {
+            x[i] = Math.max(t[m - 1], a[i]) * (t[i] - (float) 0.5) + (float) 0.5;
+        }
 
-  /**
-   * Normalizes a vector (consulte wfg toolkit reference)
-   */
-  public float[] normalise(float[] z) {
-    float[] result = new float[z.length];
+        x[m - 1] = t[m - 1];
 
-    for (int i = 0; i < z.length; i++) {
-      float bound = (float) 2.0 * (i + 1);
-      result[i] = z[i] / bound;
-      result[i] = correctTo01(result[i]);
+        return x;
     }
 
-    return result;
-  }
+    /**
+     * Normalizes a vector (consulte wfg toolkit reference)
+     */
+    public float[] normalise(float[] z) {
+        float[] result = new float[z.length];
 
-  /**
-   */
-  public float correctTo01(float a) {
-    float min = (float) 0.0;
-    float max = (float) 1.0;
+        for (int i = 0; i < z.length; i++) {
+            float bound = (float) 2.0 * (i + 1);
+            result[i] = z[i] / bound;
+            result[i] = correctTo01(result[i]);
+        }
 
-    float minEpsilon = min - epsilon;
-    float maxEpsilon = max + epsilon;
-
-    if ((a <= min && a >= minEpsilon) || (a >= min && a <= minEpsilon)) {
-      return min;
-    } else if ((a >= max && a <= maxEpsilon) || (a <= max && a >= maxEpsilon)) {
-      return max;
-    } else {
-      return a;
+        return result;
     }
-  }
 
-  /**
-   * Gets a subvector of a given vector
-   * (Head inclusive and tail inclusive)
-   *
-   * @param z the vector
-   * @return the subvector
-   */
-  public float[] subVector(float[] z, int head, int tail) {
-    int size = tail - head + 1;
-    float[] result = new float[size];
+    /**
+     *
+     */
+    public float correctTo01(float a) {
+        float min = (float) 0.0;
+        float max = (float) 1.0;
 
-    System.arraycopy(z, head, result, head - head, tail + 1 - head);
+        float minEpsilon = min - epsilon;
+        float maxEpsilon = max + epsilon;
 
-    return result;
-  }
+        if ((a <= min && a >= minEpsilon) || (a >= min && a <= minEpsilon)) {
+            return min;
+        } else if ((a >= max && a <= maxEpsilon) || (a <= max && a >= maxEpsilon)) {
+            return max;
+        } else {
+            return a;
+        }
+    }
 
-  /**
-   * Evaluates a solution
-   *
-   * @param variables The solution to evaluate
-   * @return a double [] with the evaluation results
-   */
-  abstract public float[] evaluate(float[] variables);
+    /**
+     * Gets a subvector of a given vector
+     * (Head inclusive and tail inclusive)
+     *
+     * @param z the vector
+     * @return the subvector
+     */
+    public float[] subVector(float[] z, int head, int tail) {
+        int size = tail - head + 1;
+        float[] result = new float[size];
+
+        System.arraycopy(z, head, result, head - head, tail + 1 - head);
+
+        return result;
+    }
+
+    /**
+     * Evaluates a solution
+     *
+     * @param variables The solution to evaluate
+     * @return a double [] with the evaluation results
+     */
+    abstract public float[] evaluate(float[] variables);
 }

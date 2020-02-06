@@ -21,86 +21,90 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 public class GenerationalDistance<S extends Solution<?>> extends GenericIndicator<S> {
-  private double pow = 2.0;
+    private double pow = 2.0;
 
-  /**
-   * Default constructor
-   */
-  public GenerationalDistance() {
-  }
-
-  /**
-   * Constructor
-   *
-   * @param referenceParetoFrontFile
-   * @param p
-   * @throws FileNotFoundException
-   */
-  public GenerationalDistance(String referenceParetoFrontFile, double p) throws FileNotFoundException {
-    super(referenceParetoFrontFile) ;
-    pow = p ;
-  }
-
-  /**
-   * Constructor
-   *
-   * @param referenceParetoFrontFile
-   * @throws FileNotFoundException
-   */
-  public GenerationalDistance(String referenceParetoFrontFile) throws FileNotFoundException {
-    this(referenceParetoFrontFile, 2.0) ;
-  }
-
-  /**
-   * Constructor
-   *
-   * @param referenceParetoFront
-   */
-  public GenerationalDistance(Front referenceParetoFront) {
-    super(referenceParetoFront) ;
-  }
-
-  /**
-   * Evaluate() method
-   * @param solutionList
-   * @return
-   */
-  @Override public Double evaluate(List<S> solutionList) {
-    if (solutionList == null) {
-      throw new JMetalException("The pareto front approximation is null") ;
+    /**
+     * Default constructor
+     */
+    public GenerationalDistance() {
     }
 
-    return generationalDistance(new ArrayFront(solutionList), referenceParetoFront);
-  }
-
-  /**
-   * Returns the generational distance value for a given front
-   *
-   * @param front           The front
-   * @param referenceFront The reference pareto front
-   */
-  public double generationalDistance(Front front, Front referenceFront) {
-    double sum = 0.0;
-    for (int i = 0; i < front.getNumberOfPoints(); i++) {
-      sum += Math.pow(FrontUtils.distanceToClosestPoint(front.getPoint(i),
-          referenceFront), pow);
+    /**
+     * Constructor
+     *
+     * @param referenceParetoFrontFile
+     * @param p
+     * @throws FileNotFoundException
+     */
+    public GenerationalDistance(String referenceParetoFrontFile, double p) throws FileNotFoundException {
+        super(referenceParetoFrontFile);
+        pow = p;
     }
 
-    sum = Math.pow(sum, 1.0 / pow);
+    /**
+     * Constructor
+     *
+     * @param referenceParetoFrontFile
+     * @throws FileNotFoundException
+     */
+    public GenerationalDistance(String referenceParetoFrontFile) throws FileNotFoundException {
+        this(referenceParetoFrontFile, 2.0);
+    }
 
-    return sum / front.getNumberOfPoints();
-  }
+    /**
+     * Constructor
+     *
+     * @param referenceParetoFront
+     */
+    public GenerationalDistance(Front referenceParetoFront) {
+        super(referenceParetoFront);
+    }
 
-  @Override public String getName() {
-    return "GD" ;
-  }
+    /**
+     * Evaluate() method
+     *
+     * @param solutionList
+     * @return
+     */
+    @Override
+    public Double evaluate(List<S> solutionList) {
+        if (solutionList == null) {
+            throw new JMetalException("The pareto front approximation is null");
+        }
 
-  @Override public String getDescription() {
-    return "Generational distance quality indicator" ;
-  }
+        return generationalDistance(new ArrayFront(solutionList), referenceParetoFront);
+    }
 
-  @Override
-  public boolean isTheLowerTheIndicatorValueTheBetter() {
-    return true ;
-  }
+    /**
+     * Returns the generational distance value for a given front
+     *
+     * @param front          The front
+     * @param referenceFront The reference pareto front
+     */
+    public double generationalDistance(Front front, Front referenceFront) {
+        double sum = 0.0;
+        for (int i = 0; i < front.getNumberOfPoints(); i++) {
+            sum += Math.pow(FrontUtils.distanceToClosestPoint(front.getPoint(i),
+                    referenceFront), pow);
+        }
+
+        sum = Math.pow(sum, 1.0 / pow);
+
+        return sum / front.getNumberOfPoints();
+    }
+
+    @Override
+    public String getName() {
+        return "GD";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Generational distance quality indicator";
+    }
+
+    @Override
+    public boolean isTheLowerTheIndicatorValueTheBetter() {
+        return true;
+    }
 }

@@ -14,144 +14,144 @@ import org.uma.jmetal.util.experiment.util.ExperimentProblem;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
 public class ExperimentBuilder<S extends Solution<?>, Result extends List<S>> {
-	private final String experimentName;
-	private List<ExperimentAlgorithm<S, Result>> algorithmList;
-	private List<ExperimentProblem<S>> problemList;
-	private String referenceFrontDirectory;
-	private String experimentBaseDirectory;
-	private String outputParetoFrontFileName;
-	private String outputParetoSetFileName;
-	private int independentRuns;
+    private final String experimentName;
+    private List<ExperimentAlgorithm<S, Result>> algorithmList;
+    private List<ExperimentProblem<S>> problemList;
+    private String referenceFrontDirectory;
+    private String experimentBaseDirectory;
+    private String outputParetoFrontFileName;
+    private String outputParetoSetFileName;
+    private int independentRuns;
 
-	private int evaluation;
+    private int evaluation;
 
-	private int populationsize;
+    private int populationsize;
 
-	private List<GenericIndicator<S>> indicatorList;
+    private List<GenericIndicator<S>> indicatorList;
 
-	private int numberOfCores;
+    private int numberOfCores;
 
-	public ExperimentBuilder(String experimentName) {
-		this.experimentName = experimentName;
-		this.independentRuns = 1;
-		this.numberOfCores = 1;
-		this.referenceFrontDirectory = null;
-	}
+    public ExperimentBuilder(String experimentName) {
+        this.experimentName = experimentName;
+        this.independentRuns = 1;
+        this.numberOfCores = 1;
+        this.referenceFrontDirectory = null;
+    }
 
-	public ExperimentBuilder<S, Result> setAlgorithmList(List<ExperimentAlgorithm<S, Result>> algorithmList) {
-		this.algorithmList = new ArrayList<>(algorithmList);
+    public ExperimentBuilder<S, Result> setAlgorithmList(List<ExperimentAlgorithm<S, Result>> algorithmList) {
+        this.algorithmList = new ArrayList<>(algorithmList);
 
-		return this;
-	}
+        return this;
+    }
 
-	public ExperimentBuilder<S, Result> setProblemList(List<ExperimentProblem<S>> problemList) {
-		this.problemList = problemList;
+    public ExperimentBuilder<S, Result> setProblemList(List<ExperimentProblem<S>> problemList) {
+        this.problemList = problemList;
 
-		return this;
-	}
+        return this;
+    }
 
-	public ExperimentBuilder<S, Result> setExperimentBaseDirectory(String experimentBaseDirectory) {
-		this.experimentBaseDirectory = experimentBaseDirectory + "/" + experimentName;
+    public ExperimentBuilder<S, Result> setExperimentBaseDirectory(String experimentBaseDirectory) {
+        this.experimentBaseDirectory = experimentBaseDirectory + "/" + experimentName;
 
-		return this;
-	}
+        return this;
+    }
 
-	public ExperimentBuilder<S, Result> setReferenceFrontDirectory(String referenceFrontDirectory) {
-		this.referenceFrontDirectory = referenceFrontDirectory;
+    public ExperimentBuilder<S, Result> setReferenceFrontDirectory(String referenceFrontDirectory) {
+        this.referenceFrontDirectory = referenceFrontDirectory;
 
-		return this;
-	}
+        return this;
+    }
 
-	public ExperimentBuilder<S, Result> setIndicatorList(List<GenericIndicator<S>> indicatorList) {
-		this.indicatorList = indicatorList;
+    public ExperimentBuilder<S, Result> setIndicatorList(List<GenericIndicator<S>> indicatorList) {
+        this.indicatorList = indicatorList;
 
-		return this;
-	}
+        return this;
+    }
 
-	public ExperimentBuilder<S, Result> setOutputParetoFrontFileName(String outputParetoFrontFileName) {
-		this.outputParetoFrontFileName = outputParetoFrontFileName;
+    public ExperimentBuilder<S, Result> setOutputParetoFrontFileName(String outputParetoFrontFileName) {
+        this.outputParetoFrontFileName = outputParetoFrontFileName;
 
-		return this;
-	}
+        return this;
+    }
 
-	public ExperimentBuilder<S, Result> setOutputParetoSetFileName(String outputParetoSetFileName) {
-		this.outputParetoSetFileName = outputParetoSetFileName;
+    public ExperimentBuilder<S, Result> setOutputParetoSetFileName(String outputParetoSetFileName) {
+        this.outputParetoSetFileName = outputParetoSetFileName;
 
-		return this;
-	}
+        return this;
+    }
 
-	public ExperimentBuilder<S, Result> setIndependentRuns(int independentRuns) {
-		this.independentRuns = independentRuns;
+    public ExperimentBuilder<S, Result> setIndependentRuns(int independentRuns) {
+        this.independentRuns = independentRuns;
 
-		return this;
-	}
+        return this;
+    }
 
-	public ExperimentBuilder<S, Result> setNumberOfCores(int numberOfCores) {
-		this.numberOfCores = numberOfCores;
+    public ExperimentBuilder<S, Result> setNumberOfCores(int numberOfCores) {
+        this.numberOfCores = numberOfCores;
 
-		return this;
-	}
+        return this;
+    }
 
-	public ExperimentBuilder<S, Result> setEvaluation(int evaluation) {
-		this.evaluation = evaluation;
-		return this;
-	}
+    public ExperimentBuilder<S, Result> setEvaluation(int evaluation) {
+        this.evaluation = evaluation;
+        return this;
+    }
 
-	public ExperimentBuilder<S, Result> setPopulationsize(int populationsize) {
-		this.populationsize = populationsize;
-		return this;
-	}
+    public ExperimentBuilder<S, Result> setPopulationsize(int populationsize) {
+        this.populationsize = populationsize;
+        return this;
+    }
 
-	public Experiment<S, Result> build() {
-		return new Experiment<S, Result>(this);
-	}
+    public Experiment<S, Result> build() {
+        return new Experiment<S, Result>(this);
+    }
 
-	/* Getters */
-	public String getExperimentName() {
-		return experimentName;
-	}
+    /* Getters */
+    public String getExperimentName() {
+        return experimentName;
+    }
 
-	public int getEvaluation() {
-		return evaluation;
-	}
+    public int getEvaluation() {
+        return evaluation;
+    }
 
-	public int getPopulationsize() {
-		return populationsize;
-	}
+    public int getPopulationsize() {
+        return populationsize;
+    }
 
-	public List<ExperimentAlgorithm<S, Result>> getAlgorithmList() {
-		return algorithmList;
-	}
+    public List<ExperimentAlgorithm<S, Result>> getAlgorithmList() {
+        return algorithmList;
+    }
 
-	public List<ExperimentProblem<S>> getProblemList() {
-		return problemList;
-	}
+    public List<ExperimentProblem<S>> getProblemList() {
+        return problemList;
+    }
 
-	public String getExperimentBaseDirectory() {
-		return experimentBaseDirectory;
-	}
+    public String getExperimentBaseDirectory() {
+        return experimentBaseDirectory;
+    }
 
-	public String getOutputParetoFrontFileName() {
-		return outputParetoFrontFileName;
-	}
+    public String getOutputParetoFrontFileName() {
+        return outputParetoFrontFileName;
+    }
 
-	public String getOutputParetoSetFileName() {
-		return outputParetoSetFileName;
-	}
+    public String getOutputParetoSetFileName() {
+        return outputParetoSetFileName;
+    }
 
-	public int getIndependentRuns() {
-		return independentRuns;
-	}
+    public int getIndependentRuns() {
+        return independentRuns;
+    }
 
-	public int getNumberOfCores() {
-		return numberOfCores;
-	}
+    public int getNumberOfCores() {
+        return numberOfCores;
+    }
 
-	public String getReferenceFrontDirectory() {
-		return referenceFrontDirectory;
-	}
+    public String getReferenceFrontDirectory() {
+        return referenceFrontDirectory;
+    }
 
-	public List<GenericIndicator<S>> getIndicatorList() {
-		return indicatorList;
-	}
+    public List<GenericIndicator<S>> getIndicatorList() {
+        return indicatorList;
+    }
 }

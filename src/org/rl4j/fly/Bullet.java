@@ -1,28 +1,34 @@
 package org.rl4j.fly;
 
 /**
- * ×Óµ¯Àà:ÊÇ·ÉÐÐÎï
+ * ï¿½Óµï¿½ï¿½ï¿½:ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½
  */
 public class Bullet extends FlyingObject {
-	private int speed = 3;  //ÒÆ¶¯µÄËÙ¶È
-	
-	/** ³õÊ¼»¯Êý¾Ý */
-	public Bullet(int x,int y){
-		this.x = x;
-		this.y = y;
-		this.image = ShootGame.bullet;
-	}
+    private int speed = 3;  //ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
 
-	/** ÒÆ¶¯ */
-	@Override
-	public void step(){   
-		y-=speed;
-	}
+    /**
+     * ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     */
+    public Bullet(int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.image = ShootGame.bullet;
+    }
 
-	/** Ô½½ç´¦Àí */
-	@Override
-	public boolean outOfBounds() {
-		return y<-height;
-	}
+    /**
+     * ï¿½Æ¶ï¿½
+     */
+    @Override
+    public void step() {
+        y -= speed;
+    }
+
+    /**
+     * Ô½ï¿½ç´¦ï¿½ï¿½
+     */
+    @Override
+    public boolean outOfBounds() {
+        return y < -height;
+    }
 
 }

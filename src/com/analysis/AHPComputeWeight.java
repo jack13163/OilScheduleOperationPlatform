@@ -21,8 +21,8 @@ public class AHPComputeWeight {
     private static final AHPComputeWeight acw = new AHPComputeWeight();
 
     // 平均随机一致性指针
-    private double[] RI = { 0.00, 0.00, 0.58, 0.90, 1.12, 1.21, 1.32, 1.41,
-            1.45, 1.49 };
+    private double[] RI = {0.00, 0.00, 0.58, 0.90, 1.12, 1.21, 1.32, 1.41,
+            1.45, 1.49};
 
     // 随机一致性比率
     private double CR = 0.0;
@@ -48,6 +48,7 @@ public class AHPComputeWeight {
 
     /**
      * 计算权重
+     *
      * @param a
      * @return
      */

@@ -23,10 +23,11 @@ public class RunTimeAnalysis {
 
     /**
      * 生成运行时间
+     *
      * @param problems
      * @param algorithms
      */
-    public static void GenerateRunTimeReport(List<String> problems, List<String> algorithms){
+    public static void GenerateRunTimeReport(List<String> problems, List<String> algorithms) {
 
         String fileDir = "result/runTimes.csv";
         // 初始化
@@ -70,7 +71,7 @@ public class RunTimeAnalysis {
                 for (int i = 0; i < data.length; i++) {
                     for (int j = 0; j < data[i].length; j++) {
                         stringBuilder.append(problems.get(j) + "," + Arrays.asList(ArrayUtils.toObject(data[i][j])).stream()
-                                .map(e->e.toString())
+                                .map(e -> e.toString())
                                 .collect(Collectors.joining(",")) + "\n");
                     }
                 }

@@ -11,13 +11,15 @@ import java.util.List;
  *
  * @author Antonio J. Nebro
  */
-public class SolutionListExtremeValues implements ExtremeValuesFinder <List<Solution<?>>, List<Double>> {
+public class SolutionListExtremeValues implements ExtremeValuesFinder<List<Solution<?>>, List<Double>> {
 
-  @Override public List<Double> findLowestValues(List<Solution<?>> solutionList) {
-	  return new FrontExtremeValues().findLowestValues(new ArrayFront(solutionList));
-  }
+    @Override
+    public List<Double> findLowestValues(List<Solution<?>> solutionList) {
+        return new FrontExtremeValues().findLowestValues(new ArrayFront(solutionList));
+    }
 
-  @Override public List<Double> findHighestValues(List<Solution<?>> solutionList) {
-	  return new FrontExtremeValues().findHighestValues(new ArrayFront(solutionList));
-  }
+    @Override
+    public List<Double> findHighestValues(List<Solution<?>> solutionList) {
+        return new FrontExtremeValues().findHighestValues(new ArrayFront(solutionList));
+    }
 }

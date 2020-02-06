@@ -1,7 +1,5 @@
 package org.rl4j.maze;
 
-import org.rl4j.maze.util.Point;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -21,7 +19,7 @@ public class GameBoard extends JFrame {
      * @param x
      * @param y
      */
-    public void shiftSoilder(int x, int y) {
+    public void setCurLoc(int x, int y) {
         // 10×10的迷宫
         assert (chessboard.getComponentCount() == 100);
 
@@ -48,6 +46,20 @@ public class GameBoard extends JFrame {
             JLabel label = (JLabel) components[trap.getX() * 10 + trap.getY()];
             label.setIcon(new ImageIcon("img/trap.jpg"));
         }
+    }
+
+
+    /**
+     * 设置公主的位置（x,y）
+     *
+     * @param x
+     * @param y
+     */
+    public void setDist(int x, int y) {
+        // 设置当前位置的图片为空
+        Component[] components = chessboard.getComponents();
+        JLabel labelCur = (JLabel) components[x * 10 + y];
+        labelCur.setIcon(new ImageIcon("img/princess.jpg"));
     }
 
     /**

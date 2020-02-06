@@ -26,10 +26,11 @@ public class CMetrics {
 
     /**
      * 计算C指标
+     *
      * @param algorithms
      * @param problems
      */
-    public static void calculateCMetrics(List<String> algorithms, List<String> problems){
+    public static void calculateCMetrics(List<String> algorithms, List<String> problems) {
         String path = "result/Experiment/PF/";
 
         // 读取数据
@@ -73,9 +74,10 @@ public class CMetrics {
 
     /**
      * 根据数据字典计算C指标
+     *
      * @param map
      */
-    public static void caculateC(Map<String, List<Double[]>> map){
+    public static void caculateC(Map<String, List<Double[]>> map) {
 
         for (String i : map.keySet()) {
             for (String j : map.keySet()) {
@@ -91,10 +93,11 @@ public class CMetrics {
 
     /**
      * 读取文件
+     *
      * @param filePath
      * @return
      */
-    public static List<Double[]> readVectors(String filePath){
+    public static List<Double[]> readVectors(String filePath) {
 
         List<Double[]> referenceVectors;
         String path = filePath;
@@ -120,11 +123,12 @@ public class CMetrics {
 
     /**
      * 查找指定目录下的参考平面文件
+     *
      * @param pattern
      * @param dirPath
      * @return
      */
-    public static List<String> findFiles(String pattern, String dirPath){
+    public static List<String> findFiles(String pattern, String dirPath) {
         File dir = new File(dirPath);
         Predicate<String> fileFilter = (n) -> Pattern.compile("(" + pattern + ".*.rf)").matcher(n).matches();
         List<String> files = Arrays.asList(dir.list()).stream().filter(fileFilter).collect(Collectors.toList());

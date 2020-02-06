@@ -14,56 +14,58 @@ import org.uma.jmetal.util.archive.impl.NonDominatedSolutionListArchive;
  */
 @SuppressWarnings("serial")
 public class RandomSearch<S extends Solution<?>> implements Algorithm<List<S>> {
-	private Problem<S> problem;
-	private int maxEvaluations;
-	NonDominatedSolutionListArchive<S> nonDominatedArchive;
+    private Problem<S> problem;
+    private int maxEvaluations;
+    NonDominatedSolutionListArchive<S> nonDominatedArchive;
 
-	/** Constructor */
-	public RandomSearch(Problem<S> problem, int maxEvaluations) {
-		this.problem = problem;
-		this.maxEvaluations = maxEvaluations;
-		nonDominatedArchive = new NonDominatedSolutionListArchive<S>();
-	}
+    /**
+     * Constructor
+     */
+    public RandomSearch(Problem<S> problem, int maxEvaluations) {
+        this.problem = problem;
+        this.maxEvaluations = maxEvaluations;
+        nonDominatedArchive = new NonDominatedSolutionListArchive<S>();
+    }
 
-	/* Getter */
-	public int getMaxEvaluations() {
-		return maxEvaluations;
-	}
+    /* Getter */
+    public int getMaxEvaluations() {
+        return maxEvaluations;
+    }
 
-	@Override
-	public void run() {
-		S newSolution;
-		for (int i = 0; i < maxEvaluations; i++) {
-			newSolution = problem.createSolution();
-			problem.evaluate(newSolution);
-			nonDominatedArchive.add(newSolution);
-		}
-	}
+    @Override
+    public void run() {
+        S newSolution;
+        for (int i = 0; i < maxEvaluations; i++) {
+            newSolution = problem.createSolution();
+            problem.evaluate(newSolution);
+            nonDominatedArchive.add(newSolution);
+        }
+    }
 
-	@Override
-	public List<S> getResult() {
-		return nonDominatedArchive.getSolutionList();
-	}
+    @Override
+    public List<S> getResult() {
+        return nonDominatedArchive.getSolutionList();
+    }
 
-	@Override
-	public String getName() {
-		return "RS";
-	}
+    @Override
+    public String getName() {
+        return "RS";
+    }
 
-	@Override
-	public String getDescription() {
-		return "Multi-objective random search algorithm";
-	}
+    @Override
+    public String getDescription() {
+        return "Multi-objective random search algorithm";
+    }
 
-	@Override
-	public List<Double[]> getSolutions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<Double[]> getSolutions() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public void clearSolutions() {
-		// TODO Auto-generated method stub
+    @Override
+    public void clearSolutions() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 }

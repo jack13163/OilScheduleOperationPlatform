@@ -6,6 +6,7 @@ package org.uma.jmetal.problem;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
 public interface DoubleBinaryProblem<S> extends BoundedProblem<Number, S> {
-  public int getNumberOfDoubleVariables() ;
-  public int getNumberOfBits() ;
+    public int getNumberOfDoubleVariables();
+
+    public int getNumberOfBits();
 }

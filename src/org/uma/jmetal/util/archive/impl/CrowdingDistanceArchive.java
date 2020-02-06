@@ -15,35 +15,36 @@ import java.util.Comparator;
  */
 @SuppressWarnings("serial")
 public class CrowdingDistanceArchive<S extends Solution<?>> extends AbstractBoundedArchive<S> {
-  private Comparator<S> crowdingDistanceComparator;
-  private DensityEstimator<S> crowdingDistance ;
+    private Comparator<S> crowdingDistanceComparator;
+    private DensityEstimator<S> crowdingDistance;
 
-  public CrowdingDistanceArchive(int maxSize) {
-    super(maxSize);
-    crowdingDistanceComparator = new CrowdingDistanceComparator<S>() ;
-    crowdingDistance = new CrowdingDistance<S>() ;
-  }
-
-  @Override
-  public void prune() {
-    if (getSolutionList().size() > getMaxSize()) {
-      computeDensityEstimator();
-      S worst = new SolutionListUtils().findWorstSolution(getSolutionList(), crowdingDistanceComparator) ;
-      getSolutionList().remove(worst);
+    public CrowdingDistanceArchive(int maxSize) {
+        super(maxSize);
+        crowdingDistanceComparator = new CrowdingDistanceComparator<S>();
+        crowdingDistance = new CrowdingDistance<S>();
     }
-  }
 
-  @Override
-  public Comparator<S> getComparator() {
-    return crowdingDistanceComparator ;
-  }
-  @Override
-  public void computeDensityEstimator() {
-    crowdingDistance.computeDensityEstimator(getSolutionList());
-  }
+    @Override
+    public void prune() {
+        if (getSolutionList().size() > getMaxSize()) {
+            computeDensityEstimator();
+            S worst = new SolutionListUtils().findWorstSolution(getSolutionList(), crowdingDistanceComparator);
+            getSolutionList().remove(worst);
+        }
+    }
 
-  @Override
-  public void sortByDensityEstimator() {
-    Collections.sort(getSolutionList(), new CrowdingDistanceComparator<S>());
-  }
+    @Override
+    public Comparator<S> getComparator() {
+        return crowdingDistanceComparator;
+    }
+
+    @Override
+    public void computeDensityEstimator() {
+        crowdingDistance.computeDensityEstimator(getSolutionList());
+    }
+
+    @Override
+    public void sortByDensityEstimator() {
+        Collections.sort(getSolutionList(), new CrowdingDistanceComparator<S>());
+    }
 }

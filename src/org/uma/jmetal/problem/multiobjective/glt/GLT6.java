@@ -18,61 +18,62 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class GLT6 extends AbstractDoubleProblem {
 
-  /**
-   * Default constructor
-   */
-  public GLT6() {
-    this(10) ;
-  }
-
-  /**
-   * Constructor
-   * @param numberOfVariables
-   */
-  public GLT6(int numberOfVariables) {
-    setNumberOfVariables(numberOfVariables);
-    setNumberOfObjectives(3);
-    setName("GLT6");
-
-    List<Double> lowerLimit = new ArrayList<>(getNumberOfVariables()) ;
-    List<Double> upperLimit = new ArrayList<>(getNumberOfVariables()) ;
-
-    lowerLimit.add(0.0) ;
-    upperLimit.add(1.0) ;
-    lowerLimit.add(0.0) ;
-    upperLimit.add(1.0) ;
-    for (int i = 2; i < getNumberOfVariables(); i++) {
-      lowerLimit.add(-1.0);
-      upperLimit.add(1.0);
+    /**
+     * Default constructor
+     */
+    public GLT6() {
+        this(10);
     }
 
-    setLowerLimit(lowerLimit);
-    setUpperLimit(upperLimit);
-  }
+    /**
+     * Constructor
+     *
+     * @param numberOfVariables
+     */
+    public GLT6(int numberOfVariables) {
+        setNumberOfVariables(numberOfVariables);
+        setNumberOfObjectives(3);
+        setName("GLT6");
 
-  @Override
-  public void evaluate(DoubleSolution solution) {
-    solution.setObjective(0, (1.0 + g(solution))*
-        (1.0 - Math.cos(solution.getVariableValue(0)*Math.PI/2.0))*
-        (1.0 - Math.cos(solution.getVariableValue(1)*Math.PI/2.0)));
-    solution.setObjective(1, (1.0 + g(solution))*
-        (1.0 - Math.cos(solution.getVariableValue(0)*Math.PI/2.0))*
-        (1.0 - Math.sin(solution.getVariableValue(1)*Math.PI/2.0)));
-    solution.setObjective(2, (1.0 + g(solution))*
-        (2.0 - Math.sin(solution.getVariableValue(0)*Math.PI/2.0)
-        - Math.signum(Math.cos(4*solution.getVariableValue(0)*Math.PI))));
-  }
+        List<Double> lowerLimit = new ArrayList<>(getNumberOfVariables());
+        List<Double> upperLimit = new ArrayList<>(getNumberOfVariables());
 
-  private double g(DoubleSolution solution) {
-    double result = 0.0 ;
+        lowerLimit.add(0.0);
+        upperLimit.add(1.0);
+        lowerLimit.add(0.0);
+        upperLimit.add(1.0);
+        for (int i = 2; i < getNumberOfVariables(); i++) {
+            lowerLimit.add(-1.0);
+            upperLimit.add(1.0);
+        }
 
-    for (int i = 2; i < solution.getNumberOfVariables(); i++) {
-      double value =solution.getVariableValue(i)
-          - Math.sin(2*Math.PI*solution.getVariableValue(0)+i*Math.PI/solution.getNumberOfVariables()) ;
-
-      result += value * value ;
+        setLowerLimit(lowerLimit);
+        setUpperLimit(upperLimit);
     }
 
-    return result ;
-  }
+    @Override
+    public void evaluate(DoubleSolution solution) {
+        solution.setObjective(0, (1.0 + g(solution)) *
+                (1.0 - Math.cos(solution.getVariableValue(0) * Math.PI / 2.0)) *
+                (1.0 - Math.cos(solution.getVariableValue(1) * Math.PI / 2.0)));
+        solution.setObjective(1, (1.0 + g(solution)) *
+                (1.0 - Math.cos(solution.getVariableValue(0) * Math.PI / 2.0)) *
+                (1.0 - Math.sin(solution.getVariableValue(1) * Math.PI / 2.0)));
+        solution.setObjective(2, (1.0 + g(solution)) *
+                (2.0 - Math.sin(solution.getVariableValue(0) * Math.PI / 2.0)
+                        - Math.signum(Math.cos(4 * solution.getVariableValue(0) * Math.PI))));
+    }
+
+    private double g(DoubleSolution solution) {
+        double result = 0.0;
+
+        for (int i = 2; i < solution.getNumberOfVariables(); i++) {
+            double value = solution.getVariableValue(i)
+                    - Math.sin(2 * Math.PI * solution.getVariableValue(0) + i * Math.PI / solution.getNumberOfVariables());
+
+            result += value * value;
+        }
+
+        return result;
+    }
 }

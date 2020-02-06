@@ -25,26 +25,26 @@ import java.util.Comparator;
  * @author Alejandro Santiago <aurelio.santiago@upalt.edu.mx>
  */
 public class SpatialSpreadDeviationComparator<S extends Solution<?>> implements Comparator<S>, Serializable {
-  private final SpatialSpreadDeviation<S> NewcrowdingDistance = new SpatialSpreadDeviation<S>() ;
+    private final SpatialSpreadDeviation<S> NewcrowdingDistance = new SpatialSpreadDeviation<S>();
 
-  /**
-   * Compare two solutions.
-   *
-   * @param solution1 Object representing the first <code>Solution</code>.
-   * @param solution2 Object representing the second <code>Solution</code>.
-   * @return -1, or 0, or 1 if solution1 is has greater, equal, or less distance value than solution2,
-   * respectively.
-   */
-  @Override
-  public int compare(S solution1, S solution2) {
-    int result =0;
-    
-    
-      double distance1 = Double.MIN_VALUE ;
-      double distance2 = Double.MIN_VALUE ;
+    /**
+     * Compare two solutions.
+     *
+     * @param solution1 Object representing the first <code>Solution</code>.
+     * @param solution2 Object representing the second <code>Solution</code>.
+     * @return -1, or 0, or 1 if solution1 is has greater, equal, or less distance value than solution2,
+     * respectively.
+     */
+    @Override
+    public int compare(S solution1, S solution2) {
+        int result = 0;
 
-      distance1 = (double) NewcrowdingDistance.getAttribute(solution1);
-      distance2 = (double) NewcrowdingDistance.getAttribute(solution2);
+
+        double distance1 = Double.MIN_VALUE;
+        double distance2 = Double.MIN_VALUE;
+
+        distance1 = (double) NewcrowdingDistance.getAttribute(solution1);
+        distance2 = (double) NewcrowdingDistance.getAttribute(solution2);
       /*
       if (NewcrowdingDistance.getAttribute(solution1) != null) {
         distance1 = (double) NewcrowdingDistance.getAttribute(solution1);
@@ -55,17 +55,15 @@ public class SpatialSpreadDeviationComparator<S extends Solution<?>> implements 
         distance2 = (double) NewcrowdingDistance.getAttribute(solution2);
         System.out.println("Distancia 2"+distance2);
       }*/
-      
-      //System.out.println("Valores de distancias "+distance1+" "+distance2);
-      
-      if(distance1 > distance2)
-      {
-          return -1;
-      }
-      if(distance2 > distance1)
-      {
-          return 1;
-      } 
+
+        //System.out.println("Valores de distancias "+distance1+" "+distance2);
+
+        if (distance1 > distance2) {
+            return -1;
+        }
+        if (distance2 > distance1) {
+            return 1;
+        }
       /*
       if (distance1 > distance2) {
         result = -1;
@@ -75,10 +73,10 @@ public class SpatialSpreadDeviationComparator<S extends Solution<?>> implements 
         result = 0;
       }
       */
-      return 0;
-    
+        return 0;
+
     }
-    
+
     //return result ;
-  }
+}
 

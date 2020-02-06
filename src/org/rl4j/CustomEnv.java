@@ -5,7 +5,7 @@ import org.deeplearning4j.rl4j.mdp.MDP;
 import org.deeplearning4j.rl4j.space.ActionSpace;
 import org.deeplearning4j.rl4j.space.ObservationSpace;
 
-public class CustomEnv<O, A, AS extends ActionSpace<A>> implements MDP<O,A,AS> {
+public class CustomEnv<O, A, AS extends ActionSpace<A>> implements MDP<O, A, AS> {
     @Override
     public ObservationSpace<O> getObservationSpace() {
         return null;

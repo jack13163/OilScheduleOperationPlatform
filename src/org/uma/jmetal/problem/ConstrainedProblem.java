@@ -8,9 +8,9 @@ package org.uma.jmetal.problem;
 @Deprecated
 public interface ConstrainedProblem<S> extends Problem<S> {
 
-	/* Getters */
-	public int getNumberOfConstraints() ;
-	
-	/* Methods */
-  public void evaluateConstraints(S solution) ;
+    /* Getters */
+    public int getNumberOfConstraints();
+
+    /* Methods */
+    public void evaluateConstraints(S solution);
 }

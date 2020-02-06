@@ -125,7 +125,7 @@ public class NormalizationHelper {
         for (String algorithm : algorithms) {
             for (String problem : problems) {
                 for (int i = 0; i < runs; i++) {
-                    String fileName = experimentBaseDirectory + "data/" + algorithm + "/" + problem + "/"+outputParetoFrontFileName+i+".tsv";
+                    String fileName = experimentBaseDirectory + "data/" + algorithm + "/" + problem + "/" + outputParetoFrontFileName + i + ".tsv";
                     double[][] data = VectorFileUtils.readVectors(fileName);
                     DenseMatrix64F dataMatrix = new DenseMatrix64F(data);
                     matrix64fs.add(dataMatrix);
@@ -147,17 +147,18 @@ public class NormalizationHelper {
 
     /**
      * 获取各个目标的最大最小值
+     *
      * @param outputDirectoryName
      * @param experimentBaseDirectory
      * @param fileName
      * @return
      * @deprecated 请使用FrontUtils中的getMaximumValues和getMinimumValues方法
      */
-    public static double[][] getMaxMinObjectValue(String outputDirectoryName, String experimentBaseDirectory,String fileName) {
+    public static double[][] getMaxMinObjectValue(String outputDirectoryName, String experimentBaseDirectory, String fileName) {
         double[][] result = new double[2][];
         List<DenseMatrix64F> matrix64fs = new ArrayList<DenseMatrix64F>();
 
-        double[][] data = VectorFileUtils.readVectors(experimentBaseDirectory+outputDirectoryName+fileName);
+        double[][] data = VectorFileUtils.readVectors(experimentBaseDirectory + outputDirectoryName + fileName);
         DenseMatrix64F dataMatrix = new DenseMatrix64F(data);
         matrix64fs.add(dataMatrix);
 

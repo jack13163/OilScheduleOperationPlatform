@@ -16,55 +16,55 @@ import org.uma.jmetal.util.solutionattribute.impl.OverallConstraintViolation;
  */
 @SuppressWarnings("serial")
 public class C3_DTLZ4 extends DTLZ4 {
-	public OverallConstraintViolation<DoubleSolution> overallConstraintViolationDegree;
-	public NumberOfViolatedConstraints<DoubleSolution> numberOfViolatedConstraints;
+    public OverallConstraintViolation<DoubleSolution> overallConstraintViolationDegree;
+    public NumberOfViolatedConstraints<DoubleSolution> numberOfViolatedConstraints;
 
-	/**
-	 * Constructor
-	 * 
-	 * @param numberOfVariables
-	 * @param numberOfObjectives
-	 */
-	public C3_DTLZ4(int numberOfVariables, int numberOfObjectives, int numberOfConstraints) {
-		super(numberOfVariables, numberOfObjectives);
+    /**
+     * Constructor
+     *
+     * @param numberOfVariables
+     * @param numberOfObjectives
+     */
+    public C3_DTLZ4(int numberOfVariables, int numberOfObjectives, int numberOfConstraints) {
+        super(numberOfVariables, numberOfObjectives);
 
-		setNumberOfConstraints(numberOfConstraints);
-		setName("C3_DTLZ4");
+        setNumberOfConstraints(numberOfConstraints);
+        setName("C3_DTLZ4");
 
-		overallConstraintViolationDegree = new OverallConstraintViolation<DoubleSolution>();
-		numberOfViolatedConstraints = new NumberOfViolatedConstraints<DoubleSolution>();
-	}
+        overallConstraintViolationDegree = new OverallConstraintViolation<DoubleSolution>();
+        numberOfViolatedConstraints = new NumberOfViolatedConstraints<DoubleSolution>();
+    }
 
-	@Override
-	public void evaluate(DoubleSolution solution) {
-		super.evaluate(solution);
-		this.evaluateConstraints(solution);
-	}
+    @Override
+    public void evaluate(DoubleSolution solution) {
+        super.evaluate(solution);
+        this.evaluateConstraints(solution);
+    }
 
-	private void evaluateConstraints(DoubleSolution solution) {
-		double[] constraint = new double[this.getNumberOfConstraints()];
+    private void evaluateConstraints(DoubleSolution solution) {
+        double[] constraint = new double[this.getNumberOfConstraints()];
 
-		for (int j = 0; j < getNumberOfConstraints(); j++) {
-			double sum = 0;
-			constraint[j] = Math.pow(solution.getObjective(j), 2.0) / 4.0 - 1.0;
-			for (int i = 0; i < getNumberOfObjectives(); i++) {
-				if (i != j) {
-					sum += Math.pow(solution.getObjective(j), 2.0);
-				}
-				constraint[j] += sum;
-			}
-		}
+        for (int j = 0; j < getNumberOfConstraints(); j++) {
+            double sum = 0;
+            constraint[j] = Math.pow(solution.getObjective(j), 2.0) / 4.0 - 1.0;
+            for (int i = 0; i < getNumberOfObjectives(); i++) {
+                if (i != j) {
+                    sum += Math.pow(solution.getObjective(j), 2.0);
+                }
+                constraint[j] += sum;
+            }
+        }
 
-		double overallConstraintViolation = 0.0;
-		int violatedConstraints = 0;
-		for (int i = 0; i < getNumberOfConstraints(); i++) {
-			if (constraint[i] < 0.0) {
-				overallConstraintViolation += constraint[i];
-				violatedConstraints++;
-			}
-		}
+        double overallConstraintViolation = 0.0;
+        int violatedConstraints = 0;
+        for (int i = 0; i < getNumberOfConstraints(); i++) {
+            if (constraint[i] < 0.0) {
+                overallConstraintViolation += constraint[i];
+                violatedConstraints++;
+            }
+        }
 
-		overallConstraintViolationDegree.setAttribute(solution, overallConstraintViolation);
-		numberOfViolatedConstraints.setAttribute(solution, violatedConstraints);
-	}
+        overallConstraintViolationDegree.setAttribute(solution, overallConstraintViolation);
+        numberOfViolatedConstraints.setAttribute(solution, violatedConstraints);
+    }
 }

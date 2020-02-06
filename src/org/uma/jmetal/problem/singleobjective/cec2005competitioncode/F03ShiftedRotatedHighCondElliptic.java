@@ -50,63 +50,63 @@ import org.uma.jmetal.util.JMetalException;
 
 public class F03ShiftedRotatedHighCondElliptic extends TestFunc {
 
-  // Fixed (class) parameters
-  static final public String FUNCTION_NAME = "Shifted Rotated High Conditioned Elliptic Function";
-  static final public String DEFAULT_FILE_DATA = Benchmark.CEC2005SUPPORTDATADIRECTORY + "/high_cond_elliptic_rot_data.txt";
-  static final public String DEFAULT_FILE_MX_PREFIX = Benchmark.CEC2005SUPPORTDATADIRECTORY + "/Elliptic_M_D";
-  static final public String DEFAULT_FILE_MX_SUFFIX = ".txt";
+    // Fixed (class) parameters
+    static final public String FUNCTION_NAME = "Shifted Rotated High Conditioned Elliptic Function";
+    static final public String DEFAULT_FILE_DATA = Benchmark.CEC2005SUPPORTDATADIRECTORY + "/high_cond_elliptic_rot_data.txt";
+    static final public String DEFAULT_FILE_MX_PREFIX = Benchmark.CEC2005SUPPORTDATADIRECTORY + "/Elliptic_M_D";
+    static final public String DEFAULT_FILE_MX_SUFFIX = ".txt";
 
-  // Shifted global optimum
-  private final double[] m_o;
-  private final double[][] m_matrix;
+    // Shifted global optimum
+    private final double[] m_o;
+    private final double[][] m_matrix;
 
-  // In order to avoid excessive memory allocation,
-  // a fixed memory buffer is allocated for each function object.
-  private double[] m_z;
-  private double[] m_zM;
+    // In order to avoid excessive memory allocation,
+    // a fixed memory buffer is allocated for each function object.
+    private double[] m_z;
+    private double[] m_zM;
 
-  private double constant;
+    private double constant;
 
-  // Constructors
-  public F03ShiftedRotatedHighCondElliptic(int dimension, double bias) throws JMetalException {
-    this(dimension, bias, DEFAULT_FILE_DATA,
-      DEFAULT_FILE_MX_PREFIX + dimension + DEFAULT_FILE_MX_SUFFIX);
-  }
-
-  public F03ShiftedRotatedHighCondElliptic(int dimension, double bias, String file_data,
-      String file_m) throws JMetalException {
-    super(dimension, bias, FUNCTION_NAME);
-
-    // Note: dimension starts from 0
-    m_o = new double[mDimension];
-    m_matrix = new double[mDimension][mDimension];
-
-    m_z = new double[mDimension];
-    m_zM = new double[mDimension];
-
-    // Load the shifted global optimum
-    Benchmark.loadRowVectorFromFile(file_data, mDimension, m_o);
-    // Load the matrix
-    Benchmark.loadMatrixFromFile(file_m, mDimension, mDimension, m_matrix);
-
-    constant = Math.pow(1.0e6, 1.0 / (mDimension - 1.0));
-  }
-
-  // Function body
-  public double f(double[] x) {
-    double result = 0.0;
-
-    Benchmark.shift(m_z, x, m_o);
-    Benchmark.rotate(m_zM, m_z, m_matrix);
-
-    double sum = 0.0;
-
-    for (int i = 0; i < mDimension; i++) {
-      sum += Math.pow(constant, i) * m_zM[i] * m_zM[i];
+    // Constructors
+    public F03ShiftedRotatedHighCondElliptic(int dimension, double bias) throws JMetalException {
+        this(dimension, bias, DEFAULT_FILE_DATA,
+                DEFAULT_FILE_MX_PREFIX + dimension + DEFAULT_FILE_MX_SUFFIX);
     }
 
-    result = sum + mBias;
+    public F03ShiftedRotatedHighCondElliptic(int dimension, double bias, String file_data,
+                                             String file_m) throws JMetalException {
+        super(dimension, bias, FUNCTION_NAME);
 
-    return (result);
-  }
+        // Note: dimension starts from 0
+        m_o = new double[mDimension];
+        m_matrix = new double[mDimension][mDimension];
+
+        m_z = new double[mDimension];
+        m_zM = new double[mDimension];
+
+        // Load the shifted global optimum
+        Benchmark.loadRowVectorFromFile(file_data, mDimension, m_o);
+        // Load the matrix
+        Benchmark.loadMatrixFromFile(file_m, mDimension, mDimension, m_matrix);
+
+        constant = Math.pow(1.0e6, 1.0 / (mDimension - 1.0));
+    }
+
+    // Function body
+    public double f(double[] x) {
+        double result = 0.0;
+
+        Benchmark.shift(m_z, x, m_o);
+        Benchmark.rotate(m_zM, m_z, m_matrix);
+
+        double sum = 0.0;
+
+        for (int i = 0; i < mDimension; i++) {
+            sum += Math.pow(constant, i) * m_zM[i] * m_zM[i];
+        }
+
+        result = sum + mBias;
+
+        return (result);
+    }
 }

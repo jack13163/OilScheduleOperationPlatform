@@ -16,54 +16,56 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 public abstract class GenericIndicator<S>
-    extends SimpleDescribedEntity
-    implements QualityIndicator<List<S>, Double> {
+        extends SimpleDescribedEntity
+        implements QualityIndicator<List<S>, Double> {
 
-  protected Front referenceParetoFront = null ;
-  /**
-   * Default constructor
-   */
-  public GenericIndicator() {
-  }
+    protected Front referenceParetoFront = null;
 
-  public GenericIndicator(String referenceParetoFrontFile) throws FileNotFoundException {
-    setReferenceParetoFront(referenceParetoFrontFile);
-  }
-
-  public GenericIndicator(Front referenceParetoFront) {
-    if (referenceParetoFront == null) {
-      throw new NullParetoFrontException();
+    /**
+     * Default constructor
+     */
+    public GenericIndicator() {
     }
 
-    this.referenceParetoFront = referenceParetoFront ;
-  }
-
-  public void setReferenceParetoFront(String referenceParetoFrontFile) throws FileNotFoundException {
-    if (referenceParetoFrontFile == null) {
-      throw new NullParetoFrontException();
+    public GenericIndicator(String referenceParetoFrontFile) throws FileNotFoundException {
+        setReferenceParetoFront(referenceParetoFrontFile);
     }
 
-    Front front = new ArrayFront(referenceParetoFrontFile);
-    referenceParetoFront = front ;
-  }
+    public GenericIndicator(Front referenceParetoFront) {
+        if (referenceParetoFront == null) {
+            throw new NullParetoFrontException();
+        }
 
-  public void setReferenceParetoFront(Front referenceFront) throws FileNotFoundException {
-    if (referenceFront == null) {
-      throw new NullParetoFrontException();
+        this.referenceParetoFront = referenceParetoFront;
     }
 
-    referenceParetoFront = referenceFront ;
-  }
+    public void setReferenceParetoFront(String referenceParetoFrontFile) throws FileNotFoundException {
+        if (referenceParetoFrontFile == null) {
+            throw new NullParetoFrontException();
+        }
 
-  /**
-   * This method returns true if lower indicator values are preferred and false otherwise
-   * @return
-   */
-  public abstract boolean isTheLowerTheIndicatorValueTheBetter() ;
-  
-  private static class NullParetoFrontException extends JMetalException {
-    public NullParetoFrontException() {
-      super("The reference pareto front is null");
+        Front front = new ArrayFront(referenceParetoFrontFile);
+        referenceParetoFront = front;
     }
-  }
+
+    public void setReferenceParetoFront(Front referenceFront) throws FileNotFoundException {
+        if (referenceFront == null) {
+            throw new NullParetoFrontException();
+        }
+
+        referenceParetoFront = referenceFront;
+    }
+
+    /**
+     * This method returns true if lower indicator values are preferred and false otherwise
+     *
+     * @return
+     */
+    public abstract boolean isTheLowerTheIndicatorValueTheBetter();
+
+    private static class NullParetoFrontException extends JMetalException {
+        public NullParetoFrontException() {
+            super("The reference pareto front is null");
+        }
+    }
 }

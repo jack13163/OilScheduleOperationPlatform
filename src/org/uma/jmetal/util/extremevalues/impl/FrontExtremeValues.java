@@ -12,57 +12,59 @@ import java.util.List;
  *
  * @author Antonio J. Nebro
  */
-public class FrontExtremeValues implements ExtremeValuesFinder <Front, List<Double>> {
+public class FrontExtremeValues implements ExtremeValuesFinder<Front, List<Double>> {
 
-  @Override public List<Double> findLowestValues(Front front) {
-    List<Double> minimumValue = new ArrayList<>() ;
+    @Override
+    public List<Double> findLowestValues(Front front) {
+        List<Double> minimumValue = new ArrayList<>();
 
-    if (front == null) {
-      throw new JMetalException("The front is null") ;
-    } else if (front.getNumberOfPoints() == 0) {
-      throw new JMetalException("The front is empty") ;
-    }
-
-    int numberOfObjectives = front.getPointDimensions() ;
-
-    for (int i = 0; i < numberOfObjectives; i++) {
-      minimumValue.add(Double.POSITIVE_INFINITY);
-    }
-
-    for (int i = 0 ; i < front.getNumberOfPoints(); i++) {
-      for (int j = 0; j < numberOfObjectives; j++) {
-        if (front.getPoint(i).getValue(j) < minimumValue.get(j)) {
-          minimumValue.set(j, front.getPoint(i).getValue(j));
+        if (front == null) {
+            throw new JMetalException("The front is null");
+        } else if (front.getNumberOfPoints() == 0) {
+            throw new JMetalException("The front is empty");
         }
-      }
-    }
 
-    return minimumValue;
-  }
+        int numberOfObjectives = front.getPointDimensions();
 
-  @Override public List<Double> findHighestValues(Front front) {
-    List<Double> maximumValue = new ArrayList<>() ;
-
-    if (front == null) {
-      throw new JMetalException("The front is null") ;
-    } else if (front.getNumberOfPoints() == 0) {
-      throw new JMetalException("The front is empty") ;
-    }
-
-    int numberOfObjectives = front.getPointDimensions() ;
-
-    for (int i = 0; i < numberOfObjectives; i++) {
-      maximumValue.add(Double.NEGATIVE_INFINITY);
-    }
-
-    for (int i = 0 ; i < front.getNumberOfPoints(); i++) {
-      for (int j = 0; j < numberOfObjectives; j++) {
-        if (front.getPoint(i).getValue(j) > maximumValue.get(j)) {
-          maximumValue.set(j, front.getPoint(i).getValue(j));
+        for (int i = 0; i < numberOfObjectives; i++) {
+            minimumValue.add(Double.POSITIVE_INFINITY);
         }
-      }
+
+        for (int i = 0; i < front.getNumberOfPoints(); i++) {
+            for (int j = 0; j < numberOfObjectives; j++) {
+                if (front.getPoint(i).getValue(j) < minimumValue.get(j)) {
+                    minimumValue.set(j, front.getPoint(i).getValue(j));
+                }
+            }
+        }
+
+        return minimumValue;
     }
 
-    return maximumValue;
-  }
+    @Override
+    public List<Double> findHighestValues(Front front) {
+        List<Double> maximumValue = new ArrayList<>();
+
+        if (front == null) {
+            throw new JMetalException("The front is null");
+        } else if (front.getNumberOfPoints() == 0) {
+            throw new JMetalException("The front is empty");
+        }
+
+        int numberOfObjectives = front.getPointDimensions();
+
+        for (int i = 0; i < numberOfObjectives; i++) {
+            maximumValue.add(Double.NEGATIVE_INFINITY);
+        }
+
+        for (int i = 0; i < front.getNumberOfPoints(); i++) {
+            for (int j = 0; j < numberOfObjectives; j++) {
+                if (front.getPoint(i).getValue(j) > maximumValue.get(j)) {
+                    maximumValue.set(j, front.getPoint(i).getValue(j));
+                }
+            }
+        }
+
+        return maximumValue;
+    }
 }

@@ -12,18 +12,18 @@ import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 @SuppressWarnings("serial")
 public class SequentialSolutionListEvaluator<S> implements SolutionListEvaluator<S> {
 
-	/**
-	 * 评价种群
-	 */
-	@Override
-	public List<S> evaluate(List<S> solutionList, Problem<S> problem) throws JMetalException {
-		solutionList.stream().forEach(s -> problem.evaluate(s));
+    /**
+     * 评价种群
+     */
+    @Override
+    public List<S> evaluate(List<S> solutionList, Problem<S> problem) throws JMetalException {
+        solutionList.stream().forEach(s -> problem.evaluate(s));
 
-		return solutionList;
-	}
+        return solutionList;
+    }
 
-	@Override
-	public void shutdown() {
-		// This method is an intentionally-blank override.
-	}
+    @Override
+    public void shutdown() {
+        // This method is an intentionally-blank override.
+    }
 }

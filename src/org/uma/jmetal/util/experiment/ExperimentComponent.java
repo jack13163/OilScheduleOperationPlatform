@@ -8,5 +8,5 @@ import java.io.IOException;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
 public interface ExperimentComponent {
-  void run() throws IOException;
+    void run() throws IOException;
 }

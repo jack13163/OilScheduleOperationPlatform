@@ -13,56 +13,62 @@ import org.uma.jmetal.util.JMetalException;
  */
 @SuppressWarnings("serial")
 public class OneZeroMax extends AbstractBinaryProblem {
-	private int bits;
+    private int bits;
 
-	/** Constructor */
-	public OneZeroMax() throws JMetalException {
-		this(512);
-	}
+    /**
+     * Constructor
+     */
+    public OneZeroMax() throws JMetalException {
+        this(512);
+    }
 
-	/** Constructor */
-	public OneZeroMax(Integer numberOfBits) throws JMetalException {
-		setNumberOfVariables(1);
-		setNumberOfObjectives(2);
-		setName("OneZeroMax");
+    /**
+     * Constructor
+     */
+    public OneZeroMax(Integer numberOfBits) throws JMetalException {
+        setNumberOfVariables(1);
+        setNumberOfObjectives(2);
+        setName("OneZeroMax");
 
-		bits = numberOfBits;
-	}
+        bits = numberOfBits;
+    }
 
-	@Override
-	protected int getBitsPerVariable(int index) {
-		if (index != 0) {
-			throw new JMetalException("Problem OneZeroMax has only a variable. Index = " + index);
-		}
-		return bits;
-	}
+    @Override
+    protected int getBitsPerVariable(int index) {
+        if (index != 0) {
+            throw new JMetalException("Problem OneZeroMax has only a variable. Index = " + index);
+        }
+        return bits;
+    }
 
-	@Override
-	public BinarySolution createSolution() {
-		return new DefaultBinarySolution(this);
-	}
+    @Override
+    public BinarySolution createSolution() {
+        return new DefaultBinarySolution(this);
+    }
 
-	/** Evaluate() method */
-	@Override
-	public void evaluate(BinarySolution solution) {
-		int counterOnes;
-		int counterZeroes;
+    /**
+     * Evaluate() method
+     */
+    @Override
+    public void evaluate(BinarySolution solution) {
+        int counterOnes;
+        int counterZeroes;
 
-		counterOnes = 0;
-		counterZeroes = 0;
+        counterOnes = 0;
+        counterZeroes = 0;
 
-		BitSet bitset = solution.getVariableValue(0);
+        BitSet bitset = solution.getVariableValue(0);
 
-		for (int i = 0; i < bitset.length(); i++) {
-			if (bitset.get(i)) {
-				counterOnes++;
-			} else {
-				counterZeroes++;
-			}
-		}
+        for (int i = 0; i < bitset.length(); i++) {
+            if (bitset.get(i)) {
+                counterOnes++;
+            } else {
+                counterZeroes++;
+            }
+        }
 
-		// OneZeroMax is a maximization problem: multiply by -1 to minimize
-		solution.setObjective(0, -1.0 * counterOnes);
-		solution.setObjective(1, -1.0 * counterZeroes);
-	}
+        // OneZeroMax is a maximization problem: multiply by -1 to minimize
+        solution.setObjective(0, -1.0 * counterOnes);
+        solution.setObjective(1, -1.0 * counterZeroes);
+    }
 }

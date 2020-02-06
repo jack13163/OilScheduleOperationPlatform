@@ -30,9 +30,8 @@ import java.io.IOException;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/18/16.
- *
+ * <p>
  * main example for A3C on cartpole
- *
  */
 public class A3CCartpole {
 
@@ -50,8 +49,8 @@ public class A3CCartpole {
             );
 
 
-    private static final ActorCriticFactorySeparateStdDense.Configuration CARTPOLE_NET_A3C =  ActorCriticFactorySeparateStdDense.Configuration
-    .builder().updater(new Adam(1e-2)).l2(0).numHiddenNodes(16).numLayer(3).build();
+    private static final ActorCriticFactorySeparateStdDense.Configuration CARTPOLE_NET_A3C = ActorCriticFactorySeparateStdDense.Configuration
+            .builder().updater(new Adam(1e-2)).l2(0).numHiddenNodes(16).numLayer(3).build();
 
     public static void main(String[] args) throws IOException {
         // 启动http服务
@@ -67,8 +66,8 @@ public class A3CCartpole {
         //define the mdp from gym (name, render)
         GymEnv mdp = null;
         try {
-        mdp = new GymEnv("CartPole-v0", false, false);
-        } catch (RuntimeException e){
+            mdp = new GymEnv("CartPole-v0", false, false);
+        } catch (RuntimeException e) {
             System.out.print("To run this example, download and start the gym-http-api repo found at https://github.com/openai/gym-http-api.");
         }
 

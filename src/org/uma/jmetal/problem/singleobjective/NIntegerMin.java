@@ -13,43 +13,47 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 public class NIntegerMin extends AbstractIntegerProblem {
-  private int valueN ;
+    private int valueN;
 
-  public NIntegerMin() {
-    this(10, 100, -100, +100);
-  }
-
-  /** Constructor */
-  public NIntegerMin(int numberOfVariables, int n, int lowerBound, int upperBound)  {
-    valueN = n ;
-    setNumberOfVariables(numberOfVariables);
-    setNumberOfObjectives(1);
-    setName("NIntegerMin");
-
-    List<Integer> lowerLimit = new ArrayList<>(getNumberOfVariables()) ;
-    List<Integer> upperLimit = new ArrayList<>(getNumberOfVariables()) ;
-
-    for (int i = 0; i < getNumberOfVariables(); i++) {
-      lowerLimit.add(lowerBound);
-      upperLimit.add(upperBound);
+    public NIntegerMin() {
+        this(10, 100, -100, +100);
     }
 
-    setLowerLimit(lowerLimit);
-    setUpperLimit(upperLimit);
-  }
+    /**
+     * Constructor
+     */
+    public NIntegerMin(int numberOfVariables, int n, int lowerBound, int upperBound) {
+        valueN = n;
+        setNumberOfVariables(numberOfVariables);
+        setNumberOfObjectives(1);
+        setName("NIntegerMin");
 
-  /** Evaluate() method */
-  @Override
-  public void evaluate(IntegerSolution solution) {
-    int approximationToN;
+        List<Integer> lowerLimit = new ArrayList<>(getNumberOfVariables());
+        List<Integer> upperLimit = new ArrayList<>(getNumberOfVariables());
 
-    approximationToN = 0;
+        for (int i = 0; i < getNumberOfVariables(); i++) {
+            lowerLimit.add(lowerBound);
+            upperLimit.add(upperBound);
+        }
 
-    for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-      int value = solution.getVariableValue(i) ;
-      approximationToN += Math.abs(valueN - value) ;
+        setLowerLimit(lowerLimit);
+        setUpperLimit(upperLimit);
     }
 
-    solution.setObjective(0, approximationToN);
-  }
+    /**
+     * Evaluate() method
+     */
+    @Override
+    public void evaluate(IntegerSolution solution) {
+        int approximationToN;
+
+        approximationToN = 0;
+
+        for (int i = 0; i < solution.getNumberOfVariables(); i++) {
+            int value = solution.getVariableValue(i);
+            approximationToN += Math.abs(valueN - value);
+        }
+
+        solution.setObjective(0, approximationToN);
+    }
 }

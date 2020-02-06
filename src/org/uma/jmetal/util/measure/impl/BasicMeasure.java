@@ -11,36 +11,37 @@ import org.uma.jmetal.util.measure.PushMeasure;
  */
 @SuppressWarnings("serial")
 public class BasicMeasure<T> extends SimplePushMeasure<T> implements
-    PullMeasure<T>, PushMeasure<T> {
+        PullMeasure<T>, PushMeasure<T> {
 
-  private T value ;
+    private T value;
 
-  /**
-   * Create a {@link BasicMeasure}
-   */
-  public BasicMeasure() {
-    super(
-        "SingleValue",
-        "Generic measure which stores a single value.");
-  }
+    /**
+     * Create a {@link BasicMeasure}
+     */
+    public BasicMeasure() {
+        super(
+                "SingleValue",
+                "Generic measure which stores a single value.");
+    }
 
-  /**
-   * @param value The value to be stored
-   */
-  public synchronized void set(T value) {
-    this.value = value ;
-  }
+    /**
+     * @param value The value to be stored
+     */
+    public synchronized void set(T value) {
+        this.value = value;
+    }
 
-  /**
-   * @return the current value
-   */
-  @Override
-  public synchronized T get() {
-    return value;
-  }
+    /**
+     * @return the current value
+     */
+    @Override
+    public synchronized T get() {
+        return value;
+    }
 
-  //TODO: invoke push in set()???
-  @Override public void push (T value) {
-    super.push(value) ;
-  }
+    //TODO: invoke push in set()???
+    @Override
+    public void push(T value) {
+        super.push(value);
+    }
 }

@@ -7,5 +7,5 @@ import org.uma.jmetal.solution.Solution;
  */
 @SuppressWarnings("serial")
 public class HypervolumeContributionAttribute<S extends Solution<?>>
-    extends GenericSolutionAttribute<S, Double>  {
+        extends GenericSolutionAttribute<S, Double> {
 }

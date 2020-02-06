@@ -28,9 +28,8 @@ import java.io.IOException;
 
 /**
  * @author saudet
- *
+ * <p>
  * Main example for A3C with The Arcade Learning Environment (ALE)
- *
  */
 public class A3CALE {
 

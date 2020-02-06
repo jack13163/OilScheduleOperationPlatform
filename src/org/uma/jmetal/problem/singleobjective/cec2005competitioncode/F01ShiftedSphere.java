@@ -50,43 +50,43 @@ import org.uma.jmetal.util.JMetalException;
 
 public class F01ShiftedSphere extends TestFunc {
 
-  // Fixed (class) parameters
-  static final public String FUNCTION_NAME = "Shifted Sphere Function";
-  static final public String DEFAULT_FILE_DATA = Benchmark.CEC2005SUPPORTDATADIRECTORY + "/sphere_func_data.txt";
+    // Fixed (class) parameters
+    static final public String FUNCTION_NAME = "Shifted Sphere Function";
+    static final public String DEFAULT_FILE_DATA = Benchmark.CEC2005SUPPORTDATADIRECTORY + "/sphere_func_data.txt";
 
-  // Shifted global optimum
-  private final double[] shiftedGlobalOptimum;
+    // Shifted global optimum
+    private final double[] shiftedGlobalOptimum;
 
-  // In order to avoid excessive memory allocation,
-  // a fixed memory buffer is allocated for each function object.
-  private double[] memoryBuffer;
+    // In order to avoid excessive memory allocation,
+    // a fixed memory buffer is allocated for each function object.
+    private double[] memoryBuffer;
 
-  // Constructors
-  public F01ShiftedSphere(int dimension, double bias) throws JMetalException {
-    this(dimension, bias, DEFAULT_FILE_DATA);
-  }
+    // Constructors
+    public F01ShiftedSphere(int dimension, double bias) throws JMetalException {
+        this(dimension, bias, DEFAULT_FILE_DATA);
+    }
 
-  public F01ShiftedSphere(int dimension, double bias, String file_data) throws JMetalException {
-    super(dimension, bias, FUNCTION_NAME);
+    public F01ShiftedSphere(int dimension, double bias, String file_data) throws JMetalException {
+        super(dimension, bias, FUNCTION_NAME);
 
-    // Note: dimension starts from 0
-    shiftedGlobalOptimum = new double[mDimension];
-    memoryBuffer = new double[mDimension];
+        // Note: dimension starts from 0
+        shiftedGlobalOptimum = new double[mDimension];
+        memoryBuffer = new double[mDimension];
 
-    // Load the shifted global optimum
-    Benchmark.loadRowVectorFromFile(file_data, mDimension, shiftedGlobalOptimum);
-  }
+        // Load the shifted global optimum
+        Benchmark.loadRowVectorFromFile(file_data, mDimension, shiftedGlobalOptimum);
+    }
 
-  // Function body
-  public double f(double[] x) {
-    double result = 0.0;
+    // Function body
+    public double f(double[] x) {
+        double result = 0.0;
 
-    Benchmark.shift(memoryBuffer, x, shiftedGlobalOptimum);
+        Benchmark.shift(memoryBuffer, x, shiftedGlobalOptimum);
 
-    result = Benchmark.sphere(memoryBuffer);
+        result = Benchmark.sphere(memoryBuffer);
 
-    result += mBias;
+        result += mBias;
 
-    return (result);
-  }
+        return (result);
+    }
 }

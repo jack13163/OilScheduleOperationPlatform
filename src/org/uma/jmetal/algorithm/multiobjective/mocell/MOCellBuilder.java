@@ -20,126 +20,126 @@ import java.util.List;
 
 /**
  * Created by juanjo
- *  */
+ */
 public class MOCellBuilder<S extends Solution<?>> implements AlgorithmBuilder<MOCell<S>> {
-  public enum MOCellVariant {MOCell, SteadyStateMOCell, Measures}
+    public enum MOCellVariant {MOCell, SteadyStateMOCell, Measures}
 
-  /**
-   * MOCellBuilder class
-   */
-  protected final Problem<S> problem;
-  protected int maxEvaluations;
-  protected int populationSize;
-  protected CrossoverOperator<S>  crossoverOperator;
-  protected MutationOperator<S> mutationOperator;
-  protected SelectionOperator<List<S>,S> selectionOperator;
-  protected SolutionListEvaluator<S> evaluator;
-  protected Neighborhood<S> neighborhood ;
-  protected BoundedArchive<S> archive ;
+    /**
+     * MOCellBuilder class
+     */
+    protected final Problem<S> problem;
+    protected int maxEvaluations;
+    protected int populationSize;
+    protected CrossoverOperator<S> crossoverOperator;
+    protected MutationOperator<S> mutationOperator;
+    protected SelectionOperator<List<S>, S> selectionOperator;
+    protected SolutionListEvaluator<S> evaluator;
+    protected Neighborhood<S> neighborhood;
+    protected BoundedArchive<S> archive;
 
-  /**
-   * MOCellBuilder constructor
-   */
-  public MOCellBuilder(Problem<S> problem, CrossoverOperator<S> crossoverOperator,
-      MutationOperator<S> mutationOperator) {
-    this.problem = problem;
-    maxEvaluations = 25000;
-    populationSize = 100;
-    this.crossoverOperator = crossoverOperator ;
-    this.mutationOperator = mutationOperator ;
-    selectionOperator = new BinaryTournamentSelection<S>(new RankingAndCrowdingDistanceComparator<S>());
-    neighborhood = new C9<S>((int)Math.sqrt(populationSize), (int)Math.sqrt(populationSize)) ;
-    evaluator = new SequentialSolutionListEvaluator<S>();
-    archive = new CrowdingDistanceArchive<>(populationSize) ;
-  }
-
-  public MOCellBuilder<S> setMaxEvaluations(int maxEvaluations) {
-    if (maxEvaluations < 0) {
-      throw new JMetalException("maxEvaluations is negative: " + maxEvaluations);
-    }
-    this.maxEvaluations = maxEvaluations;
-
-    return this;
-  }
-
-  public MOCellBuilder<S> setPopulationSize(int populationSize) {
-    if (populationSize < 0) {
-      throw new JMetalException("Population size is negative: " + populationSize);
+    /**
+     * MOCellBuilder constructor
+     */
+    public MOCellBuilder(Problem<S> problem, CrossoverOperator<S> crossoverOperator,
+                         MutationOperator<S> mutationOperator) {
+        this.problem = problem;
+        maxEvaluations = 25000;
+        populationSize = 100;
+        this.crossoverOperator = crossoverOperator;
+        this.mutationOperator = mutationOperator;
+        selectionOperator = new BinaryTournamentSelection<S>(new RankingAndCrowdingDistanceComparator<S>());
+        neighborhood = new C9<S>((int) Math.sqrt(populationSize), (int) Math.sqrt(populationSize));
+        evaluator = new SequentialSolutionListEvaluator<S>();
+        archive = new CrowdingDistanceArchive<>(populationSize);
     }
 
-    this.populationSize = populationSize;
-    this.neighborhood = new C9<S>((int)Math.sqrt(this.populationSize), (int)Math.sqrt(this.populationSize)) ;
-    this.archive = new CrowdingDistanceArchive<>(this.populationSize) ;
-    return this;
-  }
+    public MOCellBuilder<S> setMaxEvaluations(int maxEvaluations) {
+        if (maxEvaluations < 0) {
+            throw new JMetalException("maxEvaluations is negative: " + maxEvaluations);
+        }
+        this.maxEvaluations = maxEvaluations;
 
-  public MOCellBuilder<S> setArchive(BoundedArchive<S> archive) {
-    this.archive = archive ;
-
-    return this;
-  }
-
-  public MOCellBuilder<S> setNeighborhood(Neighborhood<S> neighborhood) {
-    this.neighborhood = neighborhood;
-
-    return this;
-  }
-
-  public MOCellBuilder<S> setSelectionOperator(SelectionOperator<List<S>,S> selectionOperator) {
-    if (selectionOperator == null) {
-      throw new JMetalException("selectionOperator is null");
+        return this;
     }
-    this.selectionOperator = selectionOperator;
 
-    return this;
-  }
+    public MOCellBuilder<S> setPopulationSize(int populationSize) {
+        if (populationSize < 0) {
+            throw new JMetalException("Population size is negative: " + populationSize);
+        }
 
-  public MOCellBuilder<S> setSolutionListEvaluator(SolutionListEvaluator<S> evaluator) {
-    if (evaluator == null) {
-      throw new JMetalException("evaluator is null");
+        this.populationSize = populationSize;
+        this.neighborhood = new C9<S>((int) Math.sqrt(this.populationSize), (int) Math.sqrt(this.populationSize));
+        this.archive = new CrowdingDistanceArchive<>(this.populationSize);
+        return this;
     }
-    this.evaluator = evaluator;
 
-    return this;
-  }
+    public MOCellBuilder<S> setArchive(BoundedArchive<S> archive) {
+        this.archive = archive;
 
-  public MOCell<S> build() {
-    MOCell<S> algorithm = new MOCell<S>(problem, maxEvaluations, populationSize, archive,
-        neighborhood, crossoverOperator, mutationOperator, selectionOperator, evaluator);
-    
-    return algorithm ;
-  }
+        return this;
+    }
 
-  /* Getters */
-  public Problem<S> getProblem() {
-    return problem;
-  }
+    public MOCellBuilder<S> setNeighborhood(Neighborhood<S> neighborhood) {
+        this.neighborhood = neighborhood;
 
-  public int getMaxEvaluations() {
-    return maxEvaluations;
-  }
+        return this;
+    }
 
-  public int getPopulationSize() {
-    return populationSize;
-  }
+    public MOCellBuilder<S> setSelectionOperator(SelectionOperator<List<S>, S> selectionOperator) {
+        if (selectionOperator == null) {
+            throw new JMetalException("selectionOperator is null");
+        }
+        this.selectionOperator = selectionOperator;
 
-  public BoundedArchive<S> getArchive() {
-    return archive ;
-  }
+        return this;
+    }
 
-  public CrossoverOperator<S> getCrossoverOperator() {
-    return crossoverOperator;
-  }
+    public MOCellBuilder<S> setSolutionListEvaluator(SolutionListEvaluator<S> evaluator) {
+        if (evaluator == null) {
+            throw new JMetalException("evaluator is null");
+        }
+        this.evaluator = evaluator;
 
-  public MutationOperator<S> getMutationOperator() {
-    return mutationOperator;
-  }
+        return this;
+    }
 
-  public SelectionOperator<List<S>,S> getSelectionOperator() {
-    return selectionOperator;
-  }
+    public MOCell<S> build() {
+        MOCell<S> algorithm = new MOCell<S>(problem, maxEvaluations, populationSize, archive,
+                neighborhood, crossoverOperator, mutationOperator, selectionOperator, evaluator);
 
-  public SolutionListEvaluator<S> getSolutionListEvaluator() {
-    return evaluator;
-  }
+        return algorithm;
+    }
+
+    /* Getters */
+    public Problem<S> getProblem() {
+        return problem;
+    }
+
+    public int getMaxEvaluations() {
+        return maxEvaluations;
+    }
+
+    public int getPopulationSize() {
+        return populationSize;
+    }
+
+    public BoundedArchive<S> getArchive() {
+        return archive;
+    }
+
+    public CrossoverOperator<S> getCrossoverOperator() {
+        return crossoverOperator;
+    }
+
+    public MutationOperator<S> getMutationOperator() {
+        return mutationOperator;
+    }
+
+    public SelectionOperator<List<S>, S> getSelectionOperator() {
+        return selectionOperator;
+    }
+
+    public SolutionListEvaluator<S> getSolutionListEvaluator() {
+        return evaluator;
+    }
 }

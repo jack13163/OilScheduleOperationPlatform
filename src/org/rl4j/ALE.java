@@ -27,9 +27,8 @@ import java.io.IOException;
 
 /**
  * @author saudet
- *
+ * <p>
  * Main example for DQN with The Arcade Learning Environment (ALE)
- *
  */
 public class ALE {
 

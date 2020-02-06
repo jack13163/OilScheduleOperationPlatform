@@ -50,75 +50,75 @@ import org.uma.jmetal.util.JMetalException;
 
 public class F12Schwefel extends TestFunc {
 
-  // Fixed (class) parameters
-  static final public String FUNCTION_NAME = "Schwefel's Problem 2.13";
-  static final public String DEFAULT_FILE_DATA = Benchmark.CEC2005SUPPORTDATADIRECTORY + "/supportData/schwefel_213_data.txt";
+    // Fixed (class) parameters
+    static final public String FUNCTION_NAME = "Schwefel's Problem 2.13";
+    static final public String DEFAULT_FILE_DATA = Benchmark.CEC2005SUPPORTDATADIRECTORY + "/supportData/schwefel_213_data.txt";
 
-  // Shifted global optimum
-  private final double[] m_o;
-  private final double[][] m_a;
-  private final double[][] m_b;
+    // Shifted global optimum
+    private final double[] m_o;
+    private final double[][] m_a;
+    private final double[][] m_b;
 
-  // In order to avoid excessive memory allocation,
-  // a fixed memory buffer is allocated for each function object.
-  private double[] m_A;
-  private double[] m_B;
+    // In order to avoid excessive memory allocation,
+    // a fixed memory buffer is allocated for each function object.
+    private double[] m_A;
+    private double[] m_B;
 
-  // Constructors
-  public F12Schwefel(int dimension, double bias) throws JMetalException {
-    this(dimension, bias, DEFAULT_FILE_DATA);
-  }
-
-  public F12Schwefel(int dimension, double bias, String file_data) throws JMetalException {
-    super(dimension, bias, FUNCTION_NAME);
-
-    // Note: dimension starts from 0
-    m_o = new double[mDimension];
-    m_a = new double[mDimension][mDimension];
-    m_b = new double[mDimension][mDimension];
-
-    m_A = new double[mDimension];
-    m_B = new double[mDimension];
-
-    // Data:
-    //	1. a 		100x100
-    //	2. b 		100x100
-    //	3. alpha	1x100
-    double[][] m_data = new double[100 + 100 + 1][mDimension];
-
-    // Load the shifted global optimum
-    Benchmark.loadMatrixFromFile(file_data, m_data.length, mDimension, m_data);
-    for (int i = 0; i < mDimension; i++) {
-      for (int j = 0; j < mDimension; j++) {
-        m_a[i][j] = m_data[i][j];
-        m_b[i][j] = m_data[100 + i][j];
-      }
-      m_o[i] = m_data[100 + 100][i];
+    // Constructors
+    public F12Schwefel(int dimension, double bias) throws JMetalException {
+        this(dimension, bias, DEFAULT_FILE_DATA);
     }
 
-    for (int i = 0; i < mDimension; i++) {
-      m_A[i] = 0.0;
-      for (int j = 0; j < mDimension; j++) {
-        m_A[i] += (m_a[i][j] * Math.sin(m_o[j]) + m_b[i][j] * Math.cos(m_o[j]));
-      }
+    public F12Schwefel(int dimension, double bias, String file_data) throws JMetalException {
+        super(dimension, bias, FUNCTION_NAME);
+
+        // Note: dimension starts from 0
+        m_o = new double[mDimension];
+        m_a = new double[mDimension][mDimension];
+        m_b = new double[mDimension][mDimension];
+
+        m_A = new double[mDimension];
+        m_B = new double[mDimension];
+
+        // Data:
+        //	1. a 		100x100
+        //	2. b 		100x100
+        //	3. alpha	1x100
+        double[][] m_data = new double[100 + 100 + 1][mDimension];
+
+        // Load the shifted global optimum
+        Benchmark.loadMatrixFromFile(file_data, m_data.length, mDimension, m_data);
+        for (int i = 0; i < mDimension; i++) {
+            for (int j = 0; j < mDimension; j++) {
+                m_a[i][j] = m_data[i][j];
+                m_b[i][j] = m_data[100 + i][j];
+            }
+            m_o[i] = m_data[100 + 100][i];
+        }
+
+        for (int i = 0; i < mDimension; i++) {
+            m_A[i] = 0.0;
+            for (int j = 0; j < mDimension; j++) {
+                m_A[i] += (m_a[i][j] * Math.sin(m_o[j]) + m_b[i][j] * Math.cos(m_o[j]));
+            }
+        }
     }
-  }
 
-  // Function body
-  public double f(double[] x) {
+    // Function body
+    public double f(double[] x) {
 
-    double sum = 0.0;
+        double sum = 0.0;
 
-    for (int i = 0; i < mDimension; i++) {
-      m_B[i] = 0.0;
-      for (int j = 0; j < mDimension; j++) {
-        m_B[i] += (m_a[i][j] * Math.sin(x[j]) + m_b[i][j] * Math.cos(x[j]));
-      }
+        for (int i = 0; i < mDimension; i++) {
+            m_B[i] = 0.0;
+            for (int j = 0; j < mDimension; j++) {
+                m_B[i] += (m_a[i][j] * Math.sin(x[j]) + m_b[i][j] * Math.cos(x[j]));
+            }
 
-      double temp = m_A[i] - m_B[i];
-      sum += (temp * temp);
+            double temp = m_A[i] - m_B[i];
+            sum += (temp * temp);
+        }
+
+        return (sum + mBias);
     }
-
-    return (sum + mBias);
-  }
 }

@@ -1,109 +1,134 @@
 package org.rl4j.fly;
+
 import java.awt.image.BufferedImage;
 
 /**
- * Ó¢ÐÛ»ú:ÊÇ·ÉÐÐÎï
+ * Ó¢ï¿½Û»ï¿½:ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½
  */
-public class Hero extends FlyingObject{
-	
-	private BufferedImage[] images = {};  //Ó¢ÐÛ»úÍ¼Æ¬
-	private int index = 0;                //Ó¢ÐÛ»úÍ¼Æ¬ÇÐ»»Ë÷Òý
-	
-	private int doubleFire;   //Ë«±¶»ðÁ¦
-	private int life;   //Ãü
-	
-	/** ³õÊ¼»¯Êý¾Ý */
-	public Hero(){
-		life = 3;   //³õÊ¼3ÌõÃü
-		doubleFire = 0;   //³õÊ¼»ðÁ¦Îª0
-		images = new BufferedImage[]{ShootGame.hero0, ShootGame.hero1}; //Ó¢ÐÛ»úÍ¼Æ¬Êý×é
-		image = ShootGame.hero0;   //³õÊ¼Îªhero0Í¼Æ¬
-		width = image.getWidth();
-		height = image.getHeight();
-		x = 150;
-		y = 400;
-	}
-	
-	/** »ñÈ¡Ë«±¶»ðÁ¦ */
-	public int isDoubleFire() {
-		return doubleFire;
-	}
+public class Hero extends FlyingObject {
 
-	/** ÉèÖÃË«±¶»ðÁ¦ */
-	public void setDoubleFire(int doubleFire) {
-		this.doubleFire = doubleFire;
-	}
-	
-	/** Ôö¼Ó»ðÁ¦ */
-	public void addDoubleFire(){
-		doubleFire = 40;
-	}
-	
-	/** ÔöÃü */
-	public void addLife(){  //ÔöÃü
-		life++;
-	}
-	
-	/** ¼õÃü */
-	public void subtractLife(){   //¼õÃü
-		life--;
-	}
-	
-	/** »ñÈ¡Ãü */
-	public int getLife(){
-		return life;
-	}
-	
-	/** µ±Ç°ÎïÌåÒÆ¶¯ÁËÒ»ÏÂ£¬Ïà¶Ô¾àÀë£¬x,yÊó±êÎ»ÖÃ  */
-	public void moveTo(int x,int y){   
-		this.x = x - width/2;
-		this.y = y - height/2;
-	}
+    private BufferedImage[] images = {};  //Ó¢ï¿½Û»ï¿½Í¼Æ¬
+    private int index = 0;                //Ó¢ï¿½Û»ï¿½Í¼Æ¬ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	/** Ô½½ç´¦Àí */
-	@Override
-	public boolean outOfBounds() {
-		return false;  
-	}
+    private int doubleFire;   //Ë«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    private int life;   //ï¿½ï¿½
 
-	/** ·¢Éä×Óµ¯ */
-	public Bullet[] shoot(){   
-		int xStep = width/4;      //4°ë
-		int yStep = 20;  //²½
-		if(doubleFire>0){  //Ë«±¶»ðÁ¦
-			Bullet[] bullets = new Bullet[2];
-			bullets[0] = new Bullet(x+xStep,y-yStep);  //y-yStep(×Óµ¯¾à·É»úµÄÎ»ÖÃ)
-			bullets[1] = new Bullet(x+3*xStep,y-yStep);
-			return bullets;
-		}else{      //µ¥±¶»ðÁ¦
-			Bullet[] bullets = new Bullet[1];
-			bullets[0] = new Bullet(x+2*xStep,y-yStep);  
-			return bullets;
-		}
-	}
+    /**
+     * ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     */
+    public Hero() {
+        life = 3;   //ï¿½ï¿½Ê¼3ï¿½ï¿½ï¿½ï¿½
+        doubleFire = 0;   //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Îª0
+        images = new BufferedImage[]{ShootGame.hero0, ShootGame.hero1}; //Ó¢ï¿½Û»ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½
+        image = ShootGame.hero0;   //ï¿½ï¿½Ê¼Îªhero0Í¼Æ¬
+        width = image.getWidth();
+        height = image.getHeight();
+        x = 150;
+        y = 400;
+    }
 
-	/** ÒÆ¶¯ */
-	@Override
-	public void step() {
-		if(images.length>0){
-			image = images[index++/10%images.length];  //ÇÐ»»Í¼Æ¬hero0£¬hero1
-		}
-	}
-	
-	/** Åö×²Ëã·¨ */
-	public boolean hit(FlyingObject other){
-		
-		int x1 = other.x - this.width/2;                 //x×ø±ê×îÐ¡¾àÀë
-		int x2 = other.x + this.width/2 + other.width;   //x×ø±ê×î´ó¾àÀë
-		int y1 = other.y - this.height/2;                //y×ø±ê×îÐ¡¾àÀë
-		int y2 = other.y + this.height/2 + other.height; //y×ø±ê×î´ó¾àÀë
-	
-		int herox = this.x + this.width/2;               //Ó¢ÐÛ»úx×ø±êÖÐÐÄµã¾àÀë
-		int heroy = this.y + this.height/2;              //Ó¢ÐÛ»úy×ø±êÖÐÐÄµã¾àÀë
-		
-		return herox>x1 && herox<x2 && heroy>y1 && heroy<y2;   //Çø¼ä·¶Î§ÄÚÎª×²ÉÏÁË
-	}
-	
+    /**
+     * ï¿½ï¿½È¡Ë«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     */
+    public int isDoubleFire() {
+        return doubleFire;
+    }
+
+    /**
+     * ï¿½ï¿½ï¿½ï¿½Ë«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     */
+    public void setDoubleFire(int doubleFire) {
+        this.doubleFire = doubleFire;
+    }
+
+    /**
+     * ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½
+     */
+    public void addDoubleFire() {
+        doubleFire = 40;
+    }
+
+    /**
+     * ï¿½ï¿½ï¿½ï¿½
+     */
+    public void addLife() {  //ï¿½ï¿½ï¿½ï¿½
+        life++;
+    }
+
+    /**
+     * ï¿½ï¿½ï¿½ï¿½
+     */
+    public void subtractLife() {   //ï¿½ï¿½ï¿½ï¿½
+        life--;
+    }
+
+    /**
+     * ï¿½ï¿½È¡ï¿½ï¿½
+     */
+    public int getLife() {
+        return life;
+    }
+
+    /**
+     * ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½Ò»ï¿½Â£ï¿½ï¿½ï¿½Ô¾ï¿½ï¿½ë£¬x,yï¿½ï¿½ï¿½Î»ï¿½ï¿½
+     */
+    public void moveTo(int x, int y) {
+        this.x = x - width / 2;
+        this.y = y - height / 2;
+    }
+
+    /**
+     * Ô½ï¿½ç´¦ï¿½ï¿½
+     */
+    @Override
+    public boolean outOfBounds() {
+        return false;
+    }
+
+    /**
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½
+     */
+    public Bullet[] shoot() {
+        int xStep = width / 4;      //4ï¿½ï¿½
+        int yStep = 20;  //ï¿½ï¿½
+        if (doubleFire > 0) {  //Ë«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            Bullet[] bullets = new Bullet[2];
+            bullets[0] = new Bullet(x + xStep, y - yStep);  //y-yStep(ï¿½Óµï¿½ï¿½ï¿½É»ï¿½ï¿½ï¿½Î»ï¿½ï¿½)
+            bullets[1] = new Bullet(x + 3 * xStep, y - yStep);
+            return bullets;
+        } else {      //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            Bullet[] bullets = new Bullet[1];
+            bullets[0] = new Bullet(x + 2 * xStep, y - yStep);
+            return bullets;
+        }
+    }
+
+    /**
+     * ï¿½Æ¶ï¿½
+     */
+    @Override
+    public void step() {
+        if (images.length > 0) {
+            image = images[index++ / 10 % images.length];  //ï¿½Ð»ï¿½Í¼Æ¬hero0ï¿½ï¿½hero1
+        }
+    }
+
+    /**
+     * ï¿½ï¿½×²ï¿½ã·¨
+     */
+    public boolean hit(FlyingObject other) {
+
+        int x1 = other.x - this.width / 2;                 //xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½
+        int x2 = other.x + this.width / 2 + other.width;   //xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        int y1 = other.y - this.height / 2;                //yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½
+        int y2 = other.y + this.height / 2 + other.height; //yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+
+        int herox = this.x + this.width / 2;               //Ó¢ï¿½Û»ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½
+        int heroy = this.y + this.height / 2;              //Ó¢ï¿½Û»ï¿½yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½
+
+        return herox > x1 && herox < x2 && heroy > y1 && heroy < y2;   //ï¿½ï¿½ï¿½ä·¶Î§ï¿½ï¿½Îª×²ï¿½ï¿½ï¿½ï¿½
+    }
+
 }
 
 
