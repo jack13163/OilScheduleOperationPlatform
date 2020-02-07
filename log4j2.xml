@@ -9,7 +9,7 @@
         <root level="warn">
             <appender-ref ref="Console"/>
         </root>
-        <logger name="com.sim.operation.Operation" level="warn" additivity="false">
+        <logger name="oil.sim.operation.Operation" level="warn" additivity="false">
             <appender-ref ref="Console"/>
         </logger>
         <logger name="com.sim.twostep.OilScheduleProblem" level="info" additivity="false">
