@@ -137,5 +137,4 @@ public class LIRCMOP1 extends Problem {
         solution.setOverallConstraintViolation(total);
         solution.setNumberOfViolatedConstraint(number);
     } // evaluateConstraints
-
 }

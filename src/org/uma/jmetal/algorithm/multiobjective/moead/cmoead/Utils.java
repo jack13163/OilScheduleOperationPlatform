@@ -304,10 +304,5 @@ public class Utils {
             ENS_FirstRank ranking = new ENS_FirstRank(feasible_solutions);
             externalArchive.union(ranking.getFirstfront());
         }
-
     }
-
-
-
-
 }

@@ -464,6 +464,4 @@ public class MOEAD_CDP extends Algorithm {
             }
         }
     }
-
-
 }

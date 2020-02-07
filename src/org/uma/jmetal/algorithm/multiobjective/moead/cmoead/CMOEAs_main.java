@@ -60,7 +60,7 @@ public class CMOEAs_main {
         String AlgorithmName = algorithmName;
 
         String mainPath = System.getProperty("user.dir");
-        String weightPath = mainPath + "/weight";
+        String weightPath = "MOEAD_Weights";// 权重文件路径
         int runtime = 30;
         Boolean isDisplay = false;
         int plotFlag = 0; // 0 for the working population; 1 for the external archive
