@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: oil.sim.ui.MainMethod
+Main-Class: opt.jmetal.problem.oil.sim.ui.MainMethod
 Class-Path: lib/plot.jar lib/javabuilder.jar 

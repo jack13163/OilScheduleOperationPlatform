@@ -15,8 +15,8 @@ import opt.jmetal.util.evaluator.SolutionListEvaluator;
 import opt.jmetal.util.solutionattribute.impl.StrengthRawFitness;
 import org.apache.commons.lang3.ArrayUtils;
 
-import oil.sim.common.CloneUtils;
-import oil.sim.ui.MainMethod;
+import opt.jmetal.problem.oil.sim.common.CloneUtils;
+import opt.jmetal.problem.oil.sim.ui.MainMethod;
 
 /**
  * @author Juan J. Durillo

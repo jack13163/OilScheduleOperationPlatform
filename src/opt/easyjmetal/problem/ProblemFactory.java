@@ -31,42 +31,46 @@ import java.lang.reflect.Constructor;
  * This class represents a factory for problems
  */
 public class ProblemFactory {
-  /**
-   * Creates an object representing a problem
-   * @param name Name of the problem
-   * @param params Parameters characterizing the problem
-   * @return The object representing the problem
-   * @throws JMException 
-   */
-  public Problem getProblem(String name, Object [] params) throws JMException {
-    // Params are the arguments
-    // The number of argument must correspond with the problem constructor params
+    /**
+     * Creates an object representing a problem
+     *
+     * @param name   Name of the problem
+     * @param params Parameters characterizing the problem
+     * @return The object representing the problem
+     * @throws JMException
+     */
+    public Problem getProblem(String name, Object[] params) throws JMException {
+        // Params are the arguments
+        // The number of argument must correspond with the problem constructor params
 
-    String base = "opt.easyjmetal.problem.";
-    if (name.substring(0,name.length()-1).equalsIgnoreCase("LIRCMOP"))
-      base += "LIRCMOP.";
-    else if (name.substring(0,name.length()-2).equalsIgnoreCase("LIRCMOP"))
-      base += "LIRCMOP.";
+        String base = "opt.easyjmetal.problem.";
+        if (name.substring(0, name.length() - 1).equalsIgnoreCase("LIRCMOP")) {
+            base += "LIRCMOP.";
+        } else if (name.substring(0, name.length() - 2).equalsIgnoreCase("LIRCMOP")) {
+            base += "LIRCMOP.";
+        } else if (name.equalsIgnoreCase("EDFPS") || name.equalsIgnoreCase("EDFTSS")) {
+            base += "schedule.cop.";
+        }
 
-    try {
-      Class problemClass = Class.forName(base+name);
-      Constructor [] constructors = problemClass.getConstructors();
-      int i = 0;
-      //find the constructor
-      while ((i < constructors.length) && 
-             (constructors[i].getParameterTypes().length!=params.length)) {
-        i++;
-      }
-      // constructors[i] is the selected one constructor
-      Problem problem = (Problem)constructors[i].newInstance(params);
-      return problem;      
-    }// try
-    catch(Exception e) {
-      Configuration.logger_.severe("ProblemFactory.getProblem: " +
-          "Problem '"+ name + "' does not exist. "  +
-          "Please, check the problem names in jmetal/problems") ;
-      e.printStackTrace();
-      throw new JMException("Exception in " + name + ".getProblem()") ;
-    } // catch              
-  }    
+        try {
+            Class problemClass = Class.forName(base + name);
+            Constructor[] constructors = problemClass.getConstructors();
+            int i = 0;
+            //find the constructor
+            while ((i < constructors.length) &&
+                    (constructors[i].getParameterTypes().length != params.length)) {
+                i++;
+            }
+            // constructors[i] is the selected one constructor
+            Problem problem = (Problem) constructors[i].newInstance(params);
+            return problem;
+        }// try
+        catch (Exception e) {
+            Configuration.logger_.severe("ProblemFactory.getProblem: " +
+                    "Problem '" + name + "' does not exist. " +
+                    "Please, check the problem names in opt.easyjmetal.problem");
+            e.printStackTrace();
+            throw new JMException("Exception in " + name + ".getProblem()");
+        } // catch
+    }
 }

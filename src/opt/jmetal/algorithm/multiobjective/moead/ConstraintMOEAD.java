@@ -1,7 +1,7 @@
 package opt.jmetal.algorithm.multiobjective.moead;
 
-import oil.sim.common.CloneUtils;
-import oil.sim.ui.MainMethod;
+import opt.jmetal.problem.oil.sim.common.CloneUtils;
+import opt.jmetal.problem.oil.sim.ui.MainMethod;
 import opt.jmetal.algorithm.multiobjective.moead.util.MOEADUtils;
 import opt.jmetal.operator.CrossoverOperator;
 import opt.jmetal.operator.MutationOperator;

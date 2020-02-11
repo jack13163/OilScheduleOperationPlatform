@@ -4,11 +4,12 @@ package opt.easyjmetal.problem.schedule.rules;
 import opt.easyjmetal.problem.schedule.models.FactObject;
 import opt.easyjmetal.problem.schedule.models.Fragment;
 import opt.easyjmetal.problem.schedule.util.ISimulationScheduler;
+import opt.easyjmetal.util.JMException;
 
 public abstract class AbstractRule {
     protected static ISimulationScheduler _scheduler;
 
-    public abstract Fragment decode(FactObject factObject);
+    public abstract Fragment decode(FactObject factObject) throws JMException;
 
     public AbstractRule(ISimulationScheduler scheduler) {
         _scheduler = scheduler;
@@ -20,7 +21,7 @@ public abstract class AbstractRule {
      * @param factObject
      * @return
      */
-    public Fragment fireAllRule(FactObject factObject) {
+    public Fragment fireAllRule(FactObject factObject) throws JMException {
         return decode(factObject);
     }
 }

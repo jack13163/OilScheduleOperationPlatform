@@ -1,5 +1,6 @@
 package opt.easyjmetal.problem.schedule.rules.impl;
 
+import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.problem.schedule.Config;
 import opt.easyjmetal.problem.schedule.cop.COPOilScheduleSimulationScheduler;
 import opt.easyjmetal.problem.schedule.models.FactObject;
@@ -8,7 +9,7 @@ import opt.easyjmetal.problem.schedule.rules.AbstractRule;
 import opt.easyjmetal.problem.schedule.util.ArrayHelper;
 import opt.easyjmetal.problem.schedule.util.CodeHelper;
 import opt.easyjmetal.problem.schedule.util.ISimulationScheduler;
-import opt.jmetal.solution.DoubleSolution;
+import opt.easyjmetal.util.JMException;
 
 import java.util.List;
 
@@ -24,14 +25,14 @@ public class EarliestDealineFirstAndTwoStepsScheduling extends AbstractRule {
     }
 
     @Override
-    public Fragment decode(FactObject factObject) {
+    public Fragment decode(FactObject factObject) throws JMException {
         COPOilScheduleSimulationScheduler scheduler = (COPOilScheduleSimulationScheduler) _scheduler;
         int numOfDSs = factObject.getConfig().getDSs().size();
         int numOfTanks = factObject.getConfig().getTanks().size();
         Integer[][] policies = scheduler.policyStack.peek();// 可用策略
         int loc = factObject.getLoc();
         Config config = factObject.getConfig();
-        DoubleSolution solution = ((DoubleSolution) factObject.getSolution());
+        Solution solution = factObject.getSolution();
         int tank = -1;
         int ds = -1;
         double vol = -1.0;
@@ -65,7 +66,7 @@ public class EarliestDealineFirstAndTwoStepsScheduling extends AbstractRule {
             // 蒸馏塔按照紧急程度降序排列
             double[] feedingLastTime = scheduler.getFeedingEndTime();
             int[] sortedDsIndexs = ArrayHelper.Arraysort(feedingLastTime);
-            double code1 = solution.getVariableValue(loc * 2).doubleValue();
+            double code1 = solution.getDecisionVariables()[loc * 2].getValue();
 
             // 4.1 确定蒸馏塔
             for (int i = 0; i < sortedDsIndexs.length; i++) {
@@ -126,7 +127,7 @@ public class EarliestDealineFirstAndTwoStepsScheduling extends AbstractRule {
         double speed = 0;
         try {
             // 解码转运速度
-            double code2 = solution.getVariableValue(loc * 2 + 1).doubleValue();
+            double code2 = solution.getDecisionVariables()[loc * 2 + 1].getValue();
 
             // 判断转运管道，并选择转运速度
             int pipe = scheduler.getCurrentPipe(ds);
@@ -145,7 +146,7 @@ public class EarliestDealineFirstAndTwoStepsScheduling extends AbstractRule {
      *
      * @return
      */
-    public double[][] calculateMaxVolume(FactObject factObjects) {
+    public double[][] calculateMaxVolume(FactObject factObjects) throws JMException {
         COPOilScheduleSimulationScheduler scheduler = (COPOilScheduleSimulationScheduler) _scheduler;
         Config config = factObjects.getConfig();
         Integer[][] policies = scheduler.generateRecommendPolicy();
@@ -160,8 +161,8 @@ public class EarliestDealineFirstAndTwoStepsScheduling extends AbstractRule {
 
         // 1.确定转运速度的下标，具体速度需要根据管道确定，而管道又可以通过蒸馏塔确定
         int loc = factObjects.getLoc();
-        DoubleSolution solution = ((DoubleSolution) factObjects.getSolution());
-        double code = solution.getVariableValue(loc * 2 + 1).doubleValue();
+        Solution solution = factObjects.getSolution();
+        double code = solution.getDecisionVariables()[loc * 2 + 1].getValue();
         int indexOfSpeed = -1;
         try {
             indexOfSpeed = CodeHelper.getRow(code, 3, 1) - 1;

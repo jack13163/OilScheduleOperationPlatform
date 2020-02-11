@@ -36,7 +36,7 @@ import java.util.NoSuchElementException;
 import opt.javasim.internal.SimulationProcessIterator;
 import opt.javasim.internal.SimulationProcessList;
 
-import oil.sim.common.MathHelper;
+import opt.jmetal.problem.oil.sim.common.MathHelper;
 
 /**
  * This is the scheduler: the heart of the simulation system.

@@ -1,6 +1,6 @@
 package opt.jmetal.util;
 
-import oil.sim.common.NormalizationHelper;
+import opt.jmetal.problem.oil.sim.common.NormalizationHelper;
 import opt.jmetal.qualityindicator.impl.*;
 import opt.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
 import opt.jmetal.solution.Solution;

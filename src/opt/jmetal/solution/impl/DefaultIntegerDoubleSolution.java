@@ -6,7 +6,7 @@ import java.util.Map;
 import opt.jmetal.problem.IntegerDoubleProblem;
 import opt.jmetal.solution.IntegerDoubleSolution;
 
-import oil.sim.common.CloneUtils;
+import opt.jmetal.problem.oil.sim.common.CloneUtils;
 
 /**
  * Defines an implementation of a class for solutions having integers and

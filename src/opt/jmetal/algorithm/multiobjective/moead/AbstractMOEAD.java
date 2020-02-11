@@ -21,7 +21,7 @@ import opt.jmetal.util.point.impl.IdealPoint;
 import opt.jmetal.util.point.impl.NadirPoint;
 import opt.jmetal.util.pseudorandom.JMetalRandom;
 
-import oil.sim.common.UniformPointHelper;
+import opt.jmetal.problem.oil.sim.common.UniformPointHelper;
 
 /**
  * Abstract class for implementing versions of the MOEA/D algorithm.

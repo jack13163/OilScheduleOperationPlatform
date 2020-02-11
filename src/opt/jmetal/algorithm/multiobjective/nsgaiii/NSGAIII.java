@@ -1,8 +1,8 @@
 package opt.jmetal.algorithm.multiobjective.nsgaiii;
 
-import oil.sim.common.CloneUtils;
-import oil.sim.common.UniformPointHelper;
-import oil.sim.ui.MainMethod;
+import opt.jmetal.problem.oil.sim.common.CloneUtils;
+import opt.jmetal.problem.oil.sim.common.UniformPointHelper;
+import opt.jmetal.problem.oil.sim.ui.MainMethod;
 import opt.jmetal.algorithm.multiobjective.nsgaiii.util.EnvironmentalSelection;
 import opt.jmetal.algorithm.multiobjective.nsgaiii.util.ReferencePoint;
 import org.apache.commons.lang3.ArrayUtils;
@@ -153,8 +153,7 @@ public class NSGAIII<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, 
             rankingIndex++;
         }
 
-        // A copy of the reference list should be used as parameter of the environmental
-        // selection
+        // A copy of the reference list should be used as parameter of the environmental selection
         EnvironmentalSelection<S> selection = new EnvironmentalSelection<>(fronts, getMaxPopulationSize(),
                 getReferencePointsCopy(), getProblem().getNumberOfObjectives());
 

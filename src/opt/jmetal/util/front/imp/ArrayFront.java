@@ -1,6 +1,6 @@
 package opt.jmetal.util.front.imp;
 
-import oil.sim.oil.cop.OilScheduleConstrainedOptimizationProblem;
+import opt.jmetal.problem.oil.sim.oil.cop.OilScheduleConstrainedOptimizationProblem;
 import opt.jmetal.solution.DoubleSolution;
 import opt.jmetal.solution.Solution;
 import opt.jmetal.solution.impl.DefaultDoubleSolution;

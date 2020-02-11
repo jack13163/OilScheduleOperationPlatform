@@ -1,11 +1,11 @@
 package opt.easyjmetal.problem.schedule.util;
 
-import oil.canvas.gante.CanvasGante;
+import opt.jmetal.problem.oil.canvas.gante.CanvasGante;
 
 import javax.swing.*;
 
 public class ChartFrame {
-    // çª—å£å¤§å°
+    // ´°¿Ú´óĞ¡
     private final static int width = 900;
     private final static int height = 600;
 
@@ -13,9 +13,9 @@ public class ChartFrame {
     private CanvasGante canvas;
 
     public ChartFrame() {
-        frame = new JFrame("åŸæ²¹è°ƒåº¦ç”˜ç‰¹å›¾");
+        frame = new JFrame("Ô­ÓÍµ÷¶È¸ÊÌØÍ¼");
         canvas = new CanvasGante();
-        // å°†çª—å£å®šä½åˆ°å±å¹•ä¸­é—´
+        // ½«´°¿Ú¶¨Î»µ½ÆÁÄ»ÖĞ¼ä
         int screenWidth = (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
         int screenHeight = (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
         frame.setBounds(screenWidth / 2 - width / 2, screenHeight / 2 - height / 2, width, height);

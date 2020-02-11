@@ -23,8 +23,8 @@ import opt.jmetal.util.solutionattribute.impl.CrowdingDistance;
 import opt.jmetal.util.solutionattribute.impl.DominanceRanking;
 import opt.jmetal.util.solutionattribute.impl.LocationAttribute;
 
-import oil.sim.common.CloneUtils;
-import oil.sim.ui.MainMethod;
+import opt.jmetal.problem.oil.sim.common.CloneUtils;
+import opt.jmetal.problem.oil.sim.ui.MainMethod;
 
 /**
  * @param <S>

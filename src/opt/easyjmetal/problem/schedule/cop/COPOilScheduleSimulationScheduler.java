@@ -14,6 +14,7 @@ import opt.easyjmetal.problem.schedule.util.ArrayHelper;
 import opt.easyjmetal.problem.schedule.util.CloneUtils;
 import opt.easyjmetal.problem.schedule.util.ISimulationScheduler;
 import opt.easyjmetal.problem.schedule.util.MathUtil;
+import opt.easyjmetal.util.JMException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +23,7 @@ import javax.swing.table.TableModel;
 import java.util.*;
 
 /**
- * å…³é”®åœ¨äºå†²çªæ£€æŸ¥
+ * ¹Ø¼üÔÚÓÚ³åÍ»¼ì²é
  *
  * @author Administrator
  */
@@ -30,23 +31,23 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
 
     private Logger logger = LogManager.getLogger(COPOilScheduleSimulationScheduler.class.getName());
 
-    private List<Operation> operations = new LinkedList<>();// æœ€ç»ˆçš„å†³ç­–åºåˆ—
-    private Solution solution;// å†³ç­–æŒ‡ä»¤åºåˆ—
-    private boolean plotEachStep;// æ˜¯å¦è¾“å‡ºæ¯ä¸€æ­¥çš„è°ƒåº¦
-    private String ruleName = "";// è§„åˆ™åç§°
+    private List<Operation> operations = new LinkedList<>();// ×îÖÕµÄ¾ö²ßĞòÁĞ
+    private Solution solution;// ¾ö²ßÖ¸ÁîĞòÁĞ
+    private boolean plotEachStep;// ÊÇ·ñÊä³öÃ¿Ò»²½µÄµ÷¶È
+    private String ruleName = "";// ¹æÔòÃû³Æ
 
-    // å½“å‰å†³ç­–åºå·
+    // µ±Ç°¾ö²ßĞòºÅ
     private int loc = 0;
     private Config config;
 
-    // ç³»ç»ŸçŠ¶æ€æ ˆ
-    private Stack<Fragment> fragmentStack = new Stack<>();// åŸºå› æ ˆ
-    public Stack<Integer[][]> policyStack = new Stack<>();// ç­–ç•¥æ ˆ
-    private Stack<Operation> operationStack = new Stack<>();// å†³ç­–æ ˆ
-    private Stack<Config> configStack = new Stack<>();// é…ç½®æ ˆ
+    // ÏµÍ³×´Ì¬Õ»
+    private Stack<Fragment> fragmentStack = new Stack<>();// »ùÒòÕ»
+    public Stack<Integer[][]> policyStack = new Stack<>();// ²ßÂÔÕ»
+    private Stack<Operation> operationStack = new Stack<>();// ¾ö²ßÕ»
+    private Stack<Config> configStack = new Stack<>();// ÅäÖÃÕ»
 
     /**
-     * æ–°å»ºä¸€ä¸ªå’Œå½“å‰é…ç½®ç›¸åŒçš„é…ç½®
+     * ĞÂ½¨Ò»¸öºÍµ±Ç°ÅäÖÃÏàÍ¬µÄÅäÖÃ
      *
      * @return
      */
@@ -55,7 +56,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * ç§»é™¤æ ˆé¡¶çš„é…ç½®ï¼Œå¹¶æ›´æ”¹configçš„æŒ‡å‘
+     * ÒÆ³ıÕ»¶¥µÄÅäÖÃ£¬²¢¸ü¸ÄconfigµÄÖ¸Ïò
      */
     private void removeConfig() {
         configStack.pop();
@@ -63,7 +64,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * å‘æ ˆä¸­æ’å…¥æ–°çš„é…ç½®ï¼Œå¹¶æ›´æ”¹configçš„æŒ‡å‘
+     * ÏòÕ»ÖĞ²åÈëĞÂµÄÅäÖÃ£¬²¢¸ü¸ÄconfigµÄÖ¸Ïò
      *
      * @param newConfig
      */
@@ -73,7 +74,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è·å–æœ€ç»ˆçš„å†³ç­–åºåˆ—
+     * »ñÈ¡×îÖÕµÄ¾ö²ßĞòÁĞ
      *
      * @return
      */
@@ -82,10 +83,10 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * å•æ­¥è°ƒåº¦
+     * µ¥²½µ÷¶È
      *
-     * @param config   è°ƒåº¦çš„é…ç½®ä¿¡æ¯
-     * @param ruleName è§„åˆ™åç§°
+     * @param config   µ÷¶ÈµÄÅäÖÃĞÅÏ¢
+     * @param ruleName ¹æÔòÃû³Æ
      */
     public COPOilScheduleSimulationScheduler(Config config, String ruleName) {
         this.config = config;
@@ -94,11 +95,11 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * å•æ­¥è°ƒåº¦
+     * µ¥²½µ÷¶È
      *
-     * @param config       è°ƒåº¦çš„é…ç½®ä¿¡æ¯
-     * @param showEachStep æ˜¯å¦æ˜¾ç¤ºæ¯ä¸€æ­¥çš„ç»“æœ
-     * @param ruleName     è§„åˆ™åç§°
+     * @param config       µ÷¶ÈµÄÅäÖÃĞÅÏ¢
+     * @param showEachStep ÊÇ·ñÏÔÊ¾Ã¿Ò»²½µÄ½á¹û
+     * @param ruleName     ¹æÔòÃû³Æ
      */
     public COPOilScheduleSimulationScheduler(Config config, boolean showEachStep, String ruleName) {
         this.config = config;
@@ -107,10 +108,10 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * å¼€å§‹
+     * ¿ªÊ¼
      */
     public void start(Solution solution) {
-        // æ¸…ç©ºå†³ç­–é˜Ÿåˆ—
+        // Çå¿Õ¾ö²ß¶ÓÁĞ
         getOperations().clear();
         fragmentStack.clear();
         operationStack.clear();
@@ -123,7 +124,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è·å–å„ä¸ªè’¸é¦å¡”çš„ç‚¼æ²¹æŒç»­æ—¶é—´ã€è´Ÿå€¼ä»£è¡¨å·²ç»å»¶è¯¯ã€‘
+     * »ñÈ¡¸÷¸öÕôÁóËşµÄÁ¶ÓÍ³ÖĞøÊ±¼ä¡¾¸ºÖµ´ú±íÒÑ¾­ÑÓÎó¡¿
      *
      * @return
      */
@@ -142,7 +143,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è·å–æœ€éœ€è¦è½¬è¿åŸæ²¹çš„è’¸é¦å¡”
+     * »ñÈ¡×îĞèÒª×ªÔËÔ­ÓÍµÄÕôÁóËş
      *
      * @return
      */
@@ -159,7 +160,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è·å–æœ€ç´§æ€¥çš„è’¸é¦å¡”ã€è§£ç æ—¶å‚è€ƒã€‘
+     * »ñÈ¡×î½ô¼±µÄÕôÁóËş¡¾½âÂëÊ±²Î¿¼¡¿
      *
      * @return
      */
@@ -183,7 +184,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è®¡ç®—æœ€å¤§å®‰å…¨è½¬è¿ä½“ç§¯ï¼Œé¿å…ç½çš„å ç”¨å†²çª
+     * ¼ÆËã×î´ó°²È«×ªÔËÌå»ı£¬±ÜÃâ¹ŞµÄÕ¼ÓÃ³åÍ»
      *
      * @param tank
      * @param ds
@@ -193,15 +194,15 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     public double getMaxSafeVolume(int tank, int ds, double chargingSpeed) {
         double vol = 0;
 
-        // 1.å½“å‰æ—¶é—´T
+        // 1.µ±Ç°Ê±¼äT
         int pipe = getCurrentPipe(ds);
         double currentTime = getCurrentTime(pipe);
 
-        // 2.ç‚¼æ²¹ç»“æŸæ—¶é—´T1
+        // 2.Á¶ÓÍ½áÊøÊ±¼äT1
         double[] feedEndTimes = getFeedingEndTime();
         double feedEndTime = feedEndTimes[ds - 1];
 
-        // 3ä¾›æ²¹ç½å¼€å§‹è¢«ç”¨åˆ°çš„æ—¶åˆ»T2
+        // 3¹©ÓÍ¹Ş¿ªÊ¼±»ÓÃµ½µÄÊ±¿ÌT2
         Map<Integer, Double> usingTimes = getDeadlineTimeOfAllTanks(currentTime);
         double feedingSpeed = Config.getInstance().getDSs().get(ds - 1).getSpeed();
         if (usingTimes.containsKey(tank)) {
@@ -214,7 +215,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è®¡ç®—ä¸æ­£å¸¸æƒ…å†µä¸‹æœ€å¤§å®‰å…¨è½¬è¿ä½“ç§¯ï¼Œé¿å…ç½çš„å ç”¨å†²çª
+     * ¼ÆËã²»Õı³£Çé¿öÏÂ×î´ó°²È«×ªÔËÌå»ı£¬±ÜÃâ¹ŞµÄÕ¼ÓÃ³åÍ»
      *
      * @param tank
      * @param ds
@@ -224,11 +225,11 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     public double getMaxSafeVolumeUnnormal(int tank, int ds, double chargingSpeed) {
         double vol = 0;
 
-        // 1.å½“å‰æ—¶é—´T
+        // 1.µ±Ç°Ê±¼äT
         int pipe = getCurrentPipe(ds);
         double currentTime = getCurrentTime(pipe);
 
-        // 2.ä¾›æ²¹ç½å¼€å§‹è¢«ç”¨åˆ°çš„æ—¶åˆ»T2
+        // 2.¹©ÓÍ¹Ş¿ªÊ¼±»ÓÃµ½µÄÊ±¿ÌT2
         Map<Integer, Double> usingTimes = getDeadlineTimeOfAllTanks(currentTime);
         double feedingSpeed = Config.getInstance().getDSs().get(ds - 1).getSpeed();
 
@@ -245,14 +246,14 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * åœ¨å°½é‡æ»¡è¶³èµ¶ä¸Šè’¸é¦å¡”ç»“æŸç‚¼æ²¹æ—¶é—´çš„åŒæ—¶ï¼Œå¦‚æœå®åœ¨èµ¶ä¸ä¸Šï¼Œå°±ç›´æ¥è¿
+     * ÔÚ¾¡Á¿Âú×ã¸ÏÉÏÕôÁóËş½áÊøÁ¶ÓÍÊ±¼äµÄÍ¬Ê±£¬Èç¹ûÊµÔÚ¸Ï²»ÉÏ£¬¾ÍÖ±½ÓÔË
      *
      * @param ds
      * @param chargingSpeed
      * @return
      */
     public double getRTVolume(int ds, double chargingSpeed) {
-        double deadlineTime = getFeedingEndTime()[ds - 1];// æˆªè‡³æ—¶åˆ»
+        double deadlineTime = getFeedingEndTime()[ds - 1];// ½ØÖÁÊ±¿Ì
         int pipe = getCurrentPipe(ds);
         double currentTime = getCurrentTime(pipe);
         double volume = MathUtil.round(chargingSpeed * (deadlineTime - currentTime - config.RT), config.Precision);
@@ -260,7 +261,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * ç¡®å®šæœ€å¤šçš„è½¬è¿ä½“ç§¯
+     * È·¶¨×î¶àµÄ×ªÔËÌå»ı
      *
      * @param fp_vol
      * @param safe_vol
@@ -268,13 +269,13 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
      * @return
      */
     public double getVolume(double fp_vol, double safe_vol, double capacity) {
-        // å¿…é¡»è¦è€ƒè™‘çš„çº¦æŸï¼šå®¹é‡ã€è¿›æ–™åŒ…ã€ä¼˜åŒ–ä½“ç§¯ã€éƒ½æœ‰ä¸Šé™ã€‘
-        double limit = MathUtil.round(Math.min(fp_vol, Math.min(capacity, safe_vol)), config.Precision);// æ¶ˆé™¤ç²¾åº¦é—®é¢˜
+        // ±ØĞëÒª¿¼ÂÇµÄÔ¼Êø£ºÈİÁ¿¡¢½øÁÏ°ü¡¢ÓÅ»¯Ìå»ı¡¾¶¼ÓĞÉÏÏŞ¡¿
+        double limit = MathUtil.round(Math.min(fp_vol, Math.min(capacity, safe_vol)), config.Precision);// Ïû³ı¾«¶ÈÎÊÌâ
         return limit;
     }
 
     /**
-     * ç¡®å®šæœ€å¤šçš„è½¬è¿ä½“ç§¯
+     * È·¶¨×î¶àµÄ×ªÔËÌå»ı
      *
      * @param fp_vol
      * @param rt_vol
@@ -283,20 +284,20 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
      * @return
      */
     public double getVolume(double fp_vol, double rt_vol, double safe_vol, double capacity) {
-        // å¿…é¡»è¦è€ƒè™‘çš„çº¦æŸï¼šå®¹é‡ã€è¿›æ–™åŒ…ã€ä¼˜åŒ–ä½“ç§¯ã€éƒ½æœ‰ä¸Šé™ã€‘
+        // ±ØĞëÒª¿¼ÂÇµÄÔ¼Êø£ºÈİÁ¿¡¢½øÁÏ°ü¡¢ÓÅ»¯Ìå»ı¡¾¶¼ÓĞÉÏÏŞ¡¿
         double limit = MathUtil.round(Math.min(safe_vol, Math.min(fp_vol, Math.min(capacity, rt_vol))),
-                config.Precision);// æ¶ˆé™¤ç²¾åº¦é—®é¢˜
+                config.Precision);// Ïû³ı¾«¶ÈÎÊÌâ
         return limit;
     }
 
     /**
-     * è¿‡æ»¤æ‰è¾ƒå·®çš„ç­–ç•¥
+     * ¹ıÂËµô½Ï²îµÄ²ßÂÔ
      *
      * @param safe_vol
      * @return
      */
     public boolean filterCondition(double vol, double fp_vol) {
-        // è§£ç æ—¶ï¼Œé»˜è®¤è½¬è¿è®°å½•çš„ä½“ç§¯ä¸å¾—å°äºä¸€å®šå¤§å°ã€é…ç½®æ–‡ä»¶æŒ‡å®šã€‘
+        // ½âÂëÊ±£¬Ä¬ÈÏ×ªÔË¼ÇÂ¼µÄÌå»ı²»µÃĞ¡ÓÚÒ»¶¨´óĞ¡¡¾ÅäÖÃÎÄ¼şÖ¸¶¨¡¿
         if (vol < config.VolMin && fp_vol != vol) {
             return true;
         } else {
@@ -305,7 +306,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è·å–æœªå®Œæˆç‚¼æ²¹è®¡åˆ’çš„è’¸é¦å¡”
+     * »ñÈ¡Î´Íê³ÉÁ¶ÓÍ¼Æ»®µÄÕôÁóËş
      *
      * @return
      */
@@ -322,7 +323,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * æ ¹æ®ç®¡é“æ³¨æ²¹ç»“æŸæ—¶é—´è‡ªåŠ¨è®¡ç®—å½“å‰ç®¡é“
+     * ¸ù¾İ¹ÜµÀ×¢ÓÍ½áÊøÊ±¼ä×Ô¶¯¼ÆËãµ±Ç°¹ÜµÀ
      *
      * @param ds
      * @return
@@ -338,7 +339,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è®¡ç®—ç®¡é“æ³¨æ²¹ç»“æŸæ—¶é—´å½“å‰ç³»ç»Ÿæ—¶é—´
+     * ¼ÆËã¹ÜµÀ×¢ÓÍ½áÊøÊ±¼äµ±Ç°ÏµÍ³Ê±¼ä
      *
      * @param pipe
      * @return
@@ -349,12 +350,12 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è·å–å½“å‰æ—¶åˆ»ä¾›æ²¹ç½çš„çŠ¶æ€ï¼Œæ˜¯å¦å¯ç”¨
+     * »ñÈ¡µ±Ç°Ê±¿Ì¹©ÓÍ¹ŞµÄ×´Ì¬£¬ÊÇ·ñ¿ÉÓÃ
      *
      * @param currentTime
      */
     public List<Integer> getTankSet(double currentTime) {
-        // æŒ‰ç…§å¼€å§‹æ—¶é—´æ’åº
+        // °´ÕÕ¿ªÊ¼Ê±¼äÅÅĞò
         Operation.sortOperation(operations);
 
         List<Integer> tankSet = new LinkedList<>();
@@ -363,12 +364,12 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
         int rowCount = model.getRowCount();
         int colCount = model.getColumnCount();
 
-        // é€ä¸ªç½åœ°ç¡®å®šçŠ¶æ€
+        // Öğ¸ö¹ŞµØÈ·¶¨×´Ì¬
         for (int i = 0; i < rowCount; i++) {
             int tank = i + 1;
-            String state = model.getValueAt(i, colCount - 1).toString();// è¯»å–ä½ è·å–è¡Œå·çš„æŸä¸€åˆ—çš„å€¼ï¼ˆä¹Ÿå°±æ˜¯å­—æ®µï¼‰
+            String state = model.getValueAt(i, colCount - 1).toString();// ¶ÁÈ¡Äã»ñÈ¡ĞĞºÅµÄÄ³Ò»ÁĞµÄÖµ£¨Ò²¾ÍÊÇ×Ö¶Î£©
 
-            // æ‰¾åˆ°æ‰€æœ‰ç©ºé—²çš„ä¾›æ²¹ç½
+            // ÕÒµ½ËùÓĞ¿ÕÏĞµÄ¹©ÓÍ¹Ş
             if (state.equals("empty")) {
                 tankSet.add(tank);
             }
@@ -378,7 +379,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è·å–è½¬è¿é€Ÿåº¦
+     * »ñÈ¡×ªÔËËÙ¶È
      *
      * @param ds
      * @return
@@ -389,7 +390,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è·å–è½¬è¿é€Ÿåº¦
+     * »ñÈ¡×ªÔËËÙ¶È
      *
      * @param pipe
      * @return
@@ -399,12 +400,12 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * å•æ¬¡è§£ç 
+     * µ¥´Î½âÂë
      *
      * @return
      */
-    public Fragment getFragment() {
-        // å°†è§„åˆ™å¯¹è±¡åŠ è½½åˆ°å·¥ä½œå†…å­˜ç©ºé—´ã€å¿…é¡»è¦ä¼ å…¥ä¸‰ä¸ªå‚æ•°ï¼Œåˆ†åˆ«ä¸ºconfig/solution/locã€‘
+    public Fragment getFragment() throws JMException {
+        // ½«¹æÔò¶ÔÏó¼ÓÔØµ½¹¤×÷ÄÚ´æ¿Õ¼ä¡¾±ØĞëÒª´«ÈëÈı¸ö²ÎÊı£¬·Ö±ğÎªconfig/solution/loc¡¿
         FactObject factObject = new FactObject();
         factObject.setConfig(config);
         factObject.setSolution(solution);
@@ -416,7 +417,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * ç”Ÿæˆæ¨èç­–ç•¥ã€åº”å¯¹é«˜ç†”ç‚¹ç®¡é“åœè¿å¯¼è‡´çš„å›æº¯ã€‘
+     * Éú³ÉÍÆ¼ö²ßÂÔ¡¾Ó¦¶Ô¸ßÈÛµã¹ÜµÀÍ£ÔËµ¼ÖÂµÄ»ØËİ¡¿
      *
      * @param fragment
      */
@@ -426,14 +427,14 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
         int cols = config.getTanks().size() + 1;
         Integer[][] policyMap = new Integer[rows][cols];
 
-        // 1.åˆå§‹åŒ–æ ‡è®°
+        // 1.³õÊ¼»¯±ê¼Ç
         for (int i = 0; i < policyMap.length; i++) {
             for (int j = 0; j < policyMap[i].length; j++) {
-                policyMap[i][j] = 0;// æ ‡è®°ä¸å¯ç”¨
+                policyMap[i][j] = 0;// ±ê¼Ç²»¿ÉÓÃ
             }
         }
 
-        // 2.ç”Ÿæˆæœªå®Œæˆç‚¼æ²¹ä»»åŠ¡çš„è’¸é¦å¡”çš„ç­–ç•¥ã€è§£ç æ—¶éœ€è¦ç­›é€‰ã€‘
+        // 2.Éú³ÉÎ´Íê³ÉÁ¶ÓÍÈÎÎñµÄÕôÁóËşµÄ²ßÂÔ¡¾½âÂëÊ±ĞèÒªÉ¸Ñ¡¡¿
         List<Integer> pipeOneList = getTankSet(getCurrentTime(0));
         List<Integer> pipeTwoList = getTankSet(getCurrentTime(1));
         List<Integer> dss = getDSSet();
@@ -441,17 +442,17 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
             int ds = dss.get(i);
 
             if (ds != config.HighOilDS) {
-                // å½“æ‰€æœ‰çš„ä¾›æ²¹ç½éƒ½æ˜¯ç©ºç½æ—¶ï¼Œä¸å¯åœè¿
+                // µ±ËùÓĞµÄ¹©ÓÍ¹Ş¶¼ÊÇ¿Õ¹ŞÊ±£¬²»¿ÉÍ£ÔË
                 if (pipeOneList.size() < config.getTanks().size()) {
-                    policyMap[ds - 1][0] = 1;// æ ‡è®°æŸä¸€è¡Œçš„è‹¥å¹²ä¸ªå…ƒç´ 
+                    policyMap[ds - 1][0] = 1;// ±ê¼ÇÄ³Ò»ĞĞµÄÈô¸É¸öÔªËØ
                 }
-                // ä½ç†”ç‚¹ç®¡é“
+                // µÍÈÛµã¹ÜµÀ
                 for (int j = 0; j < pipeOneList.size(); j++) {
                     int tank = pipeOneList.get(j);
                     policyMap[ds - 1][tank] = 1;
                 }
             } else {
-                // é«˜ç†”ç‚¹ç®¡é“ã€ä¸å¯åœè¿ã€‘
+                // ¸ßÈÛµã¹ÜµÀ¡¾²»¿ÉÍ£ÔË¡¿
                 for (int j = 0; j < pipeTwoList.size(); j++) {
                     int tank = pipeTwoList.get(j);
                     policyMap[ds - 1][tank] = 1;
@@ -463,7 +464,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * ç®¡é“é€‰æ‹©ç­–ç•¥
+     * ¹ÜµÀÑ¡Ôñ²ßÂÔ
      *
      * @return
      */
@@ -478,14 +479,14 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * é€‰æ‹©æ–°çš„åº”å¯¹ç­–ç•¥
+     * Ñ¡ÔñĞÂµÄÓ¦¶Ô²ßÂÔ
      *
      * @return
      */
     private boolean existPolicies() {
         Integer[][] policies = policyStack.peek();
 
-        // åˆ¤æ–­æ˜¯å¦æ‰€æœ‰çš„æ¨èç­–ç•¥éƒ½å·²ç»å°è¯•è¿‡
+        // ÅĞ¶ÏÊÇ·ñËùÓĞµÄÍÆ¼ö²ßÂÔ¶¼ÒÑ¾­³¢ÊÔ¹ı
         int sum = 0;
         for (int i = 0; i < policies.length; i++) {
             for (int j = policies[i].length - 1; j >= 0; j--) {
@@ -501,27 +502,27 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * å¤„ç†è¾“å…¥çš„å†³ç­–æŒ‡ä»¤
+     * ´¦ÀíÊäÈëµÄ¾ö²ßÖ¸Áî
      *
      * @return
      */
     private boolean process() {
-        // æœ€é•¿å†³ç­–æŒ‡ä»¤åºåˆ—é•¿åº¦
-        int steps = solution.getNumberOfBits() / 2;
+        // ×î³¤¾ö²ßÖ¸ÁîĞòÁĞ³¤¶È
+        int steps = solution.getDecisionVariables().length / 2;
 
-        // ç»˜å‡ºåˆå§‹çš„å›¾åƒ
+        // »æ³ö³õÊ¼µÄÍ¼Ïñ
         if (plotEachStep) {
             Operation.plotSchedule2(operations);
         }
 
         while (loc < steps && !isFinished()) {
 
-            // ç­–ç•¥æ ˆç”Ÿæˆç­–ç•¥ï¼Œå†³ç­–æ ˆç„¶åå°†å¯è¡Œçš„ç­–ç•¥å…¥æ ˆã€æ‰§è¡Œä¹‹å‰æ ‡è®°ç­–ç•¥å·²ç»ä½¿ç”¨è¿‡ï¼Œåˆ‡è®°ï¼ï¼ï¼ã€‘
+            // ²ßÂÔÕ»Éú³É²ßÂÔ£¬¾ö²ßÕ»È»ºó½«¿ÉĞĞµÄ²ßÂÔÈëÕ»¡¾Ö´ĞĞÖ®Ç°±ê¼Ç²ßÂÔÒÑ¾­Ê¹ÓÃ¹ı£¬ÇĞ¼Ç£¡£¡£¡¡¿
             if (policyStack.size() == fragmentStack.size()) {
-                // ç”Ÿæˆæ‰€æœ‰å¯èƒ½çš„ç­–ç•¥ï¼Œå¹¶å°†ç­–ç•¥å…¥æ ˆ
+                // Éú³ÉËùÓĞ¿ÉÄÜµÄ²ßÂÔ£¬²¢½«²ßÂÔÈëÕ»
                 policyStack.push(generateRecommendPolicy());
             } else {
-                // å›æº¯ã€é«˜ç†”ç‚¹ç®¡é“ä¼˜å…ˆï¼ŒæŠ¢å å¼è°ƒåº¦ã€‘
+                // »ØËİ¡¾¸ßÈÛµã¹ÜµÀÓÅÏÈ£¬ÇÀÕ¼Ê½µ÷¶È¡¿
                 while (!existPolicies()) {
                     last();
                     preemptiveScheduling();
@@ -529,16 +530,16 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
             }
 
             if (policyStack.size() != fragmentStack.size() + 1) {
-                // ä¸¤ä¸ªæ ˆæ­£å¸¸æƒ…å†µä¸‹åº”è¯¥ä¿æŒå¤§å°ç›¸å·®1
-                logger.fatal("å‡ºé”™å•¦ï¼šç³»ç»Ÿæ ˆå¼‚å¸¸");
+                // Á½¸öÕ»Õı³£Çé¿öÏÂÓ¦¸Ã±£³Ö´óĞ¡Ïà²î1
+                logger.fatal("³ö´íÀ²£ºÏµÍ³Õ»Òì³£");
                 System.exit(1);
             }
 
             try {
                 next();
             } catch (Exception e) {
-                if (e.getMessage().equals("é«˜ç†”ç‚¹ç®¡é“ä¸å…è®¸åœè¿")) {
-                    // æ ‡è®°å›æº¯
+                if (e.getMessage().equals("¸ßÈÛµã¹ÜµÀ²»ÔÊĞíÍ£ÔË")) {
+                    // ±ê¼Ç»ØËİ
                     Integer[][] policies = policyStack.peek();
                     for (int i = 0; i < policies.length; i++) {
                         if (i + 1 != config.HighOilDS) {
@@ -547,11 +548,11 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
                             }
                         }
                     }
-                } else if (e.getMessage().equals("ä¾›æ²¹ç½å ç”¨å†²çª")) {
-                    logger.fatal("ä¸åº”è¯¥å†å­˜åœ¨ä¾›æ²¹ç½å ç”¨å†²çªé”™è¯¯");
+                } else if (e.getMessage().equals("¹©ÓÍ¹ŞÕ¼ÓÃ³åÍ»")) {
+                    logger.fatal("²»Ó¦¸ÃÔÙ´æÔÚ¹©ÓÍ¹ŞÕ¼ÓÃ³åÍ»´íÎó");
                     e.printStackTrace();
                 } else {
-                    logger.fatal("å­˜åœ¨å…¶ä»–é”™è¯¯");
+                    logger.fatal("´æÔÚÆäËû´íÎó");
                     e.printStackTrace();
                 }
             }
@@ -561,11 +562,11 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * æŠ¢å å¼è°ƒåº¦ç­–ç•¥
+     * ÇÀÕ¼Ê½µ÷¶È²ßÂÔ
      */
     private void preemptiveScheduling() {
         try {
-            // ä¸å†è€ƒè™‘ä½ç†”ç‚¹å¡”
+            // ²»ÔÙ¿¼ÂÇµÍÈÛµãËş
             Integer[][] policyMap = policyStack.peek();
             for (int i = 0; i < policyMap.length; i++) {
                 if (i + 1 != config.HighOilDS) {
@@ -575,13 +576,13 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
                 }
             }
         } catch (Exception e) {
-            logger.fatal("ä¸¥é‡é”™è¯¯");
+            logger.fatal("ÑÏÖØ´íÎó");
             System.exit(1);
         }
     }
 
     /**
-     * è¿›è¡Œä¸‹ä¸€æ­¥å†³ç­–
+     * ½øĞĞÏÂÒ»²½¾ö²ß
      *
      * @param fragment
      * @throws Exception
@@ -590,28 +591,28 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
         try {
             Fragment nextFragment = getFragment();
             if (nextFragment.getTank() != 0 && nextFragment.getVolume() == 0) {
-                logger.fatal("è§£ç é”™è¯¯ï¼šéåœè¿æŒ‡ä»¤ä½†æ˜¯è§£ç ä½“ç§¯ä¸º0");
+                logger.fatal("½âÂë´íÎó£º·ÇÍ£ÔËÖ¸Áîµ«ÊÇ½âÂëÌå»ıÎª0");
                 System.exit(1);
             }
 
             doOperation(nextFragment);
 
-            // ç»˜å‡ºæ‰§è¡Œå®Œä¸‹ä¸€æ­¥æ“ä½œåçš„è°ƒåº¦å›¾
+            // »æ³öÖ´ĞĞÍêÏÂÒ»²½²Ù×÷ºóµÄµ÷¶ÈÍ¼
             if (plotEachStep) {
                 Operation.plotSchedule2(operations);
             }
         } catch (Exception e) {
-            throw new Exception(e.getMessage());// æ¶ˆæ¯ç»§ç»­å‘ä¸Šå±‚ä¼ é€’
+            throw new Exception(e.getMessage());// ÏûÏ¢¼ÌĞøÏòÉÏ²ã´«µİ
         }
     }
 
     /**
-     * å‘å‰å›é€€ä¸€æ­¥
+     * ÏòÇ°»ØÍËÒ»²½
      *
      * @return
      */
     private void last() {
-        // å›é€€ä¸€æ­¥ã€loc==0æ—¶ï¼Œæ— æ³•åé€€ã€‘
+        // »ØÍËÒ»²½¡¾loc==0Ê±£¬ÎŞ·¨ºóÍË¡¿
         if (loc > 0) {
             loc--;
             policyStack.pop();
@@ -619,11 +620,11 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
             Operation operation = null;
             do {
                 operation = operationStack.pop();
-                operations.remove(operation);// ç§»é™¤å†³ç­–
+                operations.remove(operation);// ÒÆ³ı¾ö²ß
             } while (operation.getType() == OperationType.Feeding);
-            removeConfig();// ç§»é™¤æ ˆé¡¶çš„é…ç½®ï¼Œå¹¶å°†configæŒ‡å‘æ–°çš„æ ˆé¡¶é…ç½®
+            removeConfig();// ÒÆ³ıÕ»¶¥µÄÅäÖÃ£¬²¢½«configÖ¸ÏòĞÂµÄÕ»¶¥ÅäÖÃ
 
-            // ç»˜å‡ºè¿”å›åçš„è°ƒåº¦è®¡åˆ’ç”˜ç‰¹å›¾
+            // »æ³ö·µ»ØºóµÄµ÷¶È¼Æ»®¸ÊÌØÍ¼
             if (plotEachStep) {
                 Operation.plotSchedule2(operations);
             }
@@ -631,7 +632,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * åˆ¤æ–­æ˜¯å¦è°ƒåº¦ç»“æŸ
+     * ÅĞ¶ÏÊÇ·ñµ÷¶È½áÊø
      *
      * @return
      */
@@ -650,7 +651,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è·å–æ‰€æœ‰ç½çš„æœ€è¿‘å°†è¦ä½¿ç”¨çš„æ—¶é—´
+     * »ñÈ¡ËùÓĞ¹ŞµÄ×î½ü½«ÒªÊ¹ÓÃµÄÊ±¼ä
      *
      * @param currentTime
      * @return
@@ -671,21 +672,21 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è·å–ç®¡é“çš„åœè¿æ—¶é—´ï¼Œå‡è®¾é«˜ç†”ç‚¹ç®¡é“å’Œä½ç†”ç‚¹ç®¡é“éƒ½å¯ä»¥åœè¿ã€‚ tank=0ä»£è¡¨è¿™æ˜¯ä¸€ä¸ªåœè¿æ“ä½œï¼Œæ ¹æ®dsåˆ¤æ–­æ˜¯é«˜ç†”ç‚¹ç®¡é“åœè¿è¿˜æ˜¯ä½ç†”ç‚¹ç®¡é“åœè¿
+     * »ñÈ¡¹ÜµÀµÄÍ£ÔËÊ±¼ä£¬¼ÙÉè¸ßÈÛµã¹ÜµÀºÍµÍÈÛµã¹ÜµÀ¶¼¿ÉÒÔÍ£ÔË¡£ tank=0´ú±íÕâÊÇÒ»¸öÍ£ÔË²Ù×÷£¬¸ù¾İdsÅĞ¶ÏÊÇ¸ßÈÛµã¹ÜµÀÍ£ÔË»¹ÊÇµÍÈÛµã¹ÜµÀÍ£ÔË
      *
      * @return
      */
     private double[] getChargingEndTime() {
-        // ç®¡é“çš„ä¸ªæ•°
+        // ¹ÜµÀµÄ¸öÊı
         int numOfPipes = config.getPipes().size();
         double[] chargingEndTime = new double[numOfPipes];
 
-        // æ±‚å„ä¸ªè’¸é¦å¡”çš„æ³¨æ²¹ç»“æŸæ—¶é—´
+        // Çó¸÷¸öÕôÁóËşµÄ×¢ÓÍ½áÊøÊ±¼ä
         for (Operation operation : operations) {
             if (operation.getType() == OperationType.Charging || operation.getType() == OperationType.Stop) {
-                // é«˜ç†”ç‚¹ç®¡é“è½¬è¿
+                // ¸ßÈÛµã¹ÜµÀ×ªÔË
                 if (operation.getDs() != config.HighOilDS) {
-                    // æœ€æ™šæ³¨æ²¹ç»“æŸæ—¶é—´
+                    // ×îÍí×¢ÓÍ½áÊøÊ±¼ä
                     if (chargingEndTime[0] < operation.getEnd()) {
                         chargingEndTime[0] = operation.getEnd();
                     }
@@ -701,7 +702,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è·å–æ‰€æœ‰å¡”çš„ç‚¼æ²¹ç»“æŸæ—¶é—´
+     * »ñÈ¡ËùÓĞËşµÄÁ¶ÓÍ½áÊøÊ±¼ä
      *
      * @return
      */
@@ -709,12 +710,12 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
 
         double[] feedEndTime = new double[config.getDSs().size()];
 
-        // æ±‚å„ä¸ªè’¸é¦å¡”çš„ç‚¼æ²¹ç»“æŸæ—¶é—´
+        // Çó¸÷¸öÕôÁóËşµÄÁ¶ÓÍ½áÊøÊ±¼ä
         for (int i = 0; i < config.getDSs().size(); i++) {
             int ds = i + 1;
             for (Operation operation : operations) {
                 if (operation.getDs() == ds && operation.getType() == OperationType.Feeding) {
-                    // æœ€æ™šç‚¼æ²¹ç»“æŸæ—¶é—´
+                    // ×îÍíÁ¶ÓÍ½áÊøÊ±¼ä
                     if (feedEndTime[i] < operation.getEnd()) {
                         feedEndTime[i] = operation.getEnd();
                     }
@@ -722,9 +723,9 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
             }
         }
 
-        // æ ‡è®°å·²ç»å®Œæˆç‚¼æ²¹è®¡åˆ’çš„å¡”
+        // ±ê¼ÇÒÑ¾­Íê³ÉÁ¶ÓÍ¼Æ»®µÄËş
         for (int i = 0; i < config.getDSs().size(); i++) {
-            // å®Œæˆç‚¼æ²¹è®¡åˆ’çš„è’¸é¦å¡”ä¸åœ¨è€ƒè™‘èŒƒå›´
+            // Íê³ÉÁ¶ÓÍ¼Æ»®µÄÕôÁóËş²»ÔÚ¿¼ÂÇ·¶Î§
             if (config.getDSs().get(i).getNextOilVolume() == -1) {
                 feedEndTime[i] = Double.MAX_VALUE;
                 continue;
@@ -734,21 +735,21 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è·å–ä¾›æ²¹ç½çš„æœ€æ—©é‡Šæ”¾æ—¶é—´ï¼Œä¸ºåœè¿æä¾›å‚è€ƒ
+     * »ñÈ¡¹©ÓÍ¹ŞµÄ×îÔçÊÍ·ÅÊ±¼ä£¬ÎªÍ£ÔËÌá¹©²Î¿¼
      *
      * @return
      */
     public double getEarliestAvailableTime(double currentTime) {
         Map<Integer, Double> availableTimes = new HashMap<Integer, Double>();
 
-        // é€ä¸ªç½åœ°ç¡®å®šçŠ¶æ€
+        // Öğ¸ö¹ŞµØÈ·¶¨×´Ì¬
         for (int i = 0; i < config.getTanks().size(); i++) {
             int tank = i + 1;
             for (Operation operation : operations) {
-                // æ‰¾åˆ°å¯¹åº”çš„ç½
+                // ÕÒµ½¶ÔÓ¦µÄ¹Ş
                 if (operation.getTank() == tank && operation.getEnd() > currentTime) {
 
-                    // åŠ çƒ­æˆ–ç‚¼æ²¹ç»“æŸåå¯ç”¨
+                    // ¼ÓÈÈ»òÁ¶ÓÍ½áÊøºó¿ÉÓÃ
                     if (operation.getType() == OperationType.Hoting || operation.getType() == OperationType.Feeding) {
 
                         availableTimes.put(tank, operation.getEnd());
@@ -769,7 +770,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è·å–ä¾›æ²¹ç½çš„çŠ¶æ€
+     * »ñÈ¡¹©ÓÍ¹ŞµÄ×´Ì¬
      *
      * @return
      */
@@ -777,14 +778,14 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
         Operation.sortOperation(operations);
 
         DefaultTableModel model = new DefaultTableModel();
-        Object[] columnNames = {"ä¾›æ²¹ç½", "å®¹é‡", "åŸæ²¹ç§ç±»", "åŸæ²¹ä½“ç§¯", "å¼€å§‹æ—¶é—´", "ç»“æŸæ—¶é—´", "çŠ¶æ€"};
+        Object[] columnNames = {"¹©ÓÍ¹Ş", "ÈİÁ¿", "Ô­ÓÍÖÖÀà", "Ô­ÓÍÌå»ı", "¿ªÊ¼Ê±¼ä", "½áÊøÊ±¼ä", "×´Ì¬"};
         model.setColumnIdentifiers(columnNames);
 
         for (int i = 0; i < config.getTanks().size(); i++) {
             int tank = i + 1;
             Object[] data = {tank, config.getTanks().get(tank - 1).getCapacity(), 0, 0, 0, 0, "empty"};
 
-            // è®°å½•å‰ä¸€å†³ç­–å’Œåä¸€å†³ç­–
+            // ¼ÇÂ¼Ç°Ò»¾ö²ßºÍºóÒ»¾ö²ß
             Operation lastOperation = null;
             Operation nextOperation = null;
             for (Operation operation : operations) {
@@ -798,45 +799,45 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
                 }
             }
 
-            // æ²¡æœ‰ä»»ä½•å†³ç­–è®°å½•
+            // Ã»ÓĞÈÎºÎ¾ö²ß¼ÇÂ¼
             if (lastOperation == null && nextOperation == null) {
-                // ç©ºç½çš„ç‰¹æ®Šå¤„ç†
+                // ¿Õ¹ŞµÄÌØÊâ´¦Àí
                 data[2] = 0;
                 data[3] = 0;
                 data[4] = 0;
                 data[5] = 0;
                 data[6] = "empty";
             } else {
-                // å‰ä¸€ä¸ªå†³ç­–éç©º
+                // Ç°Ò»¸ö¾ö²ß·Ç¿Õ
                 if (lastOperation != null) {
-                    // æ ¹æ®ä¸Šæ¬¡æ“ä½œçš„ç±»å‹ç¡®å®šæ˜¯ç­‰å¾…è¿˜æ˜¯ç©ºé—²
+                    // ¸ù¾İÉÏ´Î²Ù×÷µÄÀàĞÍÈ·¶¨ÊÇµÈ´ı»¹ÊÇ¿ÕÏĞ
                     if (lastOperation.getStart() <= currentTime && currentTime < lastOperation.getEnd()) {
                         if (lastOperation.getType() == OperationType.Hoting) {
-                            // æ³¨æ²¹çŠ¶æ€
+                            // ×¢ÓÍ×´Ì¬
                             data[2] = lastOperation.getOil();
                             data[3] = MathUtil.round(
                                     lastOperation.getVol()
                                             - (currentTime - lastOperation.getStart()) * lastOperation.getSpeed(),
-                                    config.NumOfDivide);// è®¡ç®—å‰©ä½™ä½“ç§¯
+                                    config.NumOfDivide);// ¼ÆËãÊ£ÓàÌå»ı
                             data[4] = lastOperation.getStart();
                             data[5] = lastOperation.getEnd();
                             data[6] = "hoting";
                         } else if (lastOperation.getType() == OperationType.Charging) {
-                            // æ³¨æ²¹çŠ¶æ€
+                            // ×¢ÓÍ×´Ì¬
                             data[2] = lastOperation.getOil();
                             data[3] = MathUtil.round(
                                     (currentTime - lastOperation.getStart()) * lastOperation.getSpeed(),
-                                    config.NumOfDivide);// è®¡ç®—æ³¨æ²¹ä½“ç§¯
+                                    config.NumOfDivide);// ¼ÆËã×¢ÓÍÌå»ı
                             data[4] = lastOperation.getStart();
                             data[5] = lastOperation.getEnd();
                             data[6] = "charging";
                         } else if (lastOperation.getType() == OperationType.Feeding) {
-                            // ä¾›æ²¹çŠ¶æ€
+                            // ¹©ÓÍ×´Ì¬
                             data[2] = lastOperation.getOil();
                             data[3] = MathUtil.round(
                                     lastOperation.getVol()
                                             - (currentTime - lastOperation.getStart()) * lastOperation.getSpeed(),
-                                    config.NumOfDivide);// è®¡ç®—å‰©ä½™ä½“ç§¯
+                                    config.NumOfDivide);// ¼ÆËãÊ£ÓàÌå»ı
                             data[4] = lastOperation.getStart();
                             data[5] = lastOperation.getEnd();
                             data[6] = "feeding";
@@ -844,14 +845,14 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
                     } else {
                         if (lastOperation.getType() == OperationType.Charging) {
 
-                            // ç­‰å¾…çŠ¶æ€
+                            // µÈ´ı×´Ì¬
                             data[2] = lastOperation.getOil();
                             data[3] = MathUtil.round(lastOperation.getVol(), config.NumOfDivide);
                             data[4] = lastOperation.getStart();
                             data[5] = lastOperation.getEnd();
                             data[6] = "waiting";
                         } else {
-                            // ç­‰å¾…çŠ¶æ€
+                            // µÈ´ı×´Ì¬
                             data[2] = 0;
                             data[3] = 0;
                             data[4] = 0;
@@ -861,7 +862,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
                     }
                 } else if (nextOperation.getType() == OperationType.Feeding) {
 
-                    // å‰ä¸€å†³ç­–ä¸ºç©ºï¼Œåˆå§‹åº“å­˜çš„ç‰¹æ®Šå¤„ç†
+                    // Ç°Ò»¾ö²ßÎª¿Õ£¬³õÊ¼¿â´æµÄÌØÊâ´¦Àí
                     data[2] = nextOperation.getOil();
                     data[3] = MathUtil.round(nextOperation.getVol(), config.NumOfDivide);
                     data[4] = nextOperation.getStart();
@@ -877,20 +878,20 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * åˆå§‹åŒ–ä»¿çœŸ
+     * ³õÊ¼»¯·ÂÕæ
      */
     private void initSimulation(Solution solution) {
         this.solution = solution;
 
-        // åˆå§‹é…ç½®å…¥æ ˆ
+        // ³õÊ¼ÅäÖÃÈëÕ»
         config.loadConfig();
         Config config_Clone = CloneUtils.clone(config);
         configStack.push(config_Clone);
 
-        // ç‚¼æ²¹ç»“æŸæ—¶é—´
+        // Á¶ÓÍ½áÊøÊ±¼ä
         double[] feedEndTime = new double[config.getDSs().size()];
 
-        // æ‰§è¡Œåˆå§‹æŒ‡æ´¾(ä½ç†”ç‚¹å¡”)
+        // Ö´ĞĞ³õÊ¼Ö¸ÅÉ(µÍÈÛµãËş)
         for (int i = 0; i < config.getTanks().size(); i++) {
             TankObject tankObject = config.getTanks().get(i);
             double vol = MathUtil.round(tankObject.getVolume(), config.Precision);
@@ -906,15 +907,15 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
 
                     Operation feeding = new Operation(OperationType.Feeding, tank, ds,
                             MathUtil.round(feedEndTime[ds - 1], config.Precision),
-                            MathUtil.round(feedEndTime[ds - 1] + feedTime, config.Precision), vol, oiltype, speed, 0);// åˆå§‹åº“å­˜å°±åœ¨ç‚¼æ²¹å‚å†…ï¼Œç”¨0è¡¨ç¤º
+                            MathUtil.round(feedEndTime[ds - 1] + feedTime, config.Precision), vol, oiltype, speed, 0);// ³õÊ¼¿â´æ¾ÍÔÚÁ¶ÓÍ³§ÄÚ£¬ÓÃ0±íÊ¾
                     operations.add(feeding);
 
-                    // æ›´æ–°ç‚¼æ²¹ç»“æŸæ—¶é—´
+                    // ¸üĞÂÁ¶ÓÍ½áÊøÊ±¼ä
                     feedEndTime[ds - 1] += feedTime;
                 }
             }
         }
-        // æ‰§è¡Œåˆå§‹æŒ‡æ´¾(é«˜ç†”ç‚¹å¡”)
+        // Ö´ĞĞ³õÊ¼Ö¸ÅÉ(¸ßÈÛµãËş)
         int tank = Config.HotTank;
         int ds = config.HighOilDS;
         TankObject tankObject = config.getTanks().get(tank - 1);
@@ -931,7 +932,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
         Operation charging = new Operation(OperationType.Charging, tank, config.HighOilDS,
                 MathUtil.round(hotingTime, config.Precision),
                 MathUtil.round(hotingTime + chargingTime, config.Precision), vPipe, oiltype, Config.HotingSpeed, 0);
-        // åŠ çƒ­ç®¡é“åçš„ä½ç†”ç‚¹åŸæ²¹ä¼šé‡æ–°ä¾›ç»™è’¸é¦å¡”ç‚¼æ²¹
+        // ¼ÓÈÈ¹ÜµÀºóµÄµÍÈÛµãÔ­ÓÍ»áÖØĞÂ¹©¸øÕôÁóËşÁ¶ÓÍ
         ds = config.getTanks().get(tank - 1).getAssign();
         feedingSpeed = Config.getInstance().getDSs().get(ds - 1).getSpeed();
         feedingTime = MathUtil.divide(vPipe, feedingSpeed);
@@ -946,7 +947,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * è®°å½•
+     * ¼ÇÂ¼
      *
      * @param col
      * @param row
@@ -960,36 +961,36 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
     }
 
     /**
-     * æ‰§è¡Œå†³ç­–
+     * Ö´ĞĞ¾ö²ß
      *
      * @param fragment
      * @throws Exception
      */
     private void doOperation(Fragment fragment) throws Exception {
 
-        // è·å–ä¸‹ä¸€æ­¥æ“ä½œ
+        // »ñÈ¡ÏÂÒ»²½²Ù×÷
         int tank = fragment.getTank();
         int ds = fragment.getDs();
         double speed = fragment.getSpeed();
         double vol = fragment.getVolume();
-        // æ ‡è®°å·²ç»æ‰§è¡Œè¿‡
+        // ±ê¼ÇÒÑ¾­Ö´ĞĞ¹ı
         record(tank, ds);
 
         double[] feedEndTimes = getFeedingEndTime();
 
-        // åˆ¤æ–­éœ€è¦è½¬è¿çš„ç®¡é“å’Œè½¬è¿ç»“æŸæ—¶é—´
+        // ÅĞ¶ÏĞèÒª×ªÔËµÄ¹ÜµÀºÍ×ªÔË½áÊøÊ±¼ä
         int pipe = getCurrentPipe(ds);
         double currentTime = getCurrentTime(pipe);
 
-        // å¤åˆ¶ä¸€ä»½æœªå˜åŒ–çš„é…ç½®ã€æ›´æ–°å¹¶å…¥æ ˆï¼ŒåŸæ¥çš„é…ç½®ä¿¡æ¯ä¸èƒ½å˜åŒ–ã€‘
+        // ¸´ÖÆÒ»·İÎ´±ä»¯µÄÅäÖÃ¡¾¸üĞÂ²¢ÈëÕ»£¬Ô­À´µÄÅäÖÃĞÅÏ¢²»ÄÜ±ä»¯¡¿
         Config config_Clone = newConfig();
 
-        // åˆ¤æ–­æ˜¯å¦åœè¿
+        // ÅĞ¶ÏÊÇ·ñÍ£ÔË
         if (tank == 0) {
 
-            // 3.é«˜ç†”ç‚¹ç®¡é“ä¸å…è®¸åœè¿
+            // 3.¸ßÈÛµã¹ÜµÀ²»ÔÊĞíÍ£ÔË
             if (ds == config.HighOilDS) {
-                throw new Exception("é«˜ç†”ç‚¹ç®¡é“ä¸å…è®¸åœè¿");// ã€æ³¨æ„ï¼šæœ¬æ³¨é‡Šå†…å®¹ä¸å¯å˜ã€‘
+                throw new Exception("¸ßÈÛµã¹ÜµÀ²»ÔÊĞíÍ£ÔË");// ¡¾×¢Òâ£º±¾×¢ÊÍÄÚÈİ²»¿É±ä¡¿
             }
 
             double availableTime = getEarliestAvailableTime(currentTime);
@@ -997,49 +998,49 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
                     MathUtil.round(currentTime, config.Precision), MathUtil.round(availableTime, config.Precision), vol,
                     0, 0, 0);
 
-            // æ›´æ–°è¿›æ–™åŒ…å’Œç‚¼æ²¹ç»“æŸæ—¶é—´
+            // ¸üĞÂ½øÁÏ°üºÍÁ¶ÓÍ½áÊøÊ±¼ä
             operations.add(stoping);
             operationStack.push(stoping);
         } else {
 
-            // ç¡®å®šåŸæ²¹ç±»å‹
+            // È·¶¨Ô­ÓÍÀàĞÍ
             int oiltype = config.getDSs().get(ds - 1).getNextOilType();
-            // ç¡®å®šä¸‹ä¸€åŸæ²¹æ¥è‡ªäºå“ªä¸€ä¸ªæ¸¯å£
+            // È·¶¨ÏÂÒ»Ô­ÓÍÀ´×ÔÓÚÄÄÒ»¸ö¸Û¿Ú
             int site = config.getDSs().get(ds - 1).getWhereNextOilFrom();
-            // ç¡®å®šæ³¨æ²¹æ—¶é—´
+            // È·¶¨×¢ÓÍÊ±¼ä
             double chargingTime = MathUtil.divide(vol, speed);
 
-            // ç¡®å®šç‚¼æ²¹é€Ÿç‡å’Œç‚¼æ²¹æ—¶é—´
+            // È·¶¨Á¶ÓÍËÙÂÊºÍÁ¶ÓÍÊ±¼ä
             double feedingSpeed = config.getDSs().get(ds - 1).getSpeed();
             double feedingTime = MathUtil.divide(vol, feedingSpeed);
 
-            // ç¡®å®šå¼€å§‹ç‚¼æ²¹æ—¶é—´
+            // È·¶¨¿ªÊ¼Á¶ÓÍÊ±¼ä
             double feedingStartTime = Math.max(feedEndTimes[ds - 1], currentTime + chargingTime + config.RT);
 
-            // 2.åˆ¤æ–­æœ¬æ¬¡æ³¨æ²¹æ˜¯å¦å’Œåˆ«çš„æ“ä½œæœ‰å†²çª
+            // 2.ÅĞ¶Ï±¾´Î×¢ÓÍÊÇ·ñºÍ±ğµÄ²Ù×÷ÓĞ³åÍ»
             Map<Integer, Double> usingTimes = getDeadlineTimeOfAllTanks(currentTime);
             double feedEndTime = MathUtil.round(MathUtil.add(feedingStartTime, feedingTime), config.Precision);
             if (usingTimes.containsKey(tank) && usingTimes.get(tank) < feedEndTime) {
                 Operation.plotSchedule2(operations);
-                throw new Exception("ä¾›æ²¹ç½å ç”¨å†²çª");// ã€ä¸å…è®¸ã€‘
+                throw new Exception("¹©ÓÍ¹ŞÕ¼ÓÃ³åÍ»");// ¡¾²»ÔÊĞí¡¿
             }
 
-            // ç¡®å®šæ“ä½œ
+            // È·¶¨²Ù×÷
             Operation charging = new Operation(OperationType.Charging, tank, ds,
                     MathUtil.round(currentTime, config.Precision), MathUtil.add(currentTime, chargingTime), vol,
                     oiltype, speed, site);
             Operation feeding = new Operation(OperationType.Feeding, tank, ds, feedingStartTime, feedEndTime, vol,
                     oiltype, feedingSpeed, site);
 
-            // æ›´æ–°è¿›æ–™åŒ…å’Œç‚¼æ²¹ç»“æŸæ—¶é—´
+            // ¸üĞÂ½øÁÏ°üºÍÁ¶ÓÍ½áÊøÊ±¼ä
             operations.add(charging);
             operations.add(feeding);
-            operationStack.push(charging);// æ³¨æ„é¡ºåºï¼Œå…ˆchargingåfeeding
+            operationStack.push(charging);// ×¢ÒâË³Ğò£¬ÏÈchargingºófeeding
             operationStack.push(feeding);
-            config_Clone.getDSs().get(ds - 1).updateOilVolume(vol);// æ›´æ–°æ–°çš„é…ç½®
+            config_Clone.getDSs().get(ds - 1).updateOilVolume(vol);// ¸üĞÂĞÂµÄÅäÖÃ
         }
-        fragmentStack.push(fragment);// å†³ç­–å…¥æ ˆ
-        addConfig(config_Clone);// å°†æ–°çš„é…ç½®å‹å…¥é…ç½®æ ˆä¸­ï¼Œå¹¶æ›´æ–°configçš„æŒ‡å‘
+        fragmentStack.push(fragment);// ¾ö²ßÈëÕ»
+        addConfig(config_Clone);// ½«ĞÂµÄÅäÖÃÑ¹ÈëÅäÖÃÕ»ÖĞ£¬²¢¸üĞÂconfigµÄÖ¸Ïò
 
         loc++;
     }

@@ -1,8 +1,8 @@
 package opt.jmetal.util.experiment.util;
 
-import oil.sim.common.FileHelper;
-import oil.sim.common.ListHelper;
-import oil.sim.common.MathUtil;
+import opt.jmetal.problem.oil.sim.common.FileHelper;
+import opt.jmetal.problem.oil.sim.common.ListHelper;
+import opt.jmetal.problem.oil.sim.common.MathUtil;
 import opt.jmetal.algorithm.Algorithm;
 import opt.jmetal.solution.Solution;
 import opt.jmetal.util.fileoutput.SolutionListOutput;

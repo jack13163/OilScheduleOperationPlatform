@@ -318,7 +318,7 @@ public class Solution implements Serializable {
 	 * 
 	 * @return the distance to k-nearest neighbor.
 	 */
-	double getKDistance() {
+	public double getKDistance() {
 		return kDistance_;
 	} // getKDistance
 

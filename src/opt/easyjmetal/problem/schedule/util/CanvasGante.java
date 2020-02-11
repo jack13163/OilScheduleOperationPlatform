@@ -1,6 +1,6 @@
 package opt.easyjmetal.problem.schedule.util;
 
-import oil.sim.common.MatrixHelper;
+import opt.jmetal.problem.oil.sim.common.MatrixHelper;
 import org.ejml.data.DenseMatrix64F;
 
 import java.awt.*;

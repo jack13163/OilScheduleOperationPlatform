@@ -327,7 +327,7 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
      *
      * @return
      */
-    public Fragment getFragment() {
+    public Fragment getFragment() throws JMException {
         // 将规则对象加载到工作内存空间【必须要传入三个参数，分别为config/solution/loc】
         FactObject factObject = new FactObject();
         factObject.setConfig(config);

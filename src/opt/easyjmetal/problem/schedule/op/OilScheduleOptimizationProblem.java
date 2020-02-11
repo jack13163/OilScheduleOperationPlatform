@@ -26,7 +26,7 @@ public class OilScheduleOptimizationProblem extends Problem {
     private boolean ShowDetail = true;
 
     /**
-     * Creates a new instance of oil schedule problem.
+     * Creates a new instance of opt.jmetal.problem.oil schedule problem.
      */
     public OilScheduleOptimizationProblem(String ruleName) {
         this(false, ruleName);

@@ -1,5 +1,6 @@
 package opt.easyjmetal.problem.schedule.rules.impl;
 
+import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.problem.schedule.Config;
 import opt.easyjmetal.problem.schedule.models.FactObject;
 import opt.easyjmetal.problem.schedule.models.Fragment;
@@ -7,7 +8,7 @@ import opt.easyjmetal.problem.schedule.op.OPOilScheduleSimulationScheduler;
 import opt.easyjmetal.problem.schedule.rules.AbstractRule;
 import opt.easyjmetal.problem.schedule.util.CodeHelper;
 import opt.easyjmetal.problem.schedule.util.ISimulationScheduler;
-import opt.jmetal.solution.DoubleSolution;
+import opt.easyjmetal.util.JMException;
 import opt.jmetal.util.JMetalLogger;
 
 /**
@@ -24,14 +25,14 @@ public class Backtracking extends AbstractRule {
     }
 
     @Override
-    public Fragment decode(FactObject factObject) {
+    public Fragment decode(FactObject factObject) throws JMException {
         OPOilScheduleSimulationScheduler scheduler = (OPOilScheduleSimulationScheduler) _scheduler;
         int numOfDSs = factObject.getConfig().getDSs().size();
         int numOfTanks = factObject.getConfig().getTanks().size();
         Integer[][] policies = scheduler.policyStack.peek();// 可用策略
         int loc = factObject.getLoc();
         Config config = factObject.getConfig();
-        DoubleSolution solution = ((DoubleSolution) factObject.getSolution());
+        Solution solution = factObject.getSolution();
         int tank = -1;
         int ds = -1;
         double vol = -1.0;
@@ -55,7 +56,7 @@ public class Backtracking extends AbstractRule {
             backFlag = true;
         } else {
             try {
-                double code1 = solution.getVariableValue(loc * 2).doubleValue();
+                double code1 = solution.getDecisionVariables()[loc * 2].getValue();
 
                 // 3.1 确定蒸馏塔
                 if (emergencyDs > 0) {
@@ -176,7 +177,7 @@ public class Backtracking extends AbstractRule {
         double speed = 0;
         try {
             // 解码转运速度
-            double code2 = solution.getVariableValue(loc * 2 + 1).doubleValue();
+            double code2 = solution.getDecisionVariables()[loc * 2 + 1].getValue();
 
             // 判断转运管道，并选择转运速度
             double[] chargingSpeeds = scheduler.getChargingSpeed(ds);

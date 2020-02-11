@@ -17,8 +17,8 @@ import opt.jmetal.util.SolutionListUtils;
 import opt.jmetal.util.comparator.DominanceComparator;
 import opt.jmetal.util.evaluator.SolutionListEvaluator;
 
-import oil.sim.common.CloneUtils;
-import oil.sim.ui.MainMethod;
+import opt.jmetal.problem.oil.sim.common.CloneUtils;
+import opt.jmetal.problem.oil.sim.ui.MainMethod;
 
 /**
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
