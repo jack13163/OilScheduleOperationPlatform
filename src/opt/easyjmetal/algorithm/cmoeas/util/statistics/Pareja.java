@@ -16,14 +16,12 @@ public class Pareja implements Comparable {
 
   public int compareTo (Object o1) { //ordena por valor absoluto
 
-    if (Math.abs(this.valor) > Math.abs(((opt.easyjmetal.experiments.util.Pareja)o1).valor)){
+    if (Math.abs(this.valor) > Math.abs(((Pareja)o1).valor)){
       //return -1;
 	return 1;
-    }else if (Math.abs(this.valor) < Math.abs(((opt.easyjmetal.experiments.util.Pareja)o1).valor)){
+    }else if (Math.abs(this.valor) < Math.abs(((Pareja)o1).valor)){
       //return 1;
 	return -1;
     }else return 0;
   }
-
-
 }

@@ -20,7 +20,7 @@ public class ISDEPLUS_CDP extends Algorithm {
      */
     public ISDEPLUS_CDP(Problem problem) {
         super(problem);
-    } // NSGAIII
+    }
 
     private SolutionSet population_;
     private SolutionSet external_archive_;

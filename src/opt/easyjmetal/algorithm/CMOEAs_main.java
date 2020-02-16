@@ -23,7 +23,7 @@ public class CMOEAs_main {
         // 0 represents for DE, 1 represents for SBX
         int crossoverMethod = 1;
         //"MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "MOEAD_CDP", "C_MOEAD", "NSGAII_CDP", "PPS_MOEAD", "NSGAIII_CDP", "SPEA2_CDP"
-        batchRun(new String[]{"SPEA2_CDP"}, crossoverMethod);
+        batchRun(new String[]{"MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "MOEAD_CDP", "C_MOEAD", "NSGAII_CDP", "PPS_MOEAD", "NSGAIII_CDP", "SPEA2_CDP"}, crossoverMethod);
     }
 
     private static void batchRun(String[] methods, int crossMethod) throws Exception {
@@ -48,7 +48,7 @@ public class CMOEAs_main {
 
         int popSize = 100;
         int neighborSize = (int) (0.1 * popSize);
-        int maxFES = 10000;
+        int maxFES = 50000;
         int updateNumber = 2;
         double deDelta = 0.9;
         double DeCrossRate = 1.0;
@@ -65,7 +65,7 @@ public class CMOEAs_main {
 
         String mainPath = System.getProperty("user.dir");
         String weightPath = "resources/MOEAD_Weights";// 权重文件路径
-        int runtime = 5;// 独立运行次数
+        int runtime = 10;// 独立运行次数
         Boolean isDisplay = false;
         int plotFlag = 0; // 0 for the working population; 1 for the external archive
 

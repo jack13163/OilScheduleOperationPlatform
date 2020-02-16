@@ -21,7 +21,6 @@
 
 package opt.easyjmetal.qualityindicator;
 
-import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.qualityindicator.util.MetricsUtil;
 
@@ -31,26 +30,26 @@ import opt.easyjmetal.qualityindicator.util.MetricsUtil;
 public class QualityIndicator {
 	SolutionSet trueParetoFront_;
 	double trueParetoFrontHypervolume_;
-	Problem problem_;
+	int numberOfObjectives_;
 	public MetricsUtil utils_;
 
 	/**
 	 * Constructor
 	 * 
-	 * @param problem
-	 *            The problem
+	 * @param numOfObjects
+	 *            目标个数
 	 * @param paretoFrontFile
 	 *            Pareto front file
 	 */
-	public QualityIndicator(Problem problem, String paretoFrontFile) {
-		problem_ = problem;
+	public QualityIndicator(int numOfObjects, String paretoFrontFile) {
 		utils_ = new MetricsUtil();
+		numberOfObjectives_ = numOfObjects;
 		trueParetoFront_ = utils_.readNonDominatedSolutionSet(paretoFrontFile);
 		trueParetoFrontHypervolume_ = new Hypervolume().hypervolume(
 				trueParetoFront_.writeObjectivesToMatrix(),
 				trueParetoFront_.writeObjectivesToMatrix(),
-				problem_.getNumberOfObjectives());
-	} // Constructor
+				numOfObjects);
+	}
 
 	/**
 	 * Returns the hypervolume of solution set
@@ -63,8 +62,8 @@ public class QualityIndicator {
 		return new Hypervolume().hypervolume(
 				solutionSet.writeObjectivesToMatrix(),
 				trueParetoFront_.writeObjectivesToMatrix(),
-				problem_.getNumberOfObjectives());
-	} // getHypervolume
+				numberOfObjectives_);
+	}
 
 	/**
 	 * Returns the hypervolume of the true Pareto front
@@ -86,8 +85,8 @@ public class QualityIndicator {
 		return new InvertedGenerationalDistance().invertedGenerationalDistance(
 				solutionSet.writeObjectivesToMatrix(),
 				trueParetoFront_.writeObjectivesToMatrix(),
-				problem_.getNumberOfObjectives());
-	} // getIGD
+				numberOfObjectives_);
+	}
 
 	/**
 	 * Returns the generational distance of solution set
@@ -100,8 +99,8 @@ public class QualityIndicator {
 		return new GenerationalDistance().generationalDistance(
 				solutionSet.writeObjectivesToMatrix(),
 				trueParetoFront_.writeObjectivesToMatrix(),
-				problem_.getNumberOfObjectives());
-	} // getGD
+				numberOfObjectives_);
+	}
 
 	/**
 	 * Returns the spread of solution set
@@ -113,8 +112,8 @@ public class QualityIndicator {
 	public double getSpread(SolutionSet solutionSet) {
 		return new Spread().spread(solutionSet.writeObjectivesToMatrix(),
 				trueParetoFront_.writeObjectivesToMatrix(),
-				problem_.getNumberOfObjectives());
-	} // getGD
+				numberOfObjectives_);
+	}
 
 	/**
 	 * Returns the epsilon indicator of solution set
@@ -126,6 +125,6 @@ public class QualityIndicator {
 	public double getEpsilon(SolutionSet solutionSet) {
 		return new Epsilon().epsilon(solutionSet.writeObjectivesToMatrix(),
 				trueParetoFront_.writeObjectivesToMatrix(),
-				problem_.getNumberOfObjectives());
-	} // getEpsilon
-} // QualityIndicator
+				numberOfObjectives_);
+	}
+}

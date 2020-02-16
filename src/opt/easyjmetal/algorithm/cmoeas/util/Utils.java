@@ -22,15 +22,26 @@
 package opt.easyjmetal.algorithm.cmoeas.util;
 
 import opt.easyjmetal.core.*;
+import opt.easyjmetal.qualityindicator.Epsilon;
+import opt.easyjmetal.qualityindicator.Hypervolume;
+import opt.easyjmetal.qualityindicator.InvertedGenerationalDistance;
+import opt.easyjmetal.qualityindicator.Spread;
 import opt.easyjmetal.util.*;
 import opt.easyjmetal.util.comparators.CrowdingComparator;
+import opt.easyjmetal.util.sqlite.SqlUtils;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utilities methods to used by MOEA/D
  */
 public class Utils {
+    public static final String resultBaseDirectory_ = "result/easyjmetal";
 
     public static double distVector(double[] vector1, double[] vector2) {
         int dim = vector1.length;
@@ -310,5 +321,130 @@ public class Utils {
             externalArchive = externalArchive.union(ranking.getSubfront(0));
         }
         return externalArchive;
+    }
+
+
+
+
+    /**
+     * Generate the Pareto Front
+     *
+     * @param algorithmNameList_ 算法列表
+     * @param problemList_       问题列表
+     * @param independentRuns_   独立运行次数
+     */
+    public static void generateParetoFront(String[] algorithmNameList_, String[] problemList_,
+                                           int independentRuns_) throws JMException {
+        for (String problemName : problemList_) {
+            String paretoFrontPath = resultBaseDirectory_ + "/";
+            List<Solution> solutionList = new ArrayList<>();
+
+            // 读取某一问题的所有结果
+            for (int numRun = 0; numRun < independentRuns_; numRun++) {
+                for (String algorithmName : algorithmNameList_) {
+                    String tableName = problemName + "_" + (numRun + 1);
+                    SolutionSet tmp = SqlUtils.SelectData(algorithmName, tableName);
+                    for (int i = 0; i < tmp.size(); i++) {
+                        solutionList.add(tmp.get(i));
+                    }
+                }
+            }
+
+            // 进行非支配排序，获取非支配解集
+            SolutionSet solutionSet = new SolutionSet(solutionList.size());
+            for (int i = 0; i < solutionList.size(); i++) {
+                solutionSet.add(solutionList.get(i));
+            }
+            Ranking ranking = new Ranking(solutionSet);
+            SolutionSet nondominatedSolutionSet = ranking.getSubfront(0);
+
+            // 输出非支配解集
+            File dir = new File(paretoFrontPath);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            nondominatedSolutionSet.printObjectivesToFile(paretoFrontPath + problemName + ".pf");
+        }
+    }
+
+
+    /**
+     * Generate the Quality Indicators
+     *
+     * @param algorithmName
+     * @param problemName
+     * @param indicatorName
+     * @param runId         从1开始
+     */
+    public static double generateQualityIndicators(String algorithmName, String problemName,
+                                                   String indicatorName, int runId) throws JMException {
+        double value = 0;
+
+        String paretoFrontPath = resultBaseDirectory_ + "/" + problemName + ".pf";
+        double[][] trueFront = new Hypervolume().utils_.readFront(paretoFrontPath);
+        String dbName = algorithmName;
+        String tableName = problemName + "_" + runId;
+        double[][] solutionFront = SqlUtils.SelectData(dbName, tableName).writeObjectivesToMatrix();
+
+        if (indicatorName.equals("HV")) {
+            Hypervolume indicators = new Hypervolume();
+            value = indicators.hypervolume(solutionFront, trueFront, trueFront[0].length);
+        }
+        if (indicatorName.equals("SPREAD")) {
+            Spread indicators = new Spread();
+            value = indicators.spread(solutionFront, trueFront, trueFront[0].length);
+        }
+        if (indicatorName.equals("IGD")) {
+            InvertedGenerationalDistance indicators = new InvertedGenerationalDistance();
+            value = indicators.invertedGenerationalDistance(solutionFront, trueFront, trueFront[0].length);
+        }
+        if (indicatorName.equals("EPSILON")) {
+            Epsilon indicators = new Epsilon();
+            value = indicators.epsilon(solutionFront, trueFront, trueFront[0].length);
+        }
+
+        return value;
+    }
+
+    /**
+     * Generate the Quality Indicators
+     *
+     * @param algorithmNameList_ 算法列表
+     * @param problemList_       问题列表
+     * @param indicatorList_     指标列表
+     * @param independentRuns_   独立运行次数
+     */
+    public static void generateQualityIndicators(String[] algorithmNameList_, String[] problemList_,
+                                                 String[] indicatorList_, int independentRuns_) throws JMException {
+        if (indicatorList_.length > 0) {
+            for (String algorithmName : algorithmNameList_) {
+                for (String problemName : problemList_) {
+                    for (String indicator : indicatorList_) {
+
+                        try {
+                            // 输出到文件
+                            String dirName = resultBaseDirectory_ + "/data/" + algorithmName + "/" + problemName + "/";
+                            File file = new File(dirName);
+                            if (!file.exists()) {
+                                file.mkdirs();// 不存在，则创建目录
+                            }
+                            String filepath = dirName + indicator;
+                            FileWriter writer = new FileWriter(filepath);
+
+                            // 计算每次实验的指标值
+                            for (int numRun = 1; numRun <= independentRuns_; numRun++) {
+                                double value = generateQualityIndicators(algorithmName, problemName, indicator, numRun);
+                                writer.write(String.format("%.5f\n", value));
+                            }
+
+                            writer.flush();
+                            writer.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
     }
 }

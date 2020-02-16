@@ -144,4 +144,4 @@ public class SPEA2_CDP extends Algorithm {
 
         return population;
     }
-} // SPEA2
+}

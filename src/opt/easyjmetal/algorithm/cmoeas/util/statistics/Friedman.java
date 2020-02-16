@@ -7,18 +7,22 @@ import java.util.Vector;
 
 public class Friedman {
 
-    String resultBaseDirectory_ = "result/easyjmetal";
-
-    public Friedman() {
-
-    }
+    public static final String resultBaseDirectory_ = "result/easyjmetal";
 
     /**
      * Friedman检验
+     * Rj表示第j个算法的平均排序
+     * rij表示第j个算法（1≤j≤k ）在第i个数据集(1≤i≤N)上的排序。
+     * Friedman test比较了算法的平均排序，
+     * 即对每个算法进行排序：
+     * 对最大化问题，排名越大越好
+     * 对最小化问题，排名越小越好
+     * <p>
+     * https://blog.csdn.net/sinat_29874843/article/details/101756615
      *
      * @param indic 指标名称
      */
-    public void executeTest(String indic, String[] algorithmNameList_, String[] problemList_) {
+    public static void executeTest(String indic, String[] algorithmNameList_, String[] problemList_) {
         Vector algoritmos;
         Vector datasets;
         Vector datos;
@@ -39,10 +43,10 @@ public class Friedman {
         String outDir = resultBaseDirectory_ + "/latex";
         String outFile = outDir + "/FriedmanTest" + indic + ".tex";
 
-        String Output = "";
-        Output = Output + ("\\documentclass{article}\n" +
+        StringBuilder Output = new StringBuilder();
+        Output.append("\\documentclass{article}\n" +
                 "\\usepackage{graphicx}\n" +
-                "\\title{Results}\n" +
+                "\\title{" + indic + "}\n" +
                 "\\author{}\n" +
                 "\\date{\\today}\n" +
                 "\\begin{document}\n" +
@@ -180,19 +184,20 @@ public class Friedman {
         }
 
         /*Print the average ranking per algorithm*/
-        Output = Output + "\n" + ("\\begin{table}[!htp]\n" +
+        Output.append("\n");
+        Output.append("\\begin{table}[!htp]\n" +
                 "\\centering\n" +
                 "\\caption{Average Rankings of the algorithms\n}" +// for "+ exp_.problemList_[prob] +" problem\n}" +
                 "\\begin{tabular}{c|c}\n" +
                 "Algorithm&Ranking\\\\\n\\hline");
 
         for (int i = 0; i < algoritmos.size(); i++) {
-            Output = Output + "\n" + algoritmos.elementAt(i) + "&" + Rj[i] + "\\\\";
+            Output.append("\n" + algoritmos.elementAt(i) + "&" + Rj[i] + "\\\\");
         }
 
-        Output = Output + "\n" +
+        Output.append("\n" +
                 "\\end{tabular}\n" +
-                "\\end{table}";
+                "\\end{table}");
 
         /*Compute the Friedman statistic*/
         termino1 = (12 * (double) datasets.size()) / ((double) algoritmos.size() * ((double) algoritmos.size() + 1));
@@ -202,9 +207,11 @@ public class Friedman {
         }
         friedman = (sumatoria - termino2) * termino1;
 
-        Output = Output + "\n" + "\n\nFriedman statistic considering reduction performance (distributed according to chi-square with " + (algoritmos.size() - 1) + " degrees of freedom: " + friedman + ").\n\n";
+        Output.append("\n" + "\n\nFriedman statistic considering reduction performance (distributed according to chi-square with "
+                + (algoritmos.size() - 1) + " degrees of freedom: " + String.format("%.4f", friedman) + ").\n\n");
 
-        Output = Output + "\n" + "\\end{document}";
+        Output.append("\n");
+        Output.append("\\end{document}");
         try {
             File latexOutput;
             latexOutput = new File(outDir);
@@ -214,7 +221,7 @@ public class Friedman {
             FileOutputStream f = new FileOutputStream(outFile);
             DataOutputStream fis = new DataOutputStream(f);
 
-            fis.writeBytes(Output);
+            fis.writeBytes(Output.toString().replace("_", "\\_"));
 
             fis.close();
             f.close();

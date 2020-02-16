@@ -1,13 +1,13 @@
 package opt.easyjmetal.util.sqlite;
 
+import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.core.Variable;
 import opt.easyjmetal.util.JMException;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2015-06-09.
@@ -16,92 +16,91 @@ public class SqlUtils {
 
     static String fileName_;
 
-    public SqlUtils(){
+    public SqlUtils() {
     }
 
-    public static void CreateTable(String tableName, String methodName){
+    public static void CreateTable(String tableName, String methodName) {
         fileName_ = methodName;
         Connection con;
         Statement stmt;
         try {
             Class.forName("org.sqlite.JDBC");
-            con = DriverManager.getConnection("jdbc:sqlite:"+fileName_+".db");
+            con = DriverManager.getConnection("jdbc:sqlite:" + fileName_ + ".db");
             System.out.println("Opened database successfully");
             stmt = con.createStatement();
             String sql = "CREATE TABLE IF NOT EXISTS" + " " + tableName + " " + "(OBJ   TEXT    NOT NULL, " + "CON  TEXT NOT NULL)";
-//            String sql = "CREATE TABLE IF NOT EXISTS" + " " + tableName + " " + "(OBJ   TEXT    NOT NULL, " + " DEC TEXT  NOT NULL, " + "CON  TEXT NOT NULL)";
             stmt.executeUpdate(sql);
             stmt.close();
             con.close();
 
-        } catch ( Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
         System.out.println("Table created successfully");
 
     }
 
-    public static void CreateTable(String problemName, int objNumber, int decNumber, int ConNumber){
+    public static void CreateTable(String problemName, int objNumber, int decNumber, int ConNumber) {
         Connection con;
         Statement stmt;
         try {
             Class.forName("org.sqlite.JDBC");
-            con = DriverManager.getConnection("jdbc:sqlite:"+fileName_+".db");
+            con = DriverManager.getConnection("jdbc:sqlite:" + fileName_ + ".db");
             System.out.println("Opened database successfully");
 
             stmt = con.createStatement();
 
             String createTable = "CREATE TABLE" + " " + problemName + " ";
             //String PrimaryKey  = "(ID INT PRIMARY KEY     NOT NULL,";
-            String dataType    =  "    REAL    NOT NULL,";
-            String conType    =  "    REAL    NOT NULL";
+            String dataType = "    REAL    NOT NULL,";
+            String conType = "    REAL    NOT NULL";
 
-            String objColumn   = "";
-            String conColumn   = "";
+            String objColumn = "";
+            String conColumn = "";
 
-            for(int i = 0; i < objNumber; i ++){
+            for (int i = 0; i < objNumber; i++) {
                 String tempString = "OBJ" + Integer.toString(i) + dataType;
                 objColumn += tempString;
             }
 
 
-            for(int i = 0; i < ConNumber; i ++){
+            for (int i = 0; i < ConNumber; i++) {
                 String tempString = "CON" + Integer.toString(i) + conType;
                 conColumn += tempString;
             }
 
-            String sql = createTable + "("+ objColumn  + conColumn + ")";
+            String sql = createTable + "(" + objColumn + conColumn + ")";
             stmt.executeUpdate(sql);
             stmt.close();
             con.close();
-        } catch ( Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
         System.out.println("Table created successfully");
     }
 
-    public static void InsertData(String TableName, double[] record){
+    public static void InsertData(String TableName, double[] record) {
 
         Connection con;
         Statement stmt;
         try {
             Class.forName("org.sqlite.JDBC");
-            con = DriverManager.getConnection("jdbc:sqlite:"+fileName_+".db");
+            con = DriverManager.getConnection("jdbc:sqlite:" + fileName_ + ".db");
             System.out.println("Opened database successfully");
             stmt = con.createStatement();
             String insertData = "(";
-            for(int i = 0; i < record.length - 1; i++){
+            for (int i = 0; i < record.length - 1; i++) {
                 insertData += Double.toString(record[i]) + ",";
             }
             insertData += Double.toString(record[record.length - 1]) + ")";
-            String sql = "INSERT INTO "+TableName+" VALUES  " + insertData;
+            String sql = "INSERT INTO " + TableName + " VALUES  " + insertData;
             stmt.executeUpdate(sql);
             stmt.close();
             con.close();
-        } catch (Exception e){
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
 
@@ -114,29 +113,29 @@ public class SqlUtils {
         PreparedStatement ps;
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:"+fileName_+".db");
+            conn = DriverManager.getConnection("jdbc:sqlite:" + fileName_ + ".db");
             String sql = "insert into" + " " + TableName + " " + " values (?,?)";
 
             conn.setAutoCommit(false);
             ps = conn.prepareStatement(sql);
-            for(int i = 0; i < recordNumber; i++){
-                ps.setString(1,pop.get(i).toString());
+            for (int i = 0; i < recordNumber; i++) {
+                ps.setString(1, pop.get(i).toString());
 //                ps.setString(2, Arrays.toString(pop.get(i).getDecisionVariables()));
 //                ps.setString(3,Double.toString(pop.get(i).getOverallConstraintViolation()));
-                ps.setString(2,Double.toString(pop.get(i).getOverallConstraintViolation()));
+                ps.setString(2, Double.toString(pop.get(i).getOverallConstraintViolation()));
                 ps.addBatch();
             }
             ps.executeBatch();
             conn.commit();
             conn.close();
-        } catch (Exception e){
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
 
     }
 
-    public static void InsertData(String TableName, SolutionSet pop) throws JMException{
+    public static void InsertData(String TableName, SolutionSet pop) throws JMException {
 
         int objNumber = pop.get(0).getNumberOfObjectives();
         int decNumber = pop.get(0).numberOfVariables();
@@ -144,45 +143,97 @@ public class SqlUtils {
 
         double record[] = new double[objNumber + decNumber + conNumber];
 
-        for(int i = 0 ; i < objNumber; i++){
+        for (int i = 0; i < objNumber; i++) {
             record[i] = pop.get(0).getObjective(i);
         }
 
         Variable[] variables = pop.get(0).getDecisionVariables();
-        for(int i = 0; i < decNumber; i++){
+        for (int i = 0; i < decNumber; i++) {
             record[objNumber + i] = variables[i].getValue();
         }
 
-        for(int i = 0; i < conNumber; i++){
+        for (int i = 0; i < conNumber; i++) {
             record[objNumber + decNumber + i] = pop.get(0).getOverallConstraintViolation();
         }
-
-
-
 
         Connection con;
         Statement stmt;
         try {
             Class.forName("org.sqlite.JDBC");
-            con = DriverManager.getConnection("jdbc:sqlite:"+fileName_+".db");
+            con = DriverManager.getConnection("jdbc:sqlite:" + fileName_ + ".db");
             System.out.println("Opened database successfully");
             stmt = con.createStatement();
             String insertData = "(";
-            for(int i = 0; i < record.length - 1; i++){
+            for (int i = 0; i < record.length - 1; i++) {
                 insertData += Double.toString(record[i]) + ",";
             }
             insertData += Double.toString(record[record.length - 1]) + ")";
-            String sql = "INSERT INTO "+TableName+" VALUES  " + insertData;
+            String sql = "INSERT INTO " + TableName + " VALUES  " + insertData;
             stmt.executeUpdate(sql);
             stmt.close();
             con.close();
-        } catch (Exception e){
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+    }
+
+    /**
+     * 从sqlite数据库中查询解
+     * @param DataBaseName
+     * @param TableName
+     * @return
+     * @throws JMException
+     */
+    public static SolutionSet SelectData(String DataBaseName, String TableName) throws JMException {
+
+        List<Solution> dataSet = new ArrayList<>();
+        Connection con;
+        Statement stmt;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            con = DriverManager.getConnection("jdbc:sqlite:" + DataBaseName + ".db");
+            stmt = con.createStatement();
+            String sql = "SELECT * from " + TableName;
+            ResultSet resultSet = stmt.executeQuery(sql);
+
+            // 判断是否读取结束
+            while (resultSet.next()) {
+                List<Double> line = new ArrayList<>();
+                String objs = resultSet.getString("OBJ");
+                String cons = resultSet.getString("CON");
+
+
+                String[] r1 = objs.split(" ");// 目标值
+                String[] r2 = cons.split(" ");// 约束
+
+                Solution solution = new Solution(r1.length, r2.length);
+
+                for (int i = 0; i < r1.length; i++) {
+                    //line.add(Double.parseDouble(r1[i]));
+                    solution.setObjective(i, Double.parseDouble(r1[i]));
+                }
+
+                double overallConstraint = 0;
+                for (int i = 0; i < r2.length; i++) {
+                    // line.add(Double.parseDouble(r2[i]));
+                    overallConstraint += Double.parseDouble(r2[i]);
+                }
+                solution.setOverallConstraintViolation(overallConstraint);
+                dataSet.add(solution);
+            }
+
+            stmt.close();
+            con.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
 
+        SolutionSet solutionSet = new SolutionSet(dataSet.size());
+        for (int i = 0; i < dataSet.size(); i++) {
+            solutionSet.add(dataSet.get(i));
+        }
+        return solutionSet;
     }
-
-
-
 }
