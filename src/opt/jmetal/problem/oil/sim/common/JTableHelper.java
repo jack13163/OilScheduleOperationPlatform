@@ -1,18 +1,14 @@
 package opt.jmetal.problem.oil.sim.common;
 
-import java.awt.Color;
-import java.awt.Component;
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Vector;
-
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 public class JTableHelper {
 
@@ -43,14 +39,14 @@ public class JTableHelper {
             // 列数
             int numOfColumes = 0;
             if (containNo) {
-                numOfColumes = line.split(",").length + 1;
+                numOfColumes = line.split(" |,").length + 1;
             } else {
-                numOfColumes = line.split(",").length;
+                numOfColumes = line.split(" |,").length;
             }
 
             if (containColumeNames) {
                 // 若列名存在，则读取列名
-                String[] columnNames = line.split(",");
+                String[] columnNames = line.split(" |,");
                 if (containNo) {
                     String[] newColumnNames = new String[columnNames.length + 1];
                     newColumnNames[0] = "No";
@@ -82,7 +78,7 @@ public class JTableHelper {
             }
 
             do {
-                String data[] = line.split(",");
+                String data[] = line.split(" |,");
                 Vector<String> v = null;
                 if (containNo) {
                     v = new Vector<>(numOfColumes);

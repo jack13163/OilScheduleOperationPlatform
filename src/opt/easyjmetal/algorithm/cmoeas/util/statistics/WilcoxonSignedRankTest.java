@@ -17,14 +17,14 @@ public class WilcoxonSignedRankTest {
     private List<String> algorithmNameList_;
     private List<String> problemList_;
 
-    private double alpha_ = 0.05;// ç½®ä¿¡åº¦0.95
+    private double alpha_ = 0.05;// ÖÃĞÅ¶È0.95
 
     private int[][][] better;
 
     public WilcoxonSignedRankTest(String[] algorithmNameList_,
                  String[] problemList_, String[] indicList_) {
         if (algorithmNameList_.length < 2) {
-            JMetalLogger.logger.info("è¯·è‡³å°‘è¾“å…¥ä¸¤ç§ç®—æ³•");
+            JMetalLogger.logger.info("ÇëÖÁÉÙÊäÈëÁ½ÖÖËã·¨");
         }
         this.indicList_ = Arrays.asList(indicList_);
         this.algorithmNameList_ = Arrays.asList(algorithmNameList_);
@@ -37,12 +37,12 @@ public class WilcoxonSignedRankTest {
             computeDataStatistics(data);
             generateLatexScript(data);
         } catch (IOException ex) {
-            JMetalLogger.logger.info("è¯·ç”ŸæˆæŒ‡æ ‡å€¼åå†æ‰§è¡Œç”Ÿæˆè¡¨æ ¼æ“ä½œ: " + ex.getMessage());
+            JMetalLogger.logger.info("ÇëÉú³ÉÖ¸±êÖµºóÔÙÖ´ĞĞÉú³É±í¸ñ²Ù×÷: " + ex.getMessage());
         }
     }
 
     /**
-     * è¯»å–æŒ‡æ ‡å€¼
+     * ¶ÁÈ¡Ö¸±êÖµ
      *
      * @return
      * @throws IOException
@@ -59,7 +59,7 @@ public class WilcoxonSignedRankTest {
                 for (int algorithm = 0; algorithm < algorithmNameList_.size(); algorithm++) {
                     data.get(indicator).get(problem).add(algorithm, new ArrayList<Double>());
 
-                    // ç›®å½•ç»“æ„ï¼šresult/data/algorithm/problem/indicator
+                    // Ä¿Â¼½á¹¹£ºresult/data/algorithm/problem/indicator
                     String directory = resultBaseDirectory_;
                     directory += "/data/";
                     directory += "/" + algorithmNameList_.get(algorithm);
@@ -96,16 +96,16 @@ public class WilcoxonSignedRankTest {
                 better[indicator][problem] = new int[algorithmListSize];
 
                 for (int algorithm = 1; algorithm < algorithmListSize; algorithm++) {
-                    // å°†algorithm[0]å’Œalgorithm[1],algorithm[2]...å¯¹æ¯”
+                    // ½«algorithm[0]ºÍalgorithm[1],algorithm[2]...¶Ô±È
                     boolean xz = computeStatistics(data.get(indicator).get(problem).get(0),
                             data.get(indicator).get(problem).get(algorithm));
 
                     double mean_ours = Statistics.MeanValue(data.get(indicator).get(problem).get(0));
                     double mean_reference = Statistics.MeanValue(data.get(indicator).get(problem).get(algorithm));
 
-                    // HVè¶Šå¤§è¶Šå¥½ï¼Œå…¶ä»–æŒ‡æ ‡è¶Šå°è¶Šå¥½
+                    // HVÔ½´óÔ½ºÃ£¬ÆäËûÖ¸±êÔ½Ğ¡Ô½ºÃ
                     if (!indicList_.get(indicator).equals("HV")) {
-                        // åˆ¤æ–­å·®å¼‚æ€§æ˜¯å¦æ˜¾è‘—
+                        // ÅĞ¶Ï²îÒìĞÔÊÇ·ñÏÔÖø
                         if (xz) {
                             if (mean_ours < mean_reference) {
                                 better[indicator][problem][algorithm] = 1;
@@ -116,7 +116,7 @@ public class WilcoxonSignedRankTest {
                             better[indicator][problem][algorithm] = 0;
                         }
                     } else {
-                        // åˆ¤æ–­å·®å¼‚æ€§æ˜¯å¦æ˜¾è‘—
+                        // ÅĞ¶Ï²îÒìĞÔÊÇ·ñÏÔÖø
                         if (xz) {
                             if (mean_ours > mean_reference) {
                                 better[indicator][problem][algorithm] = 1;
@@ -149,7 +149,7 @@ public class WilcoxonSignedRankTest {
     }
 
     /**
-     * åˆ¤æ–­å·®å¼‚æ€§æ˜¯å¦æ˜¾è‘—
+     * ÅĞ¶Ï²îÒìĞÔÊÇ·ñÏÔÖø
      *
      * @param ours
      * @param reference
@@ -173,7 +173,7 @@ public class WilcoxonSignedRankTest {
             os.write("\\usepackage{pdflscape}" + "\n");
             os.write("\\geometry{a4paper,left=2cm,right=2cm,top=1cm,bottom=1cm}" + "\n");
             os.write("\\begin{document}" + "\n");
-            os.write("\\thispagestyle{empty}" + "\n");// å½“å‰é¡µä¸æ˜¾ç¤ºé¡µç 
+            os.write("\\thispagestyle{empty}" + "\n");// µ±Ç°Ò³²»ÏÔÊ¾Ò³Âë
             os.write("\\begin{landscape}" + "\n");
         }
     }
@@ -218,7 +218,7 @@ public class WilcoxonSignedRankTest {
             // write lines
             for (int i = 0; i < problemList_.size(); i++) {
                 os.write(problemList_.get(i).replace("_", "\\_") + " & & ");
-                // æ¯”è¾ƒç¬¬ä¸€ä¸ªç®—æ³•ä¸å…¶ä»–ç®—æ³•çš„æ€§èƒ½
+                // ±È½ÏµÚÒ»¸öËã·¨ÓëÆäËûËã·¨µÄĞÔÄÜ
                 for (int j = 1; j < algorithmNameList_.size(); j++) {
                     String m;
                     if(better[indicatorIndex][i][j] == 0){

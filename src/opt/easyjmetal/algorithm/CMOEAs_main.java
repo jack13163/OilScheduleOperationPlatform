@@ -14,7 +14,12 @@ import opt.easyjmetal.operator.selection.SelectionFactory;
 import opt.easyjmetal.problem.ProblemFactory;
 import opt.easyjmetal.util.FileUtils;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class CMOEAs_main {
@@ -22,8 +27,8 @@ public class CMOEAs_main {
     public static void main(String[] args) throws Exception {
         // 0 represents for DE, 1 represents for SBX
         int crossoverMethod = 1;
-        //"MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "MOEAD_CDP", "C_MOEAD", "NSGAII_CDP", "PPS_MOEAD", "NSGAIII_CDP", "SPEA2_CDP"
-        batchRun(new String[]{"MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "MOEAD_CDP", "C_MOEAD", "NSGAII_CDP", "PPS_MOEAD", "NSGAIII_CDP", "SPEA2_CDP"}, crossoverMethod);
+        // "NSGAII_CDP", "MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "MOEAD_CDP", "C_MOEAD", "PPS_MOEAD", "NSGAIII_CDP", "SPEA2_CDP"
+        batchRun(new String[]{"ISDEPLUS_CDP"}, crossoverMethod);
     }
 
     private static void batchRun(String[] methods, int crossMethod) throws Exception {
@@ -31,7 +36,7 @@ public class CMOEAs_main {
         int algorithmNo = algorithmSet.length;
         for (int i = 0; i < algorithmNo; i++) {
             System.out.println("The tested algorithm: " + algorithmSet[i]);
-            System.out.println("The process: " + (100.0 * i / algorithmNo) + "%");
+            System.out.println("The process: " + String.format("%.2f", (100.0 * i / algorithmNo)) + "%");
             singleRun(algorithmSet[i], crossMethod); // 0 represents for DE, 1 represents for SBX
         }
     }
@@ -79,6 +84,8 @@ public class CMOEAs_main {
         String[] problemStrings = {"EDFPS", "EDFTSS"};
 
 //////////////////////////////////////// End parameter setting //////////////////////////////////
+
+        List<List<Long>> runtimes = new ArrayList<>();
 
         for (int i = 0; i < problemStrings.length; i++) {
             problem = (new ProblemFactory()).getProblem(problemStrings[i], params);
@@ -131,6 +138,7 @@ public class CMOEAs_main {
             parameters = null;
             selection = SelectionFactory.getSelectionOperator("BinaryTournament2", parameters);// 选择算子
             algorithm.addOperator("selection", selection);
+            List<Long> runtimeList = new ArrayList<>();
             // each problem runs runtime times
             for (int j = 0; j < runtime; j++) {
                 System.out.println("==================================================================");
@@ -142,9 +150,34 @@ public class CMOEAs_main {
                 long estimatedTime = System.currentTimeMillis() - initTime;
                 // Result messages
                 System.out.println("Total execution time: " + estimatedTime + "ms");
+                runtimeList.add(estimatedTime);
                 System.out.println("Problem:  " + problemStrings[i] + "  running time:  " + j);
                 System.out.println("==================================================================");
             }
+            runtimes.add(runtimeList);
         }
+        // 保存运行时间
+        String basePath = "result/easyjmetal/";
+        File dir = new File(basePath);
+        if(!dir.exists()){
+            dir.mkdirs();
+        }
+
+        //true = append file
+        FileWriter fileWritter = new FileWriter(basePath + "runtimes.txt",false);
+        BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
+
+        for (int i = 0; i < runtimes.size(); i++) {
+            List<Long> algorithmRuntimes = runtimes.get(i);
+            for (int j = 0; j < algorithmRuntimes.size(); j++) {
+                bufferWritter.write(algorithmRuntimes.get(j).toString());
+                if(j < algorithmRuntimes.size() - 1) {
+                    bufferWritter.write(" ");
+                }
+            }
+            bufferWritter.write("\n");
+        }
+        bufferWritter.flush();
+        bufferWritter.close();
     }
 }

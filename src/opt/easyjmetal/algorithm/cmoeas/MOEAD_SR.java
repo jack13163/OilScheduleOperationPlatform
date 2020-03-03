@@ -1,7 +1,6 @@
 //  This class implements a constrained version of the MOEAD algorithm based on the SR method.
 //
-//  T. P. Runarsson and X. Yao, ¡°Stochastic ranking for constrained evolutionary
-//  optimization,¡± IEEE Transactions on evolutionary computation, vol. 4, no. 3, pp. 284¨C294, 2000.
+//  T. P. Runarsson and X. Yao, ¡°Stochastic ranking for constrained evolutionary optimization,¡± IEEE Transactions on evolutionary computation, vol. 4, no. 3, pp. 284¨C294, 2000.
 package opt.easyjmetal.algorithm.cmoeas;
 
 

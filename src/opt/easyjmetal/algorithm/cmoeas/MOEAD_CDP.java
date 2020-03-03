@@ -15,7 +15,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 
-
 public class MOEAD_CDP extends Algorithm {
 
     private int populationSize_;
@@ -437,8 +436,7 @@ public class MOEAD_CDP extends Algorithm {
 
             fitness = d1 + theta * d2;
         } else {
-            System.out.println("MOEAD.fitnessFunction: unknown type "
-                    + functionType_);
+            System.out.println("MOEAD.fitnessFunction: unknown type " + functionType_);
             System.exit(-1);
         }
         return fitness;

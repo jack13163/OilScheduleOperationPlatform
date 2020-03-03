@@ -97,7 +97,7 @@ public class Config implements Serializable {
                     Precision = Integer.parseInt(element.getText());
                 } else if (element.getName() == "hoting-speed") {
                     HotingSpeed = Double.parseDouble(element.getText());
-                } else if (element.getName() == "high-opt.jmetal.problem.oil-ds") {
+                } else if (element.getName() == "high-oil-ds") {
                     HighOilDS = Integer.parseInt(element.getText());
                 } else if (element.getName() == "hot-tank") {
                     HotTank = Integer.parseInt(element.getText());
@@ -126,7 +126,7 @@ public class Config implements Serializable {
                                 tankObject.setVolume(Double.parseDouble(ele.getText()));
                             } else if (ele.getName() == "capacity") {
                                 tankObject.setCapacity(Double.parseDouble(ele.getText()));
-                            } else if (ele.getName() == "opt.jmetal.problem.oil-type") {
+                            } else if (ele.getName() == "oil-type") {
                                 tankObject.setOiltype(Integer.parseInt(ele.getText()));
                             } else if (ele.getName() == "assign") {
                                 tankObject.setAssign(Integer.parseInt(ele.getText()));

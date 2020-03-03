@@ -7,7 +7,8 @@ import opt.easyjmetal.util.JMException;
 public class CMOEAs_analysis {
     public static void main(String[] args) {
         try {
-            String[] algorithmNames = {"NSGAII_CDP", "MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "MOEAD_CDP", "C_MOEAD", "PPS_MOEAD", "NSGAIII_CDP", "SPEA2_CDP"};
+            // "NSGAII_CDP", "ISDEPLUS_CDP", "NSGAIII_CDP", "SPEA2_CDP", "MOEAD_CDP", "MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "C_MOEAD", "PPS_MOEAD"
+            String[] algorithmNames = {"NSGAII_CDP", "ISDEPLUS_CDP", "NSGAIII_CDP", "MOEAD_CDP", "MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "C_MOEAD", "PPS_MOEAD"};
             String[] problemNames = {"EDF_PS", "EDF_TSS"};
             String[] indicatorNames = {"HV", "IGD"};
             int runtimes = 10;
@@ -34,7 +35,7 @@ public class CMOEAs_analysis {
             wilcoxonSignedRankTest.run();
 
             // 计算不同策略C指标
-            CMetrics cMetrics = new CMetrics(problemNames);
+            CMetrics cMetrics = new CMetrics(problemNames, algorithmNames,runtimes);
             cMetrics.run();
         } catch (JMException e) {
             e.printStackTrace();

@@ -114,7 +114,7 @@ public class Hero extends FlyingObject {
     }
 
     /**
-     * ��ײ�㷨
+     * 是否相撞
      */
     public boolean hit(FlyingObject other) {
 

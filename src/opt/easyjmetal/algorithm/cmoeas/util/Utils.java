@@ -57,8 +57,8 @@ public class Utils {
             for (int j = i + 1; j < n; j++) {
                 if (x[i] > x[j]) {
                     double temp = x[i];
-                    x[i]   = x[j];
-                    x[j]   = temp;
+                    x[i] = x[j];
+                    x[j] = temp;
                     int id = idx[i];
                     idx[i] = idx[j];
                     idx[j] = id;
@@ -69,23 +69,23 @@ public class Utils {
     } // minFastSort
 
 
-    public static int[] returnSortedIndex(double x[], int flag){
-        if(x == null || x.length == 0){
+    public static int[] returnSortedIndex(double x[], int flag) {
+        if (x == null || x.length == 0) {
             return null;
-        }else {
+        } else {
             int arrayLength = x.length;
             int[] result = new int[arrayLength];
 
             // Initialize the result
-            for(int i = 0; i < arrayLength; i++){
+            for (int i = 0; i < arrayLength; i++) {
                 result[i] = i;
             }
 
             // bubble sort
-            if(flag == 1){ // ascending order
-                for(int i = 0; i < arrayLength; i++){
-                    for(int j = i + 1; j < arrayLength; j++){
-                        if(x[i] > x[j]){
+            if (flag == 1) { // ascending order
+                for (int i = 0; i < arrayLength; i++) {
+                    for (int j = i + 1; j < arrayLength; j++) {
+                        if (x[i] > x[j]) {
                             double temp = x[i];
                             x[i] = x[j];
                             x[j] = temp;
@@ -96,10 +96,10 @@ public class Utils {
                         }
                     }
                 }
-            }else if(flag == -1){ //descending order
-                for(int i = 0; i < arrayLength; i++){
-                    for(int j = i + 1; j < arrayLength; j++){
-                        if(x[i] < x[j]){
+            } else if (flag == -1) { //descending order
+                for (int i = 0; i < arrayLength; i++) {
+                    for (int j = i + 1; j < arrayLength; j++) {
+                        if (x[i] < x[j]) {
                             double temp = x[i];
                             x[i] = x[j];
                             x[j] = temp;
@@ -111,7 +111,7 @@ public class Utils {
                     }
                 }
 
-            }else {
+            } else {
                 System.out.println("Unknown parameter");
             }
             return result;
@@ -158,7 +158,7 @@ public class Utils {
 
         for (int n = 0; n < size; n++) {
             index[n] = n;
-            flag[n]  = true;
+            flag[n] = true;
         }
 
         int num = 0;
@@ -167,7 +167,7 @@ public class Utils {
             // int start = int(size*nd_uni(&rnd_uni_init));
             while (true) {
                 if (flag[start]) {
-                    perm[num]   = index[start];
+                    perm[num] = index[start];
                     flag[start] = false;
                     num++;
                     break;
@@ -221,24 +221,26 @@ public class Utils {
             base += "nsgaiii_cdp.";
         } else if (name.equalsIgnoreCase("SPEA2_CDP")) {
             base += "spea2_cdp.";
+        } else if (name.equalsIgnoreCase("ISDEPLUS_CDP")) {
+            base += "isdeplus_cdp.";
         }
 
         try {
-            Class AlgorithmClass = Class.forName(base+name);
+            Class AlgorithmClass = Class.forName(base + name);
             Constructor[] constructors = AlgorithmClass.getConstructors();
             int i = 0;
             //find the constructor
             while ((i < constructors.length) &&
-                    (constructors[i].getParameterTypes().length!=params.length)) {
+                    (constructors[i].getParameterTypes().length != params.length)) {
                 i++;
             }
             // constructors[i] is the selected one constructor
-            Algorithm algorithm = (Algorithm)constructors[i].newInstance(params);
+            Algorithm algorithm = (Algorithm) constructors[i].newInstance(params);
             return algorithm;
         }// try
-        catch(Exception e) {
+        catch (Exception e) {
             e.printStackTrace();
-            throw new JMException("Exception in " + name + ".getAlgorithm()") ;
+            throw new JMException("Exception in " + name + ".getAlgorithm()");
         } // catch
     }
 
@@ -248,27 +250,27 @@ public class Utils {
         double b = x[1].getValue();
         double e = x[3].getValue();
         double l = x[5].getValue();
-        double rule_1 = Math.pow((a + b),2) - Math.pow(l,2) - Math.pow(e,2);
-        double rule_2 = Math.pow((a - b),2) - Math.pow((l - 100),2) - Math.pow(e,2);
+        double rule_1 = Math.pow((a + b), 2) - Math.pow(l, 2) - Math.pow(e, 2);
+        double rule_2 = Math.pow((a - b), 2) - Math.pow((l - 100), 2) - Math.pow(e, 2);
 
-        while(rule_1 <= 0 || rule_2 >= 0){
-            try{
+        while (rule_1 <= 0 || rule_2 >= 0) {
+            try {
                 Solution tempSolution = new Solution(problem_);
                 x = tempSolution.getDecisionVariables();
                 a = x[0].getValue();
                 b = x[1].getValue();
                 e = x[3].getValue();
                 l = x[5].getValue();
-                rule_1 = Math.pow((a + b),2) - Math.pow(l,2) - Math.pow(e,2);
-                rule_2 = Math.pow((a - b),2) - Math.pow((l - 100),2) - Math.pow(e,2);
-            }catch (ClassNotFoundException exception){
+                rule_1 = Math.pow((a + b), 2) - Math.pow(l, 2) - Math.pow(e, 2);
+                rule_2 = Math.pow((a - b), 2) - Math.pow((l - 100), 2) - Math.pow(e, 2);
+            } catch (ClassNotFoundException exception) {
                 exception.printStackTrace();
             }
         }
         solution.setDecisionVariables(x);
     }
 
-    public static void updateExternalArchive(SolutionSet pop, int popSize, SolutionSet externalArchive){
+    public static void updateExternalArchive(SolutionSet pop, int popSize, SolutionSet externalArchive) {
         SolutionSet feasible_solutions = new SolutionSet(popSize);
         int objectiveNo = pop.get(0).getNumberOfObjectives();
         Distance distance = new Distance();
@@ -291,7 +293,7 @@ public class Utils {
             } else {
 
                 //delete the element of the set until N <= popSize
-                while (firstRankSolutions.size() > popSize){
+                while (firstRankSolutions.size() > popSize) {
                     distance.crowdingDistanceAssignment(firstRankSolutions, objectiveNo);
                     firstRankSolutions.sort(new CrowdingComparator());
                     firstRankSolutions.remove(firstRankSolutions.size() - 1);
@@ -307,7 +309,7 @@ public class Utils {
 
     }
 
-    public static SolutionSet initializeExternalArchive(SolutionSet pop, int popSize, SolutionSet externalArchive){
+    public static SolutionSet initializeExternalArchive(SolutionSet pop, int popSize, SolutionSet externalArchive) {
         SolutionSet feasible_solutions = new SolutionSet(popSize);
         for (int i = 0; i < popSize; i++) {
             if (pop.get(i).getOverallConstraintViolation() == 0.0) {
@@ -324,8 +326,6 @@ public class Utils {
     }
 
 
-
-
     /**
      * Generate the Pareto Front
      *
@@ -333,15 +333,49 @@ public class Utils {
      * @param problemList_       问题列表
      * @param independentRuns_   独立运行次数
      */
-    public static void generateParetoFront(String[] algorithmNameList_, String[] problemList_,
-                                           int independentRuns_) throws JMException {
+    public static void generateParetoFront(String[] algorithmNameList_, String[] problemList_, int independentRuns_) throws JMException {
         for (String problemName : problemList_) {
             String paretoFrontPath = resultBaseDirectory_ + "/";
             List<Solution> solutionList = new ArrayList<>();
 
             // 读取某一问题的所有结果
-            for (int numRun = 0; numRun < independentRuns_; numRun++) {
-                for (String algorithmName : algorithmNameList_) {
+            for (String algorithmName : algorithmNameList_) {
+                // 输出每种算法的非支配解集
+                List<Solution> solutionList2 = new ArrayList<>();
+
+                for (int numRun = 0; numRun < independentRuns_; numRun++) {
+                    String tableName = problemName + "_" + (numRun + 1);
+                    SolutionSet tmp = SqlUtils.SelectData(algorithmName, tableName);
+                    for (int i = 0; i < tmp.size(); i++) {
+                        solutionList.add(tmp.get(i));
+                        solutionList2.add(tmp.get(i));
+                    }
+                }
+
+                // 输出非支配解集
+                outputNondomincantSolutionSet(solutionList2, paretoFrontPath, algorithmName + "_" + problemName + ".pf");
+            }
+
+            // 输出非支配解集
+            outputNondomincantSolutionSet(solutionList, paretoFrontPath, problemName + ".pf");
+        }
+    }
+
+    /**
+     * Generate the Pareto Front for crude oil scheduling problem
+     *
+     * @param algorithmNameList_ 算法列表
+     * @param problemList_       问题列表
+     * @param independentRuns_   独立运行次数
+     */
+    public static String generateOilScheduleParetoFront(String[] algorithmNameList_, String[] problemList_, int independentRuns_) throws JMException {
+
+        List<Solution> solutionList = new ArrayList<>();
+
+        // 从sqlite数据库中读取所有结果
+        for (String problemName : problemList_) {
+            for (String algorithmName : algorithmNameList_) {
+                for (int numRun = 0; numRun < independentRuns_; numRun++) {
                     String tableName = problemName + "_" + (numRun + 1);
                     SolutionSet tmp = SqlUtils.SelectData(algorithmName, tableName);
                     for (int i = 0; i < tmp.size(); i++) {
@@ -349,22 +383,95 @@ public class Utils {
                     }
                 }
             }
-
-            // 进行非支配排序，获取非支配解集
-            SolutionSet solutionSet = new SolutionSet(solutionList.size());
-            for (int i = 0; i < solutionList.size(); i++) {
-                solutionSet.add(solutionList.get(i));
-            }
-            Ranking ranking = new Ranking(solutionSet);
-            SolutionSet nondominatedSolutionSet = ranking.getSubfront(0);
-
-            // 输出非支配解集
-            File dir = new File(paretoFrontPath);
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-            nondominatedSolutionSet.printObjectivesToFile(paretoFrontPath + problemName + ".pf");
         }
+
+        // 输出非支配解集
+        return outputNondomincantSolutionSet(solutionList, resultBaseDirectory_, "oil.pf");
+    }
+
+    public interface ToDo{
+        void dosomething(Solution solution, String rule);
+    }
+
+    /**
+     * @param algorithmNameList_ 算法列表
+     * @param problemList_       问题列表
+     * @param independentRuns_   独立运行次数
+     * @param toselect           要选择的个体
+     * @return
+     * @throws JMException
+     */
+    public static SolutionSet getSolutionFromDB(String[] algorithmNameList_, String[] problemList_,
+                                                int independentRuns_, double[][] toselect, ToDo todo) throws JMException {
+        SolutionSet solutionSet = new SolutionSet(toselect.length);
+
+        for (String problemName : problemList_) {
+            for (String algorithmName : algorithmNameList_) {
+                for (int numRun = 0; numRun < independentRuns_; numRun++) {
+                    String tableName = problemName + "_" + (numRun + 1);
+                    SolutionSet tmp = SqlUtils.SelectData(algorithmName, tableName);
+                    for (int i = 0; i < tmp.size(); i++) {
+                        Solution solution = tmp.get(i);
+                        boolean flag = true;
+                        // 判断当前个体是否为待查找的个体
+                        for (int j = 0; j < toselect.length && flag; j++) {
+                            for (int k = 0; k < toselect[j].length && flag; k++) {
+                                if (solution.getObjective(k) != toselect[j][k]) {
+                                    flag = false;
+                                }
+                            }
+                        }
+
+                        if (flag) {
+                            System.out.println(String.format("find solution in db:%s table:%s no:%d", algorithmName, tableName, i + 1));
+                            solutionSet.add(solution);
+                            if(todo != null){
+                                todo.dosomething(solution, problemName);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return solutionSet;
+    }
+
+    /**
+     * 输出非支配解集
+     *
+     * @param solutionList
+     * @param dirPath
+     * @param filename
+     */
+    public static String outputNondomincantSolutionSet(List<Solution> solutionList, String dirPath, String filename) {
+
+        // 进行非支配排序，获取非支配解集
+        SolutionSet nondominatedSolutionSet = getNondominantSolutionSet(solutionList);
+        // 输出非支配解集
+        File dir = new File(dirPath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        String filepath = dirPath + "/" + filename;
+        nondominatedSolutionSet.printObjectivesToFile(filepath);
+        return filepath;
+    }
+
+    /**
+     * 获取非支配解集
+     *
+     * @param solutionList
+     * @return
+     */
+    public static SolutionSet getNondominantSolutionSet(List<Solution> solutionList) {
+
+        SolutionSet solutionSet = new SolutionSet(solutionList.size());
+        for (int i = 0; i < solutionList.size(); i++) {
+            solutionSet.add(solutionList.get(i));
+        }
+        Ranking ranking = new Ranking(solutionSet);
+        SolutionSet nondominatedSolutionSet = ranking.getSubfront(0);
+        return nondominatedSolutionSet;
     }
 
 

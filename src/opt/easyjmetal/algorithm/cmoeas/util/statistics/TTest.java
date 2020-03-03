@@ -17,14 +17,14 @@ public class TTest {
     private List<String> algorithmNameList_;
     private List<String> problemList_;
 
-    private double alpha_ = 0.05;// ÁΩÆ‰ø°Â∫¶0.95
+    private double alpha_ = 0.05;// ÷√–≈∂»0.95
 
     private int[][][] better;
 
     public TTest(String[] algorithmNameList_,
                  String[] problemList_, String[] indicList_) {
         if (algorithmNameList_.length < 2) {
-            JMetalLogger.logger.info("ËØ∑Ëá≥Â∞ëËæìÂÖ•‰∏§ÁßçÁÆóÊ≥ï");
+            JMetalLogger.logger.info("«Î÷¡…Ÿ ‰»Î¡Ω÷÷À„∑®");
         }
         this.indicList_ = Arrays.asList(indicList_);
         this.algorithmNameList_ = Arrays.asList(algorithmNameList_);
@@ -37,12 +37,12 @@ public class TTest {
             computeDataStatistics(data);
             generateLatexScript(data);
         } catch (IOException ex) {
-            JMetalLogger.logger.info("ËØ∑ÁîüÊàêÊåáÊ†áÂÄºÂêéÂÜçÊâßË°åÁîüÊàêË°®Ê†ºÊìç‰Ωú: " + ex.getMessage());
+            JMetalLogger.logger.info("«Î…˙≥…÷∏±Í÷µ∫Û‘Ÿ÷¥––…˙≥…±Ì∏Ò≤Ÿ◊˜: " + ex.getMessage());
         }
     }
 
     /**
-     * ËØªÂèñÊåáÊ†áÂÄº
+     * ∂¡»°÷∏±Í÷µ
      *
      * @return
      * @throws IOException
@@ -59,7 +59,7 @@ public class TTest {
                 for (int algorithm = 0; algorithm < algorithmNameList_.size(); algorithm++) {
                     data.get(indicator).get(problem).add(algorithm, new ArrayList<Double>());
 
-                    // ÁõÆÂΩïÁªìÊûÑÔºöresult/data/algorithm/problem/indicator
+                    // ƒø¬ºΩ·ππ£∫result/data/algorithm/problem/indicator
                     String directory = resultBaseDirectory_;
                     directory += "/data/";
                     directory += "/" + algorithmNameList_.get(algorithm);
@@ -96,16 +96,16 @@ public class TTest {
                 better[indicator][problem] = new int[algorithmListSize];
 
                 for (int algorithm = 1; algorithm < algorithmListSize; algorithm++) {
-                    // Â∞Üalgorithm[0]Âíåalgorithm[1],algorithm[2]...ÂØπÊØî
+                    // Ω´algorithm[0]∫Õalgorithm[1],algorithm[2]...∂‘±»
                     double pValue = computeStatistics(data.get(indicator).get(problem).get(0),
                             data.get(indicator).get(problem).get(algorithm));
 
                     double mean_ours = Statistics.MeanValue(data.get(indicator).get(problem).get(0));
                     double mean_reference = Statistics.MeanValue(data.get(indicator).get(problem).get(algorithm));
 
-                    // HVË∂äÂ§ßË∂äÂ•ΩÔºåÂÖ∂‰ªñÊåáÊ†áË∂äÂ∞èË∂äÂ•Ω
+                    // HV‘Ω¥Û‘Ω∫√£¨∆‰À˚÷∏±Í‘Ω–°‘Ω∫√
                     if (!indicList_.get(indicator).equals("HV")) {
-                        // Âà§Êñ≠Â∑ÆÂºÇÊÄßÊòØÂê¶ÊòæËëó
+                        // ≈–∂œ≤Ó“Ï–‘ «∑Òœ‘÷¯
                         if (pValue < alpha_) {
                             if (mean_ours < mean_reference) {
                                 better[indicator][problem][algorithm] = 1;
@@ -116,7 +116,7 @@ public class TTest {
                             better[indicator][problem][algorithm] = 0;
                         }
                     } else {
-                        // Âà§Êñ≠Â∑ÆÂºÇÊÄßÊòØÂê¶ÊòæËëó
+                        // ≈–∂œ≤Ó“Ï–‘ «∑Òœ‘÷¯
                         if (pValue < alpha_) {
                             if (mean_ours > mean_reference) {
                                 better[indicator][problem][algorithm] = 1;
@@ -173,7 +173,7 @@ public class TTest {
             os.write("\\usepackage{pdflscape}" + "\n");
             os.write("\\geometry{a4paper,left=2cm,right=2cm,top=1cm,bottom=1cm}" + "\n");
             os.write("\\begin{document}" + "\n");
-            os.write("\\thispagestyle{empty}" + "\n");// ÂΩìÂâçÈ°µ‰∏çÊòæÁ§∫È°µÁ†Å
+            os.write("\\thispagestyle{empty}" + "\n");// µ±«∞“≥≤ªœ‘ æ“≥¬Î
             os.write("\\begin{landscape}" + "\n");
         }
     }
@@ -218,7 +218,7 @@ public class TTest {
             // write lines
             for (int i = 0; i < problemList_.size(); i++) {
                 os.write(problemList_.get(i).replace("_", "\\_") + " & & ");
-                // ÊØîËæÉÁ¨¨‰∏Ä‰∏™ÁÆóÊ≥ï‰∏éÂÖ∂‰ªñÁÆóÊ≥ïÁöÑÊÄßËÉΩ
+                // ±»Ωœµ⁄“ª∏ˆÀ„∑®”Î∆‰À˚À„∑®µƒ–‘ƒ‹
                 for (int j = 1; j < algorithmNameList_.size(); j++) {
                     String m;
                     if(better[indicatorIndex][i][j] == 0){

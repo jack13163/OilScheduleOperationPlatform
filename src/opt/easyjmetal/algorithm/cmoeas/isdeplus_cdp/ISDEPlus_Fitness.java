@@ -32,7 +32,7 @@ public class ISDEPlus_Fitness {
         for (int i = 1; i < solutionSet.size(); i++) {
 
             // 计算第i个个体与前i-1个个体的SDE距离
-            double[] betweenDistances = new double[i - 1];
+            double[] betweenDistances = new double[i];
             for (int j = 0; j < i - 1; j++) {
                 for (int k = 0; k < numOfObjects; k++) {
                     // 只计算qi<pj时的值

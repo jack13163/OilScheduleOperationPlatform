@@ -688,8 +688,8 @@ public class Operation {
 
             if (chartFrame == null) {
                 chartFrame = new ChartFrame();
-            } else if (!chartFrame.frame.isVisible()) {
-                chartFrame.frame.setVisible(true);
+            } else if (!chartFrame.isVisible()) {
+                chartFrame.setVisible(true);
             }
             chartFrame.updateCanvas(data);
         } catch (Exception e) {

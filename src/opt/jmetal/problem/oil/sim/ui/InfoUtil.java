@@ -1,44 +1,28 @@
 package opt.jmetal.problem.oil.sim.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Desktop;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Insets;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
-
 /**
- * * @author Administrator æ­¤å·¥å…·ç±»ç”¨æ³•ï¼šå®ä¾‹åŒ–å‡ºå¯¹è±¡ï¼Œè°ƒç”¨ void show("æ ‡é¢˜","å†…å®¹") æ–¹æ³•. InfoUtil
- * tool * = new InfoUtil(); tool.show("æ ‡é¢˜","å†…å®¹")
+ * * @author Administrator ´Ë¹¤¾ßÀàÓÃ·¨£ºÊµÀı»¯³ö¶ÔÏó£¬µ÷ÓÃ void show("±êÌâ","ÄÚÈİ") ·½·¨. InfoUtil
+ * tool * = new InfoUtil(); tool.show("±êÌâ","ÄÚÈİ")
  */
 public class InfoUtil {
 
-    private TipWindow tw = null; // æç¤ºæ¡†
+    private TipWindow tw = null; // ÌáÊ¾¿ò
 
     private JPanel headPan = null;
     private JPanel feaPan = null;
     private JPanel btnPan = null;
-    private JLabel title = null; // æ ç›®åç§°
+    private JLabel title = null; // À¸Ä¿Ãû³Æ
 
-    private JLabel head = null; // è“è‰²æ ‡é¢˜
+    private JLabel head = null; // À¶É«±êÌâ
 
-    private JLabel close = null; // å…³é—­æŒ‰é’®
+    private JLabel close = null; // ¹Ø±Õ°´Å¥
 
-    private JTextArea feature = null; // å†…å®¹
+    private JTextArea feature = null; // ÄÚÈİ
 
     private JScrollPane jfeaPan = null;
     private JButton sure = null;
@@ -47,25 +31,25 @@ public class InfoUtil {
     private Desktop desktop = null;
 
     public void init() {
-        // æ–°å»º300x180çš„æ¶ˆæ¯æç¤ºæ¡†
+        // ĞÂ½¨300x180µÄÏûÏ¢ÌáÊ¾¿ò
         tw = new TipWindow(300, 180);
         headPan = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         feaPan = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         btnPan = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        title = new JLabel("æ¬¢è¿ä½¿ç”¨æœ¬ç³»ç»Ÿ");
+        title = new JLabel("»¶Ó­Ê¹ÓÃ±¾ÏµÍ³");
         head = new JLabel(titleT);
         close = new JLabel(" x");
         feature = new JTextArea(word);
         jfeaPan = new JScrollPane(feature);
-        sure = new JButton("ç¡®è®¤");
+        sure = new JButton("È·ÈÏ");
         sure.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // è®¾ç½®æç¤ºæ¡†çš„è¾¹æ¡†,å®½åº¦å’Œé¢œè‰²
+        // ÉèÖÃÌáÊ¾¿òµÄ±ß¿ò,¿í¶ÈºÍÑÕÉ«
         tw.getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.white));
         title.setPreferredSize(new Dimension(260, 26));
         title.setVerticalTextPosition(JLabel.CENTER);
         title.setHorizontalTextPosition(JLabel.CENTER);
-        title.setFont(new Font("å®‹ä½“", Font.PLAIN, 12));
+        title.setFont(new Font("ËÎÌå", Font.PLAIN, 12));
         title.setForeground(Color.black);
 
         close.setFont(new Font("Arial", Font.BOLD, 15));
@@ -73,19 +57,19 @@ public class InfoUtil {
         close.setVerticalTextPosition(JLabel.CENTER);
         close.setHorizontalTextPosition(JLabel.CENTER);
         close.setCursor(new Cursor(12));
-        close.setToolTipText("å…³é—­");
+        close.setToolTipText("¹Ø±Õ");
 
         head.setPreferredSize(new Dimension(250, 35));
         head.setVerticalTextPosition(JLabel.CENTER);
         head.setHorizontalTextPosition(JLabel.CENTER);
-        head.setFont(new Font("å®‹ä½“", Font.PLAIN, 14));
+        head.setFont(new Font("ËÎÌå", Font.PLAIN, 14));
         head.setForeground(Color.black);
 
         feature.setEditable(false);
         feature.setForeground(Color.BLACK);
-        feature.setFont(new Font("å®‹ä½“", Font.PLAIN, 13));
+        feature.setFont(new Font("ËÎÌå", Font.PLAIN, 13));
         feature.setBackground(new Color(255, 255, 255));
-        // è®¾ç½®æ–‡æœ¬åŸŸè‡ªåŠ¨æ¢è¡Œ
+        // ÉèÖÃÎÄ±¾Óò×Ô¶¯»»ĞĞ
         feature.setLineWrap(true);
 
         jfeaPan.setPreferredSize(new Dimension(260, 100));
@@ -93,14 +77,14 @@ public class InfoUtil {
         jfeaPan.setBackground(Color.black);
         tw.setBackground(Color.white);
 
-        // ä¸ºäº†éšè—æ–‡æœ¬åŸŸï¼ŒåŠ ä¸ªç©ºçš„JLabelå°†ä»–æŒ¤åˆ°ä¸‹é¢å»
+        // ÎªÁËÒş²ØÎÄ±¾Óò£¬¼Ó¸ö¿ÕµÄJLabel½«Ëû¼·µ½ÏÂÃæÈ¥
         JLabel jsp = new JLabel();
         jsp.setPreferredSize(new Dimension(300, 15));
 
         sure.setPreferredSize(new Dimension(60, 30));
-        // è®¾ç½®æ ‡ç­¾é¼ æ ‡æ‰‹å½¢
+        // ÉèÖÃ±êÇ©Êó±êÊÖĞÎ
         sure.setCursor(new Cursor(12));
-        // è®¾ç½®buttonå¤–è§‚
+        // ÉèÖÃbuttonÍâ¹Û
         sure.setContentAreaFilled(false);
         sure.setBorder(BorderFactory.createRaisedBevelBorder());
         sure.setBackground(Color.gray);
@@ -126,7 +110,7 @@ public class InfoUtil {
     }
 
     public void handle() {
-        // ä¸ºæ›´æ–°æŒ‰é’®å¢åŠ ç›¸åº”çš„äº‹ä»¶
+        // Îª¸üĞÂ°´Å¥Ôö¼ÓÏàÓ¦µÄÊÂ¼ş
         desktop = Desktop.getDesktop();
         sure.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -141,7 +125,7 @@ public class InfoUtil {
                 sure.setBorder(null);
             }
         });
-        // å³ä¸Šè§’å…³é—­æŒ‰é’®äº‹ä»¶
+        // ÓÒÉÏ½Ç¹Ø±Õ°´Å¥ÊÂ¼ş
         close.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 tw.close();
@@ -211,7 +195,7 @@ class TipWindow extends JDialog {
             } catch (InterruptedException ex) {
             }
         }
-        // æ­¤å¤„ä»£ç ç”¨æ¥å®ç°è®©æ¶ˆæ¯æç¤ºæ¡†6ç§’åè‡ªåŠ¨æ¶ˆå¤±
+        // ´Ë´¦´úÂëÓÃÀ´ÊµÏÖÈÃÏûÏ¢ÌáÊ¾¿ò6Ãëºó×Ô¶¯ÏûÊ§
         try {
             Thread.sleep(6000);
         } catch (InterruptedException e) {

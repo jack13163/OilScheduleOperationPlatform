@@ -106,7 +106,6 @@ public class ISDEPLUS_CDP extends Algorithm {
                     offSpring[1] = (Solution) crossoverOperator_.execute(new Object[]{parents[1], parents});
                 } else {
                     System.out.println("unknown crossover");
-
                 }
                 mutationOperator_.execute(offSpring[0]);
                 mutationOperator_.execute(offSpring[1]);
@@ -154,8 +153,8 @@ public class ISDEPLUS_CDP extends Algorithm {
             SolutionSet solutions = ranking.getSubfront(rankingIndex);
             fronts.add(solutions);
 
-            candidateSolutions += ranking.getSubfront(rankingIndex).size();
-            if ((pop.size() + ranking.getSubfront(rankingIndex).size()) <= populationSize_) {
+            candidateSolutions += solutions.size();
+            if (pop.size() + solutions.size() <= populationSize_) {
 
                 for (int i = 0; i < solutions.size(); i++) {
                     pop.add(solutions.get(i));
@@ -167,8 +166,8 @@ public class ISDEPLUS_CDP extends Algorithm {
         // Environmental selection
         // A copy of the reference list should be used as parameter of the environmental selection
         EnvironmentalSelection selection = new EnvironmentalSelection(populationSize_);
-        pop = selection.execute(pop);
+        pop = selection.execute(pop, fronts);
 
         return pop;
     }
-} // ISDEPLUS_CDP
+}

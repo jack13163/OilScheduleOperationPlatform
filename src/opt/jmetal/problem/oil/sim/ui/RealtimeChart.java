@@ -30,10 +30,10 @@ public class RealtimeChart {
     private XYChart chart;
     private JFrame frame;
 
-    private String title;// æ ‡é¢˜
-    private String seriesName;// ç³»åˆ—ï¼Œæ­¤å¤„åªæœ‰ä¸€ä¸ªç³»åˆ—ã€‚è‹¥å­˜åœ¨å¤šç»„æ•°æ®ï¼Œå¯ä»¥è®¾ç½®å¤šä¸ªç³»åˆ—
-    private List<Double> seriesData;// ç³»åˆ—çš„æ•°æ®
-    private int size = 1000;// æœ€å¤šæ˜¾ç¤ºå¤šå°‘æ•°æ®ï¼Œé»˜è®¤æ˜¾ç¤º1000ä¸ªæ•°æ®
+    private String title;// ±êÌâ
+    private String seriesName;// ÏµÁĞ£¬´Ë´¦Ö»ÓĞÒ»¸öÏµÁĞ¡£Èô´æÔÚ¶à×éÊı¾İ£¬¿ÉÒÔÉèÖÃ¶à¸öÏµÁĞ
+    private List<Double> seriesData;// ÏµÁĞµÄÊı¾İ
+    private int size = 1000;// ×î¶àÏÔÊ¾¶àÉÙÊı¾İ£¬Ä¬ÈÏÏÔÊ¾1000¸öÊı¾İ
 
     public int getSize() {
         return size;
@@ -60,7 +60,7 @@ public class RealtimeChart {
     }
 
     /**
-     * å®æ—¶ç»˜å›¾
+     * ÊµÊ±»æÍ¼
      *
      * @param seriesName
      * @param title
@@ -75,7 +75,7 @@ public class RealtimeChart {
 
     public static RealtimeChart getInstance() {
         if (_instance == null) {
-            _instance = new RealtimeChart("å®æ—¶æ›²çº¿", "ç¡¬çº¦æŸä»£ä»·");
+            _instance = new RealtimeChart("ÊµÊ±ÇúÏß", "Ó²Ô¼Êø´ú¼Û");
         }
         return _instance;
     }
@@ -93,12 +93,12 @@ public class RealtimeChart {
             // Create Chart
             chart = new XYChartBuilder().width(600).height(450).theme(ChartTheme.Matlab).title(title).build();
             chart.addSeries(seriesName, null, seriesData);
-            chart.getStyler().setLegendPosition(LegendPosition.OutsideS);// è®¾ç½®legendçš„ä½ç½®ä¸ºå¤–åº•éƒ¨
-            chart.getStyler().setLegendLayout(LegendLayout.Horizontal);// è®¾ç½®legendçš„æ’åˆ—æ–¹å¼ä¸ºæ°´å¹³æ’åˆ—
+            chart.getStyler().setLegendPosition(LegendPosition.OutsideS);// ÉèÖÃlegendµÄÎ»ÖÃÎªÍâµ×²¿
+            chart.getStyler().setLegendLayout(LegendLayout.Horizontal);// ÉèÖÃlegendµÄÅÅÁĞ·½Ê½ÎªË®Æ½ÅÅÁĞ
 
             swingWrapper = new SwingWrapper<XYChart>(chart);
             frame = swingWrapper.displayChart();
-            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);// é˜²æ­¢å…³é—­çª—å£æ—¶é€€å‡ºç¨‹åº
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);// ·ÀÖ¹¹Ø±Õ´°¿ÚÊ±ÍË³ö³ÌĞò
             frame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {

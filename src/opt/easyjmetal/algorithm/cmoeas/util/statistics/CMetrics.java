@@ -1,6 +1,10 @@
 package opt.easyjmetal.algorithm.cmoeas.util.statistics;
 
+import opt.easyjmetal.core.SolutionSet;
+import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.JMetalLogger;
+import opt.easyjmetal.util.sqlite.SqlUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -21,34 +25,61 @@ public class CMetrics {
     private static final String resultBaseDirectory_ = "result/easyjmetal";
 
     private List<String> problemList_;
+    private List<String> algorithmList_;
+    private int runs_;
 
-    private double[][] cvalues;
+    private double[][][][] cvalues2;
 
-    public CMetrics(String[] problemNames) {
+    public CMetrics(String[] problemNames, String[] algorithmNames, int runs) {
         this.problemList_ = Arrays.asList(problemNames);
+        this.algorithmList_ = Arrays.asList(algorithmNames);
+        this.runs_ = runs;
     }
 
     public void run() {
         try {
-            List<List<List<Double>>> data = readDataFromFiles();
-            computeDataStatistics(data);
-            generateLatexScript(data);
+            List<List<List<List<List<Double>>>>> data = readDataFromFiles2();
+            computeDataStatistics2(data);
+            generateLatexScript();
         } catch (IOException ex) {
             JMetalLogger.logger.info("请生成指标值后再执行生成表格操作: " + ex.getMessage());
         }
     }
 
     /**
-     * 读取各个问题的pf
+     * 读取各个算法和问题的pf
      *
      * @return
      * @throws IOException
      */
-    private List<List<List<Double>>> readDataFromFiles() throws IOException {
-        List<List<List<Double>>> data = new ArrayList<>();
+    private List<List<List<List<List<Double>>>>> readDataFromFiles2() throws IOException {
+        List<List<List<List<List<Double>>>>> data = new ArrayList<>();
 
         for (int problem = 0; problem < problemList_.size(); problem++) {
-            data.add(readVectors(resultBaseDirectory_ + "/" + problemList_.get(problem) + ".pf"));
+            List<List<List<List<Double>>>> problemList = new ArrayList<>();
+            for (int algorithm = 0; algorithm < algorithmList_.size(); algorithm++) {
+                List<List<List<Double>>> algorithmList = new ArrayList<>();
+                for (int run = 0; run < runs_; run++) {
+                    List<List<Double>> runList = new ArrayList<>();
+                    try {
+                        SolutionSet solutionSet = SqlUtils.SelectData(algorithmList_.get(algorithm), problemList_.get(problem) + "_" + (run + 1));
+                        double[][] objectives = solutionSet.writeObjectivesToMatrix();
+
+                        for (int i = 0; i < objectives.length; i++) {
+                            List<Double> values = new ArrayList<>();
+                            for (int j = 0; j < objectives[i].length; j++) {
+                                values.add(objectives[i][j]);
+                            }
+                            runList.add(values);
+                        }
+                    } catch (JMException e) {
+                        e.printStackTrace();
+                    }
+                    algorithmList.add(runList);
+                }
+                problemList.add(algorithmList);
+            }
+            data.add(problemList);
         }
 
         return data;
@@ -83,19 +114,23 @@ public class CMetrics {
         return referenceVectors;
     }
 
-
-    private void computeDataStatistics(List<List<List<Double>>> data) {
+    private void computeDataStatistics2(List<List<List<List<List<Double>>>>> data) {
 
         int problemListSize = problemList_.size();
-        cvalues = new double[problemListSize - 1][2];
-        for (int problem = 1; problem < problemListSize; problem++) {
-            // problem[0]problem[1],problem[2]...对比
-            cvalues[problem - 1][0] = computeStatistics(data.get(0), data.get(problem));
-            cvalues[problem - 1][1] = computeStatistics(data.get(problem), data.get(0));
+        int algorithmListSize = algorithmList_.size();
+        cvalues2 = new double[problemListSize][algorithmListSize - 1][2][runs_];
+        for (int problem = 0; problem < problemListSize; problem++) {
+            for (int algorithm = 1; algorithm < algorithmListSize; algorithm++) {
+                for (int run = 0; run < runs_; run++) {
+                    // algorithm[0]algorithm[1],algorithm[2]...对比
+                    cvalues2[problem][algorithm - 1][0][run] = computeStatistics(data.get(problem).get(0).get(run), data.get(problem).get(algorithm).get(run));
+                    cvalues2[problem][algorithm - 1][1][run] = computeStatistics(data.get(problem).get(algorithm).get(run), data.get(problem).get(0).get(run));
+                }
+            }
         }
     }
 
-    private void generateLatexScript(List<List<List<Double>>> data) throws IOException {
+    private void generateLatexScript() throws IOException {
         String latexDirectoryName = resultBaseDirectory_ + "/" + DEFAULT_LATEX_DIRECTORY;
         File latexOutput;
         latexOutput = new File(latexDirectoryName);
@@ -104,9 +139,9 @@ public class CMetrics {
             JMetalLogger.logger.info("Creating " + latexDirectoryName + " directory");
         }
 
-        String latexFile = latexDirectoryName + "/" + "CMetrics.tex";
+        String latexFile = latexDirectoryName + "/" + "CMetrics_" + algorithmList_.get(0) + ".tex";
         printHeaderLatexCommands(latexFile);
-        printData(latexFile, "TTest");
+        printData2(latexFile, algorithmList_.get(0) + " CMetrics");
         printEndLatexCommands(latexFile);
     }
 
@@ -141,12 +176,12 @@ public class CMetrics {
         }
     }
 
-    private void printData(String latexFile, String caption) throws IOException {
+    private void printData2(String latexFile, String caption) throws IOException {
         // Generate header of the table
         try (FileWriter os = new FileWriter(latexFile, true)) {
             os.write("\n");
             os.write("\\begin{table}" + "\n");
-            os.write("\\caption{" + "C" + ". " + caption + "}"
+            os.write("\\caption{" + caption.replace("_", "\\_") + "}"
                     + "\n");
             os.write("\\label{table: " + "C" + "}" + "\n");
             os.write("\\centering" + "\n");
@@ -154,33 +189,35 @@ public class CMetrics {
             os.write("\\begin{tabular}{l");
 
             // calculate the number of columns
-            os.write(StringUtils.repeat("l", 2));
+            os.write(StringUtils.repeat("l", algorithmList_.size() - 1));
             os.write("}\n");
             os.write("\\hline\n");
 
             // write table head
-            for (int i = 0; i < 2; i++) {
-                if (i == 0) {
-                    os.write(" C(" + problemList_.get(0).replace("_", "\\_") + ","
-                            + problemList_.get(i).replace("_", "\\_") + ")" + " & ");
+            for (int algorithm = 1; algorithm < algorithmList_.size(); algorithm++) {
+                if (algorithm < algorithmList_.size() - 1) {
+                    os.write(" & " + algorithmList_.get(algorithm).replace("_", "\\_"));
                 } else {
-                    os.write("C(" + problemList_.get(i).replace("_", "\\_") + "," +
-                            problemList_.get(0).replace("_", "\\_") + ")" + "\\\\" + "\n");
+                    os.write(" & " + algorithmList_.get(algorithm).replace("_", "\\_") + " \\\\\n");
                 }
             }
             os.write("\\hline \n");
 
             // write lines
-            for (int i = 0; i < problemList_.size() - 1; i++) {
+            for (int problem = 0; problem < problemList_.size(); problem++) {
                 // 比较第一个算法与其他算法的性能
-                for (int j = 0; j < 2; j++) {
-                    os.write("$" + cvalues[i][j] + "$");
-                    if (j == 0) {
+                os.write("$" + problemList_.get(problem).replace("_", "\\_") + "$ & ");
+                for (int algorithm = 1; algorithm < algorithmList_.size(); algorithm++) {
+                    os.write("$" + String.format("%.2e",
+                            Statistics.MeanValue(Arrays.asList(ArrayUtils.toObject(cvalues2[problem][algorithm - 1][0]))))
+                            + "_{" + String.format("%.2e",
+                            Statistics.MeanValue(Arrays.asList(ArrayUtils.toObject(cvalues2[problem][algorithm - 1][1]))))
+                            + "}$");
+                    if (algorithm < algorithmList_.size() - 1) {
                         os.write(" & ");
-                    } else {
-                        os.write(" \\\\\n");
                     }
                 }
+                os.write(" \\\\\n");
             }
 
             // close table
