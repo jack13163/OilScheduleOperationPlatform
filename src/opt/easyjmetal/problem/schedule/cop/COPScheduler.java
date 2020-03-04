@@ -27,9 +27,9 @@ import java.util.*;
  *
  * @author Administrator
  */
-public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
+public class COPScheduler implements ISimulationScheduler {
 
-    private Logger logger = LogManager.getLogger(COPOilScheduleSimulationScheduler.class.getName());
+    private Logger logger = LogManager.getLogger(COPScheduler.class.getName());
 
     private List<Operation> operations = new LinkedList<>();// 最终的决策序列
     private Solution solution;// 决策指令序列
@@ -88,7 +88,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
      * @param config   调度的配置信息
      * @param ruleName 规则名称
      */
-    public COPOilScheduleSimulationScheduler(Config config, String ruleName) {
+    public COPScheduler(Config config, String ruleName) {
         this.config = config;
         this.plotEachStep = false;
         this.ruleName = ruleName;
@@ -101,7 +101,7 @@ public class COPOilScheduleSimulationScheduler implements ISimulationScheduler {
      * @param showEachStep 是否显示每一步的结果
      * @param ruleName     规则名称
      */
-    public COPOilScheduleSimulationScheduler(Config config, boolean showEachStep, String ruleName) {
+    public COPScheduler(Config config, boolean showEachStep, String ruleName) {
         this.config = config;
         this.plotEachStep = showEachStep;
         this.ruleName = ruleName;

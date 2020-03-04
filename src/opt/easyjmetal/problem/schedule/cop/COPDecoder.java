@@ -44,7 +44,7 @@ public class COPDecoder {
     public static double[] decode(Solution solution, String ruleName) {
 
         // 开始仿真
-        COPOilScheduleSimulationScheduler scheduler = new COPOilScheduleSimulationScheduler(Config.getInstance(), false, ruleName);
+        COPScheduler scheduler = new COPScheduler(Config.getInstance(), false, ruleName);
         scheduler.start(solution);
         List<Operation> operations = scheduler.getOperations();
         // 检查是否违背供油罐生命周期约束

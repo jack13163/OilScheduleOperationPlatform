@@ -76,7 +76,7 @@ public class EDFTSS extends Problem {
         // java类锁：确保多个对象访问一个代码块时的进程同步
         synchronized (EDFTSS.class) {
             // 开始仿真: "EDF_PS", "EDF_TSS", "BT"
-            COPOilScheduleSimulationScheduler controller = new COPOilScheduleSimulationScheduler(CloneUtils.clone(config), ShowEachStep, "EDF_TSS");
+            COPScheduler controller = new COPScheduler(CloneUtils.clone(config), ShowEachStep, "EDF_TSS");
             controller.start(solution);
             List<Operation> operations = controller.getOperations();
             // 检查是否违背供油罐生命周期约束

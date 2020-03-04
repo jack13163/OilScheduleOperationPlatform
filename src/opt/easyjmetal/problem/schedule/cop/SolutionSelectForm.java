@@ -331,7 +331,7 @@ public class SolutionSelectForm extends JFrame {
                         try {
                             // 生成pareto前沿面
                             String path = Utils.generateOilScheduleParetoFront(algorithmNames, problemNames, runtimes);
-                            // 生成结果
+                            // 标记优秀的解
                             paintNodominanceSolution(resultTable, path);
                         } catch (Exception e) {
                             logger.fatal(e.getMessage());
@@ -372,11 +372,11 @@ public class SolutionSelectForm extends JFrame {
             for (int i = 0; i < mm.getRowCount(); i++) {
                 Map<String, Double> referenceCost = Config.getInstance().loadConfig().referenceCost;
                 Map<String, Double> resultCost = new HashMap<String, Double>();
-                resultCost.put("energyCost", Double.parseDouble(mm.getValueAt(i, 1) + ""));
-                resultCost.put("pipeMix", Double.parseDouble(mm.getValueAt(i, 2) + ""));
-                resultCost.put("tankMix", Double.parseDouble(mm.getValueAt(i, 3) + ""));
-                resultCost.put("chargeTime", Double.parseDouble(mm.getValueAt(i, 4) + ""));
-                resultCost.put("tankUsed", Double.parseDouble(mm.getValueAt(i, 5) + ""));
+                resultCost.put("energyCost", Double.parseDouble(mm.getValueAt(i, 1).toString()));
+                resultCost.put("pipeMix", Double.parseDouble(mm.getValueAt(i, 2).toString()));
+                resultCost.put("tankMix", Double.parseDouble(mm.getValueAt(i, 3).toString()));
+                resultCost.put("chargeTime", Double.parseDouble(mm.getValueAt(i, 4).toString()));
+                resultCost.put("tankUsed", Double.parseDouble(mm.getValueAt(i, 5).toString()));
 
                 // 标记支配解
                 flags[i] = ParetoHelper.dominanceComparison(referenceCost, resultCost);

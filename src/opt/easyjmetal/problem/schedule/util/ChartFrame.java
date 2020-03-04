@@ -50,12 +50,13 @@ public class ChartFrame extends JFrame {
                     ex.printStackTrace();
                 }
             }
+            // 保存后自动重绘
+            canvas.repaint();
         });
         menu.add(item);
 
         menubar.add(menu);
         setJMenuBar(menubar);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {

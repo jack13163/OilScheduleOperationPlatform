@@ -2,7 +2,7 @@ package opt.easyjmetal.problem.schedule.rules.impl;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.problem.schedule.Config;
-import opt.easyjmetal.problem.schedule.cop.COPOilScheduleSimulationScheduler;
+import opt.easyjmetal.problem.schedule.cop.COPScheduler;
 import opt.easyjmetal.problem.schedule.models.FactObject;
 import opt.easyjmetal.problem.schedule.models.Fragment;
 import opt.easyjmetal.problem.schedule.rules.AbstractRule;
@@ -26,7 +26,7 @@ public class EarliestDealineFirstAndPreemptiveScheduling extends AbstractRule {
 
     @Override
     public Fragment decode(FactObject factObject) throws JMException {
-        COPOilScheduleSimulationScheduler scheduler = (COPOilScheduleSimulationScheduler) _scheduler;
+        COPScheduler scheduler = (COPScheduler) _scheduler;
         int numOfTanks = factObject.getConfig().getTanks().size();
         Integer[][] policies = scheduler.policyStack.peek();// 可用策略
         int loc = factObject.getLoc();
@@ -133,7 +133,7 @@ public class EarliestDealineFirstAndPreemptiveScheduling extends AbstractRule {
      * @return
      */
     public double[][] calculateMaxVolume(FactObject factObjects) throws JMException {
-        COPOilScheduleSimulationScheduler scheduler = (COPOilScheduleSimulationScheduler) _scheduler;
+        COPScheduler scheduler = (COPScheduler) _scheduler;
         Config config = factObjects.getConfig();
         Integer[][] policies = scheduler.policyStack.peek();
         int rows = policies.length;

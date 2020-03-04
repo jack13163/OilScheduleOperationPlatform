@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>OilScheduleOperationPlatform</groupId>
     <artifactId>OilScheduleOperationPlatform</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <properties>
         <!-- 文件拷贝时的编码 -->

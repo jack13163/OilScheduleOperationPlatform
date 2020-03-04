@@ -133,7 +133,7 @@ public class CanvasGante extends Canvas {
                     g.drawLine(data_x, data_y + block_height, data_x + data_width, data_y + block_height);
 
                     // 绘制标签
-                    g.drawString("T" + tank + "", data_x, data_y);
+                    g.drawString("CT" + tank + "", data_x, data_y);
                 }
             }
 

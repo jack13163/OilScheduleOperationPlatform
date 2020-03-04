@@ -75,7 +75,7 @@ public class EDFPS extends Problem {
         // java类锁：确保多个对象访问一个代码块时的进程同步
         synchronized (EDFPS.class) {
             // 开始仿真: "EDF_PS", "EDF_TSS", "BT"
-            COPOilScheduleSimulationScheduler controller = new COPOilScheduleSimulationScheduler(CloneUtils.clone(config), ShowEachStep, "EDF_PS");
+            COPScheduler controller = new COPScheduler(CloneUtils.clone(config), ShowEachStep, "EDF_PS");
             controller.start(solution);
             List<Operation> operations = controller.getOperations();
             // 检查是否违背供油罐生命周期约束
