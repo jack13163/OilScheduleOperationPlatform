@@ -439,8 +439,13 @@ public class Solution implements Serializable {
 	 */
 	public String toString() {
 		String aux = "";
-		for (int i = 0; i < this.numberOfObjectives_; i++)
-			aux = aux + this.getObjective(i) + " ";
+		for (int i = 0; i < this.numberOfObjectives_; i++) {
+			if(i < this.numberOfObjectives_ - 1) {
+				aux = aux + this.getObjective(i) + " ";
+			}else{
+				aux = aux + this.getObjective(i);
+			}
+		}
 
 		return aux;
 	} // toString

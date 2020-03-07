@@ -144,7 +144,7 @@ public class CMOEAs_main {
                 System.out.println("==================================================================");
                 algorithm.setInputParameter("runningTime", j);
                 // Execute the Algorithm
-                System.out.println("The " + j + " run of " + problemStrings[i]);
+                System.out.println("The " + j + " run of " + algorithmName);
                 long initTime = System.currentTimeMillis();
                 SolutionSet pop = algorithm.execute();
                 long estimatedTime = System.currentTimeMillis() - initTime;
