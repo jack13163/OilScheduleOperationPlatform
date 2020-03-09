@@ -7,10 +7,13 @@ from sklearn import preprocessing
 
 # 载入数据
 X = np.loadtxt("oil.pf", delimiter=' ')
+# 过滤
+X = X[np.where(X[:,4]==10)]
+X = X[0:100,0:4];
 min_max_scaler = preprocessing.MinMaxScaler()
 X = min_max_scaler.fit_transform(X)
 
-clusters = range(2,50)
+clusters = range(2,31)
 
 # calinski_harabasz_scores
 calinski_harabaz_scores = []

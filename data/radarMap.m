@@ -1,10 +1,11 @@
 %雷达图
 data = importdata('oil.pf');
-data = data(61:160,:);
-varNames = { 'energyCost', 'pipeMixingCost', 'tankMixingCost', 'numberOfChange', 'numberOfTankUsed'};
+data = data(data(:,5) == 10,:);
+data = data(1:100,1:4);
+varNames = { 'energyCost', 'pipeMixingCost', 'tankMixingCost', 'numberOfChange'};
 
 subplot(1,2,1);
-glyphplot(data,'glyph','star','varLabels',{ 'energyCost', 'pipeMixingCost', 'tankMixingCost', 'numberOfChange', 'numberOfTankUsed'});
+glyphplot(data,'glyph','star','varLabels',{ 'energyCost', 'pipeMixingCost', 'tankMixingCost', 'numberOfChange'});
 box on
 axis off
 
@@ -12,19 +13,19 @@ axis off
 ND = normlization(data, 2);
 
 % 确定聚类个数
-k = 16;
+k = 9;
 
 % 聚类
 colors =  lines(k);
 label = init_methods(ND, k, 2);
 
-[data,ind] = sortrows([data,label],6);
+[data,ind] = sortrows([data,label],5);
 subplot(1,2,2);
-h=glyphplot(data(:,1:5),'glyph','star','varLabels',{ 'energyCost', 'pipeMixingCost', 'tankMixingCost', 'numberOfChange', 'numberOfTankUsed'},...
+h=glyphplot(data(:,1:4),'glyph','star','varLabels',{ 'energyCost', 'pipeMixingCost', 'tankMixingCost', 'numberOfChange'},...
     'ObsLabels',num2str(ind));
 for i=1:k
-    hf = h(data(:,6)==i,1);
-    ha = h(data(:,6)==i,2);
+    hf = h(data(:,5)==i,1);
+    ha = h(data(:,5)==i,2);
     for j=1:length(hf)
         hf(j).Color=colors(i,:);
         ha(j).Color=colors(i,:);
