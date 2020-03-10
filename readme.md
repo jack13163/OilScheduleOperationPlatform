@@ -19,3 +19,23 @@ J_χ: Crude oil mixing cost in charging tanks;
 J_δ: Switches of distillation towers;
 J_ε: Number of charging tanks to use;
 ```
+
+遗传算子：
+
+![](docs/oprators.png)
+
+编码类型：
+
+![](docs/encoding.jpg)
+
+原油调度问题：
+
+![](docs/problem.jpg)
+
+评价指标：
+
+![](docs/indicator.jpg)
+
+如何进行实验：
+
+![](docs/enter.jpg)
