@@ -377,9 +377,14 @@ public class Utils {
             for (String algorithmName : algorithmNameList_) {
                 for (int numRun = 0; numRun < independentRuns_; numRun++) {
                     String tableName = problemName + "_" + (numRun + 1);
-                    SolutionSet tmp = SqlUtils.SelectData(algorithmName, tableName);
-                    for (int i = 0; i < tmp.size(); i++) {
-                        solutionList.add(tmp.get(i));
+                    SolutionSet updatedSolutionSet = SqlUtils.SelectData(algorithmName, tableName);
+
+//                    // 更新目标值和约束，更新数据库
+//                    SolutionSet updatedSolutionSet = SqlUtils.UpdateObjectivesAndConstraint(algorithmName, tableName);
+//                    SqlUtils.UpdateSolutionSet(algorithmName, tableName, updatedSolutionSet);
+
+                    for (int i = 0; i < updatedSolutionSet.size(); i++) {
+                        solutionList.add(updatedSolutionSet.get(i));
                     }
                 }
             }
@@ -389,7 +394,7 @@ public class Utils {
         return outputNondomincantSolutionSet(solutionList, resultBaseDirectory_, "oil.pf");
     }
 
-    public interface ToDo{
+    public interface ToDo {
         void dosomething(Solution solution, String rule);
     }
 
@@ -425,7 +430,7 @@ public class Utils {
                         if (flag) {
                             System.out.println(String.format("find solution in db:%s table:%s no:%d", algorithmName, tableName, i + 1));
                             solutionSet.add(solution);
-                            if(todo != null){
+                            if (todo != null) {
                                 todo.dosomething(solution, problemName);
                             }
                         }

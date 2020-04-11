@@ -367,7 +367,7 @@ public class MainFrame extends JFrame {
 
         // 创建指标表格
         JPanel panelValueTable = new JPanel(new BorderLayout());
-        Object[] columnNames = {"约束违背值", "切换次数", "罐底混合成本", "管道混合成本", "能耗成本", "用罐个数"};
+        String[] columnNames = {"约束违背值", "切换次数", "罐底混合成本", "管道混合成本", "能耗成本", "用罐个数"};
         Object[][] rowData = {{0, 0, 0, 0, 0, 0}};
         costTable = new JTable(rowData, columnNames);
         costTable.setEnabled(false);

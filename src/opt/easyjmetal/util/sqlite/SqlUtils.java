@@ -4,6 +4,7 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.core.Variable;
 import opt.easyjmetal.encodings.solutiontype.variable.Real;
+import opt.easyjmetal.problem.schedule.cop.COPDecoder;
 import opt.easyjmetal.util.JMException;
 
 import java.sql.*;
@@ -118,13 +119,17 @@ public class SqlUtils {
     }
 
     public static void InsertSolutionSet(String TableName, SolutionSet pop) throws JMException {
+        InsertSolutionSet(fileName_, TableName, pop);
+    }
+
+    public static void InsertSolutionSet(String DataBaseName, String TableName, SolutionSet pop) throws JMException {
         int recordNumber = pop.size();
 
         Connection conn;
         PreparedStatement ps;
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:" + fileName_ + ".db");
+            conn = DriverManager.getConnection("jdbc:sqlite:" + DataBaseName + ".db");
             String sql = "insert into" + " " + TableName + " " + " values (?,?,?)";
 
             conn.setAutoCommit(false);
@@ -136,7 +141,7 @@ public class SqlUtils {
                 Variable[] variables = pop.get(i).getDecisionVariables();
                 for (int j = 0; j < variables.length; j++) {
                     stringBuilder.append(variables[j].getValue());
-                    if(j < variables.length - 1){
+                    if (j < variables.length - 1) {
                         stringBuilder.append(" ");
                     }
                 }
@@ -150,7 +155,48 @@ public class SqlUtils {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
+    }
 
+    /**
+     * 更新解集
+     * @param DataBaseName
+     * @param TableName
+     * @param pop
+     * @throws JMException
+     */
+    public static void UpdateSolutionSet(String DataBaseName, String TableName, SolutionSet pop) throws JMException {
+        int recordNumber = pop.size();
+
+        Connection conn;
+        PreparedStatement ps;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:" + DataBaseName + ".db");
+            String sql = "update " + " " + TableName + " " + " set OBJ = ?, CON = ? where VAR = ?;";
+
+            conn.setAutoCommit(false);
+            ps = conn.prepareStatement(sql);
+            for (int i = 0; i < recordNumber; i++) {
+                ps.setString(1, pop.get(i).toString());
+                ps.setString(2, Double.toString(pop.get(i).getOverallConstraintViolation()));
+                StringBuilder stringBuilder = new StringBuilder();
+                Variable[] variables = pop.get(i).getDecisionVariables();
+                for (int j = 0; j < variables.length; j++) {
+                    stringBuilder.append(variables[j].getValue());
+                    if (j < variables.length - 1) {
+                        stringBuilder.append(" ");
+                    }
+                }
+                ps.setString(3, stringBuilder.toString());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+            conn.commit();
+            conn.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
     }
 
     public static void InsertData(String TableName, SolutionSet pop) throws JMException {
@@ -249,6 +295,73 @@ public class SqlUtils {
                     variables[i].setValue(Double.parseDouble(r3[i]));
                 }
                 solution.setDecisionVariables(variables);
+
+                dataSet.add(solution);
+            }
+
+            stmt.close();
+            con.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+
+        SolutionSet solutionSet = new SolutionSet(dataSet.size());
+        for (int i = 0; i < dataSet.size(); i++) {
+            solutionSet.add(dataSet.get(i));
+        }
+        return solutionSet;
+    }
+
+    /**
+     * 重新计算目标值和约束值，并更新sqlite数据库
+     *
+     * @param DataBaseName
+     * @param TableName
+     * @return
+     * @throws JMException
+     */
+    public static SolutionSet UpdateObjectivesAndConstraint(String DataBaseName, String TableName) throws JMException {
+
+        List<Solution> dataSet = new ArrayList<>();
+        Connection con;
+        Statement stmt;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            con = DriverManager.getConnection("jdbc:sqlite:" + DataBaseName + ".db");
+            stmt = con.createStatement();
+            String sql = "SELECT * from " + TableName;
+            ResultSet resultSet = stmt.executeQuery(sql);
+
+            // 判断是否读取结束
+            while (resultSet.next()) {
+                List<Double> line = new ArrayList<>();
+                String objs = resultSet.getString("OBJ");
+                String cons = resultSet.getString("CON");
+                String vars = resultSet.getString("VAR");
+
+                String[] r1 = objs.split(" ");// 目标值
+                String[] r2 = cons.split(" ");// 约束
+                String[] r3 = vars.split(" ");// 决策变量
+
+                Solution solution = new Solution(r1.length, r2.length);
+
+                // 目前仅仅支持实数类型的参数，如有需要，请自行修改
+                Variable[] variables = new Variable[r3.length];
+                for (int i = 0; i < r3.length; i++) {
+                    //line.add(Double.parseDouble(r1[i]));
+                    variables[i] = new Real();
+                    variables[i].setValue(Double.parseDouble(r3[i]));
+                }
+                solution.setDecisionVariables(variables);
+
+                // 计算目标值和约束值
+                String ruleName = TableName.substring(0, TableName.lastIndexOf("_"));
+                double[] values = COPDecoder.decode(solution, ruleName);
+                for (int i = 0; i < r1.length; i++) {
+                    solution.setObjective(i, values[i + 1]);
+                }
+                solution.setOverallConstraintViolation(values[0]);
 
                 dataSet.add(solution);
             }

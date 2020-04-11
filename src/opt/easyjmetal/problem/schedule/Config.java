@@ -33,7 +33,7 @@ public class Config implements Serializable {
     public Map<String, Double> referenceCost;// 参考成本
 
     // 停运次数
-    public static int stopTimes = 10;
+    public static int stopTimes = 5;
 
     private List<TankObject> tanks;
     private List<DSObject> dss;

@@ -27,8 +27,24 @@ public class CMOEAs_main {
     public static void main(String[] args) throws Exception {
         // 0 represents for DE, 1 represents for SBX
         int crossoverMethod = 1;
-        // "NSGAII_CDP", "MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "MOEAD_CDP", "C_MOEAD", "PPS_MOEAD", "NSGAIII_CDP", "SPEA2_CDP"
-        batchRun(new String[]{"ISDEPLUS_CDP"}, crossoverMethod);
+        // "NSGAII_CDP",
+        // "ISDEPLUS_CDP",
+        // "NSGAIII_CDP",
+        // "MOEAD_CDP",
+        // "MOEAD_IEpsilon",
+        // "MOEAD_Epsilon",
+        // "MOEAD_SR",
+        // "C_MOEAD",
+        // "PPS_MOEAD"
+        batchRun(new String[]{"NSGAII_CDP",
+                "ISDEPLUS_CDP",
+                "NSGAIII_CDP",
+                "MOEAD_CDP",
+                "MOEAD_IEpsilon",
+                "MOEAD_Epsilon",
+                "MOEAD_SR",
+                "C_MOEAD",
+                "PPS_MOEAD"}, crossoverMethod);
     }
 
     private static void batchRun(String[] methods, int crossMethod) throws Exception {
@@ -159,19 +175,19 @@ public class CMOEAs_main {
         // 保存运行时间
         String basePath = "result/easyjmetal/";
         File dir = new File(basePath);
-        if(!dir.exists()){
+        if (!dir.exists()) {
             dir.mkdirs();
         }
 
         //true = append file
-        FileWriter fileWritter = new FileWriter(basePath + "runtimes.txt",false);
+        FileWriter fileWritter = new FileWriter(basePath + "runtimes.txt", false);
         BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
 
         for (int i = 0; i < runtimes.size(); i++) {
             List<Long> algorithmRuntimes = runtimes.get(i);
             for (int j = 0; j < algorithmRuntimes.size(); j++) {
                 bufferWritter.write(algorithmRuntimes.get(j).toString());
-                if(j < algorithmRuntimes.size() - 1) {
+                if (j < algorithmRuntimes.size() - 1) {
                     bufferWritter.write(" ");
                 }
             }

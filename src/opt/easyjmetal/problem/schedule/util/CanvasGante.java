@@ -5,6 +5,9 @@ import org.ejml.data.DenseMatrix64F;
 
 import java.awt.*;
 
+/**
+ * 绘制甘特图
+ */
 public class CanvasGante extends Canvas {
     private static final long serialVersionUID = 1L;
 

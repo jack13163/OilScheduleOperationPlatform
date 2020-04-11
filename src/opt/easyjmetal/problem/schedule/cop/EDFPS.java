@@ -43,7 +43,7 @@ public class EDFPS extends Problem {
                 }
             }
         }
-        numberOfVariables_ = (N2 + N1) * 2 + Config.stopTimes;// 决策变量的个数
+        numberOfVariables_ = (N2 + N1 + Config.stopTimes) * 2;// 决策变量的个数
         numberOfObjectives_ = 5;// 目标个数
         numberOfConstraints_ = 1;// 约束个数【只有一个硬性约束】
         problemName_ = "EDF_PS";// 问题名

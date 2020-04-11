@@ -49,6 +49,7 @@ public class CanvasGante extends Canvas {
      * 重量级组件：    重写update方法
      * 轻量级组件：    尽快调用paint方法
      * canvas为重量级组件
+     *
      * @param g
      */
     public void update(Graphics g) {
@@ -58,10 +59,11 @@ public class CanvasGante extends Canvas {
 
     /**
      * 绘制甘特图
+     *
      * @param g
      */
     public void drawGante(Graphics g) {
-        if(data != null) {
+        if (data != null) {
             // 切记，这里要获取Graphics的长和宽，而不是Form的长和宽
             Rectangle rectangle = g.getClipBounds();
             int width = rectangle.width;
@@ -80,7 +82,7 @@ public class CanvasGante extends Canvas {
             int maxTime = (int) col_max[3];// 最后的任务的完成时间
             int numOfTasks = (int) col_max[0];// 任务的种类数
 
-            double scale_x = MathUtil.round(1.0 * (width - margin_left - margin_right - label_width) / maxTime,3);// 图像大小变化尺度
+            double scale_x = MathUtil.round(1.0 * (width - margin_left - margin_right - label_width) / maxTime, 3);// 图像大小变化尺度
             double scale_y = MathUtil.round(1.0 * (height - margin_top - margin_buttom - label_width) / 600 * 100, 3);// 图像大小变化尺度【参考原始比例】
 
             Map<Integer, Double> flags = new HashMap<>();
@@ -88,19 +90,20 @@ public class CanvasGante extends Canvas {
             // 绘制详细的调度数据
             for (int i = 0; i < data.length; i++) {
                 // 使用不同的颜色填充封闭的矩形区域
-                int color = (int) data[i][4] - 1;
                 int ds = (int) (data[i][0] - 1);
                 double start = data[i][2];
                 double end = data[i][3];
+                int color = (int) data[i][4] - 1;
+                int numberOfPumpGroups = (int) data[i][5];
+
                 // 计算矩形区域所在位置和宽度
                 int data_x = (int) MathUtil.round(margin_left + label_width + MathUtil.multiply(start, scale_x), 0).doubleValue();
                 int data_y = (int) MathUtil.round(margin_top + MathUtil.multiply(ds, scale_y), 0).doubleValue();
                 int data_width = (int) MathUtil.round(MathUtil.multiply(MathUtil.subtract(end, start), scale_x), 0).doubleValue();
                 // 不显示停运
                 if (color >= 0) {
-                    // 填充矩形区域
-                    g.setColor(colors[color]);
-                    g.fillRect(data_x, data_y, data_width, block_height);
+                    //填充矩形区域
+                    MyFillRect(g, data_x, data_y, data_width, block_height, colors[color], 10, numberOfPumpGroups);
                 }
             }
 
@@ -122,7 +125,7 @@ public class CanvasGante extends Canvas {
                     g.setColor(Color.black);
 
                     // 绘制边框
-                    if(!flags.containsKey(ds) || Math.abs(flags.get(ds) - start) > 1) {
+                    if (!flags.containsKey(ds) || Math.abs(flags.get(ds) - start) > 1) {
                         g.drawLine(data_x, data_y, data_x, data_y + block_height);
                     }
 
@@ -133,6 +136,7 @@ public class CanvasGante extends Canvas {
                     g.drawLine(data_x, data_y + block_height, data_x + data_width, data_y + block_height);
 
                     // 绘制标签
+                    g.setFont(new Font("Times new Roman", Font.BOLD, 14));
                     g.drawString("CT" + tank + "", data_x, data_y);
                 }
             }
@@ -190,6 +194,55 @@ public class CanvasGante extends Canvas {
                 int oilType = i + 1;
                 g.setColor(Color.black);
                 g.drawString("#" + oilType + "", x, y);
+            }
+        }
+    }
+
+    /**
+     * 功能：在矩形的中间画条纹
+     *
+     * @param g          绘图对象
+     * @param x          起点x
+     * @param y          起点y
+     * @param width      矩形宽度
+     * @param height     矩形高度
+     * @param color      矩形颜色
+     * @param line_width 条纹宽度
+     * @param style      条纹类型，style==0时，不会绘制底纹
+     */
+    public void MyFillRect(Graphics g, int x, int y, int width, int height, Color color, int line_width, int style) {
+        // 填充矩形区域
+        g.setColor(color);
+        g.fillRect(x, y, width, height);
+        g.setColor(Color.WHITE);
+        // 画底纹
+        // style==0时，不会绘制底纹
+        if (style == 1) {
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    if ((i + j) % line_width == 0)//设置条纹宽度
+                    {
+                        g.fillOval(x + i, y + j, 1, 1);
+                    }
+                }
+            }
+        } else if (style == 2) {
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    if (i % (line_width / 2) == 0 || j % (line_width / 2) == 0)//设置条纹宽度
+                    {
+                        g.fillOval(x + i, y + j, 1, 1);
+                    }
+                }
+            }
+        } else if (style == 3) {
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    if ((i + j) % line_width == 0)//设置条纹宽度
+                    {
+                        g.fillOval(x + i, y + height - j, 1, 1);
+                    }
+                }
             }
         }
     }

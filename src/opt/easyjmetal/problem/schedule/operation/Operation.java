@@ -665,7 +665,7 @@ public class Operation {
 
         try {
             int size = operations.size();
-            double[][] data = new double[size][5];
+            double[][] data = new double[size][6];
 
             for (int i = 0; i < operations.size(); i++) {
                 Operation operation = operations.get(i);
@@ -682,6 +682,21 @@ public class Operation {
                 data[i][2] = (double) operation.getStart();
                 data[i][3] = (double) operation.getEnd();
                 data[i][4] = (double) operation.getOil();
+
+                // 开启的油泵的组数
+                if (operation.getType() == OperationType.Charging || operation.getType() == OperationType.Hoting) {
+                    double[] speeds = Config.getInstance().getPipes().get(operation.getDs() == Config.getInstance().HighOilDS?1:0).getChargingSpeed();
+                    int numberOfPumpGroups = 0;
+                    for (int j = 0; j < speeds.length; j++) {
+                        if(speeds[j] == operation.getSpeed()){
+                            numberOfPumpGroups = j + 1;
+                            break;
+                        }
+                    }
+                    data[i][5] = numberOfPumpGroups;
+                } else {
+                    data[i][5] = 0;
+                }
 
                 logger.info(data[i][0] + "," + data[i][1] + "," + data[i][2] + "," + data[i][3] + "," + data[i][4]);
             }

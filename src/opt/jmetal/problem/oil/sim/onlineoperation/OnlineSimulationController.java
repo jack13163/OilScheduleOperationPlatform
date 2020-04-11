@@ -19,13 +19,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * å…³é”®åœ¨äºå†²çªæ£€æŸ¥
+ * ¹Ø¼üÔÚÓÚ³åÍ»¼ì²é
  *
  * @author Administrator
  */
 public class OnlineSimulationController {
 
-    // æ—¥å¿—è®°å½•
+    // ÈÕÖ¾¼ÇÂ¼
     private Logger logger = LogManager.getLogger(OnlineSimulationController.class.getName());
 
     private double currentTime;
@@ -42,7 +42,7 @@ public class OnlineSimulationController {
     }
 
     /**
-     * åˆ¤æ–­æ˜¯å¦è°ƒåº¦ç»“æŸ
+     * ÅĞ¶ÏÊÇ·ñµ÷¶È½áÊø
      *
      * @return
      */
@@ -61,7 +61,7 @@ public class OnlineSimulationController {
     }
 
     /**
-     * è·å–æ‰€æœ‰ç½çš„æœ€è¿‘å°†è¦æ³¨æ²¹çš„æˆªæ­¢æ—¶é—´
+     * »ñÈ¡ËùÓĞ¹ŞµÄ×î½ü½«Òª×¢ÓÍµÄ½ØÖ¹Ê±¼ä
      *
      * @return
      */
@@ -81,7 +81,7 @@ public class OnlineSimulationController {
     }
 
     /**
-     * è·å–æ‰€æœ‰ç½çš„æœ€è¿‘å°†è¦ç‚¼æ²¹çš„æ—¶é—´
+     * »ñÈ¡ËùÓĞ¹ŞµÄ×î½ü½«ÒªÁ¶ÓÍµÄÊ±¼ä
      *
      * @param currentTime
      * @return
@@ -102,7 +102,7 @@ public class OnlineSimulationController {
     }
 
     /**
-     * è·å–æ‰€æœ‰ç½çš„æœ€è¿‘å°†è¦ä½¿ç”¨çš„æ—¶é—´
+     * »ñÈ¡ËùÓĞ¹ŞµÄ×î½ü½«ÒªÊ¹ÓÃµÄÊ±¼ä
      *
      * @param currentTime
      * @return
@@ -123,35 +123,35 @@ public class OnlineSimulationController {
     }
 
     /**
-     * è®¡ç®—æœ€å¤§å¯è½¬è¿ä½“ç§¯ï¼Œ ä¿è¯ä¸å†²çªã€ä»¥æœ€å¤§é€Ÿåº¦è½¬è¿ã€‘
+     * ¼ÆËã×î´ó¿É×ªÔËÌå»ı£¬ ±£Ö¤²»³åÍ»¡¾ÒÔ×î´óËÙ¶È×ªÔË¡¿
      *
      * @return
      */
     public Double getMaxVolumeWithMaxSpeed(int tank, int ds) {
 
-        // ç¡®å®šè½¬è¿å’Œç‚¼æ²¹é€Ÿåº¦
+        // È·¶¨×ªÔËºÍÁ¶ÓÍËÙ¶È
         double[] chargingSpeeds = Config.getInstance().getPipes().get(0).getChargingSpeed();
-        double chargingSpeed = chargingSpeeds[chargingSpeeds.length - 1];// ã€ä»¥æœ€å¤§é€Ÿåº¦è½¬è¿ã€‘
+        double chargingSpeed = chargingSpeeds[chargingSpeeds.length - 1];// ¡¾ÒÔ×î´óËÙ¶È×ªÔË¡¿
 
         return getMaxVolume(tank, ds, chargingSpeed);
     }
 
     /**
-     * è®¡ç®—æœ€å¤§å¯è½¬è¿ä½“ç§¯ï¼Œ ä¿è¯ä¸å†²çªã€ä»¥æœ€å°é€Ÿåº¦è½¬è¿ã€‘
+     * ¼ÆËã×î´ó¿É×ªÔËÌå»ı£¬ ±£Ö¤²»³åÍ»¡¾ÒÔ×îĞ¡ËÙ¶È×ªÔË¡¿
      *
      * @return
      */
     public Double getMaxVolumeWithMinSpeed(int tank, int ds) {
 
-        // ç¡®å®šè½¬è¿å’Œç‚¼æ²¹é€Ÿåº¦
+        // È·¶¨×ªÔËºÍÁ¶ÓÍËÙ¶È
         double[] chargingSpeeds = Config.getInstance().getPipes().get(0).getChargingSpeed();
-        double chargingSpeed = chargingSpeeds[0];// ã€ä»¥æœ€å°é€Ÿåº¦è½¬è¿ã€‘
+        double chargingSpeed = chargingSpeeds[0];// ¡¾ÒÔ×îĞ¡ËÙ¶È×ªÔË¡¿
 
         return getMaxVolume(tank, ds, chargingSpeed);
     }
 
     /**
-     * è®¡ç®—æœ€å¤§å¯è½¬è¿ä½“ç§¯ï¼Œ ä¿è¯ä¸å†²çªã€ä¾›è§„åˆ™å¼•æ“è°ƒç”¨ã€‘
+     * ¼ÆËã×î´ó¿É×ªÔËÌå»ı£¬ ±£Ö¤²»³åÍ»¡¾¹©¹æÔòÒıÇæµ÷ÓÃ¡¿
      *
      * @return
      */
@@ -160,10 +160,10 @@ public class OnlineSimulationController {
         double vol = Double.MIN_VALUE;
 
         try {
-            // ç¡®å®šç‚¼æ²¹é€Ÿåº¦
+            // È·¶¨Á¶ÓÍËÙ¶È
             double feedingSpeed = Config.getInstance().getDSs().get(ds - 1).getSpeed();
 
-            // é‡‡ç”¨å€’æ¨çš„æ–¹æ³•ç¡®å®šæœ€å¤§è½¬è¿ä½“ç§¯
+            // ²ÉÓÃµ¹ÍÆµÄ·½·¨È·¶¨×î´ó×ªÔËÌå»ı
             if (getChargingDeadlineTimeOfAllTanks().containsKey(tank)) {
                 double deadline = getChargingDeadlineTimeOfAllTanks().get(tank);
 
@@ -172,9 +172,9 @@ public class OnlineSimulationController {
                     double vol1 = chargingSpeed * feedingSpeed * (deadline - currentTime - Config.getInstance().RT)
                             / (chargingSpeed + feedingSpeed);
 
-                    // å…³é”®é—®é¢˜ï¼šç†æƒ³æƒ…å†µä¸‹ä»åå¾€å‰æ¨æ²¡æœ‰å¤ªå¤§é—®é¢˜ï¼Œä½†æ˜¯ï¼Œç°å®æ˜¯ï¼Œç”±äºè½¬è¿è¿‡å»çš„åŸæ²¹ä¸æ˜¯ç«‹å³å°±å¼€å§‹
-                    // ç”¨äºè’¸é¦å¡”ç‚¼æ²¹ï¼Œå› æ­¤ï¼Œå¯èƒ½ä¼šå»¶åï¼Œå¦‚æœå»¶åçš„æ—¶é—´è¿‡ä¹…ï¼Œå°±ä¼šå¯¼è‡´å½“å‰çš„feedingè¿‡ç¨‹ä¸ä¸‹ä¸€ä¸ªå†³ç­–çš„
-                    // chargingè¿‡ç¨‹ç›¸äº’é‡å ï¼Œæœ€ç»ˆå¯¼è‡´å‘ç”Ÿäº†å†²çªï¼Œå› æ­¤ï¼Œè¿˜éœ€è¦æ·»åŠ ä¸€ä¸ªè€ƒè™‘å› ç´ vol2ã€‚
+                    // ¹Ø¼üÎÊÌâ£ºÀíÏëÇé¿öÏÂ´ÓºóÍùÇ°ÍÆÃ»ÓĞÌ«´óÎÊÌâ£¬µ«ÊÇ£¬ÏÖÊµÊÇ£¬ÓÉÓÚ×ªÔË¹ıÈ¥µÄÔ­ÓÍ²»ÊÇÁ¢¼´¾Í¿ªÊ¼
+                    // ÓÃÓÚÕôÁóËşÁ¶ÓÍ£¬Òò´Ë£¬¿ÉÄÜ»áÑÓºó£¬Èç¹ûÑÓºóµÄÊ±¼ä¹ı¾Ã£¬¾Í»áµ¼ÖÂµ±Ç°µÄfeeding¹ı³ÌÓëÏÂÒ»¸ö¾ö²ßµÄ
+                    // charging¹ı³ÌÏà»¥ÖØµş£¬×îÖÕµ¼ÖÂ·¢ÉúÁË³åÍ»£¬Òò´Ë£¬»¹ĞèÒªÌí¼ÓÒ»¸ö¿¼ÂÇÒòËØvol2¡£
                     double vol2 = 0.0;
 
                     if (getFeedingDeadlineTimeOfAllTanks(currentTime).containsKey(tank)) {
@@ -188,7 +188,7 @@ public class OnlineSimulationController {
 
                 } else {
 
-                    // ä¸èƒ½è½¬è¿åŸæ²¹
+                    // ²»ÄÜ×ªÔËÔ­ÓÍ
                     vol = Double.MIN_VALUE;
                 }
             } else {
@@ -203,21 +203,21 @@ public class OnlineSimulationController {
     }
 
     /**
-     * è·å–ç®¡é“çš„åœè¿æ—¶é—´ï¼Œå‡è®¾é«˜ç†”ç‚¹ç®¡é“å’Œä½ç†”ç‚¹ç®¡é“éƒ½å¯ä»¥åœè¿ã€‚ tank=0ä»£è¡¨è¿™æ˜¯ä¸€ä¸ªåœè¿æ“ä½œï¼Œæ ¹æ®dsåˆ¤æ–­æ˜¯é«˜ç†”ç‚¹ç®¡é“åœè¿è¿˜æ˜¯ä½ç†”ç‚¹ç®¡é“åœè¿
+     * »ñÈ¡¹ÜµÀµÄÍ£ÔËÊ±¼ä£¬¼ÙÉè¸ßÈÛµã¹ÜµÀºÍµÍÈÛµã¹ÜµÀ¶¼¿ÉÒÔÍ£ÔË¡£ tank=0´ú±íÕâÊÇÒ»¸öÍ£ÔË²Ù×÷£¬¸ù¾İdsÅĞ¶ÏÊÇ¸ßÈÛµã¹ÜµÀÍ£ÔË»¹ÊÇµÍÈÛµã¹ÜµÀÍ£ÔË
      *
      * @return
      */
     public double[] getChargingEndTime() {
-        // ç®¡é“çš„ä¸ªæ•°
+        // ¹ÜµÀµÄ¸öÊı
         int numOfPipes = Config.getInstance().getPipes().size();
         double[] chargingEndTime = new double[numOfPipes];
 
-        // æ±‚å„ä¸ªè’¸é¦å¡”çš„æ³¨æ²¹ç»“æŸæ—¶é—´
+        // Çó¸÷¸öÕôÁóËşµÄ×¢ÓÍ½áÊøÊ±¼ä
         for (Operation operation : operations) {
             if (operation.getType() == OperationType.Charging || operation.getType() == OperationType.Stop) {
-                // é«˜ç†”ç‚¹ç®¡é“è½¬è¿
+                // ¸ßÈÛµã¹ÜµÀ×ªÔË
                 if (operation.getDs() != Config.getInstance().HighOilDS) {
-                    // æœ€æ™šæ³¨æ²¹ç»“æŸæ—¶é—´
+                    // ×îÍí×¢ÓÍ½áÊøÊ±¼ä
                     if (chargingEndTime[0] < operation.getEnd()) {
                         chargingEndTime[0] = operation.getEnd();
                     }
@@ -233,7 +233,7 @@ public class OnlineSimulationController {
     }
 
     /**
-     * è·å–æ‰€æœ‰å¡”çš„ç‚¼æ²¹ç»“æŸæ—¶é—´
+     * »ñÈ¡ËùÓĞËşµÄÁ¶ÓÍ½áÊøÊ±¼ä
      *
      * @return
      */
@@ -241,12 +241,12 @@ public class OnlineSimulationController {
 
         double[] feedEndTime = new double[Config.getInstance().getDSs().size()];
 
-        // æ±‚å„ä¸ªè’¸é¦å¡”çš„ç‚¼æ²¹ç»“æŸæ—¶é—´
+        // Çó¸÷¸öÕôÁóËşµÄÁ¶ÓÍ½áÊøÊ±¼ä
         for (int i = 0; i < Config.getInstance().getDSs().size(); i++) {
             int ds = i + 1;
             for (Operation operation : operations) {
                 if (operation.getDs() == ds && operation.getType() == OperationType.Feeding) {
-                    // æœ€æ™šç‚¼æ²¹ç»“æŸæ—¶é—´
+                    // ×îÍíÁ¶ÓÍ½áÊøÊ±¼ä
                     if (feedEndTime[i] < operation.getEnd()) {
                         feedEndTime[i] = operation.getEnd();
                     }
@@ -254,9 +254,9 @@ public class OnlineSimulationController {
             }
         }
 
-        // æ ‡è®°å·²ç»å®Œæˆç‚¼æ²¹è®¡åˆ’çš„å¡”
+        // ±ê¼ÇÒÑ¾­Íê³ÉÁ¶ÓÍ¼Æ»®µÄËş
         for (int i = 0; i < Config.getInstance().getDSs().size(); i++) {
-            // å®Œæˆç‚¼æ²¹è®¡åˆ’çš„è’¸é¦å¡”ä¸åœ¨è€ƒè™‘èŒƒå›´
+            // Íê³ÉÁ¶ÓÍ¼Æ»®µÄÕôÁóËş²»ÔÚ¿¼ÂÇ·¶Î§
             if (Config.getInstance().getDSs().get(i).getNextOilVolume() == -1) {
                 feedEndTime[i] = Double.MAX_VALUE;
                 continue;
@@ -270,12 +270,12 @@ public class OnlineSimulationController {
     }
 
     /**
-     * è·å–å½“å‰æ—¶åˆ»ä¾›æ²¹ç½çš„çŠ¶æ€ï¼Œæ˜¯å¦å¯ç”¨
+     * »ñÈ¡µ±Ç°Ê±¿Ì¹©ÓÍ¹ŞµÄ×´Ì¬£¬ÊÇ·ñ¿ÉÓÃ
      *
      * @param currentTime
      */
     private Map<Integer, TankState> getTankStatus(double currentTime) {
-        // æŒ‰ç…§å¼€å§‹æ—¶é—´æ’åº
+        // °´ÕÕ¿ªÊ¼Ê±¼äÅÅĞò
         Operation.sortOperation(operations);
 
         Map<Integer, TankState> tankState = new HashMap<Integer, TankState>();
@@ -284,13 +284,13 @@ public class OnlineSimulationController {
         int rowCount = model.getRowCount();
         int colCount = model.getColumnCount();
 
-        // é€ä¸ªç½åœ°ç¡®å®šçŠ¶æ€
+        // Öğ¸ö¹ŞµØÈ·¶¨×´Ì¬
         for (int i = 0; i < rowCount; i++) {
 
             int tank = i + 1;
-            String state = model.getValueAt(i, colCount - 1).toString();// è¯»å–ä½ è·å–è¡Œå·çš„æŸä¸€åˆ—çš„å€¼ï¼ˆä¹Ÿå°±æ˜¯å­—æ®µï¼‰
+            String state = model.getValueAt(i, colCount - 1).toString();// ¶ÁÈ¡Äã»ñÈ¡ĞĞºÅµÄÄ³Ò»ÁĞµÄÖµ£¨Ò²¾ÍÊÇ×Ö¶Î£©
 
-            // ç¡®å®šç½å½“å‰æ—¶åˆ»çš„çŠ¶æ€ï¼Œå…ˆç¡®å®šæœ€ç®€å•çš„ä¸¤ç§ç±»å‹ï¼Œæ¥ç€æ ¹æ®ä¸Šæ¬¡æ“ä½œçš„ç±»å‹ç¡®å®šæ˜¯ç­‰å¾…è¿˜æ˜¯ç©ºé—²
+            // È·¶¨¹Şµ±Ç°Ê±¿ÌµÄ×´Ì¬£¬ÏÈÈ·¶¨×î¼òµ¥µÄÁ½ÖÖÀàĞÍ£¬½Ó×Å¸ù¾İÉÏ´Î²Ù×÷µÄÀàĞÍÈ·¶¨ÊÇµÈ´ı»¹ÊÇ¿ÕÏĞ
             if (state.equals("waiting")) {
                 tankState.put(tank, TankState.waiting);
             } else if (state.equals("hotting")) {
@@ -308,21 +308,21 @@ public class OnlineSimulationController {
     }
 
     /**
-     * è·å–ä¾›æ²¹ç½çš„æœ€æ—©é‡Šæ”¾æ—¶é—´ï¼Œä¸ºåœè¿æä¾›å‚è€ƒ
+     * »ñÈ¡¹©ÓÍ¹ŞµÄ×îÔçÊÍ·ÅÊ±¼ä£¬ÎªÍ£ÔËÌá¹©²Î¿¼
      *
      * @return
      */
     private double getEarliestAvailableTime(double currentTime) {
         Map<Integer, Double> availableTimes = new HashMap<Integer, Double>();
 
-        // é€ä¸ªç½åœ°ç¡®å®šçŠ¶æ€
+        // Öğ¸ö¹ŞµØÈ·¶¨×´Ì¬
         for (int i = 0; i < Config.getInstance().getTanks().size(); i++) {
             int tank = i + 1;
             for (Operation operation : operations) {
-                // æ‰¾åˆ°å¯¹åº”çš„ç½
+                // ÕÒµ½¶ÔÓ¦µÄ¹Ş
                 if (operation.getTank() == tank && operation.getEnd() > currentTime) {
 
-                    // åŠ çƒ­æˆ–ç‚¼æ²¹ç»“æŸåå¯ç”¨
+                    // ¼ÓÈÈ»òÁ¶ÓÍ½áÊøºó¿ÉÓÃ
                     if (operation.getType() == OperationType.Hoting || operation.getType() == OperationType.Feeding) {
 
                         availableTimes.put(tank, operation.getEnd());
@@ -343,14 +343,14 @@ public class OnlineSimulationController {
     }
 
     /**
-     * è·å–ä¾›æ²¹ç½çš„çŠ¶æ€
+     * »ñÈ¡¹©ÓÍ¹ŞµÄ×´Ì¬
      *
      * @return
      */
     public DefaultTableModel getTankStateModel(double currentTime) {
         Operation.sortOperation(operations);
 
-        Object[] columnNames = {"ä¾›æ²¹ç½", "å®¹é‡", "åŸæ²¹ç§ç±»", "åŸæ²¹ä½“ç§¯", "å¼€å§‹æ—¶é—´", "ç»“æŸæ—¶é—´", "çŠ¶æ€"};
+        String[] columnNames = {"¹©ÓÍ¹Ş", "ÈİÁ¿", "Ô­ÓÍÖÖÀà", "Ô­ÓÍÌå»ı", "¿ªÊ¼Ê±¼ä", "½áÊøÊ±¼ä", "×´Ì¬"};
 
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(columnNames);
@@ -359,62 +359,62 @@ public class OnlineSimulationController {
             int tank = i + 1;
             Object[] data = {tank, Config.getInstance().getTanks().get(tank - 1).getCapacity(), 0, 0, 0, 0, "empty"};
 
-            // è®°å½•å‰ä¸€å†³ç­–å’Œåä¸€å†³ç­–
+            // ¼ÇÂ¼Ç°Ò»¾ö²ßºÍºóÒ»¾ö²ß
             Operation lastOperation = null;
             Operation nextOperation = null;
 
             for (Operation operation : operations) {
-                // æ‰¾åˆ°å¯¹åº”çš„ç½
+                // ÕÒµ½¶ÔÓ¦µÄ¹Ş
                 if (operation.getTank() == tank) {
                     if (operation.getStart() > currentTime) {
                         nextOperation = operation;
                         break;
                     } else {
-                        // æ ‡è®°ä¸Šä¸€çŠ¶æ€
+                        // ±ê¼ÇÉÏÒ»×´Ì¬
                         lastOperation = operation;
                     }
                 }
             }
 
-            // æ²¡æœ‰ä»»ä½•å†³ç­–è®°å½•
+            // Ã»ÓĞÈÎºÎ¾ö²ß¼ÇÂ¼
             if (lastOperation == null && nextOperation == null) {
-                // ç©ºç½çš„ç‰¹æ®Šå¤„ç†
+                // ¿Õ¹ŞµÄÌØÊâ´¦Àí
                 data[2] = 0;
                 data[3] = 0;
                 data[4] = 0;
                 data[5] = 0;
                 data[6] = "empty";
             } else {
-                // å‰ä¸€ä¸ªå†³ç­–éç©º
+                // Ç°Ò»¸ö¾ö²ß·Ç¿Õ
                 if (lastOperation != null) {
-                    // æ ¹æ®ä¸Šæ¬¡æ“ä½œçš„ç±»å‹ç¡®å®šæ˜¯ç­‰å¾…è¿˜æ˜¯ç©ºé—²
+                    // ¸ù¾İÉÏ´Î²Ù×÷µÄÀàĞÍÈ·¶¨ÊÇµÈ´ı»¹ÊÇ¿ÕÏĞ
                     if (lastOperation.getStart() <= currentTime && currentTime < lastOperation.getEnd()) {
                         if (lastOperation.getType() == OperationType.Hoting) {
-                            // æ³¨æ²¹çŠ¶æ€
+                            // ×¢ÓÍ×´Ì¬
                             data[2] = lastOperation.getOil();
                             data[3] = MathHelper.precision(
                                     lastOperation.getVol()
                                             - (currentTime - lastOperation.getStart()) * lastOperation.getSpeed(),
-                                    Config.getInstance().NumOfDivide);// è®¡ç®—å‰©ä½™ä½“ç§¯
+                                    Config.getInstance().NumOfDivide);// ¼ÆËãÊ£ÓàÌå»ı
                             data[4] = lastOperation.getStart();
                             data[5] = lastOperation.getEnd();
                             data[6] = "hoting";
                         } else if (lastOperation.getType() == OperationType.Charging) {
-                            // æ³¨æ²¹çŠ¶æ€
+                            // ×¢ÓÍ×´Ì¬
                             data[2] = lastOperation.getOil();
                             data[3] = MathHelper.precision(
                                     (currentTime - lastOperation.getStart()) * lastOperation.getSpeed(),
-                                    Config.getInstance().NumOfDivide);// è®¡ç®—æ³¨æ²¹ä½“ç§¯
+                                    Config.getInstance().NumOfDivide);// ¼ÆËã×¢ÓÍÌå»ı
                             data[4] = lastOperation.getStart();
                             data[5] = lastOperation.getEnd();
                             data[6] = "charging";
                         } else if (lastOperation.getType() == OperationType.Feeding) {
-                            // ä¾›æ²¹çŠ¶æ€
+                            // ¹©ÓÍ×´Ì¬
                             data[2] = lastOperation.getOil();
                             data[3] = MathHelper.precision(
                                     lastOperation.getVol()
                                             - (currentTime - lastOperation.getStart()) * lastOperation.getSpeed(),
-                                    Config.getInstance().NumOfDivide);// è®¡ç®—å‰©ä½™ä½“ç§¯
+                                    Config.getInstance().NumOfDivide);// ¼ÆËãÊ£ÓàÌå»ı
                             data[4] = lastOperation.getStart();
                             data[5] = lastOperation.getEnd();
                             data[6] = "feeding";
@@ -422,14 +422,14 @@ public class OnlineSimulationController {
                     } else {
                         if (lastOperation.getType() == OperationType.Charging) {
 
-                            // ç­‰å¾…çŠ¶æ€
+                            // µÈ´ı×´Ì¬
                             data[2] = lastOperation.getOil();
                             data[3] = MathHelper.precision(lastOperation.getVol(), Config.getInstance().NumOfDivide);
                             data[4] = lastOperation.getStart();
                             data[5] = lastOperation.getEnd();
                             data[6] = "waiting";
                         } else {
-                            // ç­‰å¾…çŠ¶æ€
+                            // µÈ´ı×´Ì¬
                             data[2] = 0;
                             data[3] = 0;
                             data[4] = 0;
@@ -439,7 +439,7 @@ public class OnlineSimulationController {
                     }
                 } else if (nextOperation.getType() == OperationType.Feeding) {
 
-                    // å‰ä¸€å†³ç­–ä¸ºç©ºï¼Œåˆå§‹åº“å­˜çš„ç‰¹æ®Šå¤„ç†
+                    // Ç°Ò»¾ö²ßÎª¿Õ£¬³õÊ¼¿â´æµÄÌØÊâ´¦Àí
                     data[2] = nextOperation.getOil();
                     data[3] = MathHelper.precision(nextOperation.getVol(), Config.getInstance().NumOfDivide);
                     data[4] = nextOperation.getStart();
@@ -455,12 +455,12 @@ public class OnlineSimulationController {
     }
 
     /**
-     * è·å–å„ä¸ªè’¸é¦å¡”è¿›æ–™åŒ…å¤§å°
+     * »ñÈ¡¸÷¸öÕôÁóËş½øÁÏ°ü´óĞ¡
      *
      * @return
      */
     public TableModel getFpModel() {
-        Object[] columnNames = {"è’¸é¦å¡”", "åŸæ²¹ç§ç±»", "åŸæ²¹ä½“ç§¯", "æ‰€åœ¨ä½ç½®"};
+        String[] columnNames = {"ÕôÁóËş", "Ô­ÓÍÖÖÀà", "Ô­ÓÍÌå»ı", "ËùÔÚÎ»ÖÃ"};
 
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(columnNames);
@@ -470,7 +470,7 @@ public class OnlineSimulationController {
             List<FPObject> fpObjects = Config.getInstance().getDSs().get(i).getFps();
 
             for (FPObject fpObject : fpObjects) {
-                // å¿½ç•¥å·²ç»å®Œæˆçš„è¿›æ–™åŒ…
+                // ºöÂÔÒÑ¾­Íê³ÉµÄ½øÁÏ°ü
                 if (fpObject.getVolume() > 0) {
                     Object[] data = new Object[columnNames.length];
                     data[0] = ds;
@@ -485,12 +485,12 @@ public class OnlineSimulationController {
     }
 
     /**
-     * è·å–æˆæœ¬
+     * »ñÈ¡³É±¾
      *
      * @return
      */
     public TableModel getCostModel() {
-        Object[] columnNames = {"çº¦æŸè¿èƒŒå€¼", "åˆ‡æ¢æ¬¡æ•°", "ç½åº•æ··åˆæˆæœ¬", "ç®¡é“æ··åˆæˆæœ¬", "èƒ½è€—æˆæœ¬", "ç”¨ç½ä¸ªæ•°"};
+        String[] columnNames = {"Ô¼ÊøÎ¥±³Öµ", "ÇĞ»»´ÎÊı", "¹Şµ×»ìºÏ³É±¾", "¹ÜµÀ»ìºÏ³É±¾", "ÄÜºÄ³É±¾", "ÓÃ¹Ş¸öÊı"};
 
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(columnNames);
@@ -509,17 +509,17 @@ public class OnlineSimulationController {
     }
 
     /**
-     * åˆå§‹åŒ–ä»¿çœŸ
+     * ³õÊ¼»¯·ÂÕæ
      */
     public void initSimulation() {
 
-        // åŠ è½½åˆå§‹åŒ–é…ç½®
+        // ¼ÓÔØ³õÊ¼»¯ÅäÖÃ
         Config.getInstance().loadConfig();
 
-        // ç‚¼æ²¹ç»“æŸæ—¶é—´
+        // Á¶ÓÍ½áÊøÊ±¼ä
         double[] feedEndTime = new double[Config.getInstance().getDSs().size()];
 
-        // æ‰§è¡Œåˆå§‹æŒ‡æ´¾(ä½ç†”ç‚¹å¡”)
+        // Ö´ĞĞ³õÊ¼Ö¸ÅÉ(µÍÈÛµãËş)
         for (int i = 0; i < Config.getInstance().getTanks().size(); i++) {
             TankObject tankObject = Config.getInstance().getTanks().get(i);
             double vol = MathHelper.precision(tankObject.getVolume(), Config.getInstance().Precision);
@@ -536,15 +536,15 @@ public class OnlineSimulationController {
                     Operation feeding = new Operation(OperationType.Feeding, tank, ds,
                             MathHelper.precision(feedEndTime[ds - 1], Config.getInstance().Precision),
                             MathHelper.precision(feedEndTime[ds - 1] + feedTime, Config.getInstance().Precision), vol,
-                            oiltype, speed, 0);// åˆå§‹åº“å­˜å°±åœ¨ç‚¼æ²¹å‚å†…ï¼Œç”¨0è¡¨ç¤º
+                            oiltype, speed, 0);// ³õÊ¼¿â´æ¾ÍÔÚÁ¶ÓÍ³§ÄÚ£¬ÓÃ0±íÊ¾
                     operations.add(feeding);
 
-                    // æ›´æ–°ç‚¼æ²¹ç»“æŸæ—¶é—´
+                    // ¸üĞÂÁ¶ÓÍ½áÊøÊ±¼ä
                     feedEndTime[ds - 1] += feedTime;
                 }
             }
         }
-        // æ‰§è¡Œåˆå§‹æŒ‡æ´¾(é«˜ç†”ç‚¹å¡”)
+        // Ö´ĞĞ³õÊ¼Ö¸ÅÉ(¸ßÈÛµãËş)
         int tank = Config.HotTank;
         int ds = Config.getInstance().HighOilDS;
         TankObject tankObject = Config.getInstance().getTanks().get(tank - 1);
@@ -554,7 +554,7 @@ public class OnlineSimulationController {
         double feedingSpeed = Config.getInstance().getDSs().get(Config.getInstance().HighOilDS - 1).getSpeed();
         double feedingTime = MathHelper.precision(vPipe / feedingSpeed, Config.getInstance().Precision);
 
-        double paperSpeed = 625;// ä¸ºäº†å¯¹æ¯”è®ºæ–‡è€Œè®¾ç½®
+        double paperSpeed = 625;// ÎªÁË¶Ô±ÈÂÛÎÄ¶øÉèÖÃ
         double hotingTime = MathHelper.precision(vol / paperSpeed, Config.getInstance().Precision);
         double chargingTime = MathHelper.precision(vPipe / paperSpeed, Config.getInstance().Precision);
         Operation hoting = new Operation(OperationType.Hoting, tank, Config.getInstance().HighOilDS, 0, hotingTime, vol,
@@ -563,7 +563,7 @@ public class OnlineSimulationController {
                 MathHelper.precision(hotingTime, Config.getInstance().Precision),
                 MathHelper.precision(hotingTime + chargingTime, Config.getInstance().Precision), vPipe, oiltype,
                 paperSpeed, 2);
-        // åŠ çƒ­ç®¡é“åçš„ä½ç†”ç‚¹åŸæ²¹ä¼šé‡æ–°ä¾›ç»™è’¸é¦å¡”ç‚¼æ²¹
+        // ¼ÓÈÈ¹ÜµÀºóµÄµÍÈÛµãÔ­ÓÍ»áÖØĞÂ¹©¸øÕôÁóËşÁ¶ÓÍ
         ds = Config.getInstance().getTanks().get(tank - 1).getAssign();
         feedingSpeed = Config.getInstance().getDSs().get(ds - 1).getSpeed();
         feedingTime = MathHelper.precision(vPipe / feedingSpeed, Config.getInstance().Precision);
@@ -578,7 +578,7 @@ public class OnlineSimulationController {
     }
 
     /**
-     * ä¸‹ä¸€æ­¥å†³ç­–
+     * ÏÂÒ»²½¾ö²ß
      *
      * @param fragment
      * @return
@@ -586,7 +586,7 @@ public class OnlineSimulationController {
      */
     public boolean doOperation(Fragment fragment) throws Exception {
 
-        // è·å–ä¸‹ä¸€æ­¥æ“ä½œ
+        // »ñÈ¡ÏÂÒ»²½²Ù×÷
         int tank = fragment.getTank();
         int ds = fragment.getDs();
         double speed = fragment.getSpeed();
@@ -595,64 +595,64 @@ public class OnlineSimulationController {
         double[] feedEndTimes = getFeedingEndTime();
         double[] chargingEndTimes = getChargingEndTime();
 
-        // åˆ¤æ–­éœ€è¦è½¬è¿çš„ç®¡é“å’Œè½¬è¿ç»“æŸæ—¶é—´
+        // ÅĞ¶ÏĞèÒª×ªÔËµÄ¹ÜµÀºÍ×ªÔË½áÊøÊ±¼ä
         double currentTime = (ds != Config.getInstance().HighOilDS) ? chargingEndTimes[0] : chargingEndTimes[1];
 
-        // åˆ¤æ–­æ˜¯å¦åœè¿
+        // ÅĞ¶ÏÊÇ·ñÍ£ÔË
         if (tank == 0) {
             double availableTime = getEarliestAvailableTime(currentTime);
             Operation stoping = new Operation(OperationType.Stop, tank, ds,
                     MathHelper.precision(currentTime, Config.getInstance().Precision),
                     MathHelper.precision(availableTime, Config.getInstance().Precision), vol, 0, 0, 0);
 
-            // æ›´æ–°è¿›æ–™åŒ…å’Œç‚¼æ²¹ç»“æŸæ—¶é—´
+            // ¸üĞÂ½øÁÏ°üºÍÁ¶ÓÍ½áÊøÊ±¼ä
             operations.add(stoping);
         } else {
 
-            // 1.åˆ¤æ–­å½“å‰ä¾›æ²¹ç½æ˜¯å¦å¯ä»¥ä½¿ç”¨
+            // 1.ÅĞ¶Ïµ±Ç°¹©ÓÍ¹ŞÊÇ·ñ¿ÉÒÔÊ¹ÓÃ
             Map<Integer, TankState> tankState = getTankStatus(currentTime);
             if (tankState.containsKey(tank) && tankState.get(tank) != TankState.empty) {
-                throw new Exception("ç¡®ä¿æ‚¨é€‰æ‹©çš„ä¾›æ²¹ç½ä¸ºç©ºã€‚");
+                throw new Exception("È·±£ÄúÑ¡ÔñµÄ¹©ÓÍ¹ŞÎª¿Õ¡£");
             }
 
-            // 2.åˆ¤æ–­è½¬è¿çš„åŸæ²¹æ˜¯å¦è¶…è¿‡ç‚¼æ²¹è®¡åˆ’
+            // 2.ÅĞ¶Ï×ªÔËµÄÔ­ÓÍÊÇ·ñ³¬¹ıÁ¶ÓÍ¼Æ»®
             if (vol > Config.getInstance().getDSs().get(ds - 1).getNextOilVolume()) {
-                throw new Exception("ç‚¼æ²¹è®¡åˆ’ä¸­ï¼Œè’¸é¦å¡”" + ds + "ä¸éœ€è¦è½¬è¿é‚£ä¹ˆå¤šä½“ç§¯çš„åŸæ²¹ã€‚");
+                throw new Exception("Á¶ÓÍ¼Æ»®ÖĞ£¬ÕôÁóËş" + ds + "²»ĞèÒª×ªÔËÄÇÃ´¶àÌå»ıµÄÔ­ÓÍ¡£");
             }
 
-            // 3.åˆ¤æ–­æ˜¯å¦æ»¡è¶³ä¾›æ²¹ç½å®¹é‡çº¦æŸ
+            // 3.ÅĞ¶ÏÊÇ·ñÂú×ã¹©ÓÍ¹ŞÈİÁ¿Ô¼Êø
             if (vol > Config.getInstance().getTanks().get(tank - 1).getCapacity()) {
                 throw new Exception(
                         "make sure the volume of opt.jmetal.problem.oil to translated is smaller than the capacity of the tank you selected.");
             }
 
-            // ç¡®å®šåŸæ²¹ç±»å‹
+            // È·¶¨Ô­ÓÍÀàĞÍ
             int oiltype = Config.getInstance().getDSs().get(ds - 1).getNextOilType();
-            // ç¡®å®šä¸‹ä¸€åŸæ²¹æ¥è‡ªäºå“ªä¸€ä¸ªæ¸¯å£
+            // È·¶¨ÏÂÒ»Ô­ÓÍÀ´×ÔÓÚÄÄÒ»¸ö¸Û¿Ú
             int site = Config.getInstance().getDSs().get(ds - 1).getWhereNextOilFrom();
-            // ç¡®å®šæ³¨æ²¹æ—¶é—´
+            // È·¶¨×¢ÓÍÊ±¼ä
             double chargingTime = MathHelper.precision(vol / speed, Config.getInstance().Precision);
 
-            // ç¡®å®šç‚¼æ²¹é€Ÿç‡å’Œç‚¼æ²¹æ—¶é—´
+            // È·¶¨Á¶ÓÍËÙÂÊºÍÁ¶ÓÍÊ±¼ä
             double feedingSpeed = Config.getInstance().getDSs().get(ds - 1).getSpeed();
             double feedingTime = MathHelper.precision(vol / feedingSpeed, Config.getInstance().Precision);
 
-            // ç¡®å®šå¼€å§‹ç‚¼æ²¹æ—¶é—´
+            // È·¶¨¿ªÊ¼Á¶ÓÍÊ±¼ä
             double feedingStartTime = feedEndTimes[ds - 1];
 
-            // 4.åˆ¤æ–­æ˜¯å¦æ»¡è¶³é©»ç•™æ—¶é—´çº¦æŸ
+            // 4.ÅĞ¶ÏÊÇ·ñÂú×ã×¤ÁôÊ±¼äÔ¼Êø
             if (currentTime + chargingTime + Config.getInstance().RT > feedEndTimes[ds - 1]) {
-                // å½“ä¸æ»¡è¶³é©»ç•™æ—¶é—´çº¦æŸæ—¶ï¼Œä¼šé‡‡å–åé€€çš„æ–¹å¼
+                // µ±²»Âú×ã×¤ÁôÊ±¼äÔ¼ÊøÊ±£¬»á²ÉÈ¡ºóÍËµÄ·½Ê½
                 feedingStartTime = currentTime + chargingTime + Config.getInstance().RT;
             }
 
-            // 5.åˆ¤æ–­æœ¬æ¬¡æ³¨æ²¹æ˜¯å¦å’Œåˆ«çš„æ“ä½œæœ‰å†²çª
+            // 5.ÅĞ¶Ï±¾´Î×¢ÓÍÊÇ·ñºÍ±ğµÄ²Ù×÷ÓĞ³åÍ»
             Map<Integer, Double> usingTimes = getDeadlineTimeOfAllTanks(currentTime);
             if (usingTimes.containsKey(tank) && usingTimes.get(tank) < feedingStartTime + feedingTime) {
-                throw new Exception("ä¾›æ²¹ç½å ç”¨å†²çªã€‚");
+                throw new Exception("¹©ÓÍ¹ŞÕ¼ÓÃ³åÍ»¡£");
             }
 
-            // ç¡®å®šæ“ä½œ
+            // È·¶¨²Ù×÷
             Operation charging = new Operation(OperationType.Charging, tank, ds,
                     MathHelper.precision(currentTime, Config.getInstance().Precision),
                     MathHelper.precision(currentTime + chargingTime, Config.getInstance().Precision), vol, oiltype,
@@ -662,7 +662,7 @@ public class OnlineSimulationController {
                     MathHelper.precision(feedingStartTime + feedingTime, Config.getInstance().Precision), vol, oiltype,
                     feedingSpeed, site);
 
-            // æ›´æ–°è¿›æ–™åŒ…å’Œç‚¼æ²¹ç»“æŸæ—¶é—´
+            // ¸üĞÂ½øÁÏ°üºÍÁ¶ÓÍ½áÊøÊ±¼ä
             operations.add(charging);
             operations.add(feeding);
             Config.getInstance().getDSs().get(ds - 1).updateOilVolume(vol);

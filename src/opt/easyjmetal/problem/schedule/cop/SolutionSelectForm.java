@@ -300,7 +300,7 @@ public class SolutionSelectForm extends JFrame {
                                 new Utils.ToDo() {
                                     @Override
                                     public void dosomething(Solution solution, String rule) {
-                                        COPDecoder.decode(solution, rule);
+                                        COPDecoder.decode(solution, rule, true);
                                     }
                                 });
                     } catch (JMException ex) {

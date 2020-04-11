@@ -20,7 +20,7 @@ public class COPDecoder {
 
         // 查找出指定的解
         double[][] tofind = new double[][]{
-                {815.42,276.0,230.0,29.0,11.0}
+                {815.42, 276.0, 230.0, 29.0, 11.0}
         };
         try {
             Utils.getSolutionFromDB(algorithmNames, problemNames, runtimes, tofind, new Utils.ToDo() {
@@ -34,6 +34,7 @@ public class COPDecoder {
         }
     }
 
+
     /**
      * 解码
      *
@@ -42,6 +43,17 @@ public class COPDecoder {
      * @return
      */
     public static double[] decode(Solution solution, String ruleName) {
+        return decode(solution, ruleName, false);
+    }
+
+    /**
+     * 解码
+     *
+     * @param solution
+     * @param ruleName
+     * @return
+     */
+    public static double[] decode(Solution solution, String ruleName, boolean showSchedule) {
 
         // 开始仿真
         COPScheduler scheduler = new COPScheduler(Config.getInstance(), false, ruleName);
@@ -65,27 +77,29 @@ public class COPDecoder {
         double numberOfChange = Operation.getNumberOfChange(operations);
         double numberOfTankUsed = Operation.getNumberOfTankUsed(operations);
 
-        // 输出详细调度
-        System.out.println("============================================================================");
-        System.out.println("detail schedule :");
-        Operation.printOperation(operations);
-        System.out.println("============================================================================");
-
-        // 输出代价
-        System.out.println("============================================================================");
-        System.out.println("cost :");
-        System.out.println("hardCost :" + hardCost);
-        System.out.println("----------------------------------------------------------------------------");
-        System.out.println("energyCost :" + energyCost);
-        System.out.println("pipeMixingCost :" + pipeMixingCost);
-        System.out.println("tankMixingCost :" + tankMixingCost);
-        System.out.println("numberOfChange :" + numberOfChange);
-        System.out.println("numberOfTankUsed :" + numberOfTankUsed);
-        System.out.println("============================================================================");
-
         // 绘制甘特图
-        Operation.plotSchedule2(operations);
-        Operation.creatSangSen(operations);
+        if (showSchedule) {
+            // 输出详细调度
+            System.out.println("============================================================================");
+            System.out.println("detail schedule :");
+            Operation.printOperation(operations);
+            System.out.println("============================================================================");
+
+            // 输出代价
+            System.out.println("============================================================================");
+            System.out.println("cost :");
+            System.out.println("hardCost :" + hardCost);
+            System.out.println("----------------------------------------------------------------------------");
+            System.out.println("energyCost :" + energyCost);
+            System.out.println("pipeMixingCost :" + pipeMixingCost);
+            System.out.println("tankMixingCost :" + tankMixingCost);
+            System.out.println("numberOfChange :" + numberOfChange);
+            System.out.println("numberOfTankUsed :" + numberOfTankUsed);
+            System.out.println("============================================================================");
+
+            Operation.plotSchedule2(operations);
+            Operation.creatSangSen(operations);
+        }
         double[] freeTimes = Operation.getTankMaxFreeTime(operations);
 
         return new double[]{hardCost, energyCost, pipeMixingCost, tankMixingCost, numberOfChange, numberOfTankUsed};

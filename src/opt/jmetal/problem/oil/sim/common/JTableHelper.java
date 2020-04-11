@@ -25,7 +25,7 @@ public class JTableHelper {
         DefaultTableModel mm = new DefaultTableModel() {
             private static final long serialVersionUID = 1L;
 
-            // è®¾ç½®å•å…ƒæ ¼ä¸å¯ç¼–è¾‘
+            // ÉèÖÃµ¥Ôª¸ñ²»¿É±à¼­
             public boolean isCellEditable(int rowIndex, int ColIndex) {
                 return false;
             }
@@ -36,7 +36,7 @@ public class JTableHelper {
         String line;
 
         if ((line = br.readLine()) != null) {
-            // åˆ—æ•°
+            // ÁĞÊı
             int numOfColumes = 0;
             if (containNo) {
                 numOfColumes = line.split(" |,").length + 1;
@@ -45,7 +45,7 @@ public class JTableHelper {
             }
 
             if (containColumeNames) {
-                // è‹¥åˆ—åå­˜åœ¨ï¼Œåˆ™è¯»å–åˆ—å
+                // ÈôÁĞÃû´æÔÚ£¬Ôò¶ÁÈ¡ÁĞÃû
                 String[] columnNames = line.split(" |,");
                 if (containNo) {
                     String[] newColumnNames = new String[columnNames.length + 1];
@@ -57,10 +57,10 @@ public class JTableHelper {
                 } else {
                     mm.setColumnIdentifiers(columnNames);
                 }
-                // è¯»å–ä¸‹ä¸€è¡Œ
+                // ¶ÁÈ¡ÏÂÒ»ĞĞ
                 line = br.readLine();
             } else {
-                // è‹¥åˆ—åä¸å­˜åœ¨ï¼Œåˆ™è®¾ç½®ä¸´æ—¶åˆ—åï¼Œå¦åˆ™ä¼šå‡ºé”™
+                // ÈôÁĞÃû²»´æÔÚ£¬ÔòÉèÖÃÁÙÊ±ÁĞÃû£¬·ñÔò»á³ö´í
                 if (containNo) {
                     String[] tmpColumnNames = new String[numOfColumes + 1];
                     tmpColumnNames[0] = "No";
@@ -98,7 +98,7 @@ public class JTableHelper {
                 mm.addRow(v);
             } while ((line = br.readLine()) != null);
         }
-        // å…³é—­è¯»å†™å™¨
+        // ¹Ø±Õ¶ÁĞ´Æ÷
         br.close();
         reader.close();
 
@@ -106,17 +106,17 @@ public class JTableHelper {
     }
 
     /**
-     * è®¾ç½®æŸäº›è¡Œçš„é¢œè‰²
+     * ÉèÖÃÄ³Ğ©ĞĞµÄÑÕÉ«
      *
-     * @param table è¡¨æ ¼
-     * @param flags æ˜¯å¦ç‰¹æ®Šæ˜¾ç¤º
+     * @param table ±í¸ñ
+     * @param flags ÊÇ·ñÌØÊâÏÔÊ¾
      */
     public static void setRowsColor(JTable table, boolean[] flags) {
         try {
             DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer() {
                 private static final long serialVersionUID = 1L;
 
-                // é‡å†™getTableCellRendererComponent æ–¹æ³•
+                // ÖØĞ´getTableCellRendererComponent ·½·¨
                 @Override
                 public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                                                                boolean hasFocus, int row, int column) {
@@ -132,7 +132,7 @@ public class JTableHelper {
                     return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 }
             };
-            // å¯¹æ¯è¡Œçš„æ¯ä¸€ä¸ªå•å…ƒæ ¼
+            // ¶ÔÃ¿ĞĞµÄÃ¿Ò»¸öµ¥Ôª¸ñ
             int columnCount = table.getColumnCount();
             for (int i = 0; i < columnCount; i++) {
                 table.getColumn(table.getColumnName(i)).setCellRenderer(dtcr);
@@ -143,7 +143,7 @@ public class JTableHelper {
     }
 
     /**
-     * è¡¨æ ¼æ•°æ®å±…ä¸­
+     * ±í¸ñÊı¾İ¾ÓÖĞ
      *
      * @param table
      */
@@ -154,13 +154,13 @@ public class JTableHelper {
     }
 
     /**
-     * è®¾ç½®è¡¨æ ¼çš„æŸä¸€è¡Œçš„èƒŒæ™¯è‰²
+     * ÉèÖÃ±í¸ñµÄÄ³Ò»ĞĞµÄ±³¾°É«
      *
      * @param table
      */
     public static void setOneRowBackgroundColor(JTable table, int rowIndex, Color color) {
         try {
-            // è·å–åˆå§‹æ—¶åˆ»ä¾›æ²¹ç½çš„çŠ¶æ€
+            // »ñÈ¡³õÊ¼Ê±¿Ì¹©ÓÍ¹ŞµÄ×´Ì¬
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -217,13 +217,13 @@ public class JTableHelper {
     }
 
     /**
-     * æ›´æ–°swingä¸­çš„jtable
+     * ¸üĞÂswingÖĞµÄjtable
      *
      * @param table
      * @param mm
      */
     public static void showTableInSwing(JTable table, TableModel mm) {
-        // ä¸è¦åœ¨UIçº¿ç¨‹å¤–æ›´æ–°æ“ä½œUIï¼Œè¿™é‡ŒSwingUtilitiesä¼šæ‰¾åˆ°UIçº¿ç¨‹å¹¶æ‰§è¡Œæ›´æ–°UIæ“ä½œ
+        // ²»ÒªÔÚUIÏß³ÌÍâ¸üĞÂ²Ù×÷UI£¬ÕâÀïSwingUtilities»áÕÒµ½UIÏß³Ì²¢Ö´ĞĞ¸üĞÂUI²Ù×÷
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
