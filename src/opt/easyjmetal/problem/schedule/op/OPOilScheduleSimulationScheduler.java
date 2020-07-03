@@ -45,6 +45,10 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
     private Stack<Operation> operationStack = new Stack<>();// 决策栈
     private Stack<Config> configStack = new Stack<>();// 配置栈
 
+    public Config getConfig() {
+        return config;
+    }
+
     /**
      * 新建一个和当前配置相同的配置
      *

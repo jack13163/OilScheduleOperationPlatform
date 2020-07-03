@@ -1,19 +1,19 @@
 package opt.jmetal.problem.oil.sim.experiment;
 
-import opt.jmetal.qualityindicator.impl.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import opt.jmetal.algorithm.Algorithm;
+import opt.jmetal.algorithm.multiobjective.ibea.IBEABuilder;
 import opt.jmetal.algorithm.multiobjective.mocell.MOCellBuilder;
 import opt.jmetal.algorithm.multiobjective.moead.MOEADBuilder;
 import opt.jmetal.algorithm.multiobjective.moead.MOEADBuilder.Variant;
 import opt.jmetal.algorithm.multiobjective.nsgaii.NSGAIIBuilder;
 import opt.jmetal.algorithm.multiobjective.nsgaiii.NSGAIIIBuilder;
+import opt.jmetal.algorithm.multiobjective.pesa2.PESA2Builder;
 import opt.jmetal.algorithm.multiobjective.spea2.SPEA2Builder;
 import opt.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
 import opt.jmetal.operator.impl.crossover.SBXCrossover;
 import opt.jmetal.operator.impl.mutation.PolynomialMutation;
 import opt.jmetal.operator.impl.selection.BinaryTournamentSelection;
+import opt.jmetal.qualityindicator.impl.*;
 import opt.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
 import opt.jmetal.solution.DoubleSolution;
 import opt.jmetal.util.archive.impl.CrowdingDistanceArchive;
@@ -23,6 +23,8 @@ import opt.jmetal.util.experiment.component.ExecuteAlgorithms;
 import opt.jmetal.util.experiment.component.GenerateReferenceParetoSetAndFrontFromDoubleSolutions;
 import opt.jmetal.util.experiment.util.ExperimentAlgorithm;
 import opt.jmetal.util.experiment.util.ExperimentProblem;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -135,6 +137,26 @@ public class ExperimentConfig {
             int evaluation) {
         List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> algorithms = new ArrayList<>();
         for (int run = 0; run < runs; run++) {
+
+            if (algorithmList.contains("IBEA")) {
+                Algorithm<List<DoubleSolution>> algorithm = new IBEABuilder(problem.getProblem())
+                        .setPopulationSize(popSize)
+                        .setArchiveSize(popSize)
+                        .setCrossover(new SBXCrossover(0.9, 20))
+                        .setMutation(new PolynomialMutation(1.0 / problem.getProblem().getNumberOfVariables(), 20.0))
+                        .setMaxEvaluations(evaluation).build();
+                algorithms.add(new ExperimentAlgorithm<>(algorithm, problem, run));
+            }
+
+            if (algorithmList.contains("PESA2")) {
+                Algorithm<List<DoubleSolution>> algorithm = new PESA2Builder<>(problem.getProblem(),
+                        new SBXCrossover(0.9, 20),
+                        new PolynomialMutation(1.0 / problem.getProblem().getNumberOfVariables(), 20.0))
+                        .setPopulationSize(popSize)
+                        .setArchiveSize(popSize)
+                        .setMaxEvaluations(evaluation).build();
+                algorithms.add(new ExperimentAlgorithm<>(algorithm, problem, run));
+            }
 
             if (algorithmList.contains("NSGAII")) {
                 Algorithm<List<DoubleSolution>> algorithm = new NSGAIIBuilder<>(problem.getProblem(),

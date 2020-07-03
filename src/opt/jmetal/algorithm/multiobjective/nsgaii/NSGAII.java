@@ -1,24 +1,22 @@
 package opt.jmetal.algorithm.multiobjective.nsgaii;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.apache.commons.lang3.ArrayUtils;
 import opt.jmetal.algorithm.impl.AbstractGeneticAlgorithm;
 import opt.jmetal.operator.CrossoverOperator;
 import opt.jmetal.operator.MutationOperator;
 import opt.jmetal.operator.SelectionOperator;
 import opt.jmetal.operator.impl.selection.RankingAndCrowdingSelection;
 import opt.jmetal.problem.Problem;
+import opt.jmetal.problem.oil.sim.common.CloneUtils;
 import opt.jmetal.solution.Solution;
 import opt.jmetal.util.SolutionListUtils;
 import opt.jmetal.util.comparator.DominanceComparator;
 import opt.jmetal.util.evaluator.SolutionListEvaluator;
+import org.apache.commons.lang3.ArrayUtils;
 
-import opt.jmetal.problem.oil.sim.common.CloneUtils;
-import opt.jmetal.problem.oil.sim.ui.MainMethod;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
@@ -82,7 +80,7 @@ public class NSGAII<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
     @Override
     protected boolean isStoppingConditionReached() {
         // 更新进度条
-        MainMethod.frame.updateProcessBar(evaluations);
+        // MainMethod.frame.updateProcessBar(evaluations);
         return evaluations >= maxEvaluations;
     }
 

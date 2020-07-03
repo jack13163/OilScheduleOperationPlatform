@@ -1,17 +1,11 @@
 package opt.jmetal.algorithm.multiobjective.mocell;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.apache.commons.lang3.ArrayUtils;
 import opt.jmetal.algorithm.impl.AbstractGeneticAlgorithm;
 import opt.jmetal.operator.CrossoverOperator;
 import opt.jmetal.operator.MutationOperator;
 import opt.jmetal.operator.SelectionOperator;
 import opt.jmetal.problem.Problem;
+import opt.jmetal.problem.oil.sim.common.CloneUtils;
 import opt.jmetal.solution.Solution;
 import opt.jmetal.util.archive.BoundedArchive;
 import opt.jmetal.util.comparator.DominanceComparator;
@@ -22,9 +16,9 @@ import opt.jmetal.util.solutionattribute.Ranking;
 import opt.jmetal.util.solutionattribute.impl.CrowdingDistance;
 import opt.jmetal.util.solutionattribute.impl.DominanceRanking;
 import opt.jmetal.util.solutionattribute.impl.LocationAttribute;
+import org.apache.commons.lang3.ArrayUtils;
 
-import opt.jmetal.problem.oil.sim.common.CloneUtils;
-import opt.jmetal.problem.oil.sim.ui.MainMethod;
+import java.util.*;
 
 /**
  * @param <S>
@@ -86,7 +80,7 @@ public class MOCell<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, L
         evaluations++;
         currentIndividual = (currentIndividual + 1) % getMaxPopulationSize();
         // 更新进度条
-        MainMethod.frame.updateProcessBar(evaluations);
+        // MainMethod.frame.updateProcessBar(evaluations);
     }
 
     @Override

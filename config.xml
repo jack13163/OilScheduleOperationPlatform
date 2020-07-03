@@ -2,16 +2,17 @@
 <configuration>
 
     <rt>4</rt>
-    <min-volume>10000</min-volume>
+    <min-volume>20000</min-volume>
     <num-divide>10</num-divide>
     <precision>3</precision>
-    <hoting-speed>500</hoting-speed>
+    <!--论文设定-->
+    <hoting-speed>625</hoting-speed>
     <high-oil-ds>2</high-oil-ds>
     <hot-tank>8</hot-tank>
     <auto-stop>0</auto-stop>
     <!--为期两天的维护时间-->
     <maintenance-time>48</maintenance-time>
-    <reference-cost>chargeTime=23,tankMix=223,pipeMix=200,energyCost=973.51,tankUsed=11</reference-cost>
+    <reference-cost>chargeTime=23,tankMix=223,pipeMix=200,energyCost=1093.51,tankUsed=11</reference-cost>
 
     <tanks>
         <tank id="1">

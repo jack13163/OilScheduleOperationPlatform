@@ -554,7 +554,7 @@ public class OnlineSimulationController {
         double feedingSpeed = Config.getInstance().getDSs().get(Config.getInstance().HighOilDS - 1).getSpeed();
         double feedingTime = MathHelper.precision(vPipe / feedingSpeed, Config.getInstance().Precision);
 
-        double paperSpeed = 625;// 为了对比论文而设置
+        double paperSpeed = Config.getInstance().HotingSpeed;// 为了对比论文而设置
         double hotingTime = MathHelper.precision(vol / paperSpeed, Config.getInstance().Precision);
         double chargingTime = MathHelper.precision(vPipe / paperSpeed, Config.getInstance().Precision);
         Operation hoting = new Operation(OperationType.Hoting, tank, Config.getInstance().HighOilDS, 0, hotingTime, vol,

@@ -85,7 +85,7 @@ public class EDFPS extends Problem {
             }
 
             // 计算硬约束
-            double delayCost = Operation.getDelayCost(operations);
+            double delayCost = Operation.getDelayCostN(controller.getConfig(), operations);
             double maintenanceCost = Operation.getTankMaintenanceTime(operations);
             double hardCost = delayCost + maintenanceCost;
 

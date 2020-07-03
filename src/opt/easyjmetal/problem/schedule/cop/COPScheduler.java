@@ -46,6 +46,10 @@ public class COPScheduler implements ISimulationScheduler {
     private Stack<Operation> operationStack = new Stack<>();// 决策栈
     private Stack<Config> configStack = new Stack<>();// 配置栈
 
+    public Config getConfig() {
+        return config;
+    }
+
     /**
      * 新建一个和当前配置相同的配置
      *
@@ -293,7 +297,8 @@ public class COPScheduler implements ISimulationScheduler {
     /**
      * 过滤掉较差的策略
      *
-     * @param safe_vol
+     * @param vol
+     * @param fp_vol
      * @return
      */
     public boolean filterCondition(double vol, double fp_vol) {
@@ -418,8 +423,6 @@ public class COPScheduler implements ISimulationScheduler {
 
     /**
      * 生成推荐策略【应对高熔点管道停运导致的回溯】
-     *
-     * @param fragment
      */
     public Integer[][] generateRecommendPolicy() {
 
@@ -584,7 +587,6 @@ public class COPScheduler implements ISimulationScheduler {
     /**
      * 进行下一步决策
      *
-     * @param fragment
      * @throws Exception
      */
     private void next() throws Exception {
@@ -927,19 +929,37 @@ public class COPScheduler implements ISimulationScheduler {
         double chargingTime = MathUtil.divide(vPipe, Config.HotingSpeed);
         double feedingTime = MathUtil.divide(vPipe, feedingSpeed);
 
-        Operation hoting = new Operation(OperationType.Hoting, tank, config.HighOilDS, 0,
-                MathUtil.round(hotingTime, config.Precision), vol, oiltype, Config.HotingSpeed, 0);
-        Operation charging = new Operation(OperationType.Charging, tank, config.HighOilDS,
+        int site = 2;// 高熔点港口
+        Operation hoting = new Operation(OperationType.Hoting,
+                tank,
+                ds,
+                0,
                 MathUtil.round(hotingTime, config.Precision),
-                MathUtil.round(hotingTime + chargingTime, config.Precision), vPipe, oiltype, Config.HotingSpeed, 0);
+                vol,
+                oiltype,
+                Config.HotingSpeed,
+                site);
+        Operation charging = new Operation(OperationType.Charging,
+                tank,
+                ds,
+                MathUtil.round(hotingTime, config.Precision),
+                MathUtil.round(hotingTime + chargingTime, config.Precision),
+                vPipe,
+                oiltype,
+                Config.HotingSpeed,
+                site);
         // 加热管道后的低熔点原油会重新供给蒸馏塔炼油
         ds = config.getTanks().get(tank - 1).getAssign();
         feedingSpeed = Config.getInstance().getDSs().get(ds - 1).getSpeed();
         feedingTime = MathUtil.divide(vPipe, feedingSpeed);
-        Operation feeding = new Operation(OperationType.Feeding, tank, ds,
+        Operation feeding = new Operation(OperationType.Feeding,
+                tank,
+                ds,
                 MathUtil.round(feedEndTime[ds - 1], config.Precision),
-                MathUtil.round(MathUtil.add(feedEndTime[ds - 1], feedingTime), config.Precision), vPipe, oiltype,
-                feedingSpeed, 0);
+                MathUtil.round(MathUtil.add(feedEndTime[ds - 1], feedingTime), config.Precision),
+                vPipe, oiltype,
+                feedingSpeed,
+                site);
 
         operations.add(hoting);
         operations.add(charging);

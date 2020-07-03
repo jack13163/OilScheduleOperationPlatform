@@ -56,7 +56,8 @@ public class COPDecoder {
     public static double[] decode(Solution solution, String ruleName, boolean showSchedule) {
 
         // 开始仿真
-        COPScheduler scheduler = new COPScheduler(Config.getInstance(), false, ruleName);
+        Config config = Config.getInstance();
+        COPScheduler scheduler = new COPScheduler(config, false, ruleName);
         scheduler.start(solution);
         List<Operation> operations = scheduler.getOperations();
         // 检查是否违背供油罐生命周期约束
@@ -66,7 +67,7 @@ public class COPDecoder {
         }
 
         // 计算硬约束
-        double delayCost = Operation.getDelayCost(operations);
+        double delayCost = Operation.getDelayCostN(scheduler.getConfig(), operations);
         double maintenanceCost = Operation.getTankMaintenanceTime(operations);
         double hardCost = delayCost + maintenanceCost;
 

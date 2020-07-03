@@ -1,4 +1,4 @@
-//  ObjectiveComparator.java
+//  PointComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -41,11 +41,11 @@ public class IdeaObjectiveComparator implements Comparator {
    */
   public IdeaObjectiveComparator() {
     ascendingOrder_ = true;
-  } // ObjectiveComparator
+  } // PointComparator
 
   public IdeaObjectiveComparator(boolean descendingOrder) {
     ascendingOrder_ = !descendingOrder;
-  } // ObjectiveComparator
+  } // PointComparator
 
   /**
    * Compares two solutions.
@@ -81,4 +81,4 @@ public class IdeaObjectiveComparator implements Comparator {
       }
     }
   } // compare
-} // ObjectiveComparator
+} // PointComparator

@@ -13,7 +13,7 @@ public class CanvasGante extends Canvas {
 
     private final static int margin_left = 20;// 图像左边距
     private final static int margin_top = 50;// 图像上边距
-    private final static int margin_right = 20;// 图像右边距
+    private final static int margin_right = 120;// 图像右边距
     private final static int margin_buttom = 40;// 图像下边距
 
     private final static int label_width = 40;// 任务标签
@@ -41,9 +41,10 @@ public class CanvasGante extends Canvas {
             new Color(0, 153, 255),
             new Color(51, 51, 153),
             new Color(0, 0, 255),
-            new Color(255, 255, 0),
+            new Color(255,165,0),
             new Color(21, 116, 168),
-            new Color(255, 0, 0)};
+            new Color(255, 0, 0)
+    };
 
     /**
      * 重量级组件：    重写update方法
@@ -103,7 +104,7 @@ public class CanvasGante extends Canvas {
                 // 不显示停运
                 if (color >= 0) {
                     //填充矩形区域
-                    MyFillRect(g, data_x, data_y, data_width, block_height, colors[color], 10, numberOfPumpGroups);
+                    MyFillRect(g, data_x, data_y, data_width, block_height, Color.white, colors[color], 10, numberOfPumpGroups);
                 }
             }
 
@@ -180,21 +181,65 @@ public class CanvasGante extends Canvas {
             g.drawLine(x3, y3, x4, y4);// y轴
 
             // 绘制legend
-            for (int i = 0; i < numOfOilType; i++) {
-                // 计算矩形区域所在位置和宽度
-                int x = (int) (margin_left + label_width + i * 3 * block_height);
-                int y = height - margin_buttom;
+            // 计算矩形区域所在位置和宽度
+            int x = width - margin_right + 20;
+            int y = margin_top;
+            MyColorLegend(g, x, y, 11);
+            x = margin_left;
+            y = height - margin_buttom;
+            MyNumberOfpumpGroupsLegend(g, x, y, 3);
+        }
+    }
 
-                // 使用不同的颜色填充封闭的矩形区域
-                g.setColor(colors[i]);
-                g.fillRect(x, y, block_width, block_height);
-                g.drawRect(x, y, block_width, block_height);
+    /**
+     * 绘制legend
+     * @param g
+     * @param x
+     * @param y
+     */
+    public void MyColorLegend(Graphics g, int x, int y, int oilTypes){
 
-                // 设置标签
-                int oilType = i + 1;
-                g.setColor(Color.black);
-                g.drawString("#" + oilType + "", x, y);
-            }
+        int betweenDistance = 4;
+        int block_offset_top = -9;
+        int text_offset_top = 10;
+        // 绘制颜色
+        for (int i = 0; i < oilTypes; i++) {
+
+            // 使用不同的颜色填充封闭的矩形区域
+            g.setColor(colors[i]);
+            g.fillRect(x + 20, y + i * (block_height + betweenDistance) + block_offset_top, block_width, block_height);
+            g.setColor(Color.black);
+            g.drawRect(x + 20, y + i * (block_height + betweenDistance) + block_offset_top, block_width, block_height);
+
+            // 设置标签
+            int oilType = i + 1;
+            g.setColor(Color.black);
+            g.drawString("#" + oilType, x + block_width + 30, y + i * (block_height + betweenDistance) + text_offset_top);
+        }
+    }
+
+    /**
+     * 绘制legend
+     * @param g
+     * @param x
+     * @param y
+     * @param numberOfPumpGroups
+     */
+    public void MyNumberOfpumpGroupsLegend(Graphics g, int x, int y, int numberOfPumpGroups){
+        // 绘制开启的泵的组数
+        int x_offset = 25;
+        int y_offset = 20;
+        int betweenDistance = 100;
+        for (int i = 0; i < numberOfPumpGroups; i++) {
+
+            int xb = x + i * betweenDistance;
+            // 设置标签
+            g.setColor(Color.black);
+            g.setFont(new Font("Times new roman", Font.BOLD, 14));
+            g.drawString("V" + (i+1), xb, y + y_offset);
+
+            // 使用不同的颜色填充封闭的矩形区域
+            MyFillRect(g, xb + x_offset, y, block_width, block_height, Color.BLACK, Color.GRAY, 10, i+1);
         }
     }
 
@@ -206,41 +251,40 @@ public class CanvasGante extends Canvas {
      * @param y          起点y
      * @param width      矩形宽度
      * @param height     矩形高度
-     * @param color      矩形颜色
+     * @param front_color           前景色
+     * @param background_color      背景色
      * @param line_width 条纹宽度
      * @param style      条纹类型，style==0时，不会绘制底纹
      */
-    public void MyFillRect(Graphics g, int x, int y, int width, int height, Color color, int line_width, int style) {
+    public void MyFillRect(Graphics g, int x, int y, int width, int height, Color front_color, Color background_color, int line_width, int style) {
         // 填充矩形区域
-        g.setColor(color);
+        g.setColor(background_color);
         g.fillRect(x, y, width, height);
-        g.setColor(Color.WHITE);
+        g.setColor(front_color);
         // 画底纹
         // style==0时，不会绘制底纹
         if (style == 1) {
-            for (int i = 0; i < width; i++) {
-                for (int j = 0; j < height; j++) {
-                    if ((i + j) % line_width == 0)//设置条纹宽度
-                    {
-                        g.fillOval(x + i, y + j, 1, 1);
+            for (int i = 0; i < width - 2; i++) {
+                for (int j = 0; j < height - 2; j++) {
+                    if ((i + j) % line_width == 0){
+                        g.fillOval(x + i, y + j, 2, 2);
                     }
                 }
             }
         } else if (style == 2) {
-            for (int i = 0; i < width; i++) {
-                for (int j = 0; j < height; j++) {
-                    if (i % (line_width / 2) == 0 || j % (line_width / 2) == 0)//设置条纹宽度
-                    {
-                        g.fillOval(x + i, y + j, 1, 1);
+            for (int i = 1; i < width - 2; i++) {
+                for (int j = 1; j < height - 2; j++) {
+                    if (i % (line_width / 2) == 0 || j % (line_width / 2) == 0){
+                        g.fillOval(x + i, y + j, 2, 2);
                     }
                 }
             }
         } else if (style == 3) {
-            for (int i = 0; i < width; i++) {
-                for (int j = 0; j < height; j++) {
-                    if ((i + j) % line_width == 0)//设置条纹宽度
-                    {
-                        g.fillOval(x + i, y + height - j, 1, 1);
+            for (int i = 0; i < width - 2; i++) {
+                for (int j = 0; j < height - 2; j++) {
+                    if ((i + j) % line_width == 0){
+                        //设置条纹宽度
+                        g.fillOval(x + i, y + height - j - 2, 2, 2);
                     }
                 }
             }

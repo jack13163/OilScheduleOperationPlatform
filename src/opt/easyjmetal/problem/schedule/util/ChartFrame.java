@@ -1,7 +1,5 @@
 package opt.easyjmetal.problem.schedule.util;
 
-import opt.jmetal.problem.oil.canvas.gante.CanvasGante;
-
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.FileImageOutputStream;
@@ -108,6 +106,7 @@ public class ChartFrame extends JFrame {
             ImageWriter writer = ImageIO.getImageWritersByFormatName("tiff").next();
             writer.setOutput(new FileImageOutputStream(new File(filepath)));
             writer.write(myImage);
+            writer.dispose();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

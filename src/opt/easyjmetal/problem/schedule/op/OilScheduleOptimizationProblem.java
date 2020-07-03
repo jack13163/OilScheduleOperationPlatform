@@ -124,7 +124,6 @@ public class OilScheduleOptimizationProblem extends Problem {
      * 解码【需要保证解码操作的原子性】
      *
      * @param solution
-     * @param config
      * @return
      */
     public double[] decode(Solution solution) {
@@ -146,7 +145,7 @@ public class OilScheduleOptimizationProblem extends Problem {
             }
 
             // 计算硬约束
-            double hardCost = Operation.getDelayCost(operations);
+            double hardCost = Operation.getDelayCostN(controller.getConfig(), operations);
             if (hardCost != 0.0) {
                 System.out.println("optimization problem's hardCost don't equals to 0.");
             }

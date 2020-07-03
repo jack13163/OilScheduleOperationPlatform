@@ -1,18 +1,17 @@
 package opt.jmetal.algorithm.multiobjective.nsgaiii;
 
-import opt.jmetal.problem.oil.sim.common.CloneUtils;
-import opt.jmetal.problem.oil.sim.common.UniformPointHelper;
-import opt.jmetal.problem.oil.sim.ui.MainMethod;
+import opt.jmetal.algorithm.impl.AbstractGeneticAlgorithm;
 import opt.jmetal.algorithm.multiobjective.nsgaiii.util.EnvironmentalSelection;
 import opt.jmetal.algorithm.multiobjective.nsgaiii.util.ReferencePoint;
-import org.apache.commons.lang3.ArrayUtils;
-import opt.jmetal.algorithm.impl.AbstractGeneticAlgorithm;
+import opt.jmetal.problem.oil.sim.common.CloneUtils;
+import opt.jmetal.problem.oil.sim.common.UniformPointHelper;
 import opt.jmetal.solution.Solution;
 import opt.jmetal.util.JMetalLogger;
 import opt.jmetal.util.SolutionListUtils;
 import opt.jmetal.util.evaluator.SolutionListEvaluator;
 import opt.jmetal.util.solutionattribute.Ranking;
 import opt.jmetal.util.solutionattribute.impl.DominanceRanking;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -72,8 +71,8 @@ public class NSGAIII<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, 
     protected void updateProgress() {
         iterations++;
         // 更新进度条
-        int populationSize = population.size();
-        MainMethod.frame.updateProcessBar(iterations * populationSize);
+        // int populationSize = population.size();
+        // MainMethod.frame.updateProcessBar(iterations * populationSize);
     }
 
     @Override

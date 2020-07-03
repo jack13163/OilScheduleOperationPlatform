@@ -543,7 +543,7 @@ public class Operation {
 
         // 遍历转运决策序列计算成本【暂不考虑加热管道那部分的成本，认为其是固定成本】
         for (Operation operation : operations) {
-            if (operation.getType() == OperationType.Charging) {
+            if (operation.getType() == OperationType.Charging || operation.getType() == OperationType.Hoting) {
 
                 double cost = 0.0;
                 // 来自于站点1代表是通过低熔点管道转运而来，来自站点2代表是通过高熔点管道转运而来
@@ -623,7 +623,7 @@ public class Operation {
 
         try {
             int size = operations.size();
-            double[][] data = new double[size][5];
+            double[][] data = new double[size][6];
             String labels = "DS1 DS2 DS3 DS4 Pipe1 Pipe2";
 
             for (int i = 0; i < operations.size(); i++) {
@@ -641,6 +641,21 @@ public class Operation {
                 data[i][2] = (double) operation.getStart();
                 data[i][3] = (double) operation.getEnd();
                 data[i][4] = (double) operation.getOil();
+
+                // 开启的油泵的组数
+                if (operation.getType() == OperationType.Charging || operation.getType() == OperationType.Hoting) {
+                    double[] speeds = Config.getInstance().getPipes().get(operation.getDs() == Config.getInstance().HighOilDS?1:0).getChargingSpeed();
+                    int numberOfPumpGroups = 0;
+                    for (int j = 0; j < speeds.length; j++) {
+                        if(speeds[j] == operation.getSpeed()){
+                            numberOfPumpGroups = j + 1;
+                            break;
+                        }
+                    }
+                    data[i][5] = numberOfPumpGroups;
+                } else {
+                    data[i][5] = 0;
+                }
 
                 logger.info(data[i][0] + "," + data[i][1] + "," + data[i][2] + "," + data[i][3] + "," + data[i][4]);
             }
@@ -670,7 +685,7 @@ public class Operation {
 
         try {
             int size = operations.size();
-            double[][] data = new double[size][5];
+            double[][] data = new double[size][6];
 
             for (int i = 0; i < operations.size(); i++) {
                 Operation operation = operations.get(i);
@@ -687,6 +702,21 @@ public class Operation {
                 data[i][2] = (double) operation.getStart();
                 data[i][3] = (double) operation.getEnd();
                 data[i][4] = (double) operation.getOil();
+
+                // 开启的油泵的组数
+                if (operation.getType() == OperationType.Charging || operation.getType() == OperationType.Hoting) {
+                    double[] speeds = Config.getInstance().getPipes().get(operation.getDs() == Config.getInstance().HighOilDS?1:0).getChargingSpeed();
+                    int numberOfPumpGroups = 0;
+                    for (int j = 0; j < speeds.length; j++) {
+                        if(speeds[j] == operation.getSpeed()){
+                            numberOfPumpGroups = j + 1;
+                            break;
+                        }
+                    }
+                    data[i][5] = numberOfPumpGroups;
+                } else {
+                    data[i][5] = 0;
+                }
 
                 logger.info(data[i][0] + "," + data[i][1] + "," + data[i][2] + "," + data[i][3] + "," + data[i][4]);
             }

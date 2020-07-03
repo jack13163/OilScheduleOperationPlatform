@@ -1,22 +1,20 @@
 package opt.jmetal.algorithm.multiobjective.spea2;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import opt.jmetal.algorithm.impl.AbstractGeneticAlgorithm;
 import opt.jmetal.algorithm.multiobjective.spea2.util.EnvironmentalSelection;
 import opt.jmetal.operator.CrossoverOperator;
 import opt.jmetal.operator.MutationOperator;
 import opt.jmetal.operator.SelectionOperator;
 import opt.jmetal.problem.Problem;
+import opt.jmetal.problem.oil.sim.common.CloneUtils;
 import opt.jmetal.solution.Solution;
 import opt.jmetal.util.evaluator.SolutionListEvaluator;
 import opt.jmetal.util.solutionattribute.impl.StrengthRawFitness;
 import org.apache.commons.lang3.ArrayUtils;
 
-import opt.jmetal.problem.oil.sim.common.CloneUtils;
-import opt.jmetal.problem.oil.sim.ui.MainMethod;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Juan J. Durillo
@@ -61,7 +59,7 @@ public class SPEA2<S extends Solution<?>> extends AbstractGeneticAlgorithm<S, Li
         iterations++;
         // 更新进度条
         int populationSize = population.size();
-        MainMethod.frame.updateProcessBar(iterations * populationSize);
+        // MainMethod.frame.updateProcessBar(iterations * populationSize);
     }
 
     @Override

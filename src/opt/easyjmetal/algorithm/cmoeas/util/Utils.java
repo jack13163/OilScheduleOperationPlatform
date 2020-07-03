@@ -410,28 +410,41 @@ public class Utils {
                                                 int independentRuns_, double[][] toselect, ToDo todo) throws JMException {
         SolutionSet solutionSet = new SolutionSet(toselect.length);
 
-        for (String problemName : problemList_) {
-            for (String algorithmName : algorithmNameList_) {
-                for (int numRun = 0; numRun < independentRuns_; numRun++) {
-                    String tableName = problemName + "_" + (numRun + 1);
-                    SolutionSet tmp = SqlUtils.SelectData(algorithmName, tableName);
-                    for (int i = 0; i < tmp.size(); i++) {
-                        Solution solution = tmp.get(i);
-                        boolean flag = true;
-                        // 判断当前个体是否为待查找的个体
-                        for (int j = 0; j < toselect.length && flag; j++) {
+        // 判断当前个体是否为待查找的个体
+        for (int j = 0; j < toselect.length; j++) {
+            boolean flag = false;
+
+            for (String problemName : problemList_) {
+                if(flag){
+                    break;
+                }
+                for (String algorithmName : algorithmNameList_) {
+                    if(flag){
+                        break;
+                    }
+                    for (int numRun = 0; numRun < independentRuns_; numRun++) {
+                        // 没有找到就继续找，否则，退出
+                        if(flag){
+                            break;
+                        }
+                        String tableName = problemName + "_" + (numRun + 1);
+                        SolutionSet tmp = SqlUtils.SelectData(algorithmName, tableName);
+                        for (int i = 0; i < tmp.size() && !flag; i++) {
+                            flag = true;
+                            Solution solution = tmp.get(i);
                             for (int k = 0; k < toselect[j].length && flag; k++) {
                                 if (solution.getObjective(k) != toselect[j][k]) {
                                     flag = false;
                                 }
                             }
-                        }
 
-                        if (flag) {
-                            System.out.println(String.format("find solution in db:%s table:%s no:%d", algorithmName, tableName, i + 1));
-                            solutionSet.add(solution);
-                            if (todo != null) {
-                                todo.dosomething(solution, problemName);
+                            // 这里需要保证当出现多个解的目标值相同时，就只找到第一个
+                            if (flag) {
+                                System.out.println(String.format("find solution in db:%s table:%s no:%d", algorithmName, tableName, i + 1));
+                                solutionSet.add(solution);
+                                if (todo != null) {
+                                    todo.dosomething(solution, problemName);
+                                }
                             }
                         }
                     }

@@ -4,8 +4,8 @@ import javax.swing.JFrame;
 
 public class ChartFrame {
     // ´°¿Ú´óÐ¡
-    private final static int width = 900;
-    private final static int height = 600;
+    private final static int width = 1100;
+    private final static int height = 480;
 
     public JFrame frame;
     private CanvasGante canvas;

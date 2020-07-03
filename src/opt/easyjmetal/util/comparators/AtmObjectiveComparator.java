@@ -1,4 +1,4 @@
-//  ObjectiveComparator.java
+//  PointComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -45,12 +45,12 @@ public class AtmObjectiveComparator implements Comparator {
   public AtmObjectiveComparator(int nObj) {
     this.nObj = nObj;
     ascendingOrder_ = true;
-  } // ObjectiveComparator
+  } // PointComparator
 
   public AtmObjectiveComparator(int nObj, boolean descendingOrder) {
     this.nObj = nObj;
     ascendingOrder_ = !descendingOrder;
-  } // ObjectiveComparator
+  } // PointComparator
 
   /**
    * Compares two solutions.
@@ -86,4 +86,4 @@ public class AtmObjectiveComparator implements Comparator {
       }
     }
   } // compare
-} // ObjectiveComparator
+} // PointComparator

@@ -86,7 +86,7 @@ public class EDFTSS extends Problem {
             }
 
             // 计算硬约束
-            double delayCost = Operation.getDelayCost(operations);
+            double delayCost = Operation.getDelayCostN(controller.getConfig(), operations);// 修改了一步Bug
             double maintenanceCost = Operation.getTankMaintenanceTime(operations);
             double hardCost = delayCost + maintenanceCost;
 

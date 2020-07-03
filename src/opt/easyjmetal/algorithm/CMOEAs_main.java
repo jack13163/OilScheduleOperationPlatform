@@ -1,6 +1,3 @@
-/**
- * Created by liwenji  Email: wenji_li@126.com
- */
 package opt.easyjmetal.algorithm;
 
 import opt.easyjmetal.algorithm.cmoeas.util.Utils;
@@ -14,7 +11,6 @@ import opt.easyjmetal.operator.selection.SelectionFactory;
 import opt.easyjmetal.problem.ProblemFactory;
 import opt.easyjmetal.util.FileUtils;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -36,7 +32,8 @@ public class CMOEAs_main {
         // "MOEAD_SR",
         // "C_MOEAD",
         // "PPS_MOEAD"
-        batchRun(new String[]{"NSGAII_CDP",
+        batchRun(new String[]{
+                "NSGAII_CDP",
                 "ISDEPLUS_CDP",
                 "NSGAIII_CDP",
                 "MOEAD_CDP",
@@ -44,7 +41,8 @@ public class CMOEAs_main {
                 "MOEAD_Epsilon",
                 "MOEAD_SR",
                 "C_MOEAD",
-                "PPS_MOEAD"}, crossoverMethod);
+                "PPS_MOEAD"
+        }, crossoverMethod);
     }
 
     private static void batchRun(String[] methods, int crossMethod) throws Exception {
@@ -69,7 +67,7 @@ public class CMOEAs_main {
 
         int popSize = 100;
         int neighborSize = (int) (0.1 * popSize);
-        int maxFES = 50000;
+        int maxFES = 10000;
         int updateNumber = 2;
         double deDelta = 0.9;
         double DeCrossRate = 1.0;
@@ -86,7 +84,7 @@ public class CMOEAs_main {
 
         String mainPath = System.getProperty("user.dir");
         String weightPath = "resources/MOEAD_Weights";// 权重文件路径
-        int runtime = 10;// 独立运行次数
+        int runtime = 1;// 独立运行次数
         Boolean isDisplay = false;
         int plotFlag = 0; // 0 for the working population; 1 for the external archive
 
@@ -102,6 +100,17 @@ public class CMOEAs_main {
 //////////////////////////////////////// End parameter setting //////////////////////////////////
 
         List<List<Long>> runtimes = new ArrayList<>();
+
+        // 输出运行时间
+        String basePath = "result/easyjmetal/";
+        File dir = new File(basePath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        //true = append file
+        FileWriter fileWritter = new FileWriter(basePath + "runtimes.txt", false);
+        StringBuilder stringBuilder = new StringBuilder();
 
         for (int i = 0; i < problemStrings.length; i++) {
             problem = (new ProblemFactory()).getProblem(problemStrings[i], params);
@@ -169,31 +178,13 @@ public class CMOEAs_main {
                 runtimeList.add(estimatedTime);
                 System.out.println("Problem:  " + problemStrings[i] + "  running time:  " + j);
                 System.out.println("==================================================================");
+                stringBuilder.append(algorithmName + "," + problemStrings[i] + "," + estimatedTime + "\n");
             }
             runtimes.add(runtimeList);
         }
-        // 保存运行时间
-        String basePath = "result/easyjmetal/";
-        File dir = new File(basePath);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
 
-        //true = append file
-        FileWriter fileWritter = new FileWriter(basePath + "runtimes.txt", false);
-        BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-
-        for (int i = 0; i < runtimes.size(); i++) {
-            List<Long> algorithmRuntimes = runtimes.get(i);
-            for (int j = 0; j < algorithmRuntimes.size(); j++) {
-                bufferWritter.write(algorithmRuntimes.get(j).toString());
-                if (j < algorithmRuntimes.size() - 1) {
-                    bufferWritter.write(" ");
-                }
-            }
-            bufferWritter.write("\n");
-        }
-        bufferWritter.flush();
-        bufferWritter.close();
+        fileWritter.write(stringBuilder.toString());
+        fileWritter.flush();
+        fileWritter.close();
     }
 }

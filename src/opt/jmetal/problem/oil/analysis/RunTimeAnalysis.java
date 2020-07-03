@@ -29,7 +29,7 @@ public class RunTimeAnalysis {
      */
     public static void GenerateRunTimeReport(List<String> problems, List<String> algorithms) {
 
-        String fileDir = "result/runTimes.csv";
+        String fileDir = "result/easyjmetal/runTimes.csv";
         // 初始化
         Map<String, Map<String, List<Double>>> map = new TreeMap<>();
         for (int i = 0; i < problems.size(); i++) {
@@ -98,7 +98,7 @@ public class RunTimeAnalysis {
      * 早期版本，已淘汰
      */
     private static void test() {
-        String fileDir = "result/runTimes.csv";
+        String fileDir = "result/easyjmetal/runTimes.csv";
         Map<String, List<Double>> map = getDataSet(fileDir);
 
         // 计算均值和方差

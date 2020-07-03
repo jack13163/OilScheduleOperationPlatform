@@ -538,7 +538,7 @@ public class Operation {
 
         // 遍历转运决策序列计算成本【暂不考虑加热管道那部分的成本，认为其是固定成本】
         for (Operation operation : operations) {
-            if (operation.getType() == OperationType.Charging) {
+            if (operation.getType() == OperationType.Charging || operation.getType() == OperationType.Hoting) {
 
                 double cost = 0.0;
                 // 来自于站点1代表是通过低熔点管道转运而来，来自站点2代表是通过高熔点管道转运而来
@@ -601,8 +601,22 @@ public class Operation {
      * @param operations
      * @return
      */
-    public static double getDelayCost(List<Operation> operations) {
-        return MathHelper.precision(getFeedingFinishTime(operations) - getPlanFeedingFinishTime(operations), 2);
+    public static double getDelayCostN(Config config, List<Operation> operations) {
+        boolean unfinished = false;
+        // 计算炼油计划是否完成
+        for (int i = 0; i < config.getDSs().size(); i++) {
+            int ds = i + 1;
+            if (config.getDSs().get(ds - 1).getNextOilVolume() > 0) {
+                unfinished = true;
+                break;
+            }
+        }
+
+        if(unfinished == true){
+            return Double.MAX_VALUE;
+        }else {
+            return MathHelper.precision(getFeedingFinishTime(operations) - getPlanFeedingFinishTime(operations), 2);
+        }
     }
 
     /**
