@@ -20,6 +20,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -334,6 +335,8 @@ public class SolutionSelectForm extends JFrame {
                             String path = Utils.generateOilScheduleParetoFront(algorithmNames, problemNames, runtimes);
                             // 标记优秀的解
                             paintNodominanceSolution(resultTable, path);
+                            // 比较两条管道的能耗【新增内容】
+                            compareEnergyConsumptionTwoPipeline(path, algorithmNames, problemNames, runtimes);
                         } catch (Exception e) {
                             logger.fatal(e.getMessage());
                         }
@@ -385,6 +388,69 @@ public class SolutionSelectForm extends JFrame {
 
             // 突出显示非支配解
             JTableHelper.setRowsColor(resultTable, flags);
+        });
+    }
+
+    /**
+     * 比较两条管道的能耗
+     *
+     * @param paretoFilePath
+     * @param algorithmNames
+     * @param problemNames
+     * @param runtimes
+     */
+    protected void compareEnergyConsumptionTwoPipeline(String paretoFilePath,
+                                                       String[] algorithmNames,
+                                                       String[] problemNames,
+                                                       int runtimes) throws IOException {
+        // 准备数据
+        final DefaultTableModel mm = JTableHelper.showTableWithNo(paretoFilePath, false);
+
+        // 不要在UI线程外更新操作UI，这里SwingUtilities会找到UI线程并执行更新UI操作
+        SwingUtilities.invokeLater(() -> {
+            // 输出管道转运能耗对比
+            String basePath = "result/easyjmetal/";
+            File dir = new File(basePath);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            //true = append file
+            FileWriter fileWritter = null;
+            try {
+                fileWritter = new FileWriter(basePath + "transportationEnergyConsumption.csv", false);
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("hardCost, pipeOneEC, pipeTwoEC, totalEC\n");
+                for (int i = 0; i < mm.getRowCount(); i++) {
+                    double energyCost = Double.parseDouble(mm.getValueAt(i, 1).toString());
+                    double pipeMix = Double.parseDouble(mm.getValueAt(i, 2).toString());
+                    double tankMix = Double.parseDouble(mm.getValueAt(i, 3).toString());
+                    double chargeTime = Double.parseDouble(mm.getValueAt(i, 4).toString());
+                    double tankUsed = Double.parseDouble(mm.getValueAt(i, 5).toString());
+
+                    // 查找出指定的解
+                    double[][] tofind = new double[][]{{energyCost, pipeMix, tankMix, chargeTime, tankUsed}};
+                    try {
+                        Utils.getSolutionFromDB(algorithmNames, problemNames, runtimes, tofind, new Utils.ToDo() {
+                            @Override
+                            public void dosomething(Solution solution, String rule) {
+                                // {硬约束违背，管道1转运能耗，管道2转运能耗，总转运能耗}
+                                double[] costs = COPDecoder.decodePipelineEnergyConsumption(solution, rule);
+                                stringBuilder.append(costs[0] + "," + costs[1] + "," + costs[2] + "," + costs[3] + "\n");
+                            }
+                        });
+                    } catch (JMException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                fileWritter.write(stringBuilder.toString());
+                fileWritter.flush();
+                fileWritter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 

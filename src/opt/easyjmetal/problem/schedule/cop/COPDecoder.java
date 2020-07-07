@@ -105,4 +105,45 @@ public class COPDecoder {
 
         return new double[]{hardCost, energyCost, pipeMixingCost, tankMixingCost, numberOfChange, numberOfTankUsed};
     }
+
+    /**
+     * 解码两条管道的能耗
+     * @param solution
+     * @param ruleName
+     * @return
+     */
+    public static double[] decodePipelineEnergyConsumption(Solution solution, String ruleName) {
+
+        // 开始仿真
+        Config config = Config.getInstance();
+        COPScheduler scheduler = new COPScheduler(config, false, ruleName);
+        scheduler.start(solution);
+        List<Operation> operations = scheduler.getOperations();
+        // 检查是否违背供油罐生命周期约束
+        if (!Operation.check(operations)) {
+            System.out.println("operation error.");
+            System.exit(1);
+        }
+
+        // 计算硬约束
+        double delayCost = Operation.getDelayCostN(scheduler.getConfig(), operations);
+        double maintenanceCost = Operation.getTankMaintenanceTime(operations);
+        double hardCost = delayCost + maintenanceCost;
+
+        // 计算软约束
+        double pipeOneEC = Operation.getPipelineOneEnergyCost(operations);
+        double pipeTwoEC = Operation.getPipelineTwoEnergyCost(operations);
+        double totalEC = Operation.getEnergyCost(operations);
+
+        // 输出结果
+        System.out.println("============================================================================");
+        System.out.println("hardCost :" + hardCost);
+        System.out.println("----------------------------------------------------------------------------");
+        System.out.println("pipeOneEC :" + pipeOneEC);
+        System.out.println("pipeTwoEC :" + pipeTwoEC);
+        System.out.println("totalEC :" + totalEC);
+        System.out.println("============================================================================");
+
+        return new double[]{hardCost, pipeOneEC, pipeTwoEC, totalEC};
+    }
 }

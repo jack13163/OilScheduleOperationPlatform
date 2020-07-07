@@ -511,6 +511,77 @@ public class Operation {
     }
 
     /**
+     * 计算管道1的能耗成本
+     *
+     * @param operations
+     * @return
+     */
+    public static double getPipelineOneEnergyCost(List<Operation> operations) {
+
+        double result = 0.0;
+
+        // 建立转运速度与转运成本之间的映射关系
+        Map<Double, Double> map = new HashMap<>();
+
+        double[] speed = Config.getInstance().getPipes().get(0).getChargingSpeed();
+        double[] costPerHour = Config.getInstance().getPipes().get(0).getCost();
+        for (int j = 0; j < speed.length; j++) {
+            map.put(speed[j], costPerHour[j]);
+        }
+
+        // 遍历转运决策序列计算成本【暂不考虑加热管道那部分的成本，认为其是固定成本】
+        for (Operation operation : operations) {
+            if (operation.getType() == OperationType.Charging || operation.getType() == OperationType.Hoting) {
+
+                double cost = 0.0;
+                // 来自于站点1代表是通过低熔点管道转运而来，来自站点2代表是通过高熔点管道转运而来
+                if (operation.getSite() == 1) {
+                    // 成本=单位时间成本*总时间
+                    cost = map.get(operation.getSpeed()) * (operation.getEnd() - operation.getStart());
+                }
+                result += cost;
+            }
+        }
+
+        return MathHelper.precision(result, Config.getInstance().Precision);
+    }
+
+    /**
+     * 计算管道2的能耗成本
+     *
+     * @param operations
+     * @return
+     */
+    public static double getPipelineTwoEnergyCost(List<Operation> operations) {
+
+        double result = 0.0;
+
+        // 建立转运速度与转运成本之间的映射关系
+        Map<Double, Double> map = new HashMap<>();
+
+        double[] speed = Config.getInstance().getPipes().get(1).getChargingSpeed();
+        double[] costPerHour = Config.getInstance().getPipes().get(1).getCost();
+        for (int j = 0; j < speed.length; j++) {
+            map.put(speed[j], costPerHour[j]);
+        }
+
+        // 遍历转运决策序列计算成本【暂不考虑加热管道那部分的成本，认为其是固定成本】
+        for (Operation operation : operations) {
+            if (operation.getType() == OperationType.Charging || operation.getType() == OperationType.Hoting) {
+
+                double cost = 0.0;
+                // 来自于站点1代表是通过低熔点管道转运而来，来自站点2代表是通过高熔点管道转运而来
+                if (operation.getSite() == 2) {
+                    cost = map.get(operation.getSpeed()) * (operation.getEnd() - operation.getStart());
+                }
+                result += cost;
+            }
+        }
+
+        return MathHelper.precision(result, Config.getInstance().Precision);
+    }
+
+    /**
      * 计算能耗成本
      *
      * @param operations
@@ -612,9 +683,9 @@ public class Operation {
             }
         }
 
-        if(unfinished == true){
+        if (unfinished == true) {
             return Double.MAX_VALUE;
-        }else {
+        } else {
             return MathHelper.precision(getFeedingFinishTime(operations) - getPlanFeedingFinishTime(operations), 2);
         }
     }
@@ -699,10 +770,10 @@ public class Operation {
 
                 // 开启的油泵的组数
                 if (operation.getType() == OperationType.Charging || operation.getType() == OperationType.Hoting) {
-                    double[] speeds = Config.getInstance().getPipes().get(operation.getDs() == Config.getInstance().HighOilDS?1:0).getChargingSpeed();
+                    double[] speeds = Config.getInstance().getPipes().get(operation.getDs() == Config.getInstance().HighOilDS ? 1 : 0).getChargingSpeed();
                     int numberOfPumpGroups = 0;
                     for (int j = 0; j < speeds.length; j++) {
-                        if(speeds[j] == operation.getSpeed()){
+                        if (speeds[j] == operation.getSpeed()) {
                             numberOfPumpGroups = j + 1;
                             break;
                         }
