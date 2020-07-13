@@ -34,7 +34,6 @@ public class COPDecoder {
         }
     }
 
-
     /**
      * 解码
      *
@@ -56,7 +55,7 @@ public class COPDecoder {
     public static double[] decode(Solution solution, String ruleName, boolean showSchedule) {
 
         // 开始仿真
-        Config config = Config.getInstance();
+        Config config = Config.getInstance().loadConfig("config.xml");
         COPScheduler scheduler = new COPScheduler(config, false, ruleName);
         scheduler.start(solution);
         List<Operation> operations = scheduler.getOperations();
@@ -115,7 +114,7 @@ public class COPDecoder {
     public static double[] decodePipelineEnergyConsumption(Solution solution, String ruleName) {
 
         // 开始仿真
-        Config config = Config.getInstance();
+        Config config = Config.getInstance().loadConfig("config.xml");
         COPScheduler scheduler = new COPScheduler(config, false, ruleName);
         scheduler.start(solution);
         List<Operation> operations = scheduler.getOperations();

@@ -21,8 +21,7 @@ public class SqlUtils {
     public SqlUtils() {
     }
 
-    public static void CreateTable(String tableName, String methodName) {
-        fileName_ = methodName;
+    public static void CreateTable(String tableName, String fileName_) {
         Connection con;
         Statement stmt;
         try {
@@ -116,10 +115,6 @@ public class SqlUtils {
             System.exit(0);
         }
 
-    }
-
-    public static void InsertSolutionSet(String TableName, SolutionSet pop) throws JMException {
-        InsertSolutionSet(fileName_, TableName, pop);
     }
 
     public static void InsertSolutionSet(String DataBaseName, String TableName, SolutionSet pop) throws JMException {

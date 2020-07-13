@@ -8,7 +8,7 @@ import opt.easyjmetal.problem.schedule.models.Fragment;
 import opt.easyjmetal.problem.schedule.rules.AbstractRule;
 import opt.easyjmetal.problem.schedule.util.ArrayHelper;
 import opt.easyjmetal.problem.schedule.util.CodeHelper;
-import opt.easyjmetal.problem.schedule.util.ISimulationScheduler;
+import opt.easyjmetal.problem.schedule.rules.ISimulationScheduler;
 import opt.easyjmetal.util.JMException;
 
 import java.util.List;

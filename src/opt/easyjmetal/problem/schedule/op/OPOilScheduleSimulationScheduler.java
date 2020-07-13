@@ -14,7 +14,7 @@ import opt.easyjmetal.problem.schedule.rules.RuleFactory;
 import opt.easyjmetal.problem.schedule.rules.impl.Backtracking;
 import opt.easyjmetal.problem.schedule.util.CloneUtils;
 import opt.easyjmetal.problem.schedule.util.CodeHelper;
-import opt.easyjmetal.problem.schedule.util.ISimulationScheduler;
+import opt.easyjmetal.problem.schedule.rules.ISimulationScheduler;
 import opt.easyjmetal.problem.schedule.util.MathUtil;
 import opt.easyjmetal.util.JMException;
 import org.apache.logging.log4j.LogManager;
@@ -227,8 +227,6 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 
     /**
      * 剪枝，过滤掉较差的策略
-     *
-     * @param safe_vol
      * @return
      */
     public boolean filterCondition(double vol, double fp_vol) {
@@ -275,7 +273,6 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 
     /**
      * 计算系统时间
-     * <p>
      * 当前管道的注油结束时间为当前系统时间
      *
      * @param pipe
@@ -344,8 +341,6 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 
     /**
      * 生成推荐策略
-     *
-     * @param fragment
      */
     public Integer[][] generateRecommendPolicy() {
 
@@ -482,8 +477,6 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 
     /**
      * 进行下一步决策
-     *
-     * @param fragment
      * @throws Exception
      */
     private void next() throws Exception {
@@ -827,10 +820,7 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 
     /**
      * 抢占式调度策略
-     * <p>
      * emergencyDs: 最需要转运原油的蒸馏塔
-     *
-     * @param scheduler
      */
     public void preemptiveScheduling() {
         try {
@@ -851,8 +841,6 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
 
     /**
      * 计算所有策略的原油的最大转运体积
-     *
-     * @return
      */
     public double[][] calculateMaxVolume() throws JMException {
         Integer[][] policies = policyStack.peek();
@@ -911,7 +899,6 @@ public class OPOilScheduleSimulationScheduler implements ISimulationScheduler {
         this.solution = solution;
 
         // 初始配置入栈
-        config.loadConfig();
         Config config_Clone = CloneUtils.clone(config);
         configStack.push(config_Clone);
 

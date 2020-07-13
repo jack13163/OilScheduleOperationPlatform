@@ -12,7 +12,7 @@ import opt.easyjmetal.problem.schedule.rules.AbstractRule;
 import opt.easyjmetal.problem.schedule.rules.RuleFactory;
 import opt.easyjmetal.problem.schedule.util.ArrayHelper;
 import opt.easyjmetal.problem.schedule.util.CloneUtils;
-import opt.easyjmetal.problem.schedule.util.ISimulationScheduler;
+import opt.easyjmetal.problem.schedule.rules.ISimulationScheduler;
 import opt.easyjmetal.problem.schedule.util.MathUtil;
 import opt.easyjmetal.util.JMException;
 import org.apache.logging.log4j.LogManager;
@@ -886,7 +886,6 @@ public class COPScheduler implements ISimulationScheduler {
         this.solution = solution;
 
         // ≥ı º≈‰÷√»Î’ª
-        config.loadConfig();
         Config config_Clone = CloneUtils.clone(config);
         configStack.push(config_Clone);
 

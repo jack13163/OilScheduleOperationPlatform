@@ -3,7 +3,6 @@ package opt.easyjmetal.problem.schedule.rules;
 
 import opt.easyjmetal.problem.schedule.models.FactObject;
 import opt.easyjmetal.problem.schedule.models.Fragment;
-import opt.easyjmetal.problem.schedule.util.ISimulationScheduler;
 import opt.easyjmetal.util.JMException;
 
 public abstract class AbstractRule {

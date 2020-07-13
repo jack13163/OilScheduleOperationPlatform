@@ -48,7 +48,7 @@ public class ISDEPLUS_CDP extends Algorithm {
         //Read the parameters
         populationSize_ = (Integer) getInputParameter("populationSize");
         maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
-        String methodName_ = getInputParameter("AlgorithmName").toString();
+        String dbName = getInputParameter("DBName").toString();
         dataDirectory_ = getInputParameter("dataDirectory").toString();
 
         //Initialize the variables
@@ -78,7 +78,7 @@ public class ISDEPLUS_CDP extends Algorithm {
 
         //creat database
         String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
-        SqlUtils.CreateTable(problemName, methodName_);
+        SqlUtils.CreateTable(problemName, dbName);
 
         int gen = 0;
         // Generations
@@ -129,7 +129,7 @@ public class ISDEPLUS_CDP extends Algorithm {
             gen++;
         } // while
 
-        SqlUtils.InsertSolutionSet(problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
 
         return external_archive_;
     } // execute

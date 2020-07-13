@@ -24,6 +24,15 @@ import java.util.Map;
 public class OilScheduleOptimizationProblem extends Problem {
     private Config config;
     private boolean ShowDetail = true;
+    private String configPath;
+
+    public Config getConfig() {
+        return config;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
+    }
 
     /**
      * Creates a new instance of opt.jmetal.problem.oil schedule problem.
@@ -35,9 +44,11 @@ public class OilScheduleOptimizationProblem extends Problem {
     /**
      * 构造函数入口
      */
-    @SuppressWarnings("unchecked")
     public OilScheduleOptimizationProblem(boolean showEachStep, String ruleName) {
-        config = CloneUtils.clone(Config.getInstance().loadConfig());
+        if(configPath == "" || configPath == null){
+            throw new RuntimeException("請先輸入配置文件的路徑");
+        }
+        this.config = Config.getInstance().loadConfig(configPath);
 
         // 【决策次数】
         int numberOfVariables = 0;

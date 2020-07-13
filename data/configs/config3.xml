@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <rt>4</rt>
+    <min-volume>20000</min-volume>
+    <num-divide>10</num-divide>
+    <precision>3</precision>
+    <!--论文设定-->
+    <hoting-speed>625</hoting-speed>
+    <high-oil-ds>2</high-oil-ds>
+    <hot-tank>8</hot-tank>
+    <auto-stop>0</auto-stop>
+    <!--为期两天的维护时间-->
+    <maintenance-time>48</maintenance-time>
+    <reference-cost>chargeTime=23,tankMix=223,pipeMix=200,energyCost=1093.51,tankUsed=11</reference-cost>
+
+    <tanks>
+        <tank id="1">
+            <volume>0</volume>
+            <capacity>20000</capacity>
+            <oil-type>0</oil-type>
+            <assign>-1</assign>
+            <maintenance>1</maintenance>
+        </tank>
+        <tank id="2">
+            <volume>16000</volume>
+            <capacity>34000</capacity>
+            <oil-type>1</oil-type>
+            <assign>2</assign>
+            <maintenance>1</maintenance>
+        </tank>
+        <tank id="3">
+            <volume>26000</volume>
+            <capacity>34000</capacity>
+            <oil-type>2</oil-type>
+            <assign>2</assign>
+            <maintenance>1</maintenance>
+        </tank>
+        <tank id="4">
+            <volume>0</volume>
+            <capacity>25000</capacity>
+            <oil-type>0</oil-type>
+            <assign>-1</assign>
+            <maintenance>1</maintenance>
+        </tank>
+        <tank id="5">
+            <volume>25000</volume>
+            <capacity>30000</capacity>
+            <oil-type>3</oil-type>
+            <assign>1</assign>
+            <maintenance>1</maintenance>
+        </tank>
+        <tank id="6">
+            <volume>15000</volume>
+            <capacity>34000</capacity>
+            <oil-type>5</oil-type>
+            <assign>3</assign>
+            <maintenance>1</maintenance>
+        </tank>
+        <tank id="7">
+            <volume>17000</volume>
+            <capacity>20000</capacity>
+            <oil-type>4</oil-type>
+            <assign>3</assign>
+            <maintenance>0</maintenance>
+        </tank>
+        <tank id="8">
+            <volume>25000</volume>
+            <capacity>30000</capacity>
+            <oil-type>6</oil-type>
+            <assign>3</assign>
+            <maintenance>0</maintenance>
+        </tank>
+        <tank id="9">
+            <volume>22000</volume>
+            <capacity>34000</capacity>
+            <oil-type>7</oil-type>
+            <assign>4</assign>
+            <maintenance>0</maintenance>
+        </tank>
+        <tank id="10">
+            <volume>19000</volume>
+            <capacity>34000</capacity>
+            <oil-type>8</oil-type>
+            <assign>4</assign>
+            <maintenance>0</maintenance>
+        </tank>
+        <tank id="11">
+            <volume>0</volume>
+            <capacity>20000</capacity>
+            <oil-type>0</oil-type>
+            <assign>-1</assign>
+            <maintenance>0</maintenance>
+        </tank>
+    </tanks>
+
+    <pipes>
+        <pipe id="1">
+            <volume>18000</volume>
+            <charging-speed>
+                <speed cost="1">800</speed>
+                <speed cost="2">1100</speed>
+                <speed cost="3">1250</speed>
+            </charging-speed>
+        </pipe>
+        <pipe id="2">
+            <volume>18000</volume>
+            <charging-speed>
+                <speed cost="1">420</speed>
+                <speed cost="2">500</speed>
+                <speed cost="3">625</speed>
+            </charging-speed>
+        </pipe>
+    </pipes>
+
+    <dss>
+        <ds id="1">
+            <feeding-speed>250</feeding-speed>
+            <fps>
+                <fp type="4" site="1">24000</fp>
+                <fp type="8" site="1">44055</fp>
+            </fps>
+        </ds>
+        <ds id="2">
+            <feeding-speed>334</feeding-speed>
+            <fps>
+                <fp type="11" site="2">82300</fp>
+            </fps>
+        </ds>
+        <ds id="3">
+            <feeding-speed>250</feeding-speed>
+            <fps>
+                <fp type="10" site="1">43055</fp>
+            </fps>
+        </ds>
+        <ds id="4">
+            <feeding-speed>625</feeding-speed>
+            <fps>
+                <fp type="8" site="1">84000</fp>
+                <fp type="9" site="1">107638</fp>
+            </fps>
+        </ds>
+    </dss>
+</configuration>

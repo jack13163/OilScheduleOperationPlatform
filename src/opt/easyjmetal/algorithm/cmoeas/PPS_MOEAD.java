@@ -84,7 +84,7 @@ public class PPS_MOEAD extends Algorithm {
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         populationSize_ = (Integer) getInputParameter("populationSize");
         dataDirectory_ = getInputParameter("dataDirectory").toString();
-        String methodName_ = getInputParameter("AlgorithmName").toString();
+        String dbName = getInputParameter("DBName").toString();
         runningTime = (Integer) getInputParameter("runningTime") + 1; // start from 1
         population_ = new SolutionSet(populationSize_);
         T_ = (Integer) getInputParameter("T");
@@ -107,7 +107,7 @@ public class PPS_MOEAD extends Algorithm {
 
         //creat database
         String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
-        SqlUtils.CreateTable(problemName, methodName_);
+        SqlUtils.CreateTable(problemName, dbName);
 
         // STEP 1. Initialization
         // STEP 1.1. Compute euclidean distances between weight vectors and find T
@@ -251,7 +251,7 @@ public class PPS_MOEAD extends Algorithm {
 
         //outputResult2File(problemName, change_ratio);
 
-        SqlUtils.InsertSolutionSet(problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
         return external_archive_;
 
 

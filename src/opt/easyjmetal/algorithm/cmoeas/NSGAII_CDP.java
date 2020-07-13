@@ -50,7 +50,7 @@ public class NSGAII_CDP extends Algorithm {
         //Read the parameters
         int populationSize_ = (Integer) getInputParameter("populationSize");
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
-        String methodName_ = getInputParameter("AlgorithmName").toString();
+        String dbName = getInputParameter("DBName").toString();
 
 
         //Initialize the variables
@@ -78,10 +78,9 @@ public class NSGAII_CDP extends Algorithm {
         external_archive_ = new SolutionSet(populationSize_);
         Utils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
-              //creat database
+        //creat database
         String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
-        SqlUtils.CreateTable(problemName, methodName_);
-
+        SqlUtils.CreateTable(problemName, dbName);
 
         int gen = 0;
         // Generations
@@ -171,7 +170,7 @@ public class NSGAII_CDP extends Algorithm {
             gen++;
         } // while
 
-        SqlUtils.InsertSolutionSet(problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
 
         return external_archive_;
     } // execute

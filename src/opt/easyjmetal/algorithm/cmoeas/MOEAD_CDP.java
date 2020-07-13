@@ -65,7 +65,7 @@ public class MOEAD_CDP extends Algorithm {
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         populationSize_ = (Integer) getInputParameter("populationSize");
         dataDirectory_ = getInputParameter("dataDirectory").toString();
-        String methodName_ = getInputParameter("AlgorithmName").toString();
+        String dbName = getInputParameter("DBName").toString();
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
         int plotFlag_ = (Integer) getInputParameter("plotFlag");
         runningTime = (Integer) getInputParameter("runningTime") + 1; // start from 1
@@ -82,7 +82,7 @@ public class MOEAD_CDP extends Algorithm {
 
         //creat database
         String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
-        SqlUtils.CreateTable(problemName, methodName_);
+        SqlUtils.CreateTable(problemName, dbName);
 
         // STEP 1. Initialization
         // STEP 1.1. Compute euclidean distances between weight vectors and find T
@@ -186,7 +186,7 @@ public class MOEAD_CDP extends Algorithm {
 
         } while (evaluations_ < maxEvaluations_);
 
-        SqlUtils.InsertSolutionSet(problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
         return external_archive_;
     }
 

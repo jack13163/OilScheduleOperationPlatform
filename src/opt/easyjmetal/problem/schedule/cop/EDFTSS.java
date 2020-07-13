@@ -22,9 +22,9 @@ public class EDFTSS extends Problem {
     double overallConstraintViolation = 0;
     int numberOfViolatedConstraint = 0;
 
-    public EDFTSS(String solutionType) {
+    public EDFTSS(String solutionType, String configPath) {
 
-        config = CloneUtils.clone(Config.getInstance().loadConfig());
+        this.config = Config.getInstance().loadConfig(configPath);
 
         // 【决策次数】
         int N1 = 0;

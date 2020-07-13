@@ -16,6 +16,12 @@ import java.util.*;
 public class Config implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private String configPath;
+
+    public String getConfigPath() {
+        return configPath;
+    }
+
     private static Logger logger = LogManager.getLogger(Config.class.getName());
 
     public double RT;
@@ -49,10 +55,6 @@ public class Config implements Serializable {
         return dss;
     }
 
-    public void setDSs(List<DSObject> dss) {
-        this.dss = dss;
-    }
-
     public List<PipeObject> getPipes() {
         return pipes;
     }
@@ -65,24 +67,23 @@ public class Config implements Serializable {
 
     /**
      * 加载配置
-     *
+     * @param configPath
      * @return
      */
-    public Config loadConfig() {
-        getConfigFromXml();
+    public Config loadConfig(String configPath) {
+        this.configPath = configPath;
+        getConfigFromXml(configPath);
         return _instance;
     }
 
     /**
      * 从xml文件中读取配置信息
-     *
-     * @return
-     * @throws DocumentException
+     * @param configPath
      */
-    public void getConfigFromXml() {
+    public void getConfigFromXml(String configPath) {
 
         try {
-            Element root = XMLHelper.parse("config.xml").getRootElement();
+            Element root = XMLHelper.parse(configPath).getRootElement();
 
             List<Element> elements = root.elements();
 

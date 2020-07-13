@@ -12,6 +12,9 @@ import opt.easyjmetal.util.JMException;
 
 import java.util.List;
 
+/**
+ * ProblemFactory反射的方式创建对象
+ */
 public class EDFPS extends Problem {
     private boolean ShowDetail = true;//显示甘特图
     private boolean ShowEachStep = false;//显示每一步
@@ -21,9 +24,9 @@ public class EDFPS extends Problem {
     double overallConstraintViolation = 0;
     int numberOfViolatedConstraint = 0;
 
-    public EDFPS(String solutionType) {
+    public EDFPS(String solutionType, String configPath) {
 
-        config = CloneUtils.clone(Config.getInstance().loadConfig());
+        this.config = Config.getInstance().loadConfig(configPath);
 
         // 【决策次数】
         int N1 = 0;

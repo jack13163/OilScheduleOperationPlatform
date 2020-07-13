@@ -336,7 +336,7 @@ public class SolutionSelectForm extends JFrame {
                             // 标记优秀的解
                             paintNodominanceSolution(resultTable, path);
                             // 比较两条管道的能耗【新增内容】
-                            compareEnergyConsumptionTwoPipeline(path, algorithmNames, problemNames, runtimes);
+                            // compareEnergyConsumptionTwoPipeline(path, algorithmNames, problemNames, runtimes);
                         } catch (Exception e) {
                             logger.fatal(e.getMessage());
                         }

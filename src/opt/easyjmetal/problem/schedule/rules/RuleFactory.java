@@ -3,7 +3,6 @@ package opt.easyjmetal.problem.schedule.rules;
 import opt.easyjmetal.problem.schedule.rules.impl.Backtracking;
 import opt.easyjmetal.problem.schedule.rules.impl.EarliestDealineFirstAndPreemptiveScheduling;
 import opt.easyjmetal.problem.schedule.rules.impl.EarliestDealineFirstAndTwoStepsScheduling;
-import opt.easyjmetal.problem.schedule.util.ISimulationScheduler;
 
 public class RuleFactory {
 
