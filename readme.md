@@ -40,6 +40,10 @@ J_ε: Number of charging tanks to use;
 
 ![](docs/enter.jpg)
 
+单步仿真：
+
+![](img/单步仿真.png)
+
 
 感谢：
 
