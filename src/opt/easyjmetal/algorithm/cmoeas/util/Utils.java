@@ -362,6 +362,49 @@ public class Utils {
     }
 
     /**
+     * Generate the Pareto Front
+     *
+     * @param configList 配置列表
+     * @param algorithmNameList_ 算法列表
+     * @param problemList_       问题列表
+     * @param independentRuns_   独立运行次数
+     */
+    public static void generateParetoFrontForAllConfigs(String[] configList, String[] algorithmNameList_, String[] problemList_, int independentRuns_) throws JMException {
+        String paretoFrontPath = resultBaseDirectory_ + "/PF/";
+
+        List<Solution> allSolutions = new ArrayList<>();
+        for(String config: configList) {
+            List<Solution> solutionList = new ArrayList<>();
+            for (String problemName : problemList_) {
+                for (String algorithmName : algorithmNameList_) {
+                    // 输出每种算法的非支配解集
+                    List<Solution> solutionList2 = new ArrayList<>();
+
+                    for (int numRun = 0; numRun < independentRuns_; numRun++) {
+                        String tableName = problemName + "_" + (numRun + 1);
+                        // 查询数据
+                        String dbPath = resultBaseDirectory_ + "/" + config + "/" + algorithmName;
+                        SolutionSet tmp = SqlUtils.SelectData(dbPath, tableName);
+                        for (int i = 0; i < tmp.size(); i++) {
+                            solutionList.add(tmp.get(i));
+                            solutionList2.add(tmp.get(i));
+                        }
+                    }
+
+                    // 输出非支配解集
+                    outputNondomincantSolutionSet(solutionList2, paretoFrontPath,
+                            config + "_" + algorithmName + "_" + problemName + ".pf");
+                }
+            }
+
+            // 输出非支配解集
+            allSolutions.addAll(solutionList);
+            outputNondomincantSolutionSet(solutionList, paretoFrontPath, config + ".pf");
+        }
+        outputNondomincantSolutionSet(allSolutions, paretoFrontPath, "oil.pf");
+    }
+
+    /**
      * Generate the Pareto Front for crude oil scheduling problem
      *
      * @param algorithmNameList_ 算法列表
@@ -532,6 +575,39 @@ public class Utils {
     }
 
     /**
+     * 计算IGD指标值
+     *
+     * @param configName
+     */
+    public static double generateQualityIndicatorsForAllConfigs(String configName, String indicatorName) throws JMException {
+        double value = 0;
+
+        String paretoFrontPath = resultBaseDirectory_ + "/PF/oil.pf";
+        double[][] trueFront = new Hypervolume().utils_.readFront(paretoFrontPath);
+        String configPath = resultBaseDirectory_ + "/PF/" + configName + ".pf";
+        double[][] solutionFront = new Hypervolume().utils_.readFront(configPath);
+
+        if (indicatorName.equals("HV")) {
+            Hypervolume indicators = new Hypervolume();
+            value = indicators.hypervolume(solutionFront, trueFront, trueFront[0].length);
+        }
+        if (indicatorName.equals("SPREAD")) {
+            Spread indicators = new Spread();
+            value = indicators.spread(solutionFront, trueFront, trueFront[0].length);
+        }
+        if (indicatorName.equals("IGD")) {
+            InvertedGenerationalDistance indicators = new InvertedGenerationalDistance();
+            value = indicators.invertedGenerationalDistance(solutionFront, trueFront, trueFront[0].length);
+        }
+        if (indicatorName.equals("EPSILON")) {
+            Epsilon indicators = new Epsilon();
+            value = indicators.epsilon(solutionFront, trueFront, trueFront[0].length);
+        }
+
+        return value;
+    }
+
+    /**
      * Generate the Quality Indicators
      *
      * @param algorithmNameList_ 算法列表
@@ -566,6 +642,54 @@ public class Utils {
                             writer.close();
                         } catch (IOException e) {
                             e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Generate the Quality Indicators
+     *
+     * @param configList 配置列表
+     * @param algorithmNameList_ 算法列表
+     * @param problemList_       问题列表
+     * @param indicatorList_     指标列表
+     * @param independentRuns_   独立运行次数
+     */
+    public static void generateQualityIndicatorsForAllConfigs(String[] configList,
+                                                              String[] algorithmNameList_,
+                                                              String[] problemList_,
+                                                              String[] indicatorList_,
+                                                              int independentRuns_) throws JMException {
+        if (indicatorList_.length > 0) {
+            for (String config : configList) {
+                for (String algorithmName : algorithmNameList_) {
+                    for (String problemName : problemList_) {
+                        for (String indicator : indicatorList_) {
+
+                            try {
+                                // 输出到文件
+                                String dirName = resultBaseDirectory_ + "/data/" + algorithmName + "/" + problemName + "/";
+                                File file = new File(dirName);
+                                if (!file.exists()) {
+                                    file.mkdirs();// 不存在，则创建目录
+                                }
+                                String filepath = dirName + indicator;
+                                FileWriter writer = new FileWriter(filepath);
+
+                                // 计算每次实验的指标值
+                                for (int numRun = 1; numRun <= independentRuns_; numRun++) {
+                                    double value = generateQualityIndicatorsForAllConfigs(config, indicator);
+                                    writer.write(String.format("%.5f\n", value));
+                                }
+
+                                writer.flush();
+                                writer.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }

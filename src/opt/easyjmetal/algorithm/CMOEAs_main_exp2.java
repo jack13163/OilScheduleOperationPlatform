@@ -96,7 +96,7 @@ public class CMOEAs_main_exp2 {
         String AlgorithmName = algorithmName;
 
         String weightPath = "resources/MOEAD_Weights";// 权重文件路径
-        int runtime = 1;// 独立运行次数
+        int runtime = 10;// 独立运行次数
         Boolean isDisplay = false;
         int plotFlag = 0; // 0 for the working population; 1 for the external archive
 
