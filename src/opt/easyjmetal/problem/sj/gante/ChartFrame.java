@@ -1,11 +1,11 @@
-package opt.jmetal.problem.oil.canvas.gante;
+package opt.easyjmetal.problem.sj.gante;
 
 import javax.swing.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class ChartFrame {
-    // ´°¿Ú´óÐ¡
+    // ï¿½ï¿½ï¿½Ú´ï¿½Ð¡
     private final static int width = 800;
     private final static int height = 480;
 
@@ -13,10 +13,10 @@ public class ChartFrame {
     private CanvasGante canvas;
 
     public ChartFrame() {
-        frame = new JFrame("Ô­ÓÍµ÷¶È¸ÊÌØÍ¼");
+        frame = new JFrame("Ô­ï¿½Íµï¿½ï¿½È¸ï¿½ï¿½ï¿½Í¼");
         canvas = new CanvasGante();
 
-        // ½«´°¿Ú¶¨Î»µ½ÆÁÄ»ÖÐ¼ä
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½Î»ï¿½ï¿½ï¿½ï¿½Ä»ï¿½Ð¼ï¿½
         int screenWidth = (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
         int screenHeight = (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
         frame.setBounds(screenWidth / 2 - width / 2, screenHeight / 2 - height / 2, width, height);
@@ -24,7 +24,7 @@ public class ChartFrame {
         frame.setVisible(true);
         frame.add(canvas);
 
-        // ¼àÌýµ½JFrame´°¿Ú´óÐ¡¸Ä±äÊÂ¼þÊ±£¬×Ô¶¯ÖØ»æcanvas
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½JFrameï¿½ï¿½ï¿½Ú´ï¿½Ð¡ï¿½Ä±ï¿½ï¿½Â¼ï¿½Ê±ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½Ø»ï¿½canvas
         frame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {

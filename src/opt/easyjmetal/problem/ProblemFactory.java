@@ -50,6 +50,8 @@ public class ProblemFactory {
             base += "LIRCMOP.";
         } else if (name.equalsIgnoreCase("EDFPS") || name.equalsIgnoreCase("EDFTSS")) {
             base += "schedule.cop.";
+        } else if (name.equalsIgnoreCase("EDFPS") || name.equalsIgnoreCase("SJOIL")) {
+            base += "sj.";
         }
 
         try {
