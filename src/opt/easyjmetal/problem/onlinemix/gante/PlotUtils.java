@@ -20,7 +20,7 @@ public class PlotUtils {
         try {
             int size = operations.size();
             double[][] data = new double[size][6];
-
+            System.out.println("--------------------------------------------------------------------------------");
             for (int i = 0; i < operations.size(); i++) {
 
                 // 区分转运和炼油
@@ -44,6 +44,7 @@ public class PlotUtils {
 
                 System.out.println(data[i][0] + "," + data[i][1] + "," + data[i][2] + "," + data[i][3] + "," + data[i][4] + (data[i][5] < 0 ? "" : "," + data[i][5]));
             }
+            System.out.println("--------------------------------------------------------------------------------");
 
             if (chartFrame == null) {
                 chartFrame = new ChartFrame();

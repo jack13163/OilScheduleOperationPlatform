@@ -129,18 +129,30 @@ public class Oilschdule {
             for (int k = 0; k < TKS.length; k++) { // 油罐选择
                 if (Double.parseDouble(TKS[k][1].toString()) != inf) {
                     int ds = Integer.parseInt(TKS[k][3].toString());
+                    String type = TKS[k][1].toString();
+                    double vol = Double.parseDouble(TKS[k][2].toString());
                     double Temp = DSFET[ds - 1];
-                    DSFET[ds - 1] = Temp + Double.parseDouble(TKS[k][2].toString()) / DSFR[ds - 1];
+                    DSFET[ds - 1] = Temp + vol / DSFR[ds - 1];
                     List<Double> list = new ArrayList<>();
                     list.add((double) ds);// 蒸馏塔号
                     list.add((double) k + 1); // 油罐号
                     list.add((double) Math.round(Temp * 100.0) / 100.0);            // 开始供油t
                     list.add((double) Math.round(DSFET[ds - 1] * 100.0) / 100.0);   // 供油罐结束t
-                    list.add(Double.parseDouble(TKS[k][1].toString()));             // 原油类型
+                    list.add(Double.parseDouble(type));                             // 原油类型
                     schedulePlan.add(list);
                     TKS[k][3] = ds; // 记录蒸馏塔
                     TKS[k][4] = Temp;// 供油开始时间
                     TKS[k][5] = DSFET[ds - 1];// 供油结束时间
+
+                    // 进料包减去罐中的原油
+                    Queue<KeyValue> keyValues = feedingPackages.get("DS" + ds);
+                    if(keyValues.peek().getType().equals("M" + type)){
+                        if(keyValues.peek().getVolume() == vol){
+                            keyValues.remove();
+                        }else{
+                            keyValues.peek().setVolume(keyValues.peek().getVolume() - vol);
+                        }
+                    }
                 }
             }
 
@@ -270,7 +282,7 @@ public class Oilschdule {
         List<Integer> UD = getUD(back);
         int[] footprint = new int[UD.size() + 1];
         // 供油罐为空，当前状态为不可行状态
-        if(ET.isEmpty()){
+        if (ET.isEmpty()) {
             for (int i = 0; i < footprint.length; i++) {
                 footprint[i] = 1;
             }
@@ -291,14 +303,15 @@ public class Oilschdule {
                 boolean ff = false;
 
                 // 停运情况
-                if (ET.size() <= 1) {
-                    double PipeStoptime = getPipeStopTime(backTrace);
-                    if (Math.round(PipeStoptime) > 0) {
+                if (footprint[0] == 0 && ET.size() <= 1) {
+                    double pipeStoptime = getPipeStopTime(backTrace);
+                    if (Math.round(pipeStoptime) > 0) {
                         ff = true;
                         // 进行停运
-                        back = stop(back, PipeStoptime);
+                        back = stop(back, pipeStoptime);
+                        footprint[0] = 1;
                     }
-                } else {
+                } else if (ET.size() > 1) {
                     // 确保两个供油罐不相等
                     while (TK1 == TK2) {
                         back.getX()[3 * back.getStep() + 1] = Math.random();
@@ -309,6 +322,8 @@ public class Oilschdule {
                     if (back.getFlag() && (OilSchedule.Schedulable(back))) {
                         ff = true;
                     }
+                } else {
+                    ff = false;
                 }
                 if (ff) {
                     // 绘制甘特图
@@ -321,18 +336,16 @@ public class Oilschdule {
                     back.setFlag(false);
 
                     //*********** 策略是否已经全部执行尝试 **********
-                    //************* 更改策略 *********************
+                    //*************** 更改蒸馏塔 *****************
                     for (int i = 0; i < footprint.length; i++) {
                         if (footprint[i] == 0) {
-                            // 第一位代表管道停运
-                            if (i == 0) {
-                                // 含有两个以上的供油罐，默认不停运
-                                footprint[0] = 1;
-                            } else {
+                            if (i > 0) {
                                 // 有两个及以上的空罐
                                 while (TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size() - 1) != i - 1) {
                                     back.getX()[3 * back.getStep() + 2] = Math.random();
                                 }
+                                footprint[i] = 1;
+                            } else {
                                 footprint[i] = 1;
                             }
                             break;
