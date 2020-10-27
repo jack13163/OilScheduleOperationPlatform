@@ -307,9 +307,10 @@ public class Oilschdule {
 
                 boolean ff = false;
 
-                // 停运情况
+                // 停运情况：供油罐的个数不足两个
                 if (footprint[0] == 0 && ET.size() <= 1) {
                     double pipeStoptime = getPipeStopTime(back);
+                    // 计算停运截至时间，即能够停运的最晚时间
                     double[] feedTimes = back.getFeedTime();
                     double tmp = Double.MAX_VALUE;
                     for (int i = 0; i < feedTimes.length; i++) {
@@ -317,6 +318,8 @@ public class Oilschdule {
                             tmp = feedTimes[i];
                         }
                     }
+                    tmp -= RT;
+                    // 若能够停运，则停运
                     if (pipeStoptime > 0 && pipeStoptime < tmp) {
                         ff = true;
                         // 进行停运
