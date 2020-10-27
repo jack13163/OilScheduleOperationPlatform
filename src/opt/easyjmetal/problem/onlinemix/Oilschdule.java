@@ -247,7 +247,8 @@ public class Oilschdule {
         Map<String, Queue<KeyValue>> FPs = backTrace.getFP();
         for (int i = 0; i < FPs.size(); i++) {
             int ds = i + 1;
-            if (FPs.containsKey("DS" + ds)) {
+
+            if (FPs.containsKey("DS" + ds) && !FPs.get("DS" + ds).isEmpty()) {
                 UD.add(ds);
             }
         }
@@ -344,7 +345,7 @@ public class Oilschdule {
         // 绘制调度甘特图
         PlotUtils.plotSchedule2(back.getSchedulePlan());
         try {
-            Thread.sleep(3000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -453,8 +454,8 @@ public class Oilschdule {
             List<Double> list1 = new ArrayList<>();
             list1.add(4.0);
             list1.add((double) TK1);                                                                    // 油罐号
-            list1.add((double) Math.round(back.getTime() * 100.0) / 100.0);                                 // 开始供油t
-            list1.add((double) Math.round((back.getTime() + V[0] / PIPEFR) * 100.0) / 100.0);               // 供油罐结束t
+            list1.add((double) Math.round(back.getTime() * 100.0) / 100.0);                             // 开始供油t
+            list1.add((double) Math.round((back.getTime() + V[0] / PIPEFR) * 100.0) / 100.0);           // 供油罐结束t
             list1.add(Double.parseDouble(oilTypeVolumeRates.get(0).getType().substring(1)));            // 原油类型
             back.getSchedulePlan().add(list1);
             back.setTime(list1.get(3));
@@ -463,10 +464,10 @@ public class Oilschdule {
             if (types > 1) {
                 List<Double> list2 = new ArrayList<>();
                 list2.add(4.0);
-                list2.add((double) TK2);                                                                 // 油罐号
-                list2.add((double) Math.round(back.getTime() * 100.0) / 100.0);                              // 开始供油t
-                list2.add((double) Math.round((back.getTime() + V[1] / PIPEFR) * 100.0) / 100.0);            // 供油罐结束t
-                list2.add(Double.parseDouble(oilTypeVolumeRates.get(1).getType().substring(1)));// 原油类型
+                list2.add((double) TK2);                                                                // 油罐号
+                list2.add((double) Math.round(back.getTime() * 100.0) / 100.0);                         // 开始供油t
+                list2.add((double) Math.round((back.getTime() + V[1] / PIPEFR) * 100.0) / 100.0);       // 供油罐结束t
+                list2.add(Double.parseDouble(oilTypeVolumeRates.get(1).getType().substring(1)));        // 原油类型
                 back.getSchedulePlan().add(list2);
                 back.setTime(list2.get(3));
             }
