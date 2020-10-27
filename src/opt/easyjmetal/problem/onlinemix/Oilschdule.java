@@ -302,11 +302,9 @@ public class Oilschdule {
             back.setFlag(false);
         } else {
             while (TestFun.all(footprint) == 0 && !back.getFlag() && back.getStep() < 25) {
+                ET = getET(back);
+                UD = getUD(back);
 
-                // TK1和TK2应该不等
-                int TK1 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep()], ET.size() - 1));// 返回0 ~ ET.size - 1的数
-                int TK2 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep() + 1], ET.size() - 1));// 返回0 ~ ET.size - 1的数
-                int DS = UD.get(TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size() - 1));
                 boolean ff = false;
 
                 // 停运情况
@@ -319,6 +317,11 @@ public class Oilschdule {
                         footprint[0] = 1;
                     }
                 } else if (ET.size() > 1) {
+                    // TK1和TK2应该不等
+                    int TK1 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep()], ET.size() - 1));// 返回0 ~ ET.size - 1的数
+                    int TK2 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep() + 1], ET.size() - 1));// 返回0 ~ ET.size - 1的数
+                    int DS = UD.get(TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size() - 1));
+
                     // 确保两个供油罐不相等
                     while (TK1 == TK2) {
                         back.getX()[3 * back.getStep() + 1] = Math.random();
@@ -564,7 +567,7 @@ public class Oilschdule {
 
         // 计算原始种类的原油需要转运的体积
         for (int i = 0; i < len; i++) {
-            V[i] = Math.round(volume * oilTypeVolumes.get(i).getVolume() * 100) / 100;
+            V[i] = Math.round(volume * oilTypeVolumes.get(i).getVolume() * 100.0) / 100.0;
         }
 
         return V;
@@ -582,73 +585,5 @@ public class Oilschdule {
         back.setFlag(true);
         back.setTime(pipeStoptime);
         return back;
-    }
-
-    public static int[] Arraysort(double[] arr, boolean desc) {
-        double temp;
-        int index;
-        int k = arr.length;
-        int[] Index = new int[k];
-        for (int i = 0; i < k; i++) {
-            Index[i] = i;
-        }
-
-        for (int i = 0; i < arr.length; i++) {
-            for (int j = 0; j < arr.length - i - 1; j++) {
-                if (desc) {
-                    if (arr[j] < arr[j + 1]) { //从大到小排序 true
-                        temp = arr[j];
-                        arr[j] = arr[j + 1];
-                        arr[j + 1] = temp;
-
-                        index = Index[j];
-                        Index[j] = Index[j + 1];
-                        Index[j + 1] = index;
-                    }
-                } else {
-                    if (arr[j] > arr[j + 1]) { //从小到大 false
-                        temp = arr[j];
-                        arr[j] = arr[j + 1];
-                        arr[j + 1] = temp;
-
-                        index = Index[j];
-                        Index[j] = Index[j + 1];
-                        Index[j + 1] = index;
-                    }
-                }
-            }
-        }
-        return Index;
-    }
-
-    public static Object[][] switchL_A(List<List<Double>> plan) {
-        Object[][] temp = new Object[plan.size()][plan.get(0).size()];
-        for (int i = 0; i < temp.length; i++) {
-            for (int j = 0; j < temp[i].length; j++) {
-                temp[i][j] = plan.get(i).get(j);
-            }
-        }
-        return temp;
-    }
-
-    public static List<List<Double>> switchA_L(double[][] plannew) {
-        List<List<Double>> temp = new ArrayList<List<Double>>();
-        for (int i = 0; i < plannew.length; i++) {
-            List<Double> t = new ArrayList<Double>();
-            for (int j = 0; j < plannew[i].length; j++) {
-                t.add(plannew[i][j]);
-            }
-            temp.add(t);
-        }
-        return temp;
-    }
-
-    public static void output_plan(List<List<Double>> plan) {
-        for (int i = 0; i < plan.size(); i++) {
-            for (int j = 0; j < plan.get(0).size(); j++) {
-                System.out.print(Math.round(plan.get(i).get(j)) + ",");
-            }
-            System.out.print("\b\n");
-        }
     }
 }
