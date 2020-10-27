@@ -307,7 +307,7 @@ public class Oilschdule {
 
                 boolean ff = false;
 
-                // 停运情况：供油罐的个数不足两个
+                // 停运情况：供油罐的个数不足两个【停运的目的就是为了等待空闲供油罐的释放】
                 if (footprint[0] == 0 && ET.size() <= 1) {
                     double pipeStoptime = getPipeStopTime(back);
                     // 计算停运截至时间，即能够停运的最晚时间
@@ -594,7 +594,17 @@ public class Oilschdule {
         // 拷贝一份调度之前的系统状态，以后的更改都会在这个新拷贝的对象上进行。
         BackTrace back = CloneUtil.clone(backtrace);
         back.setFlag(true);
-        back.setTime(pipeStoptime);
+
+        // 停运操作
+        List<Double> list1 = new ArrayList<>();
+        list1.add(4.0);
+        list1.add(0.0);                                         // 油罐号
+        list1.add(back.getTime());                              // 开始供油t
+        list1.add(pipeStoptime);                                // 供油罐结束t
+        list1.add(0.0);            // 原油类型
+        back.getSchedulePlan().add(list1);
+        back.setTime(list1.get(3));
+
         return back;
     }
 }

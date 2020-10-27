@@ -77,7 +77,6 @@ public class CanvasGante extends Canvas {
 
             DenseMatrix64F dataMatrix = new DenseMatrix64F(data);
             double[] col_max = MatrixHelper.getColMax(dataMatrix).data;
-            int numOfOilType = (int) col_max[4];// 原油种类数
             int maxTime = (int) col_max[3];// 最后的任务的完成时间
             int numOfTasks = (int) col_max[0];// 任务的种类数
 
@@ -92,14 +91,14 @@ public class CanvasGante extends Canvas {
                 int ds = (int) (data[i][0] - 1);
                 double start = data[i][2];
                 double end = data[i][3];
-                int color = (int) data[i][4] - 1;
+                int color = (int) data[i][4];
                 int numberOfPumpGroups = (int) data[i][5];
 
                 // 计算矩形区域所在位置和宽度
                 int data_x = (int) MathUtil.round(margin_left + label_width + MathUtil.multiply(start, scale_x), 0).doubleValue();
                 int data_y = (int) MathUtil.round(margin_top + MathUtil.multiply(ds, scale_y), 0).doubleValue();
                 int data_width = (int) MathUtil.round(MathUtil.multiply(MathUtil.subtract(end, start), scale_x), 0).doubleValue();
-                // 不显示停运
+                // 显示停运
                 if (color >= 0) {
                     //填充矩形区域
                     MyFillRect(g, data_x, data_y, data_width, block_height, Color.white, colors[color], 10, numberOfPumpGroups);
