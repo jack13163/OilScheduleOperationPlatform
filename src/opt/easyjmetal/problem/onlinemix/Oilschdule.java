@@ -224,7 +224,8 @@ public class Oilschdule {
                     ops.add(op);
                 }
             }
-            List<List<Double>> opCollections = ops.stream().sorted((e1, e2) -> (int) Math.ceil(Math.abs(e1.get(3) - e2.get(3))))
+            List<List<Double>> opCollections = ops.stream()
+                    .sorted((e1, e2) -> (int) Math.ceil(Math.abs(e1.get(3) - e2.get(3))))
                     .filter(e -> e.get(3) > backTrace.getTime())    // 过滤结束时间大于当前时间的操作
                     .collect(Collectors.toList());
 
@@ -263,7 +264,17 @@ public class Oilschdule {
 
         BackTrace back = CloneUtil.clone(backTrace);
         back.setFlag(false);
-        int[] footprint = new int[back.getFP().size() + 1];
+
+        List<Integer> ET = getET(backTrace);
+        List<Integer> UD = getUD(back);
+        int[] footprint = new int[UD.size() + 1];
+        // 供油罐为空，当前状态为不可行状态
+        if(ET.isEmpty()){
+            for (int i = 0; i < footprint.length; i++) {
+                footprint[i] = 1;
+            }
+        }
+
         // 判断是否完成炼油计划
         if (isFinished(back)) {
             back.setFlag(true);
@@ -271,8 +282,6 @@ public class Oilschdule {
             back.setFlag(false);
         } else {
             while (TestFun.all(footprint) == 0 && !back.getFlag() && back.getStep() < 25) {
-                List<Integer> ET = getET(back);
-                List<Integer> UD = getUD(back);
 
                 // TK1和TK2应该不等
                 int TK1 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep()], ET.size() - 1));// 返回0 ~ ET.size - 1的数
@@ -307,39 +316,27 @@ public class Oilschdule {
                     back.setStep(back.getStep() + 1);
                     back = backSchedule(back);
                 } else {
-                    back = CloneUtil.clone(backTrace); //数据回滚
+                    back = CloneUtil.clone(backTrace); // 数据回滚
                     back.setFlag(false);
-                    double t1, t2, t3;
-                    //***********策略是否已经全部执行尝试**********
-                    //*************更改策略*************************
+
+                    //*********** 策略是否已经全部执行尝试 **********
+                    //************* 更改策略 *********************
                     for (int i = 0; i < footprint.length; i++) {
-                        if (footprint[i] == 0) { //第一位代表管道停运
+                        if (footprint[i] == 0) {
+                            // 第一位代表管道停运
                             if (i == 0) {
-                                while (TestFun.getInt(back.getX()[2 * back.getStep()], ET.size()) != ET.size()) {
-                                    t1 = Math.random();
-                                    back.getX()[2 * back.getStep()] = t1;
-                                }
+                                // 含有两个以上的供油罐，默认不停运
                                 footprint[0] = 1;
-                            } else if (ET.isEmpty()) { //尝试过停运，但没有空罐
-                                for (int j = 0; j < footprint.length; j++) {
-                                    footprint[i] = 1;
-                                }
                             } else {
-                                //停运不行，但有空罐
-                                while (TestFun.getInt(back.getX()[2 * back.getStep()], ET.size()) == ET.size()) {//选空罐
-                                    t2 = Math.random();
-                                    back.getX()[2 * back.getStep()] = t2;
-                                }
-                                while (TestFun.getInt(back.getX()[2 * back.getStep() + 1], UD.size() - 1) != i - 1) {
-                                    t3 = Math.random();
-                                    back.getX()[2 * back.getStep() + 1] = t3;
+                                // 有两个及以上的空罐
+                                while (TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size() - 1) != i - 1) {
+                                    back.getX()[3 * back.getStep() + 2] = Math.random();
                                 }
                                 footprint[i] = 1;
                             }
                             break;
                         }
                     }
-
                 }
             }
         }
