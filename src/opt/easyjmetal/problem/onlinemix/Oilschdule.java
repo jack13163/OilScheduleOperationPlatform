@@ -146,10 +146,10 @@ public class Oilschdule {
 
                     // 进料包减去罐中的原油
                     Queue<KeyValue> keyValues = feedingPackages.get("DS" + ds);
-                    if(keyValues.peek().getType().equals("M" + type)){
-                        if(keyValues.peek().getVolume() == vol){
+                    if (keyValues.peek().getType().equals("M" + type)) {
+                        if (keyValues.peek().getVolume() == vol) {
                             keyValues.remove();
-                        }else{
+                        } else {
                             keyValues.peek().setVolume(keyValues.peek().getVolume() - vol);
                         }
                     }
@@ -310,7 +310,14 @@ public class Oilschdule {
                 // 停运情况
                 if (footprint[0] == 0 && ET.size() <= 1) {
                     double pipeStoptime = getPipeStopTime(back);
-                    if (Math.round(pipeStoptime) > 0) {
+                    double[] feedTimes = back.getFeedTime();
+                    double tmp = Double.MAX_VALUE;
+                    for (int i = 0; i < feedTimes.length; i++) {
+                        if(tmp > feedTimes[i]) {
+                            tmp = feedTimes[i];
+                        }
+                    }
+                    if (pipeStoptime > 0 && pipeStoptime < tmp) {
                         ff = true;
                         // 进行停运
                         back = stop(back, pipeStoptime);
@@ -340,6 +347,7 @@ public class Oilschdule {
                     back = backSchedule(back);
                 } else {
                     back = CloneUtil.clone(backTrace); // 数据回滚
+                    UD = getUD(back);
                     back.setFlag(false);
 
                     //*********** 策略是否已经全部执行尝试 **********
