@@ -277,11 +277,18 @@ public class Oilschdule {
 
         BackTrace back = CloneUtil.clone(backTrace);
         back.setFlag(false);
+        // 绘制甘特图
+        PlotUtils.plotSchedule2(back.getSchedulePlan());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        List<Integer> ET = getET(backTrace);
+        List<Integer> ET = getET(back);
         List<Integer> UD = getUD(back);
         int[] footprint = new int[UD.size() + 1];
-        // 供油罐为空，当前状态为不可行状态
+        // 没有可用的供油罐，当前状态为不可行状态
         if (ET.isEmpty()) {
             for (int i = 0; i < footprint.length; i++) {
                 footprint[i] = 1;
@@ -304,7 +311,7 @@ public class Oilschdule {
 
                 // 停运情况
                 if (footprint[0] == 0 && ET.size() <= 1) {
-                    double pipeStoptime = getPipeStopTime(backTrace);
+                    double pipeStoptime = getPipeStopTime(back);
                     if (Math.round(pipeStoptime) > 0) {
                         ff = true;
                         // 进行停运
@@ -326,9 +333,6 @@ public class Oilschdule {
                     ff = false;
                 }
                 if (ff) {
-                    // 绘制甘特图
-                    PlotUtils.plotSchedule2(back.getSchedulePlan());
-
                     back.setStep(back.getStep() + 1);
                     back = backSchedule(back);
                 } else {
@@ -353,14 +357,6 @@ public class Oilschdule {
                     }
                 }
             }
-        }
-
-        // 绘制调度甘特图
-        PlotUtils.plotSchedule2(back.getSchedulePlan());
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
         return back;
     }
@@ -395,7 +391,8 @@ public class Oilschdule {
      * @return
      */
     private static boolean isFinished(BackTrace backtrace) {
-        if (backtrace.getFP().isEmpty()) {
+        if (backtrace.getFP().isEmpty() ||
+                (backtrace.getFP().get("DS1").isEmpty() && backtrace.getFP().get("DS2").isEmpty() && backtrace.getFP().get("DS3").isEmpty())) {
             return true;
         }
         return false;
