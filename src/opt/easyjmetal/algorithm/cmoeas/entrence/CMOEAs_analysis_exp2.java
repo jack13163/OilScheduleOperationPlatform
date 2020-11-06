@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm;
+package opt.easyjmetal.algorithm.cmoeas.entrence;
 
 import opt.easyjmetal.algorithm.cmoeas.util.Utils;
 import opt.easyjmetal.util.JMException;

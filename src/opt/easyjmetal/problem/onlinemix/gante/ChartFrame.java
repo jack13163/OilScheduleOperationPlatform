@@ -5,14 +5,14 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class ChartFrame {
-    private final static int width = 1800;
-    private final static int height = 720;
+    private final static int width = 1600;
+    private final static int height = 500;
 
     public JFrame frame;
     private CanvasGante canvas;
 
     public ChartFrame() {
-        frame = new JFrame("åŸæ²¹åœ¨çº¿æ··åˆç”˜ç‰¹å›¾");
+        frame = new JFrame("Ô­ÓÍÔÚÏß»ìºÏ¸ÊÌØÍ¼");
         canvas = new CanvasGante();
 
         int screenWidth = (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;

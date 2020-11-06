@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class Oilschdule {
 
-    static class KeyValue implements Serializable {
+    public static class KeyValue implements Serializable {
         private String type;
         private double volume;
 
@@ -457,13 +457,6 @@ public class Oilschdule {
                     V[i] = Math.min(V[i], volume * oilTypeVolumeRates.get(i).getVolume());
                 }
             }
-            if ((types > 1 && V[0] + V[1] == volume) || V[0] == volume) {
-                // 进料包转运结束
-                FP.remove();
-            } else {
-                // 进料包递减
-                FP.peek().setVolume(types > 1 ? FP.peek().getVolume() - V[0] - V[1] : FP.peek().getVolume() - V[0]);
-            }
 
             // 调整转运的原油的体积
             if (types > 1) {
@@ -472,6 +465,14 @@ public class Oilschdule {
                 } else {
                     V[1] = V[0] * oilTypeVolumeRates.get(1).getVolume() / oilTypeVolumeRates.get(0).getVolume();
                 }
+            }
+
+            if ((types > 1 && V[0] + V[1] == volume) || V[0] == volume) {
+                // 进料包转运结束
+                FP.remove();
+            } else {
+                // 进料包递减
+                FP.peek().setVolume(types > 1 ? FP.peek().getVolume() - V[0] - V[1] : FP.peek().getVolume() - V[0]);
             }
 
             // 第一次转运操作
@@ -524,7 +525,7 @@ public class Oilschdule {
      * @param type
      * @return
      */
-    private static List<KeyValue> getKeyValues(String type) {
+    public static List<KeyValue> getKeyValues(String type) {
         // 需要原始类型的原油类型和体积
         List<KeyValue> oilTypeVolumeRates = new ArrayList<>();
         if (peifang.get(type).contains("=")) {

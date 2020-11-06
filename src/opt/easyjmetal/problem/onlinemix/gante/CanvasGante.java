@@ -1,9 +1,11 @@
 package opt.easyjmetal.problem.onlinemix.gante;
 
+import opt.easyjmetal.problem.onlinemix.Oilschdule;
 import org.ejml.data.DenseMatrix64F;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CanvasGante extends Canvas {
@@ -31,6 +33,7 @@ public class CanvasGante extends Canvas {
 
     // 颜色数组，以区分不同的原油类型
     private final static Color[] colors = {
+            new Color(255, 255, 255),
             new Color(204, 204, 204),
             new Color(192, 255, 32),
             new Color(153, 0, 102),
@@ -91,17 +94,30 @@ public class CanvasGante extends Canvas {
                 int ds = (int) (data[i][0] - 1);
                 double start = data[i][2];
                 double end = data[i][3];
-                int color = (int) data[i][4];
-                int numberOfPumpGroups = (int) data[i][5];
+                int oiltype = (int) data[i][4];
+                int color1 = oiltype;
+                int color2 = oiltype;
+                // 如果同时使用两个供油罐，代表这是一个同时需要两种类型的原油的ODF
+                if(data[i].length > 5 && oiltype > 0){
+                    // 计算原始类型
+                    List<Oilschdule.KeyValue> keyValues = Oilschdule.getKeyValues("M" + oiltype);
+                    color1 = Integer.parseInt(keyValues.get(0).getType().substring(1));
+                    if(keyValues.size() > 1) {
+                        color2 = Integer.parseInt(keyValues.get(1).getType().substring(1));
+                    }
+                }
 
                 // 计算矩形区域所在位置和宽度
                 int data_x = (int) MathUtil.round(margin_left + label_width + MathUtil.multiply(start, scale_x), 0).doubleValue();
                 int data_y = (int) MathUtil.round(margin_top + MathUtil.multiply(ds, scale_y), 0).doubleValue();
                 int data_width = (int) MathUtil.round(MathUtil.multiply(MathUtil.subtract(end, start), scale_x), 0).doubleValue();
-                // 显示停运
-                if (color >= 0) {
-                    //填充矩形区域
-                    MyFillRect(g, data_x, data_y, data_width, block_height, Color.white, colors[color], 10, numberOfPumpGroups);
+
+                // 绘制矩形
+                if (color1 != color2 && ds < 3) {
+                    // 停运
+                    MyFillRect(g, data_x, data_y, data_width, block_height, colors[color1], colors[color2], 10, 1);// 最后一个参数待用
+                } else {
+                    MyFillRect(g, data_x, data_y, data_width, block_height, colors[oiltype], colors[oiltype], 10, 0);
                 }
             }
 
@@ -109,7 +125,7 @@ public class CanvasGante extends Canvas {
             // 绘制详细的调度数据的边界和标签
             for (int i = 0; i < data.length; i++) {
                 // 使用不同的颜色填充封闭的矩形区域
-                int color = (int) data[i][4] - 1;
+                int oiltype = (int) data[i][4];
                 int tank = (int) data[i][1];
                 int tank2 = (int) data[i][5];
                 int ds = (int) (data[i][0] - 1);
@@ -120,7 +136,7 @@ public class CanvasGante extends Canvas {
                 int data_y = (int) MathUtil.round(margin_top + MathUtil.multiply(ds, scale_y), 0).doubleValue();
                 int data_width = (int) MathUtil.round(MathUtil.multiply(MathUtil.subtract(end, start), scale_x), 0).doubleValue();
                 // 不显示停运
-                if (color >= 0) {
+                if (oiltype >= 0) {
                     g.setColor(Color.black);
 
                     // 绘制边框
@@ -135,8 +151,17 @@ public class CanvasGante extends Canvas {
                     g.drawLine(data_x, data_y + block_height, data_x + data_width, data_y + block_height);
 
                     // 绘制标签
-                    g.setFont(new Font("Times new Roman", Font.BOLD, 14));
-                    g.drawString("CT" + tank + (tank2 > 0 ? ",CT" + tank2 : ""), data_x, data_y);
+                    if(oiltype > 0) {
+                        g.setFont(new Font("Times new Roman", Font.BOLD, 14));
+                        String str = "CT" + tank + (tank2 > 0 ? ",CT" + tank2 : "");
+
+                        List<Oilschdule.KeyValue> keyValues = Oilschdule.getKeyValues("M" + oiltype);
+                        if (keyValues.size() > 1 && ds < 3) {
+                            str += ",M" + oiltype;
+                        }
+                        g.drawString(str, data_x, data_y);
+                    }
+
                 }
             }
 
@@ -201,7 +226,7 @@ public class CanvasGante extends Canvas {
         int block_offset_top = -9;
         int text_offset_top = 10;
         // 绘制颜色
-        for (int i = 0; i < oilTypes; i++) {
+        for (int i = 1; i < oilTypes; i++) {
 
             // 使用不同的颜色填充封闭的矩形区域
             g.setColor(colors[i]);
@@ -210,7 +235,7 @@ public class CanvasGante extends Canvas {
             g.drawRect(x + 20, y + i * (block_height + betweenDistance) + block_offset_top, block_width, block_height);
 
             // 设置标签
-            int oilType = i + 1;
+            int oilType = i;
             g.setColor(Color.black);
             g.drawString("#" + oilType, x + block_width + 30, y + i * (block_height + betweenDistance) + text_offset_top);
         }

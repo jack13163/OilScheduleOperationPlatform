@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm;
+package opt.easyjmetal.algorithm.cmoeas.entrence;
 
 import opt.easyjmetal.algorithm.cmoeas.util.Utils;
 import opt.easyjmetal.core.Algorithm;
@@ -11,53 +11,64 @@ import opt.easyjmetal.operator.selection.SelectionFactory;
 import opt.easyjmetal.problem.ProblemFactory;
 import opt.easyjmetal.util.FileUtils;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 
-/**
- *
- */
-public class SJ_MOEAs_main {
+
+public class CMOEAs_main {
 
     public static void main(String[] args) throws Exception {
         // 0 represents for DE, 1 represents for SBX
-        // int crossoverMethod = 1;
-        //batchRun(new String[]{"NSGAII_CDP"}, crossoverMethod);
-        singleRun("NSGAII_CDP", 1);
+        int crossoverMethod = 1;
+        // "NSGAII_CDP",
+        // "ISDEPLUS_CDP",
+        // "NSGAIII_CDP",
+        // "MOEAD_CDP",
+        // "MOEAD_IEpsilon",
+        // "MOEAD_Epsilon",
+        // "MOEAD_SR",
+        // "C_MOEAD",
+        // "PPS_MOEAD"
+        batchRun(new String[]{
+                "NSGAII_CDP",
+                "ISDEPLUS_CDP",
+                "NSGAIII_CDP",
+                "MOEAD_CDP",
+                "MOEAD_IEpsilon",
+                "MOEAD_Epsilon",
+                "MOEAD_SR",
+                "C_MOEAD",
+                "PPS_MOEAD"
+        }, crossoverMethod);
     }
 
-//    private static void batchRun(String[] methods, int crossMethod) throws Exception {
-//        String[] algorithmSet = methods;
-//        int algorithmNo = algorithmSet.length;
-//
-//        // 输出运行时间
-//        String basePath = "result/easyjmetal/";
-//        File dir = new File(basePath);
-//        if (!dir.exists()) {
-//            dir.mkdirs();
-//        }
-//
-//        //true = append file
-//        FileWriter fileWritter = new FileWriter(basePath + "runtimes.txt", false);
-//        StringBuilder stringBuilder = new StringBuilder();
-//
-//        for (int i = 0; i < algorithmNo; i++) {
-//            System.out.println("The tested algorithm: " + algorithmSet[i]);
-//            System.out.println("The process: " + String.format("%.2f", (100.0 * i / algorithmNo)) + "%");
-//            stringBuilder.append(singleRun(algorithmSet[i], crossMethod)); // 0 represents for DE, 1 represents for SBX
-//        }
-//
-//        fileWritter.write(stringBuilder.toString());
-//        fileWritter.flush();
-//        fileWritter.close();
-//    }
+    private static void batchRun(String[] methods, int crossMethod) throws Exception {
+        String[] algorithmSet = methods;
+        int algorithmNo = algorithmSet.length;
 
-    /**
-     * 入口
-     * @param algorithmName
-     * @param crossMethod
-     * @return
-     * @throws Exception
-     */
+        // 输出运行时间
+        String basePath = "result/easyjmetal/";
+        File dir = new File(basePath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        //true = append file
+        FileWriter fileWritter = new FileWriter(basePath + "runtimes.txt", false);
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < algorithmNo; i++) {
+            System.out.println("The tested algorithm: " + algorithmSet[i]);
+            System.out.println("The process: " + String.format("%.2f", (100.0 * i / algorithmNo)) + "%");
+            stringBuilder.append(singleRun(algorithmSet[i], crossMethod)); // 0 represents for DE, 1 represents for SBX
+        }
+
+        fileWritter.write(stringBuilder.toString());
+        fileWritter.flush();
+        fileWritter.close();
+    }
+
     private static String singleRun(String algorithmName, int crossMethod) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -70,24 +81,37 @@ public class SJ_MOEAs_main {
 
 /////////////////////////////////////////// parameter setting //////////////////////////////////
 
-        int popSize = 50; // 种群大小
-        int maxFES = 500; // 评价次数 = 种群大小 * 迭代次数
-        int runtime = 10;// 独立运行次数
+        int popSize = 100;
+        int neighborSize = (int) (0.1 * popSize);
+        int maxFES = 50000;
+        int updateNumber = 2;
+        double deDelta = 0.9;
         double DeCrossRate = 1.0;
         double DeFactor = 0.5;
+
+        double tao = 0.1;
+        double alpha = 0.9;
+        double threshold = 1e-3;
+
+        // IDEA parameter
+        float infeasibleRatio = 0.1f;
 
         String AlgorithmName = algorithmName;
 
         String mainPath = System.getProperty("user.dir");
         String weightPath = "resources/MOEAD_Weights";// 权重文件路径
+        int runtime = 10;// 独立运行次数
         Boolean isDisplay = false;
         int plotFlag = 0; // 0 for the working population; 1 for the external archive
+
+        // MOEAD_SR parameters
+        double srFactor = 0.05;
 
         String resultFile = mainPath + "/" + AlgorithmName + ".db";
         FileUtils.deleteFile(resultFile);
 
         Object[] params = {"Real"};
-        String[] problemStrings = {"SJOIL"};
+        String[] problemStrings = {"EDFPS", "EDFTSS"};
 
 //////////////////////////////////////// End parameter setting //////////////////////////////////
 
@@ -105,10 +129,17 @@ public class SJ_MOEAs_main {
             algorithm.setInputParameter("populationSize", popSize);
             algorithm.setInputParameter("maxEvaluations", maxFES);
             algorithm.setInputParameter("dataDirectory", weightPath);
+            algorithm.setInputParameter("T", neighborSize);
+            algorithm.setInputParameter("delta", deDelta);
+            algorithm.setInputParameter("nr", updateNumber);
             algorithm.setInputParameter("isDisplay", isDisplay);
             algorithm.setInputParameter("plotFlag", plotFlag);
             algorithm.setInputParameter("paretoPath", paretoPath);
-            algorithm.setInputParameter("DBName", "sjoil");
+            algorithm.setInputParameter("srFactor", srFactor);
+            algorithm.setInputParameter("tao", tao);
+            algorithm.setInputParameter("alpha", alpha);
+            algorithm.setInputParameter("threshold_change", threshold);
+            algorithm.setInputParameter("infeasibleRatio", infeasibleRatio);
 
             // Crossover operator
             if (crossMethod == 0) {                      // DE operator
