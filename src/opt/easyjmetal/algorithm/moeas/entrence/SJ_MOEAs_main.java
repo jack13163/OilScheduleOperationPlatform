@@ -25,32 +25,6 @@ public class SJ_MOEAs_main {
         singleRun("NSGAII_CDP", 1);
     }
 
-//    private static void batchRun(String[] methods, int crossMethod) throws Exception {
-//        String[] algorithmSet = methods;
-//        int algorithmNo = algorithmSet.length;
-//
-//        // 输出运行时间
-//        String basePath = "result/easyjmetal/";
-//        File dir = new File(basePath);
-//        if (!dir.exists()) {
-//            dir.mkdirs();
-//        }
-//
-//        //true = append file
-//        FileWriter fileWritter = new FileWriter(basePath + "runtimes.txt", false);
-//        StringBuilder stringBuilder = new StringBuilder();
-//
-//        for (int i = 0; i < algorithmNo; i++) {
-//            System.out.println("The tested algorithm: " + algorithmSet[i]);
-//            System.out.println("The process: " + String.format("%.2f", (100.0 * i / algorithmNo)) + "%");
-//            stringBuilder.append(singleRun(algorithmSet[i], crossMethod)); // 0 represents for DE, 1 represents for SBX
-//        }
-//
-//        fileWritter.write(stringBuilder.toString());
-//        fileWritter.flush();
-//        fileWritter.close();
-//    }
-
     /**
      * 入口
      * @param algorithmName
@@ -63,9 +37,6 @@ public class SJ_MOEAs_main {
 
         Problem problem;                // The problem to solve
         Algorithm algorithm;            // The algorithm to use
-        Operator crossover;            // Crossover operator
-        Operator mutation;             // Mutation operator
-        Operator selection;            // Selection operator
         HashMap parameters;           // Operator parameters
 
 /////////////////////////////////////////// parameter setting //////////////////////////////////
