@@ -1,16 +1,20 @@
 package opt.easyjmetal.algorithm.moeas;
 
 import opt.easyjmetal.algorithm.cmoeas.util.Utils;
-import opt.easyjmetal.core.*;
+import opt.easyjmetal.core.Algorithm;
+import opt.easyjmetal.core.Problem;
+import opt.easyjmetal.core.Solution;
+import opt.easyjmetal.core.SolutionSet;
+import opt.easyjmetal.problem.sj.CloneUtil;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.comparators.IConstraintViolationComparator;
-import opt.easyjmetal.util.comparators.ViolationThresholdComparator;
-import opt.easyjmetal.util.jmathplot.ScatterPlot;
 import opt.easyjmetal.util.sqlite.SqlUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * 多策略协同多目标萤火虫算法
- * Programmed by Kevin Kong
  */
 public class MOFA extends Algorithm {
 
@@ -29,8 +33,6 @@ public class MOFA extends Algorithm {
     // 保存路径
     private String dataDirectory_;
 
-    private ScatterPlot plot_;
-
     // 外部储备集
     private int externalArchiveSize;
     private SolutionSet external_archive_;
@@ -40,10 +42,9 @@ public class MOFA extends Algorithm {
     // 最大吸引力
     private double beta0;
 
-    private IConstraintViolationComparator comparator = new ViolationThresholdComparator();
-
     /**
      * 初始化
+     *
      * @param problem 问题
      */
     public MOFA(Problem problem) {
@@ -59,118 +60,69 @@ public class MOFA extends Algorithm {
     public SolutionSet execute() throws JMException, ClassNotFoundException {
         // 参数初始化
         evaluations_ = 0;
-        int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
+        maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         populationSize_ = (Integer) getInputParameter("populationSize");
+        externalArchiveSize = (Integer) getInputParameter("externalArchiveSize");
         dataDirectory_ = getInputParameter("dataDirectory").toString();
         String dbName = getInputParameter("DBName").toString();
-        boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
-        int plotFlag_ = (Integer) getInputParameter("plotFlag");
 
         int runningTime = (Integer) getInputParameter("runningTime") + 1; // start from 1
         population_ = new SolutionSet(populationSize_);
         gamma = (Integer) getInputParameter("gamma");
         beta0 = (Integer) getInputParameter("beta0");
 
-        String paratoFilePath_ = getInputParameter("paretoPath").toString();
-        Operator crossover_ = operators_.get("crossover"); // default: DE crossover
-        Operator mutation_ = operators_.get("mutation");  // default: polynomial mutation
-
         // 创建数据表，方便后面保存结果
         String problemName = problem_.getName() + "_" + runningTime;
         SqlUtils.CreateTable(problemName, dbName);
 
-
-        // STEP 1.2. Initialize population
+        // 初始化种群
         initPopulation();
 
-        // Initialize the external archive
-        external_archive_ = new SolutionSet(populationSize_);
-        Utils.initializeExternalArchive(population_,populationSize_,external_archive_);
+        // 初始化外部储备集
+        external_archive_ = new SolutionSet(externalArchiveSize);
+        Utils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
-        //display constraint info
-        if (isDisplay_ && paratoFilePath_ != null) {
-            if (plotFlag_ == 0) {
-                plot_ = new ScatterPlot(this.getClass().getName(), problem_.getName(), population_);
-            }
-            if (plotFlag_ == 1) {
-                plot_ = new ScatterPlot(this.getClass().getName(), problem_.getName(), external_archive_);
-            }
-            plot_.displayPf(paratoFilePath_);
-        }
+        // 迭代更新
+        do {
+            int[] permutation = new int[populationSize_];
+            Utils.randomPermutation(permutation, populationSize_);
 
-        // STEP 2. Update
-        int gen = 0;
-//        do {
-//            int[] permutation = new int[populationSize_];
-//            Utils.randomPermutation(permutation, populationSize_);
-//
-//            for (int i = 0; i < populationSize_; i++) {
-//                int n = permutation[i]; // or int n = i;
-//                //int n = i ; // or int n = i;
-//                int type;
-//                double rnd = PseudoRandom.randDouble();
-//
-//                // STEP 2.1. Mating selection based on probability
-//                if (rnd < delta_){ // if (rnd < realb)
-//                    type = 1;   // neighborhood
-//                } else {
-//                    type = 2;   // whole population
-//                }
-//                Vector<Integer> p = new Vector<Integer>();
-//                matingSelection(p, n,2, type);
-//
-//                // STEP 2.2. Reproduction
-//                Solution child = null;
-//                // Apply Crossover for Real codification
-//                if (crossover_.getClass().getSimpleName().equalsIgnoreCase("SBXCrossover")) {
-//                    Solution[] parents = new Solution[2];
-//                    parents[0] = population_.get(p.get(0));
-//                    parents[1] = population_.get(n);
-//                    child = ((Solution[]) crossover_.execute(parents))[0];
-//                }
-//                // Apply DE crossover
-//                else if (crossover_.getClass().getSimpleName().equalsIgnoreCase("DifferentialEvolutionCrossover")) {
-//                    Solution[] parents = new Solution[3];
-//                    parents[0] = population_.get(p.get(0));
-//                    parents[1] = population_.get(p.get(1));
-//                    parents[2] = population_.get(n);
-//                    child = (Solution) crossover_.execute(new Object[]{population_.get(n), parents});
-//                } else {
-//                    System.out.println("unknown crossover");
-//                }
-//
-//                // Apply mutation
-//                mutation_.execute(child);
-//
-//                // Evaluation
-//                problem_.evaluate(child);
-//                problem_.evaluateConstraints(child);
-//
-//                evaluations_++;
-//
-//                // STEP 2.3. Repair. Not necessary
-//
-//                // STEP 2.4. Update z_
-//                updateReference(child);
-//
-//                // STEP 2.5. Update of solutions
-//                updateProblem(child, n, type);
-//            } // for
-//
-//            ((ViolationThresholdComparator) this.comparator).updateThreshold(this.population_);
-//
-//            gen += 1;
-//
-//            //Update the external archive
-//            Utils.updateExternalArchive(population_,populationSize_,external_archive_);
-//
-//            if (isDisplay_) {
-//                plotPopulation(plotFlag_);
-//            }
-//
-//            allPop = allPop.union(population_);
-//
-//        } while (evaluations_ < maxEvaluations_);
+            for (int i = 0; i < populationSize_; i++) {
+                for (int j = 0; j < populationSize_; j++) {
+                    int domination = get_domination(population_.get(i), population_.get(i));
+                    if (domination != -1) {
+                        // i和j之间存在支配关系，从储备集中随机选取一个个体作为g
+                        int eSize = external_archive_.size();
+                        int ind = new Random().nextInt(eSize);
+                        Solution g = external_archive_.get(ind);
+                        if (domination == 0) {
+                            // i支配j
+                            population_.replace(j, firefly_move(population_.get(i), population_.get(j),beta0, gamma, true, g).get(0));// 这里没有进行越界处理
+                        } else {
+                            // j支配i
+                            population_.replace(i, firefly_move(population_.get(j), population_.get(i), beta0, gamma, true, g).get(0));// 这里没有进行越界处理
+                        }
+                    } else {
+                        // i和j之间存在支配关系，从储备集中随机选取一个个体作为g
+                        int eSize = external_archive_.size();
+                        int ind = new Random().nextInt(eSize);
+                        Solution g = external_archive_.get(ind);
+                        List<Solution> res = firefly_move(population_.get(i), population_.get(j), beta0, gamma, false, g);
+                        population_.replace(i, res.get(0));// 这里没有进行越界处理
+                        population_.replace(j, res.get(1));// 这里没有进行越界处理
+                    }
+                }
+            }
+
+            // Evaluation
+            for (int i = 0; i < this.populationSize_; i++) {
+                problem_.evaluate(this.population_.get(i));
+                evaluations_++;
+            }
+
+            //Update the external archive
+            Utils.updateExternalArchive(population_, populationSize_, external_archive_);
+        } while (evaluations_ < maxEvaluations_);
 
         SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
         return external_archive_;
@@ -185,5 +137,222 @@ public class MOFA extends Algorithm {
             evaluations_++;
             population_.add(newSolution);
         }
+    }
+
+    /**
+     * 获得两个个体的支配关系，x1支配x2返回0，x2支配x1返回1，否则返回-1
+     *
+     * @param s1
+     * @param s2
+     * @return
+     */
+    public int get_domination(Solution s1, Solution s2) {
+        int less = 0;
+        int equal = 0;
+        int more = 0;
+        int res = 0;
+
+        int M = s1.getNumberOfObjectives();
+        for (int i = 0; i < M; i++) {
+            if (s1.getObjective(i) < s2.getObjective(i))
+                less = less + 1;
+            else if (s1.getObjective(i) == s2.getObjective(i)) {
+                equal = equal + 1;
+            } else {
+                more = more + 1;
+            }
+        }
+
+        if (more == 0 && equal != M) {
+            // i支配j
+            res = 0;
+        } else if (less == 0 && equal != M) {
+            // i被j支配
+            res = 1;
+        } else {
+            res = -1;
+        }
+        return res;
+    }
+
+    /**
+     * 萤火虫x1向x2移动
+     * 当x1、x2之间存在支配关系时，omega = omega0，omega0为[0,1]之间的随机数
+     * 当x1、x2之间不存在支配关系，omega = 1 - omega0
+     *
+     * @param s1
+     * @param s2
+     * @param beta0      最大吸引度
+     * @param gamma      光吸收系数
+     * @param domination 是否存在支配关系
+     * @param g          精英个体
+     * @return
+     */
+    public List<Solution> firefly_move(Solution s1, Solution s2, double beta0, double gamma, boolean domination, Solution g) throws JMException {
+        int V = s1.getDecisionVariables().length;
+        // 获得x1和x2之间的距离
+        double r = get_distance(s1, s2);
+        // 获得x1和x2之间的吸引力
+        double beta = get_attraction(r, beta0, gamma);
+        // 莱维飞行获得随机扰动
+        double s = levy_flights();
+        double omega0 = Math.random();
+
+        List<Solution> res = new ArrayList<>();
+
+        // 存在支配关系
+        if (domination) {
+            // 获得x2与精英个体g之间的距离
+            double r_g = get_distance(s2, g);
+            // 获得x2和g之间的吸引力
+            double beta_g = get_attraction(r_g, beta0, gamma);
+
+            Solution new_x = CloneUtil.clone(s1);
+            for (int i = 0; i < V; i++) {
+                new_x.getDecisionVariables()[i].setValue(s1.getDecisionVariables()[i].getValue()
+                        + omega0 * beta * (s1.getDecisionVariables()[i].getValue() - s2.getDecisionVariables()[i].getValue())
+                        + (1 - omega0) * beta_g * (g.getDecisionVariables()[i].getValue() - s2.getDecisionVariables()[i].getValue()));
+            }
+        } else {
+            // 获得x1与精英个体g之间的距离
+            double r_g = get_distance(s1, g);
+            // 获得x1和g之间的吸引力
+            double beta_g = get_attraction(r_g, beta0, gamma);
+            Solution new_x = CloneUtil.clone(s1);
+            for (int i = 0; i < V; i++) {
+                new_x.getDecisionVariables()[i].setValue(omega0 * s1.getDecisionVariables()[i].getValue()
+                        + (1 - omega0) * beta_g * (g.getDecisionVariables()[i].getValue() - s1.getDecisionVariables()[i].getValue()));
+            }
+
+            // 获得x2与精英个体g之间的距离
+            r_g = get_distance(s2, g);
+            // 获得x2和g之间的吸引力
+            beta_g = get_attraction(r_g, beta0, gamma);
+            new_x = CloneUtil.clone(s1);
+            for (int i = 0; i < V; i++) {
+                new_x.getDecisionVariables()[i].setValue(omega0 * s2.getDecisionVariables()[i].getValue()
+                        + (1 - omega0) * beta_g * (g.getDecisionVariables()[i].getValue() - s2.getDecisionVariables()[i].getValue()));
+            }
+        }
+
+        // 越界处理
+        for (int i = 0; i < res.size(); i++) {
+            outbound(res.get(i));
+        }
+
+        return res;
+    }
+
+    /**
+     * 越界处理
+     * @param s
+     */
+    public void outbound(Solution s) throws JMException {
+        int V = s.getDecisionVariables().length;
+        for (int i = 0; i < V; i++) {
+            if(s.getDecisionVariables()[i].getValue() < problem_.getLowerLimit(i)){
+                s.getDecisionVariables()[i].setValue(problem_.getLowerLimit(i));
+            }else if(s.getDecisionVariables()[i].getValue() > problem_.getUpperLimit(i)){
+                s.getDecisionVariables()[i].setValue(problem_.getUpperLimit(i));
+            }
+        }
+    }
+
+    /**
+     * 获得萤火虫x1和x2之间的吸引力
+     *
+     * @param r     两萤火虫之间的距离
+     * @param beta0 最大吸引力
+     * @param gamma 光吸收系数
+     * @return
+     */
+    public double get_attraction(double r, double beta0, double gamma) {
+        double beta = beta0 * Math.exp(-1 * gamma * Math.pow(r, 2));
+        return beta;
+    }
+
+    /**
+     * 获得萤火虫x1和x2之间的距离[二范数]
+     *
+     * @param s1
+     * @param s2
+     * @return
+     */
+    public double get_distance(Solution s1, Solution s2) throws JMException {
+        int V = s1.getDecisionVariables().length;
+        double distance = 0.0;
+        for (int i = 0; i < V; i++) {
+            distance += Math.pow(s1.getDecisionVariables()[i].getValue() - s1.getDecisionVariables()[i].getValue(), 2);
+        }
+        return distance;
+    }
+
+    /**
+     * 莱维飞行产生随机扰动
+     *
+     * @return
+     */
+    public double levy_flights() {
+        // beta为(0,2]之间的常数，一般取值为1.5
+        double beta = 1.5;
+        double sigma_u = Math.pow((gamma(1 + beta) * Math.sin(Math.PI * beta / 2)) / (gamma((1 + beta) / 2) * beta * Math.pow(2, (beta - 1) / 2)), 1 / beta);// 0.6966
+        double sigma_v = 1;
+        double u = normrnd(0, sigma_u);// 产生均值为0，标准差为sigma_u的正态分布随机数 0 < u≤0.5232
+        double v = normrnd(0, sigma_v);// 产生均值为0，标准差为sigma_v的正态分布随机数 0 < v≤0.3989
+        double s = u / Math.pow(Math.abs(v), 1 / beta);
+        return s;
+    }
+
+    /**
+     * 产生正态随机分布
+     *
+     * @param mean
+     * @param std
+     * @return
+     */
+    public double normrnd(double mean, double std) {
+        java.util.Random random = new java.util.Random();
+        return Math.sqrt(std) * random.nextGaussian() + mean;
+    }
+
+    /**
+     * gamma函数
+     *
+     * @param x
+     * @param setAbsRelaErr
+     * @return
+     */
+    public double gamma(double x, double setAbsRelaErr) {
+        //setAbsRelaErr 相对误差绝对值
+        //递归结束条件
+        if (x < 0) {
+            return gamma(x + 1, setAbsRelaErr) / x;
+        }
+        if (Math.abs(1.0 - x) < 0.00001) {
+            return 1;
+        }
+        if (Math.abs(0.5 - x) < 0.00001) {
+            return Math.sqrt(3.1415926);
+        }
+
+        if (x > 1.0) {
+            return (x - 1) * gamma(x - 1, setAbsRelaErr);
+        }
+
+        double res = 0.0;
+        double temp = 1.0;
+        double check = 0.0;
+        int i = 1;
+        while (Math.abs((check - temp) / temp) > setAbsRelaErr) {
+            check = temp;
+            temp *= i / (x - 1 + i);
+            i++;
+        }
+        res = temp * Math.pow(i, x - 1);
+        return res;
+    }
+
+    public double gamma(double num) {
+        return gamma(num, 0.00001);
     }
 }
