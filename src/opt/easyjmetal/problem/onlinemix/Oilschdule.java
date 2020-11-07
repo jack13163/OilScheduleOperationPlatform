@@ -71,20 +71,24 @@ public class Oilschdule {
         int popsize = pop.length;
 
         int[][] c1 = new int[][]{
-                {0, 11, 12, 13, 7, 15},
-                {10, 0, 9, 12, 13, 7},
-                {13, 8, 0, 7, 12, 13},
-                {13, 12, 7, 0, 11, 12},
-                {7, 13, 12, 11, 0, 11},
-                {15, 7, 13, 12, 11, 0}
+                {0, 11, 12, 15, 10, 15, 16, 18},
+                {11, 0, 11, 12, 13, 10, 14, 15},
+                {12, 11, 0, 10, 12, 13, 15, 17},
+                {13, 12, 10, 0, 11, 12, 13, 14},
+                {10, 13, 12, 11, 0, 11, 12, 13},
+                {15, 10, 12, 12, 11, 0, 11, 12},
+                {15, 15, 14, 13, 12, 11, 0, 11},
+                {15, 17, 13, 11, 11, 10, 11, 0}
         };// 管道混合成本
         int[][] c2 = new int[][]{
-                {0, 11, 12, 13, 10, 15},
-                {11, 0, 11, 12, 13, 10},
-                {12, 11, 0, 10, 12, 13},
-                {13, 12, 10, 0, 11, 12},
-                {10, 13, 12, 11, 0, 11},
-                {15, 10, 13, 12, 11, 0}
+                {0, 11, 12, 13, 10, 15, 16, 18},
+                {11, 0, 11, 12, 13, 10, 14, 15},
+                {12, 11, 0, 10, 12, 13, 15, 17},
+                {13, 12, 10, 0, 11, 12, 13, 14},
+                {10, 13, 12, 11, 0, 11, 12, 13},
+                {15, 10, 13, 12, 11, 0, 11, 12},
+                {15, 15, 14, 13, 12, 11, 0, 11},
+                {15, 17, 13, 12, 11, 10, 11, 0}
         };// 罐底混合成本
 
         for (int p = 0; p < popsize; p++) { //解遍历
@@ -161,10 +165,10 @@ public class Oilschdule {
             back = backSchedule(back);//每次返回一个可行调度解
 
             if (back.getFlag()) {
-                f1 = TestFun.gNum(schedulePlan);        // 供油罐个数
-                f2 = TestFun.gChange(schedulePlan);     // 蒸馏塔的油罐切换次数
-                f3 = TestFun.gDmix(schedulePlan, c1);   // 管道混合成本
-                f4 = TestFun.gDimix(schedulePlan, c2);  // 罐底混合成本
+                f1 = TestFun.gNum(back.getSchedulePlan());        // 供油罐个数
+                f2 = TestFun.gChange(back.getSchedulePlan());     // 蒸馏塔的油罐切换次数
+                f3 = TestFun.gDmix(back.getSchedulePlan(), c1);   // 管道混合成本
+                f4 = TestFun.gDimix(back.getSchedulePlan(), c2);  // 罐底混合成本
             } else {
                 f1 = inf;
                 f2 = inf;
@@ -175,6 +179,11 @@ public class Oilschdule {
             for (int i = 0; i < x.length; i++) {
                 t_list.add(x[i]);
             }
+
+            if(f1 < TKS.length){
+                System.out.println("找到一个使用罐个数较少的解");
+            }
+
             t_list.add(f1);
             t_list.add(f2);
             t_list.add(f3);
@@ -294,7 +303,7 @@ public class Oilschdule {
         // 绘制甘特图
         PlotUtils.plotSchedule2(back.getSchedulePlan());
         try {
-            Thread.sleep(1000);
+            Thread.sleep(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

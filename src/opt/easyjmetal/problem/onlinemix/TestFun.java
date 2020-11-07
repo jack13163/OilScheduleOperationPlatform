@@ -61,10 +61,8 @@ public class TestFun {
                 TKset.add(a.get(i).get(1));
             }
         }
-        HashSet h = new HashSet(TKset);//清除重复数据
-        TKset.clear();
-        TKset.addAll(h);
-        return TKset.size();
+        HashSet h = new HashSet(TKset);
+        return h.size();
     }
 
     public static double gChange(List<List<Double>> a) { //油罐切换次数
@@ -90,8 +88,8 @@ public class TestFun {
                 break;
             }
         }
-        double[][] m1 = new double[6][6];//用于存放混合次数
-        List<List<Double>> PIPE = new ArrayList<List<Double>>();
+        double[][] m1 = new double[8][8];//用于存放混合次数
+        List<List<Double>> PIPE = new ArrayList<>();
         double sum = 0;
         for (int i = K; i < a.size(); i++) {
             if (a.get(i).get(4) != 0d) {
@@ -116,7 +114,7 @@ public class TestFun {
     }
 
     public static double gDimix(List<List<Double>> a, int[][] c2) { //计算罐底混合成本
-        double[][] m2 = new double[6][6]; //存放各个类型油的混合次数
+        double[][] m2 = new double[8][8]; //存放各个类型油的混合次数
         int K = 0;
         for (int i = 0; i < a.size(); i++) {
             if (a.get(i).get(0) >= 4d) {
