@@ -185,6 +185,21 @@ public class Oilschdule {
     }
 
     /**
+     * 计算蒸馏塔所需要供油罐的个数
+     *
+     * @param back
+     * @param ds
+     * @return
+     */
+    public static int getNumberOfTanksNeeded(BackTrace back, int ds) {
+        Map<String, Queue<KeyValue>> FPs = back.getFP();
+        Queue<KeyValue> FP = FPs.get("DS" + ds);
+        String type = FP.peek().getType();
+        List<KeyValue> oilTypeVolumeRates = getKeyValues(type);
+        return oilTypeVolumeRates.size();
+    }
+
+    /**
      * 检查调度计划是否合理
      *
      * @param schedulePlan 蒸馏塔号 | 油罐号1 | 开始供油时间 | 结束供油时间 | 原油类型 | 油罐号2
@@ -301,19 +316,20 @@ public class Oilschdule {
             back.setFlag(false);
         } else {
             while (TestFun.all(footprint) == 0 && !back.getFlag() && back.getStep() < 25) {
-                ET = getET(back);
-                UD = getUD(back);
-
                 boolean ff = false;
 
-                // 停运情况：供油罐的个数不足两个【停运的目的就是为了等待空闲供油罐的释放】
-                if (footprint[0] == 0 && ET.size() <= 1) {
+                ET = getET(back);
+                UD = getUD(back);
+                int DS_NO = TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size());// 返回0-UD.size()
+
+                if (footprint[0] == 0 && (DS_NO == UD.size() || ET.size() < getNumberOfTanksNeeded(back, UD.get(DS_NO)))) {
+                    // 停运情况：供油罐的个数不够所需要的，一个或两个【停运：1.为了等待空闲供油罐的释放；2.不得不停运】
                     double pipeStoptime = getPipeStopTime(back);
                     // 计算停运截至时间，即能够停运的最晚时间
                     double[] feedTimes = back.getFeedTime();
                     double tmp = Double.MAX_VALUE;
                     for (int i = 0; i < feedTimes.length; i++) {
-                        if(tmp > feedTimes[i]) {
+                        if (tmp > feedTimes[i]) {
                             tmp = feedTimes[i];
                         }
                     }
@@ -329,7 +345,7 @@ public class Oilschdule {
                     // TK1和TK2应该不等
                     int TK1 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep()], ET.size() - 1));// 返回0 ~ ET.size - 1的数
                     int TK2 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep() + 1], ET.size() - 1));// 返回0 ~ ET.size - 1的数
-                    int DS = UD.get(TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size() - 1));
+                    int DS = UD.get(TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size() - 1));// 需要确保DS_NO小于UD.size()
 
                     // 确保两个供油罐不相等
                     while (TK1 == TK2) {
@@ -344,6 +360,7 @@ public class Oilschdule {
                 } else {
                     ff = false;
                 }
+
                 if (ff) {
                     back.setStep(back.getStep() + 1);
                     back = backSchedule(back);
@@ -439,7 +456,7 @@ public class Oilschdule {
             total += V[i];
         }
 
-        if (total >= 1500) {
+        if (total >= 5000) {
             // 2.考虑供油罐的容量约束
             for (int i = 0; i < types; i++) {
                 if (i == 0) {
@@ -465,6 +482,9 @@ public class Oilschdule {
                     V[1] = V[0] * oilTypeVolumeRates.get(1).getVolume() / oilTypeVolumeRates.get(0).getVolume();
                 }
             }
+
+            total = types > 1 ? V[0] + V[1] : V[0];
+
 
             if ((types > 1 && V[0] + V[1] == volume) || V[0] == volume) {
                 // 进料包转运结束
@@ -498,7 +518,6 @@ public class Oilschdule {
 
             // 炼油操作
             double endTime = getFeedingEndTime(back.getSchedulePlan(), back.getTime(), DS);
-            total = types > 1 ? V[0] + V[1] : V[0];
             List<Double> list3 = new ArrayList<>();
             list3.add((double) DS);
             list3.add((double) TK1);

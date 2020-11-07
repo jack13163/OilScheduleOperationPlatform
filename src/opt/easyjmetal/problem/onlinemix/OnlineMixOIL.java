@@ -33,13 +33,9 @@ import java.util.List;
  * 原油调度问题，通过反射和工厂模式创建问题对象
  **/
 public class OnlineMixOIL extends Problem {
-  /**
-   * Constructor
-   * Creates a default instance of the Binh2 problem
-   * @param solutionType The solution type must "Real" or "BinaryReal".
-   */
+
   public OnlineMixOIL(String solutionType) {
-    numberOfVariables_  = 50;
+    numberOfVariables_  = 75;
     numberOfObjectives_ = 4;
     problemName_        = "OnlineMixOIL";
         
