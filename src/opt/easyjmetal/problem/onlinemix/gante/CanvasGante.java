@@ -207,7 +207,7 @@ public class CanvasGante extends Canvas {
             // 计算矩形区域所在位置和宽度
             int x = width - margin_right + 20;
             int y = margin_top;
-            MyColorLegend(g, x, y, 11);
+            MyColorLegend(g, x, y);
             x = margin_left;
             y = height - margin_buttom;
             MyNumberOfpumpGroupsLegend(g, x, y, 3);
@@ -220,13 +220,14 @@ public class CanvasGante extends Canvas {
      * @param x
      * @param y
      */
-    public void MyColorLegend(Graphics g, int x, int y, int oilTypes){
+    public void MyColorLegend(Graphics g, int x, int y){
 
         int betweenDistance = 4;
         int block_offset_top = -9;
         int text_offset_top = 10;
+        int oilTypes = 8;
         // 绘制颜色
-        for (int i = 1; i < oilTypes; i++) {
+        for (int i = 1; i <= oilTypes; i++) {
 
             // 使用不同的颜色填充封闭的矩形区域
             g.setColor(colors[i]);
@@ -237,7 +238,7 @@ public class CanvasGante extends Canvas {
             // 设置标签
             int oilType = i;
             g.setColor(Color.black);
-            g.drawString("#" + oilType, x + block_width + 30, y + i * (block_height + betweenDistance) + text_offset_top);
+            g.drawString("R" + oilType, x + block_width + 30, y + i * (block_height + betweenDistance) + text_offset_top);
         }
     }
 
