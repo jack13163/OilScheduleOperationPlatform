@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.moeas;
+package opt.easyjmetal.algorithm.moeas.impl;
 
 import opt.easyjmetal.algorithm.cmoeas.util.Utils;
 import opt.easyjmetal.core.Algorithm;
@@ -65,7 +65,6 @@ public class MOFA extends Algorithm {
         externalArchiveSize = (Integer) getInputParameter("externalArchiveSize");
         dataDirectory_ = getInputParameter("dataDirectory").toString();
         String dbName = getInputParameter("DBName").toString();
-
         int runningTime = (Integer) getInputParameter("runningTime") + 1; // start from 1
         population_ = new SolutionSet(populationSize_);
         gamma = (Integer) getInputParameter("gamma");

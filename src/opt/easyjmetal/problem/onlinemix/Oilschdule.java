@@ -35,9 +35,8 @@ public class Oilschdule {
     }
 
     public static void main(String[] args) {
-        int M = 4; // 优化目标个数 100*50
         int k = 75;
-        int Na = 50, popsize = 50;
+        int popsize = 50;
         double[][] pop = new double[popsize][k];
         for (int i = 0; i < popsize; i++) {
             for (int j = 0; j < k; j++) {

@@ -27,21 +27,21 @@ import opt.easyjmetal.encodings.solutiontype.RealSolutionType;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.wrapper.XReal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 原油调度问题 */
-public class SJOIL extends Problem {
+ * 原油调度问题，通过反射和工厂模式创建问题对象
+ **/
+public class OnlineMixOIL extends Problem {
   /**
    * Constructor
    * Creates a default instance of the Binh2 problem
    * @param solutionType The solution type must "Real" or "BinaryReal".
    */
-  public SJOIL(String solutionType) {
+  public OnlineMixOIL(String solutionType) {
     numberOfVariables_  = 50;
     numberOfObjectives_ = 4;
-    problemName_        = "SJOil";
+    problemName_        = "OnlineMixOIL";
         
     lowerLimit_ = new double[numberOfVariables_];
     upperLimit_ = new double[numberOfVariables_];
@@ -58,7 +58,7 @@ public class SJOIL extends Problem {
     	System.out.println("Error: solution type " + solutionType + " invalid") ;
     	System.exit(-1) ;
     }  
-  } // ConstrEx
+  }
      
   /** 
   * 评价适应度
@@ -67,8 +67,7 @@ public class SJOIL extends Problem {
   */
   public void evaluate(Solution solution) throws JMException {
     XReal vars = new XReal(solution) ;
-		
-    double [] fx = new double[2] ; // function values     
+
     double [] x = new double[numberOfVariables_] ;
     for (int i = 0 ; i < numberOfVariables_; i++) {
       x[i] = vars.getValue(i);
@@ -78,12 +77,11 @@ public class SJOIL extends Problem {
     for (int i = 0; i < x.length; i++) {
       pop[0][i] = x[i];
     }
-    List<List<Double>> eff = new ArrayList<List<Double>>();
-    eff = Oilschdule.fat(pop);
+    List<List<Double>> eff = Oilschdule.fat(pop);
     
     solution.setObjective(0,eff.get(0).get(x.length + 0));
     solution.setObjective(1,eff.get(0).get(x.length + 1));
     solution.setObjective(2,eff.get(0).get(x.length + 2));
     solution.setObjective(3,eff.get(0).get(x.length + 3));
-  } // evaluate
-} // Binh2
+  }
+}
