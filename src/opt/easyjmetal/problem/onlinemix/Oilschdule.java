@@ -494,13 +494,13 @@ public class Oilschdule {
 
             total = types > 1 ? V[0] + V[1] : V[0];
 
-
-            if ((types > 1 && V[0] + V[1] == volume) || V[0] == volume) {
+            // 通过四舍五入处理精度问题
+            if (Math.round(Math.abs(FP.peek().getVolume() - total)) < 1) {
                 // 进料包转运结束
                 FP.remove();
             } else {
                 // 进料包递减
-                FP.peek().setVolume(types > 1 ? FP.peek().getVolume() - V[0] - V[1] : FP.peek().getVolume() - V[0]);
+                FP.peek().setVolume(FP.peek().getVolume() - total);
             }
 
             // 第一次转运操作
