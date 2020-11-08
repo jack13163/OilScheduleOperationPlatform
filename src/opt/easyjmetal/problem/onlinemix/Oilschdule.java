@@ -578,7 +578,7 @@ public class Oilschdule {
         List<List<Double>> lists = collect.get(DS);
         double endTime = Double.MAX_VALUE;
         if (lists != null && !lists.isEmpty()) {
-            endTime = Collections.max(lists, (e1, e2) -> (int) Math.ceil(Math.abs(e1.get(3) - e2.get(3)))).get(3);
+            endTime = Collections.max(lists, (e1, e2) -> (int) Math.ceil(e1.get(3) - e2.get(3))).get(3);
         }
         return endTime;
     }
