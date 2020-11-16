@@ -209,9 +209,9 @@ public class Oilschdule {
                 f3 = inf;
                 f4 = inf;
             }
-            List<Double> t_list = new ArrayList<Double>();
-            for (int i = 0; i < x.length; i++) {
-                t_list.add(x[i]);
+            List<Double> t_list = new ArrayList<>();
+            for (int i = 0; i < back.getX().length; i++) {
+                t_list.add(back.getX()[i]);
             }
 
             t_list.add(f1);

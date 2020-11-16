@@ -42,18 +42,19 @@ public class OnlineMix_MOEAs_decode {
     public static boolean evaluate(Solution solution) throws JMException {
 
         Variable[] decisionVariables = solution.getDecisionVariables();
-        double[][] x = new double[1][decisionVariables.length];
-        for (int i = 0; i < x.length; i++) {
+        int numberOfVariables = decisionVariables.length;
+        double[][] x = new double[1][numberOfVariables];
+        for (int i = 0; i < numberOfVariables; i++) {
             x[0][i] = decisionVariables[i].getValue();
         }
 
         List<List<Double>> eff = Oilschdule.fat(x, false);
 
         // 对比目标值是否前后一致
-        if (solution.getObjective(0) == eff.get(0).get(x.length + 0)
-                && solution.getObjective(1) == eff.get(0).get(x.length + 1)
-                && solution.getObjective(2) == eff.get(0).get(x.length + 2)
-                && solution.getObjective(3) == eff.get(0).get(x.length + 3)) {
+        if (solution.getObjective(0) == eff.get(0).get(numberOfVariables + 0)
+                && solution.getObjective(1) == eff.get(0).get(numberOfVariables + 1)
+                && solution.getObjective(2) == eff.get(0).get(numberOfVariables + 2)
+                && solution.getObjective(3) == eff.get(0).get(numberOfVariables + 3)) {
             return true;
         }
         return false;
