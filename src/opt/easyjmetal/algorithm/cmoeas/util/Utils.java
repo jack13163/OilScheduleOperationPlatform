@@ -309,6 +309,13 @@ public class Utils {
 
     }
 
+    /**
+     * åˆå§‹åŒ–å‚¨å¤‡é›†
+     * @param pop
+     * @param popSize
+     * @param externalArchive
+     * @return
+     */
     public static SolutionSet initializeExternalArchive(SolutionSet pop, int popSize, SolutionSet externalArchive) {
         SolutionSet feasible_solutions = new SolutionSet(popSize);
         for (int i = 0; i < popSize; i++) {
@@ -318,7 +325,7 @@ public class Utils {
         }
 
         if (feasible_solutions.size() > 0) {
-            // Ö´ĞĞ·ÇÖ§ÅäÅÅĞò»ñÈ¡·ÇÖ§Åä½â¼¯
+            // æ‰§è¡Œéæ”¯é…æ’åºè·å–éæ”¯é…è§£é›†
             Ranking ranking = new Ranking(feasible_solutions);
             externalArchive = externalArchive.union(ranking.getSubfront(0));
         }
@@ -329,18 +336,18 @@ public class Utils {
     /**
      * Generate the Pareto Front
      *
-     * @param algorithmNameList_ Ëã·¨ÁĞ±í
-     * @param problemList_       ÎÊÌâÁĞ±í
-     * @param independentRuns_   ¶ÀÁ¢ÔËĞĞ´ÎÊı
+     * @param algorithmNameList_ ç®—æ³•åˆ—è¡¨
+     * @param problemList_       é—®é¢˜åˆ—è¡¨
+     * @param independentRuns_   ç‹¬ç«‹è¿è¡Œæ¬¡æ•°
      */
     public static void generateParetoFront(String[] algorithmNameList_, String[] problemList_, int independentRuns_) throws JMException {
         for (String problemName : problemList_) {
             String paretoFrontPath = resultBaseDirectory_ + "/";
             List<Solution> solutionList = new ArrayList<>();
 
-            // ¶ÁÈ¡Ä³Ò»ÎÊÌâµÄËùÓĞ½á¹û
+            // è¯»å–æŸä¸€é—®é¢˜çš„æ‰€æœ‰ç»“æœ
             for (String algorithmName : algorithmNameList_) {
-                // Êä³öÃ¿ÖÖËã·¨µÄ·ÇÖ§Åä½â¼¯
+                // è¾“å‡ºæ¯ç§ç®—æ³•çš„éæ”¯é…è§£é›†
                 List<Solution> solutionList2 = new ArrayList<>();
 
                 for (int numRun = 0; numRun < independentRuns_; numRun++) {
@@ -352,11 +359,11 @@ public class Utils {
                     }
                 }
 
-                // Êä³ö·ÇÖ§Åä½â¼¯
+                // è¾“å‡ºéæ”¯é…è§£é›†
                 outputNondomincantSolutionSet(solutionList2, paretoFrontPath, algorithmName + "_" + problemName + ".pf");
             }
 
-            // Êä³ö·ÇÖ§Åä½â¼¯
+            // è¾“å‡ºéæ”¯é…è§£é›†
             outputNondomincantSolutionSet(solutionList, paretoFrontPath, problemName + ".pf");
         }
     }
@@ -364,10 +371,10 @@ public class Utils {
     /**
      * Generate the Pareto Front
      *
-     * @param configList ÅäÖÃÁĞ±í
-     * @param algorithmNameList_ Ëã·¨ÁĞ±í
-     * @param problemList_       ÎÊÌâÁĞ±í
-     * @param independentRuns_   ¶ÀÁ¢ÔËĞĞ´ÎÊı
+     * @param configList é…ç½®åˆ—è¡¨
+     * @param algorithmNameList_ ç®—æ³•åˆ—è¡¨
+     * @param problemList_       é—®é¢˜åˆ—è¡¨
+     * @param independentRuns_   ç‹¬ç«‹è¿è¡Œæ¬¡æ•°
      */
     public static void generateParetoFrontForAllConfigs(String[] configList, String[] algorithmNameList_, String[] problemList_, int independentRuns_) throws JMException {
         String paretoFrontPath = resultBaseDirectory_ + "/PF/";
@@ -377,12 +384,12 @@ public class Utils {
             List<Solution> solutionList = new ArrayList<>();
             for (String problemName : problemList_) {
                 for (String algorithmName : algorithmNameList_) {
-                    // Êä³öÃ¿ÖÖËã·¨µÄ·ÇÖ§Åä½â¼¯
+                    // è¾“å‡ºæ¯ç§ç®—æ³•çš„éæ”¯é…è§£é›†
                     List<Solution> solutionList2 = new ArrayList<>();
 
                     for (int numRun = 0; numRun < independentRuns_; numRun++) {
                         String tableName = problemName + "_" + (numRun + 1);
-                        // ²éÑ¯Êı¾İ
+                        // æŸ¥è¯¢æ•°æ®
                         String dbPath = resultBaseDirectory_ + "/" + config + "/" + algorithmName;
                         SolutionSet tmp = SqlUtils.SelectData(dbPath, tableName);
                         for (int i = 0; i < tmp.size(); i++) {
@@ -391,13 +398,13 @@ public class Utils {
                         }
                     }
 
-                    // Êä³ö·ÇÖ§Åä½â¼¯
+                    // è¾“å‡ºéæ”¯é…è§£é›†
                     outputNondomincantSolutionSet(solutionList2, paretoFrontPath,
                             config + "_" + algorithmName + "_" + problemName + ".pf");
                 }
             }
 
-            // Êä³ö·ÇÖ§Åä½â¼¯
+            // è¾“å‡ºéæ”¯é…è§£é›†
             allSolutions.addAll(solutionList);
             outputNondomincantSolutionSet(solutionList, paretoFrontPath, config + ".pf");
         }
@@ -407,22 +414,22 @@ public class Utils {
     /**
      * Generate the Pareto Front for crude oil scheduling problem
      *
-     * @param algorithmNameList_ Ëã·¨ÁĞ±í
-     * @param problemList_       ÎÊÌâÁĞ±í
-     * @param independentRuns_   ¶ÀÁ¢ÔËĞĞ´ÎÊı
+     * @param algorithmNameList_ ç®—æ³•åˆ—è¡¨
+     * @param problemList_       é—®é¢˜åˆ—è¡¨
+     * @param independentRuns_   ç‹¬ç«‹è¿è¡Œæ¬¡æ•°
      */
     public static String generateOilScheduleParetoFront(String[] algorithmNameList_, String[] problemList_, int independentRuns_) throws JMException {
 
         List<Solution> solutionList = new ArrayList<>();
 
-        // ´ÓsqliteÊı¾İ¿âÖĞ¶ÁÈ¡ËùÓĞ½á¹û
+        // ä»sqliteæ•°æ®åº“ä¸­è¯»å–æ‰€æœ‰ç»“æœ
         for (String problemName : problemList_) {
             for (String algorithmName : algorithmNameList_) {
                 for (int numRun = 0; numRun < independentRuns_; numRun++) {
                     String tableName = problemName + "_" + (numRun + 1);
                     SolutionSet updatedSolutionSet = SqlUtils.SelectData(algorithmName, tableName);
 
-//                    // ¸üĞÂÄ¿±êÖµºÍÔ¼Êø£¬¸üĞÂÊı¾İ¿â
+//                    // æ›´æ–°ç›®æ ‡å€¼å’Œçº¦æŸï¼Œæ›´æ–°æ•°æ®åº“
 //                    SolutionSet updatedSolutionSet = SqlUtils.UpdateObjectivesAndConstraint(algorithmName, tableName);
 //                    SqlUtils.UpdateSolutionSet(algorithmName, tableName, updatedSolutionSet);
 
@@ -433,7 +440,7 @@ public class Utils {
             }
         }
 
-        // Êä³ö·ÇÖ§Åä½â¼¯
+        // è¾“å‡ºéæ”¯é…è§£é›†
         return outputNondomincantSolutionSet(solutionList, resultBaseDirectory_, "oil.pf");
     }
 
@@ -442,10 +449,10 @@ public class Utils {
     }
 
     /**
-     * @param algorithmNameList_ Ëã·¨ÁĞ±í
-     * @param problemList_       ÎÊÌâÁĞ±í
-     * @param independentRuns_   ¶ÀÁ¢ÔËĞĞ´ÎÊı
-     * @param toselect           ÒªÑ¡ÔñµÄ¸öÌå
+     * @param algorithmNameList_ ç®—æ³•åˆ—è¡¨
+     * @param problemList_       é—®é¢˜åˆ—è¡¨
+     * @param independentRuns_   ç‹¬ç«‹è¿è¡Œæ¬¡æ•°
+     * @param toselect           è¦é€‰æ‹©çš„ä¸ªä½“
      * @return
      * @throws JMException
      */
@@ -453,7 +460,7 @@ public class Utils {
                                                 int independentRuns_, double[][] toselect, ToDo todo) throws JMException {
         SolutionSet solutionSet = new SolutionSet(toselect.length);
 
-        // ÅĞ¶Ïµ±Ç°¸öÌåÊÇ·ñÎª´ı²éÕÒµÄ¸öÌå
+        // åˆ¤æ–­å½“å‰ä¸ªä½“æ˜¯å¦ä¸ºå¾…æŸ¥æ‰¾çš„ä¸ªä½“
         for (int j = 0; j < toselect.length; j++) {
             boolean flag = false;
 
@@ -466,7 +473,7 @@ public class Utils {
                         break;
                     }
                     for (int numRun = 0; numRun < independentRuns_; numRun++) {
-                        // Ã»ÓĞÕÒµ½¾Í¼ÌĞøÕÒ£¬·ñÔò£¬ÍË³ö
+                        // æ²¡æœ‰æ‰¾åˆ°å°±ç»§ç»­æ‰¾ï¼Œå¦åˆ™ï¼Œé€€å‡º
                         if(flag){
                             break;
                         }
@@ -481,7 +488,7 @@ public class Utils {
                                 }
                             }
 
-                            // ÕâÀïĞèÒª±£Ö¤µ±³öÏÖ¶à¸ö½âµÄÄ¿±êÖµÏàÍ¬Ê±£¬¾ÍÖ»ÕÒµ½µÚÒ»¸ö
+                            // è¿™é‡Œéœ€è¦ä¿è¯å½“å‡ºç°å¤šä¸ªè§£çš„ç›®æ ‡å€¼ç›¸åŒæ—¶ï¼Œå°±åªæ‰¾åˆ°ç¬¬ä¸€ä¸ª
                             if (flag) {
                                 System.out.println(String.format("find solution in db:%s table:%s no:%d", algorithmName, tableName, i + 1));
                                 solutionSet.add(solution);
@@ -498,7 +505,7 @@ public class Utils {
     }
 
     /**
-     * Êä³ö·ÇÖ§Åä½â¼¯
+     * è¾“å‡ºéæ”¯é…è§£é›†
      *
      * @param solutionList
      * @param dirPath
@@ -506,9 +513,9 @@ public class Utils {
      */
     public static String outputNondomincantSolutionSet(List<Solution> solutionList, String dirPath, String filename) {
 
-        // ½øĞĞ·ÇÖ§ÅäÅÅĞò£¬»ñÈ¡·ÇÖ§Åä½â¼¯
+        // è¿›è¡Œéæ”¯é…æ’åºï¼Œè·å–éæ”¯é…è§£é›†
         SolutionSet nondominatedSolutionSet = getNondominantSolutionSet(solutionList);
-        // Êä³ö·ÇÖ§Åä½â¼¯
+        // è¾“å‡ºéæ”¯é…è§£é›†
         File dir = new File(dirPath);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -519,7 +526,7 @@ public class Utils {
     }
 
     /**
-     * »ñÈ¡·ÇÖ§Åä½â¼¯
+     * è·å–éæ”¯é…è§£é›†
      *
      * @param solutionList
      * @return
@@ -542,7 +549,7 @@ public class Utils {
      * @param algorithmName
      * @param problemName
      * @param indicatorName
-     * @param runId         ´Ó1¿ªÊ¼
+     * @param runId         ä»1å¼€å§‹
      */
     public static double generateQualityIndicators(String algorithmName, String problemName,
                                                    String indicatorName, int runId) throws JMException {
@@ -575,7 +582,7 @@ public class Utils {
     }
 
     /**
-     * ¼ÆËãIGDÖ¸±êÖµ
+     * è®¡ç®—IGDæŒ‡æ ‡å€¼
      *
      * @param configName
      */
@@ -610,10 +617,10 @@ public class Utils {
     /**
      * Generate the Quality Indicators
      *
-     * @param algorithmNameList_ Ëã·¨ÁĞ±í
-     * @param problemList_       ÎÊÌâÁĞ±í
-     * @param indicatorList_     Ö¸±êÁĞ±í
-     * @param independentRuns_   ¶ÀÁ¢ÔËĞĞ´ÎÊı
+     * @param algorithmNameList_ ç®—æ³•åˆ—è¡¨
+     * @param problemList_       é—®é¢˜åˆ—è¡¨
+     * @param indicatorList_     æŒ‡æ ‡åˆ—è¡¨
+     * @param independentRuns_   ç‹¬ç«‹è¿è¡Œæ¬¡æ•°
      */
     public static void generateQualityIndicators(String[] algorithmNameList_, String[] problemList_,
                                                  String[] indicatorList_, int independentRuns_) throws JMException {
@@ -623,16 +630,16 @@ public class Utils {
                     for (String indicator : indicatorList_) {
 
                         try {
-                            // Êä³öµ½ÎÄ¼ş
+                            // è¾“å‡ºåˆ°æ–‡ä»¶
                             String dirName = resultBaseDirectory_ + "/data/" + algorithmName + "/" + problemName + "/";
                             File file = new File(dirName);
                             if (!file.exists()) {
-                                file.mkdirs();// ²»´æÔÚ£¬Ôò´´½¨Ä¿Â¼
+                                file.mkdirs();// ä¸å­˜åœ¨ï¼Œåˆ™åˆ›å»ºç›®å½•
                             }
                             String filepath = dirName + indicator;
                             FileWriter writer = new FileWriter(filepath);
 
-                            // ¼ÆËãÃ¿´ÎÊµÑéµÄÖ¸±êÖµ
+                            // è®¡ç®—æ¯æ¬¡å®éªŒçš„æŒ‡æ ‡å€¼
                             for (int numRun = 1; numRun <= independentRuns_; numRun++) {
                                 double value = generateQualityIndicators(algorithmName, problemName, indicator, numRun);
                                 writer.write(String.format("%.5f\n", value));
@@ -652,11 +659,11 @@ public class Utils {
     /**
      * Generate the Quality Indicators
      *
-     * @param configList ÅäÖÃÁĞ±í
-     * @param algorithmNameList_ Ëã·¨ÁĞ±í
-     * @param problemList_       ÎÊÌâÁĞ±í
-     * @param indicatorList_     Ö¸±êÁĞ±í
-     * @param independentRuns_   ¶ÀÁ¢ÔËĞĞ´ÎÊı
+     * @param configList é…ç½®åˆ—è¡¨
+     * @param algorithmNameList_ ç®—æ³•åˆ—è¡¨
+     * @param problemList_       é—®é¢˜åˆ—è¡¨
+     * @param indicatorList_     æŒ‡æ ‡åˆ—è¡¨
+     * @param independentRuns_   ç‹¬ç«‹è¿è¡Œæ¬¡æ•°
      */
     public static void generateQualityIndicatorsForAllConfigs(String[] configList,
                                                               String[] algorithmNameList_,
@@ -670,16 +677,16 @@ public class Utils {
                         for (String indicator : indicatorList_) {
 
                             try {
-                                // Êä³öµ½ÎÄ¼ş
+                                // è¾“å‡ºåˆ°æ–‡ä»¶
                                 String dirName = resultBaseDirectory_ + "/data/" + algorithmName + "/" + problemName + "/";
                                 File file = new File(dirName);
                                 if (!file.exists()) {
-                                    file.mkdirs();// ²»´æÔÚ£¬Ôò´´½¨Ä¿Â¼
+                                    file.mkdirs();// ä¸å­˜åœ¨ï¼Œåˆ™åˆ›å»ºç›®å½•
                                 }
                                 String filepath = dirName + indicator;
                                 FileWriter writer = new FileWriter(filepath);
 
-                                // ¼ÆËãÃ¿´ÎÊµÑéµÄÖ¸±êÖµ
+                                // è®¡ç®—æ¯æ¬¡å®éªŒçš„æŒ‡æ ‡å€¼
                                 for (int numRun = 1; numRun <= independentRuns_; numRun++) {
                                     double value = generateQualityIndicatorsForAllConfigs(config, indicator);
                                     writer.write(String.format("%.5f\n", value));

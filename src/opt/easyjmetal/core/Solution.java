@@ -235,7 +235,7 @@ public class Solution implements Serializable {
 	} // Constructor
 
 	/**
-	 * Copy constructor.
+	 * 复制当前解
 	 * 
 	 * @param solution Solution to copy.
 	 */

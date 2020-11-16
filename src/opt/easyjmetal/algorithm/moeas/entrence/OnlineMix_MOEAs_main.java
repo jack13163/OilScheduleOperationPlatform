@@ -10,11 +10,11 @@ import opt.easyjmetal.util.FileUtils;
 public class OnlineMix_MOEAs_main {
 
     public static void main(String[] args) throws Exception {
-        batchRun("MOFA", 10);
+        batchRun("MOFA", 3);
     }
 
     /**
-     * ¶ÀÁ¢ÔËĞĞÄ³¸öËã·¨Èô¸É´Î
+     * ç‹¬ç«‹è¿è¡ŒæŸä¸ªç®—æ³•è‹¥å¹²æ¬¡
      * @param algorithmName
      * @param runtime
      * @throws Exception
@@ -26,11 +26,11 @@ public class OnlineMix_MOEAs_main {
 
         Problem problem = (new ProblemFactory()).getProblem("OnlineMixOIL", new Object[]{"Real"});
 
-        // ¶ÀÁ¢ÔËĞĞ
+        // ç‹¬ç«‹è¿è¡Œ
         for (int j = 0; j < runtime; j++) {
-            // ¶¨ÒåËã·¨
+            // å®šä¹‰ç®—æ³•
             Algorithm algorithm = new MOFA(problem);
-            // ²ÎÊıÉèÖÃ
+            // å‚æ•°è®¾ç½®
             algorithm.setInputParameter("AlgorithmName", algorithmName);
             algorithm.setInputParameter("populationSize", 50);
             algorithm.setInputParameter("maxEvaluations", 5000);
@@ -42,7 +42,7 @@ public class OnlineMix_MOEAs_main {
             algorithm.setInputParameter("beta0", 1);
 
             System.out.println("==================================================================");
-            // ÔËĞĞËã·¨
+            // è¿è¡Œç®—æ³•
             System.out.println("The " + j + " run of " + algorithmName);
             long initTime = System.currentTimeMillis();
             SolutionSet pop = algorithm.execute();

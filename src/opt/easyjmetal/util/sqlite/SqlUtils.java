@@ -42,7 +42,6 @@ public class SqlUtils {
             System.exit(0);
         }
         System.out.println("Table created successfully");
-
     }
 
     public static void CreateTable(String problemName, int objNumber, int decNumber, int ConNumber) {
@@ -153,7 +152,7 @@ public class SqlUtils {
     }
 
     /**
-     * ¸üĞÂ½â¼¯
+     * æ›´æ–°è§£é›†
      * @param DataBaseName
      * @param TableName
      * @param pop
@@ -238,7 +237,7 @@ public class SqlUtils {
     }
 
     /**
-     * ´ÓsqliteÊı¾İ¿âÖĞ²éÑ¯½â
+     * ä»sqliteæ•°æ®åº“ä¸­æŸ¥è¯¢è§£
      *
      * @param DataBaseName
      * @param TableName
@@ -257,16 +256,16 @@ public class SqlUtils {
             String sql = "SELECT * from " + TableName;
             ResultSet resultSet = stmt.executeQuery(sql);
 
-            // ÅĞ¶ÏÊÇ·ñ¶ÁÈ¡½áÊø
+            // åˆ¤æ–­æ˜¯å¦è¯»å–ç»“æŸ
             while (resultSet.next()) {
                 List<Double> line = new ArrayList<>();
                 String objs = resultSet.getString("OBJ");
                 String cons = resultSet.getString("CON");
                 String vars = resultSet.getString("VAR");
 
-                String[] r1 = objs.split(" ");// Ä¿±êÖµ
-                String[] r2 = cons.split(" ");// Ô¼Êø
-                String[] r3 = vars.split(" ");// ¾ö²ß±äÁ¿
+                String[] r1 = objs.split(" ");// ç›®æ ‡å€¼
+                String[] r2 = cons.split(" ");// çº¦æŸ
+                String[] r3 = vars.split(" ");// å†³ç­–å˜é‡
 
                 Solution solution = new Solution(r1.length, r2.length);
 
@@ -282,7 +281,7 @@ public class SqlUtils {
                 }
                 solution.setOverallConstraintViolation(overallConstraint);
 
-                // Ä¿Ç°½ö½öÖ§³ÖÊµÊıÀàĞÍµÄ²ÎÊı£¬ÈçÓĞĞèÒª£¬Çë×ÔĞĞĞŞ¸Ä
+                // ç›®å‰ä»…ä»…æ”¯æŒå®æ•°ç±»å‹çš„å‚æ•°ï¼Œå¦‚æœ‰éœ€è¦ï¼Œè¯·è‡ªè¡Œä¿®æ”¹
                 Variable[] variables = new Variable[r3.length];
                 for (int i = 0; i < r3.length; i++) {
                     //line.add(Double.parseDouble(r1[i]));
@@ -309,7 +308,7 @@ public class SqlUtils {
     }
 
     /**
-     * ÖØĞÂ¼ÆËãÄ¿±êÖµºÍÔ¼ÊøÖµ£¬²¢¸üĞÂsqliteÊı¾İ¿â
+     * é‡æ–°è®¡ç®—ç›®æ ‡å€¼å’Œçº¦æŸå€¼ï¼Œå¹¶æ›´æ–°sqliteæ•°æ®åº“
      *
      * @param DataBaseName
      * @param TableName
@@ -328,20 +327,20 @@ public class SqlUtils {
             String sql = "SELECT * from " + TableName;
             ResultSet resultSet = stmt.executeQuery(sql);
 
-            // ÅĞ¶ÏÊÇ·ñ¶ÁÈ¡½áÊø
+            // åˆ¤æ–­æ˜¯å¦è¯»å–ç»“æŸ
             while (resultSet.next()) {
                 List<Double> line = new ArrayList<>();
                 String objs = resultSet.getString("OBJ");
                 String cons = resultSet.getString("CON");
                 String vars = resultSet.getString("VAR");
 
-                String[] r1 = objs.split(" ");// Ä¿±êÖµ
-                String[] r2 = cons.split(" ");// Ô¼Êø
-                String[] r3 = vars.split(" ");// ¾ö²ß±äÁ¿
+                String[] r1 = objs.split(" ");// ç›®æ ‡å€¼
+                String[] r2 = cons.split(" ");// çº¦æŸ
+                String[] r3 = vars.split(" ");// å†³ç­–å˜é‡
 
                 Solution solution = new Solution(r1.length, r2.length);
 
-                // Ä¿Ç°½ö½öÖ§³ÖÊµÊıÀàĞÍµÄ²ÎÊı£¬ÈçÓĞĞèÒª£¬Çë×ÔĞĞĞŞ¸Ä
+                // ç›®å‰ä»…ä»…æ”¯æŒå®æ•°ç±»å‹çš„å‚æ•°ï¼Œå¦‚æœ‰éœ€è¦ï¼Œè¯·è‡ªè¡Œä¿®æ”¹
                 Variable[] variables = new Variable[r3.length];
                 for (int i = 0; i < r3.length; i++) {
                     //line.add(Double.parseDouble(r1[i]));
@@ -350,7 +349,7 @@ public class SqlUtils {
                 }
                 solution.setDecisionVariables(variables);
 
-                // ¼ÆËãÄ¿±êÖµºÍÔ¼ÊøÖµ
+                // è®¡ç®—ç›®æ ‡å€¼å’Œçº¦æŸå€¼
                 String ruleName = TableName.substring(0, TableName.lastIndexOf("_"));
                 double[] values = COPDecoder.decode(solution, ruleName);
                 for (int i = 0; i < r1.length; i++) {

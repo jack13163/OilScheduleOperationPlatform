@@ -78,8 +78,7 @@ public class MOFA extends Algorithm {
         initPopulation();
 
         // 初始化外部储备集
-        external_archive_ = new SolutionSet(externalArchiveSize);
-        external_archive_ = Utils.initializeExternalArchive(population_, populationSize_, external_archive_);
+        external_archive_ = Utils.initializeExternalArchive(population_, populationSize_, new SolutionSet(externalArchiveSize));
 
         // 迭代更新
         do {
@@ -113,17 +112,18 @@ public class MOFA extends Algorithm {
                 }
             }
 
-            // Evaluation
+            // 评估适应值
             for (int i = 0; i < this.populationSize_; i++) {
                 problem_.evaluate(this.population_.get(i));
                 evaluations_++;
             }
 
-            //Update the external archive
+            // 更新储备集
             Utils.updateExternalArchive(population_, populationSize_, external_archive_);
         } while (evaluations_ < maxEvaluations_);
 
         SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
+
         return external_archive_;
     }
 

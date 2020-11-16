@@ -30,7 +30,7 @@ import opt.easyjmetal.util.wrapper.XReal;
 import java.util.List;
 
 /**
- * Ô­ÓÍµ÷¶ÈÎÊÌâ£¬Í¨¹ı·´ÉäºÍ¹¤³§Ä£Ê½´´½¨ÎÊÌâ¶ÔÏó
+ * åŸæ²¹è°ƒåº¦é—®é¢˜ï¼Œé€šè¿‡åå°„å’Œå·¥å‚æ¨¡å¼åˆ›å»ºé—®é¢˜å¯¹è±¡
  **/
 public class OnlineMixOIL extends Problem {
 
@@ -57,7 +57,7 @@ public class OnlineMixOIL extends Problem {
     }
 
     /**
-     * ÆÀ¼ÛÊÊÓ¦¶È
+     * è¯„ä»·é€‚åº”åº¦
      *
      * @param solution The solution to evaluate
      * @throws JMException

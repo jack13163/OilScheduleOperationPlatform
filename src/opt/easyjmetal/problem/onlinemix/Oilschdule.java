@@ -42,13 +42,13 @@ public class Oilschdule {
         double[][] pop = new double[popsize][k];
         for (int i = 0; i < popsize; i++) {
             for (int j = 0; j < k; j++) {
-                pop[i][j] = Math.random();  // äº§ç”Ÿéšæœºç§ç¾¤
+                pop[i][j] = Math.random();  // ²úÉúËæ»úÖÖÈº
             }
         }
         fat(pop, true);
     }
 
-    // æ··åˆé…æ–¹
+    // »ìºÏÅä·½
     private static Map<String, String> peifang = new HashMap<>();
 
     static {
@@ -62,9 +62,9 @@ public class Oilschdule {
         peifang.put("M8", "R5:R4=2:1");
     }
 
-    static int RT = 6;                                  // é©»ç•™æ—¶é—´
-    static double[] DSFR = new double[]{250, 279, 304}; // è’¸é¦å¡”ç‚¼æ²¹é€Ÿç‡
-    static int PIPEFR = 840;                            // åŒ€é€Ÿ
+    static int RT = 6;                                  // ×¤ÁôÊ±¼ä
+    static double[] DSFR = new double[]{250, 279, 304}; // ÕôÁóËşÁ¶ÓÍËÙÂÊ
+    static int PIPEFR = 840;                            // ÔÈËÙ
 
     public static List<List<Double>> fat(double[][] pop, boolean showGante) {
         _showGante = showGante;
@@ -80,7 +80,7 @@ public class Oilschdule {
                 {13, 12, 10, 0, 11, 12},
                 {10, 13, 12, 11, 0, 11},
                 {15, 10, 12, 12, 11, 0}
-        };// ç®¡é“æ··åˆæˆæœ¬
+        };// ¹ÜµÀ»ìºÏ³É±¾
         int[][] c2 = new int[][]{
                 {0, 11, 12, 13, 10, 15},
                 {11, 0, 11, 12, 13, 10},
@@ -88,32 +88,32 @@ public class Oilschdule {
                 {13, 12, 10, 0, 11, 12},
                 {10, 13, 12, 11, 0, 11},
                 {15, 10, 13, 12, 11, 0}
-        };// ç½åº•æ··åˆæˆæœ¬
+        };// ¹Şµ×»ìºÏ³É±¾
 
-        for (int p = 0; p < popsize; p++) { //è§£éå†
+        for (int p = 0; p < popsize; p++) { //½â±éÀú
             double[] x = pop[p];
             List<List<Double>> schedulePlan = new ArrayList<>();
             BackTrace back = null;
 
-            // ç‚¼æ²¹è®¡åˆ’
+            // Á¶ÓÍ¼Æ»®
             Map<String, Queue<KeyValue>> feedingPackages = new HashMap<>();
-            Queue<KeyValue> ds1 = new LinkedList<>();//æŒ‰ç…§æ’å…¥é¡ºåºæ’åº
+            Queue<KeyValue> ds1 = new LinkedList<>();//°´ÕÕ²åÈëË³ĞòÅÅĞò
             ds1.add(new KeyValue("M1", 3500.0));
             ds1.add(new KeyValue("M6", 38500.0));
             feedingPackages.put("DS1", ds1);
-            Queue<KeyValue> ds2 = new LinkedList<>();//æŒ‰ç…§æ’å…¥é¡ºåºæ’åº
+            Queue<KeyValue> ds2 = new LinkedList<>();//°´ÕÕ²åÈëË³ĞòÅÅĞò
             ds2.add(new KeyValue("M3", 12000.0));
             ds2.add(new KeyValue("M5", 20369.5));
             ds2.add(new KeyValue("M7", 14502.4));
             feedingPackages.put("DS2", ds2);
-            Queue<KeyValue> ds3 = new LinkedList<>();//æŒ‰ç…§æ’å…¥é¡ºåºæ’åº
+            Queue<KeyValue> ds3 = new LinkedList<>();//°´ÕÕ²åÈëË³ĞòÅÅĞò
             ds3.add(new KeyValue("M2", 7200.0));
             ds3.add(new KeyValue("M4", 32000.0));
             ds3.add(new KeyValue("M2", 11872.0));
             feedingPackages.put("DS3", ds3);
 
-            // åˆå§‹çŠ¶æ€ä¸‹ä¾›æ²¹ç½çš„çŠ¶æ€
-            Object[][] TKS = new Object[][]{  // å®¹é‡  åŸæ²¹ç±»å‹  å·²æœ‰å®¹é‡ è’¸é¦å¡”  ä¾›æ²¹å¼€å§‹æ—¶é—´ ä¾›æ²¹ç»“æŸæ—¶é—´  ä¾›æ²¹ç½ç¼–å·  æ··åˆåŸæ²¹ç±»å‹é›†åˆ
+            // ³õÊ¼×´Ì¬ÏÂ¹©ÓÍ¹ŞµÄ×´Ì¬
+            Object[][] TKS = new Object[][]{  // ÈİÁ¿  Ô­ÓÍÀàĞÍ  ÒÑÓĞÈİÁ¿ ÕôÁóËş  ¹©ÓÍ¿ªÊ¼Ê±¼ä ¹©ÓÍ½áÊøÊ±¼ä  ¹©ÓÍ¹Ş±àºÅ  »ìºÏÔ­ÓÍÀàĞÍ¼¯ºÏ
                     {20000, 1, 1400, 0, 0, 0, 1, new HashMap<String, String>() {{
                         put("DS1:M1:FP1", "TK1:" + 1400);
                     }}},
@@ -153,34 +153,34 @@ public class Oilschdule {
                 }
             }
             double[] DSFET = new double[]{0, 0, 0};
-            // é€ä¸ªè’¸é¦å¡”è¿›è¡ŒæŒ‡æ´¾
+            // Öğ¸öÕôÁóËş½øĞĞÖ¸ÅÉ
             for (int i = 0; i < DSFET.length; i++) {
                 int ds = i + 1;
                 Queue<KeyValue> FP = feedingPackages.get("DS" + ds);
                 int fp_ind = 1;
 
                 while (!FP.isEmpty()) {
-                    // è®¡ç®—æœ€éœ€è¦è½¬è¿çš„åŸæ²¹ç±»å‹
+                    // ¼ÆËã×îĞèÒª×ªÔËµÄÔ­ÓÍÀàĞÍ
                     String type = FP.peek().getType();
-                    // å½“å‰è’¸é¦å¡”å¯¹åº”çš„è¿›æ–™åŒ…
+                    // µ±Ç°ÕôÁóËş¶ÔÓ¦µÄ½øÁÏ°ü
                     List<String> tkAndVolumes = tmpMap.get("DS" + ds + ":" + type + ":FP" + fp_ind);
 
-                    // åˆ¤æ–­æ˜¯å¦ç»“æŸ
+                    // ÅĞ¶ÏÊÇ·ñ½áÊø
                     if (tkAndVolumes == null || tkAndVolumes.isEmpty()) {
                         break;
                     }
 
-                    // æ‰§è¡ŒODF
+                    // Ö´ĞĞODF
                     List<Integer> tks = new ArrayList<>();
                     double vol = 0;
                     for (int j = 0; j < tkAndVolumes.size(); j++) {
                         List<Double> res = TestFun.getNumber(tkAndVolumes.get(j));
-                        tks.add((int) res.get(0).doubleValue());// ä¿å­˜ä¾›æ²¹ç½çš„ç¼–å·
+                        tks.add((int) res.get(0).doubleValue());// ±£´æ¹©ÓÍ¹ŞµÄ±àºÅ
                         vol += res.get(1);
                     }
                     doODF(schedulePlan, DSFET, ds, type, tks, vol);
 
-                    // è¿›æ–™åŒ…å‡å»ç½ä¸­çš„åŸæ²¹
+                    // ½øÁÏ°ü¼õÈ¥¹ŞÖĞµÄÔ­ÓÍ
                     Queue<KeyValue> keyValues = feedingPackages.get("DS" + ds);
                     if (keyValues.peek().getType().equals(type)) {
                         if (keyValues.peek().getVolume() == vol) {
@@ -193,16 +193,16 @@ public class Oilschdule {
                 }
             }
 
-            //*******************å›æº¯éƒ¨åˆ†å¼€å§‹*********************//
+            //*******************»ØËİ²¿·Ö¿ªÊ¼*********************//
             back = new BackTrace(x, 0, 0.0, DSFET, feedingPackages, TKS, schedulePlan);
             back.setFlag(false);
-            back = backSchedule(back);//æ¯æ¬¡è¿”å›ä¸€ä¸ªå¯è¡Œè°ƒåº¦è§£
+            back = backSchedule(back);//Ã¿´Î·µ»ØÒ»¸ö¿ÉĞĞµ÷¶È½â
 
             if (back.getFlag()) {
-                f1 = TestFun.gNum(back.getSchedulePlan());              // ä¾›æ²¹ç½ä¸ªæ•°
-                f2 = TestFun.gChange(TKS, back.getSchedulePlan());      // è’¸é¦å¡”çš„æ²¹ç½åˆ‡æ¢æ¬¡æ•°
-                f3 = TestFun.gDmix(back.getSchedulePlan(), c1);         // ç®¡é“æ··åˆæˆæœ¬
-                f4 = TestFun.gDimix(TKS, back.getSchedulePlan(), c2);   // ç½åº•æ··åˆæˆæœ¬
+                f1 = TestFun.gNum(back.getSchedulePlan());              // ¹©ÓÍ¹Ş¸öÊı
+                f2 = TestFun.gChange(TKS, back.getSchedulePlan());      // ÕôÁóËşµÄÓÍ¹ŞÇĞ»»´ÎÊı
+                f3 = TestFun.gDmix(back.getSchedulePlan(), c1);         // ¹ÜµÀ»ìºÏ³É±¾
+                f4 = TestFun.gDimix(TKS, back.getSchedulePlan(), c2);   // ¹Şµ×»ìºÏ³É±¾
             } else {
                 f1 = inf;
                 f2 = inf;
@@ -212,10 +212,6 @@ public class Oilschdule {
             List<Double> t_list = new ArrayList<Double>();
             for (int i = 0; i < x.length; i++) {
                 t_list.add(x[i]);
-            }
-
-            if (f1 < TKS.length) {
-                System.out.println("æ‰¾åˆ°ä¸€ä¸ªä½¿ç”¨ç½ä¸ªæ•°è¾ƒå°‘çš„è§£");
             }
 
             t_list.add(f1);
@@ -231,20 +227,20 @@ public class Oilschdule {
         double Temp = DSFET[ds - 1];
         DSFET[ds - 1] = Temp + vol / DSFR[ds - 1];
         List<Double> list = new ArrayList<>();
-        list.add((double) ds);                                          // è’¸é¦å¡”å·
-        list.add((double) tks.get(0));                                  // ä¾›æ²¹ç½1
-        list.add((double) Math.round(Temp * 100.0) / 100.0);            // å¼€å§‹ä¾›æ²¹t
-        list.add((double) Math.round(DSFET[ds - 1] * 100.0) / 100.0);   // ä¾›æ²¹ç½ç»“æŸt
-        list.add(Double.parseDouble(type.substring(1)));                // åŸæ²¹ç±»å‹
+        list.add((double) ds);                                          // ÕôÁóËşºÅ
+        list.add((double) tks.get(0));                                  // ¹©ÓÍ¹Ş1
+        list.add((double) Math.round(Temp * 100.0) / 100.0);            // ¿ªÊ¼¹©ÓÍt
+        list.add((double) Math.round(DSFET[ds - 1] * 100.0) / 100.0);   // ¹©ÓÍ¹Ş½áÊøt
+        list.add(Double.parseDouble(type.substring(1)));                // Ô­ÓÍÀàĞÍ
         if (tks.size() > 1) {
-            list.add((double) tks.get(1));                              // ä¾›æ²¹ç½2
+            list.add((double) tks.get(1));                              // ¹©ÓÍ¹Ş2
         }
 
         schedulePlan.add(list);
     }
 
     /**
-     * è®¡ç®—è’¸é¦å¡”æ‰€éœ€è¦ä¾›æ²¹ç½çš„ä¸ªæ•°
+     * ¼ÆËãÕôÁóËşËùĞèÒª¹©ÓÍ¹ŞµÄ¸öÊı
      *
      * @param back
      * @param ds
@@ -259,17 +255,17 @@ public class Oilschdule {
     }
 
     /**
-     * æ£€æŸ¥è°ƒåº¦è®¡åˆ’æ˜¯å¦åˆç†
+     * ¼ì²éµ÷¶È¼Æ»®ÊÇ·ñºÏÀí
      *
-     * @param schedulePlan è’¸é¦å¡”å· | æ²¹ç½å·1 | å¼€å§‹ä¾›æ²¹æ—¶é—´ | ç»“æŸä¾›æ²¹æ—¶é—´ | åŸæ²¹ç±»å‹ | æ²¹ç½å·2
+     * @param schedulePlan ÕôÁóËşºÅ | ÓÍ¹ŞºÅ1 | ¿ªÊ¼¹©ÓÍÊ±¼ä | ½áÊø¹©ÓÍÊ±¼ä | Ô­ÓÍÀàĞÍ | ÓÍ¹ŞºÅ2
      * @return
      */
     public static boolean check(List<List<Double>> schedulePlan) {
-        // æŒ‰ç…§æ²¹ç½è¿›è¡Œåˆ†ç»„
+        // °´ÕÕÓÍ¹Ş½øĞĞ·Ö×é
         Map<Double, List<List<Double>>> collect = schedulePlan.stream().collect(Collectors.groupingBy(e -> e.get(1)));
-        // æ£€æŸ¥æ¯ä¸ªç½æ˜¯å¦å†²çª
+        // ¼ì²éÃ¿¸ö¹ŞÊÇ·ñ³åÍ»
         for (Double d : collect.keySet()) {
-            // æŒ‰ç…§å¼€å§‹æ—¶é—´æ’åº
+            // °´ÕÕ¿ªÊ¼Ê±¼äÅÅĞò
             List<List<Double>> lists = collect.get(d);
             Collections.sort(lists, (e1, e2) -> (int) Math.ceil(e1.get(2) - e2.get(2)));
 
@@ -278,7 +274,7 @@ public class Oilschdule {
 
             for (List<Double> operation : lists) {
 
-                // å„ä¸ªoperationä¸é‡å 
+                // ¸÷¸öoperation²»ÖØµş
                 if (operation.get(2) >= lastEnd && lastType != operation.get(4)) {
                     lastEnd = operation.get(3);
                     lastType = operation.get(4);
@@ -291,7 +287,7 @@ public class Oilschdule {
     }
 
     /**
-     * æ±‚å¯ç”¨ç½çš„é›†åˆï¼Œä»…è€ƒè™‘ç©ºç½
+     * Çó¿ÉÓÃ¹ŞµÄ¼¯ºÏ£¬½ö¿¼ÂÇ¿Õ¹Ş
      *
      * @param backTrace
      * @return
@@ -311,7 +307,7 @@ public class Oilschdule {
             }
             List<List<Double>> opCollections = ops.stream()
                     .sorted((e1, e2) -> (int) Math.ceil(Math.abs(e1.get(3) - e2.get(3))))
-                    .filter(e -> e.get(3) > backTrace.getTime())    // è¿‡æ»¤ç»“æŸæ—¶é—´å¤§äºå½“å‰æ—¶é—´çš„æ“ä½œ
+                    .filter(e -> e.get(3) > backTrace.getTime())    // ¹ıÂË½áÊøÊ±¼ä´óÓÚµ±Ç°Ê±¼äµÄ²Ù×÷
                     .collect(Collectors.toList());
 
             if (opCollections.isEmpty()) {
@@ -322,7 +318,7 @@ public class Oilschdule {
     }
 
     /**
-     * æ±‚æœªå®Œæˆç‚¼æ²¹ä»»åŠ¡çš„è’¸é¦å¡”çš„é›†åˆ
+     * ÇóÎ´Íê³ÉÁ¶ÓÍÈÎÎñµÄÕôÁóËşµÄ¼¯ºÏ
      *
      * @param backTrace
      * @return
@@ -341,17 +337,17 @@ public class Oilschdule {
     }
 
     /**
-     * å›æº¯è°ƒåº¦
+     * »ØËİµ÷¶È
      *
-     * @param backTrace è°ƒåº¦ä¹‹å‰çš„ç³»ç»ŸçŠ¶æ€
-     * @return è°ƒåº¦ä¹‹åçš„ç³»ç»ŸçŠ¶æ€
+     * @param backTrace µ÷¶ÈÖ®Ç°µÄÏµÍ³×´Ì¬
+     * @return µ÷¶ÈÖ®ºóµÄÏµÍ³×´Ì¬
      */
     public static BackTrace backSchedule(BackTrace backTrace) {
 
         BackTrace back = CloneUtil.clone(backTrace);
         back.setFlag(false);
 
-        // ç»˜åˆ¶ç”˜ç‰¹å›¾
+        // »æÖÆ¸ÊÌØÍ¼
         if(_showGante) {
             PlotUtils.plotSchedule2(back.getSchedulePlan());
             try {
@@ -364,14 +360,14 @@ public class Oilschdule {
         List<Integer> ET = getET(back);
         List<Integer> UD = getUD(back);
         int[] footprint = new int[UD.size() + 1];
-        // æ²¡æœ‰å¯ç”¨çš„ä¾›æ²¹ç½ï¼Œå½“å‰çŠ¶æ€ä¸ºä¸å¯è¡ŒçŠ¶æ€
+        // Ã»ÓĞ¿ÉÓÃµÄ¹©ÓÍ¹Ş£¬µ±Ç°×´Ì¬Îª²»¿ÉĞĞ×´Ì¬
         if (ET.isEmpty()) {
             for (int i = 0; i < footprint.length; i++) {
                 footprint[i] = 1;
             }
         }
 
-        // åˆ¤æ–­æ˜¯å¦å®Œæˆç‚¼æ²¹è®¡åˆ’
+        // ÅĞ¶ÏÊÇ·ñÍê³ÉÁ¶ÓÍ¼Æ»®
         if (isFinished(back)) {
             back.setFlag(true);
         } else if (back.getStep() >= 25) {
@@ -382,12 +378,12 @@ public class Oilschdule {
 
                 ET = getET(back);
                 UD = getUD(back);
-                int DS_NO = TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size());// è¿”å›0-UD.size()
+                int DS_NO = TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size());// ·µ»Ø0-UD.size()
 
                 if (footprint[0] == 0 && (DS_NO == UD.size() || ET.size() < getNumberOfTanksNeeded(back, UD.get(DS_NO)))) {
-                    // åœè¿æƒ…å†µï¼šä¾›æ²¹ç½çš„ä¸ªæ•°ä¸å¤Ÿæ‰€éœ€è¦çš„ï¼Œä¸€ä¸ªæˆ–ä¸¤ä¸ªã€åœè¿ï¼š1.ä¸ºäº†ç­‰å¾…ç©ºé—²ä¾›æ²¹ç½çš„é‡Šæ”¾ï¼›2.ä¸å¾—ä¸åœè¿ã€‘
+                    // Í£ÔËÇé¿ö£º¹©ÓÍ¹ŞµÄ¸öÊı²»¹»ËùĞèÒªµÄ£¬Ò»¸ö»òÁ½¸ö¡¾Í£ÔË£º1.ÎªÁËµÈ´ı¿ÕÏĞ¹©ÓÍ¹ŞµÄÊÍ·Å£»2.²»µÃ²»Í£ÔË¡¿
                     double pipeStoptime = getPipeStopTime(back);
-                    // è®¡ç®—åœè¿æˆªè‡³æ—¶é—´ï¼Œå³èƒ½å¤Ÿåœè¿çš„æœ€æ™šæ—¶é—´
+                    // ¼ÆËãÍ£ÔË½ØÖÁÊ±¼ä£¬¼´ÄÜ¹»Í£ÔËµÄ×îÍíÊ±¼ä
                     double[] feedTimes = back.getFeedTime();
                     double tmp = Double.MAX_VALUE;
                     for (int i = 0; i < feedTimes.length; i++) {
@@ -396,25 +392,25 @@ public class Oilschdule {
                         }
                     }
                     tmp -= RT;
-                    // è‹¥èƒ½å¤Ÿåœè¿ï¼Œåˆ™åœè¿
+                    // ÈôÄÜ¹»Í£ÔË£¬ÔòÍ£ÔË
                     if (pipeStoptime > 0 && pipeStoptime < tmp) {
                         ff = true;
-                        // è¿›è¡Œåœè¿
+                        // ½øĞĞÍ£ÔË
                         back = stop(back, pipeStoptime);
                         footprint[0] = 1;
                     }
                 } else if (ET.size() > 1) {
-                    // TK1å’ŒTK2åº”è¯¥ä¸ç­‰
-                    int TK1 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep()], ET.size() - 1));// è¿”å›0 ~ ET.size - 1çš„æ•°
-                    int TK2 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep() + 1], ET.size() - 1));// è¿”å›0 ~ ET.size - 1çš„æ•°
-                    int DS = UD.get(TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size() - 1));// éœ€è¦ç¡®ä¿DS_NOå°äºUD.size()
+                    // TK1ºÍTK2Ó¦¸Ã²»µÈ
+                    int TK1 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep()], ET.size() - 1));// ·µ»Ø0 ~ ET.size - 1µÄÊı
+                    int TK2 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep() + 1], ET.size() - 1));// ·µ»Ø0 ~ ET.size - 1µÄÊı
+                    int DS = UD.get(TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size() - 1));// ĞèÒªÈ·±£DS_NOĞ¡ÓÚUD.size()
 
-                    // ç¡®ä¿ä¸¤ä¸ªä¾›æ²¹ç½ä¸ç›¸ç­‰
+                    // È·±£Á½¸ö¹©ÓÍ¹Ş²»ÏàµÈ
                     while (TK1 == TK2) {
                         back.getX()[3 * back.getStep() + 1] = Math.random();
-                        TK2 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep() + 1], ET.size() - 1));// è¿”å›0 ~ ET.size - 1çš„æ•°
+                        TK2 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep() + 1], ET.size() - 1));// ·µ»Ø0 ~ ET.size - 1µÄÊı
                     }
-                    // è¯•è°ƒåº¦ï¼Œéœ€è¦é€‰æ‹©ä¸¤ä¸ªå¡”
+                    // ÊÔµ÷¶È£¬ĞèÒªÑ¡ÔñÁ½¸öËş
                     back = tryschedule(back, TK1, TK2, DS);
                     if (back.getFlag() && (OilSchedule.Schedulable(back))) {
                         ff = true;
@@ -427,16 +423,16 @@ public class Oilschdule {
                     back.setStep(back.getStep() + 1);
                     back = backSchedule(back);
                 } else {
-                    back = CloneUtil.clone(backTrace); // æ•°æ®å›æ»š
+                    back = CloneUtil.clone(backTrace); // Êı¾İ»Ø¹ö
                     UD = getUD(back);
                     back.setFlag(false);
 
-                    //*********** ç­–ç•¥æ˜¯å¦å·²ç»å…¨éƒ¨æ‰§è¡Œå°è¯• **********
-                    //*************** æ›´æ”¹è’¸é¦å¡” *****************
+                    //*********** ²ßÂÔÊÇ·ñÒÑ¾­È«²¿Ö´ĞĞ³¢ÊÔ **********
+                    //*************** ¸ü¸ÄÕôÁóËş *****************
                     for (int i = 0; i < footprint.length; i++) {
                         if (footprint[i] == 0) {
                             if (i > 0) {
-                                // æœ‰ä¸¤ä¸ªåŠä»¥ä¸Šçš„ç©ºç½
+                                // ÓĞÁ½¸ö¼°ÒÔÉÏµÄ¿Õ¹Ş
                                 while (TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size() - 1) != i - 1) {
                                     back.getX()[3 * back.getStep() + 2] = Math.random();
                                 }
@@ -454,7 +450,7 @@ public class Oilschdule {
     }
 
     /**
-     * è®¡ç®—åœè¿æ—¶é—´
+     * ¼ÆËãÍ£ÔËÊ±¼ä
      *
      * @param backTrace
      * @return
@@ -462,9 +458,9 @@ public class Oilschdule {
     public static double getPipeStopTime(BackTrace backTrace) {
         double t = Double.MAX_VALUE;
 
-        // æŒ‰ç…§æ²¹ç½è¿›è¡Œåˆ†ç»„
+        // °´ÕÕÓÍ¹Ş½øĞĞ·Ö×é
         Map<Double, List<List<Double>>> collect = backTrace.getSchedulePlan().stream()
-                .filter(e -> e.get(0) <= 3 && e.get(3) > backTrace.getTime()) // è¿‡æ»¤
+                .filter(e -> e.get(0) <= 3 && e.get(3) > backTrace.getTime()) // ¹ıÂË
                 .collect(Collectors.groupingBy(e -> e.get(1)));
         for (Double d : collect.keySet()) {
             List<List<Double>> lists = collect.get(d);
@@ -477,7 +473,7 @@ public class Oilschdule {
     }
 
     /**
-     * åˆ¤æ–­æ˜¯å¦è°ƒåº¦ç»“æŸ
+     * ÅĞ¶ÏÊÇ·ñµ÷¶È½áÊø
      *
      * @param backtrace
      * @return
@@ -491,26 +487,26 @@ public class Oilschdule {
     }
 
     /**
-     * è¯•è°ƒåº¦
+     * ÊÔµ÷¶È
      *
-     * @param backtrace è°ƒåº¦ä¹‹å‰çš„ç³»ç»ŸçŠ¶æ€
-     * @return è°ƒåº¦ä¹‹åçš„ç³»ç»ŸçŠ¶æ€ã€backã€‘
+     * @param backtrace µ÷¶ÈÖ®Ç°µÄÏµÍ³×´Ì¬
+     * @return µ÷¶ÈÖ®ºóµÄÏµÍ³×´Ì¬¡¾back¡¿
      */
     public static BackTrace tryschedule(BackTrace backtrace, int TK1, int TK2, int DS) {
 
-        // æ‹·è´ä¸€ä»½è°ƒåº¦ä¹‹å‰çš„ç³»ç»ŸçŠ¶æ€ï¼Œä»¥åçš„æ›´æ”¹éƒ½ä¼šåœ¨è¿™ä¸ªæ–°æ‹·è´çš„å¯¹è±¡ä¸Šè¿›è¡Œã€‚
+        // ¿½±´Ò»·İµ÷¶ÈÖ®Ç°µÄÏµÍ³×´Ì¬£¬ÒÔºóµÄ¸ü¸Ä¶¼»áÔÚÕâ¸öĞÂ¿½±´µÄ¶ÔÏóÉÏ½øĞĞ¡£
         BackTrace back = CloneUtil.clone(backtrace);
 
-        // å½“å‰è¿›æ–™åŒ…
+        // µ±Ç°½øÁÏ°ü
         Map<String, Queue<KeyValue>> FPs = back.getFP();
         Queue<KeyValue> FP = FPs.get("DS" + DS);
 
-        // éœ€è¦æ··åˆç±»å‹çš„åŸæ²¹çš„ä½“ç§¯
+        // ĞèÒª»ìºÏÀàĞÍµÄÔ­ÓÍµÄÌå»ı
         String type = FP.peek().getType();
         double volume = FP.peek().getVolume();
         List<KeyValue> oilTypeVolumeRates = getKeyValues(type);
 
-        // 1.è®¡ç®—èƒ½å¤Ÿè½¬è¿çš„æœ€å¤§ä½“ç§¯
+        // 1.¼ÆËãÄÜ¹»×ªÔËµÄ×î´óÌå»ı
         double[] V = getSafeVolume(back, DS, oilTypeVolumeRates);
         double total = 0;
         int types = V.length;
@@ -519,7 +515,7 @@ public class Oilschdule {
         }
 
         if (total >= 5000) {
-            // 2.è€ƒè™‘ä¾›æ²¹ç½çš„å®¹é‡çº¦æŸ
+            // 2.¿¼ÂÇ¹©ÓÍ¹ŞµÄÈİÁ¿Ô¼Êø
             for (int i = 0; i < types; i++) {
                 if (i == 0) {
                     V[i] = Math.min(V[i], Double.parseDouble(back.getTKS()[TK1 - 1][0].toString()));
@@ -529,14 +525,14 @@ public class Oilschdule {
                 }
             }
 
-            // 3.è€ƒè™‘è¿›æ–™åŒ…çº¦æŸ
+            // 3.¿¼ÂÇ½øÁÏ°üÔ¼Êø
             if (total > volume) {
                 for (int i = 0; i < types; i++) {
                     V[i] = Math.min(V[i], volume * oilTypeVolumeRates.get(i).getVolume());
                 }
             }
 
-            // è°ƒæ•´è½¬è¿çš„åŸæ²¹çš„ä½“ç§¯
+            // µ÷Õû×ªÔËµÄÔ­ÓÍµÄÌå»ı
             if (types > 1) {
                 if (Math.round(V[0] / V[1]) > Math.round(oilTypeVolumeRates.get(0).getVolume() / oilTypeVolumeRates.get(1).getVolume())) {
                     V[0] = V[1] * oilTypeVolumeRates.get(0).getVolume() / oilTypeVolumeRates.get(1).getVolume();
@@ -547,50 +543,50 @@ public class Oilschdule {
 
             total = types > 1 ? V[0] + V[1] : V[0];
 
-            // é€šè¿‡å››èˆäº”å…¥å¤„ç†ç²¾åº¦é—®é¢˜
+            // Í¨¹ıËÄÉáÎåÈë´¦Àí¾«¶ÈÎÊÌâ
             if (Math.round(Math.abs(FP.peek().getVolume() - total)) < 1) {
-                // è¿›æ–™åŒ…è½¬è¿ç»“æŸ
+                // ½øÁÏ°ü×ªÔË½áÊø
                 FP.remove();
             } else {
-                // è¿›æ–™åŒ…é€’å‡
+                // ½øÁÏ°üµİ¼õ
                 FP.peek().setVolume(FP.peek().getVolume() - total);
             }
 
-            // ç¬¬ä¸€æ¬¡è½¬è¿æ“ä½œ
+            // µÚÒ»´Î×ªÔË²Ù×÷
             List<Double> list1 = new ArrayList<>();
             list1.add(4.0);
-            list1.add((double) TK1);                                                                    // æ²¹ç½å·
-            list1.add((double) Math.round(back.getTime() * 100.0) / 100.0);                             // å¼€å§‹ä¾›æ²¹t
-            list1.add((double) Math.round((back.getTime() + V[0] / PIPEFR) * 100.0) / 100.0);           // ä¾›æ²¹ç½ç»“æŸt
-            list1.add(Double.parseDouble(oilTypeVolumeRates.get(0).getType().substring(1)));            // åŸæ²¹ç±»å‹
+            list1.add((double) TK1);                                                                    // ÓÍ¹ŞºÅ
+            list1.add((double) Math.round(back.getTime() * 100.0) / 100.0);                             // ¿ªÊ¼¹©ÓÍt
+            list1.add((double) Math.round((back.getTime() + V[0] / PIPEFR) * 100.0) / 100.0);           // ¹©ÓÍ¹Ş½áÊøt
+            list1.add(Double.parseDouble(oilTypeVolumeRates.get(0).getType().substring(1)));            // Ô­ÓÍÀàĞÍ
             back.getSchedulePlan().add(list1);
             back.setTime(list1.get(3));
 
-            // ç¬¬äºŒæ¬¡è½¬è¿æ“ä½œ
+            // µÚ¶ş´Î×ªÔË²Ù×÷
             if (types > 1) {
                 List<Double> list2 = new ArrayList<>();
                 list2.add(4.0);
-                list2.add((double) TK2);                                                                // æ²¹ç½å·
-                list2.add((double) Math.round(back.getTime() * 100.0) / 100.0);                         // å¼€å§‹ä¾›æ²¹t
-                list2.add((double) Math.round((back.getTime() + V[1] / PIPEFR) * 100.0) / 100.0);       // ä¾›æ²¹ç½ç»“æŸt
-                list2.add(Double.parseDouble(oilTypeVolumeRates.get(1).getType().substring(1)));        // åŸæ²¹ç±»å‹
+                list2.add((double) TK2);                                                                // ÓÍ¹ŞºÅ
+                list2.add((double) Math.round(back.getTime() * 100.0) / 100.0);                         // ¿ªÊ¼¹©ÓÍt
+                list2.add((double) Math.round((back.getTime() + V[1] / PIPEFR) * 100.0) / 100.0);       // ¹©ÓÍ¹Ş½áÊøt
+                list2.add(Double.parseDouble(oilTypeVolumeRates.get(1).getType().substring(1)));        // Ô­ÓÍÀàĞÍ
                 back.getSchedulePlan().add(list2);
                 back.setTime(list2.get(3));
             }
 
-            // ç‚¼æ²¹æ“ä½œ
+            // Á¶ÓÍ²Ù×÷
             double endTime = getFeedingEndTime(back.getSchedulePlan(), back.getTime(), DS);
             List<Double> list3 = new ArrayList<>();
             list3.add((double) DS);
             list3.add((double) TK1);
             list3.add((double) Math.round(endTime * 100.0) / 100.0);
-            list3.add((double) Math.round((endTime + total / DSFR[DS - 1]) * 100.0) / 100.0);   // ç‚¼æ²¹ç»“æŸæ—¶é—´
-            list3.add(Double.parseDouble(type.substring(1)));                                   // åŸæ²¹ç±»å‹
+            list3.add((double) Math.round((endTime + total / DSFR[DS - 1]) * 100.0) / 100.0);   // Á¶ÓÍ½áÊøÊ±¼ä
+            list3.add(Double.parseDouble(type.substring(1)));                                   // Ô­ÓÍÀàĞÍ
             if (types > 1) {
                 list3.add((double) TK2);
             }
             back.getSchedulePlan().add(list3);
-            back.getFeedTime()[DS - 1] = list3.get(3);                                          // æ›´æ–°ç‚¼æ²¹ç»“æŸæ—¶é—´
+            back.getFeedTime()[DS - 1] = list3.get(3);                                          // ¸üĞÂÁ¶ÓÍ½áÊøÊ±¼ä
 
             back.setFlag(true);
         } else {
@@ -600,24 +596,24 @@ public class Oilschdule {
     }
 
     /**
-     * è®¡ç®—éœ€è¦åŸå§‹ç±»å‹çš„åŸæ²¹ç±»å‹å’Œä½“ç§¯
+     * ¼ÆËãĞèÒªÔ­Ê¼ÀàĞÍµÄÔ­ÓÍÀàĞÍºÍÌå»ı
      *
      * @param type
      * @return
      */
     public static List<KeyValue> getKeyValues(String type) {
-        // éœ€è¦åŸå§‹ç±»å‹çš„åŸæ²¹ç±»å‹å’Œä½“ç§¯
+        // ĞèÒªÔ­Ê¼ÀàĞÍµÄÔ­ÓÍÀàĞÍºÍÌå»ı
         List<KeyValue> oilTypeVolumeRates = new ArrayList<>();
         if (peifang.get(type).contains("=")) {
             String[] types = peifang.get(type).split("=")[0].split(":"); // R5:R1=1.5:1
             String[] volumes = peifang.get(type).split("=")[1].split(":"); // R5:R1=1.5:1
-            // æ··åˆæ¯”ä¾‹
+            // »ìºÏ±ÈÀı
             KeyValue keyValue1 = new KeyValue(types[0], Double.parseDouble(volumes[0]) / (Double.parseDouble(volumes[0]) + Double.parseDouble(volumes[1])));
             KeyValue keyValue2 = new KeyValue(types[1], Double.parseDouble(volumes[1]) / (Double.parseDouble(volumes[0]) + Double.parseDouble(volumes[1])));
             oilTypeVolumeRates.add(keyValue1);
             oilTypeVolumeRates.add(keyValue2);
         } else {
-            // åªæœ‰ä¸€ç§åŸæ²¹ç±»å‹
+            // Ö»ÓĞÒ»ÖÖÔ­ÓÍÀàĞÍ
             KeyValue keyValue = new KeyValue(type, 1);
             oilTypeVolumeRates.add(keyValue);
         }
@@ -626,7 +622,7 @@ public class Oilschdule {
 
     public static double getFeedingEndTime(List<List<Double>> schedulePlan, double currentTime, double DS) {
         Map<Double, List<List<Double>>> collect = schedulePlan.stream()
-                .filter(e -> e.get(0) <= 3 && e.get(3) > currentTime) // è¿‡æ»¤
+                .filter(e -> e.get(0) <= 3 && e.get(3) > currentTime) // ¹ıÂË
                 .collect(Collectors.groupingBy(e -> e.get(0)));
         List<List<Double>> lists = collect.get(DS);
         double endTime = Double.MAX_VALUE;
@@ -637,7 +633,7 @@ public class Oilschdule {
     }
 
     /**
-     * è®¡ç®—è¦è½¬è¿çš„åŸå§‹åŸæ²¹çš„ç±»å‹å’Œä½“ç§¯ã€æ»¡è¶³é©»ç•™æ—¶é—´çº¦æŸçš„æœ€å¤§ä½“ç§¯ã€‘
+     * ¼ÆËãÒª×ªÔËµÄÔ­Ê¼Ô­ÓÍµÄÀàĞÍºÍÌå»ı¡¾Âú×ã×¤ÁôÊ±¼äÔ¼ÊøµÄ×î´óÌå»ı¡¿
      *
      * @param back
      * @param DS
@@ -648,16 +644,16 @@ public class Oilschdule {
         int len = oilTypeVolumes.size();
         double[] V = new double[len];
 
-        // å½“å‰æ—¶é—´
+        // µ±Ç°Ê±¼ä
         double currentTime = back.getTime();
 
-        // è®¡ç®—ç‚¼æ²¹æ—¶é—´
+        // ¼ÆËãÁ¶ÓÍÊ±¼ä
         double endTime = getFeedingEndTime(back.getSchedulePlan(), back.getTime(), DS);
 
-        // è®¡ç®—èƒ½å¤Ÿè½¬è¿çš„æœ€å¤§çš„åŸæ²¹ä½“ç§¯
+        // ¼ÆËãÄÜ¹»×ªÔËµÄ×î´óµÄÔ­ÓÍÌå»ı
         double volume = PIPEFR * (endTime - currentTime - RT);
 
-        // è®¡ç®—åŸå§‹ç§ç±»çš„åŸæ²¹éœ€è¦è½¬è¿çš„ä½“ç§¯
+        // ¼ÆËãÔ­Ê¼ÖÖÀàµÄÔ­ÓÍĞèÒª×ªÔËµÄÌå»ı
         for (int i = 0; i < len; i++) {
             V[i] = Math.round(volume * oilTypeVolumes.get(i).getVolume() * 100.0) / 100.0;
         }
@@ -666,23 +662,23 @@ public class Oilschdule {
     }
 
     /**
-     * åœè¿
+     * Í£ÔË
      *
-     * @param backtrace è°ƒåº¦ä¹‹å‰çš„ç³»ç»ŸçŠ¶æ€
-     * @return è°ƒåº¦ä¹‹åçš„ç³»ç»ŸçŠ¶æ€ã€backã€‘
+     * @param backtrace µ÷¶ÈÖ®Ç°µÄÏµÍ³×´Ì¬
+     * @return µ÷¶ÈÖ®ºóµÄÏµÍ³×´Ì¬¡¾back¡¿
      */
     public static BackTrace stop(BackTrace backtrace, double pipeStoptime) {
-        // æ‹·è´ä¸€ä»½è°ƒåº¦ä¹‹å‰çš„ç³»ç»ŸçŠ¶æ€ï¼Œä»¥åçš„æ›´æ”¹éƒ½ä¼šåœ¨è¿™ä¸ªæ–°æ‹·è´çš„å¯¹è±¡ä¸Šè¿›è¡Œã€‚
+        // ¿½±´Ò»·İµ÷¶ÈÖ®Ç°µÄÏµÍ³×´Ì¬£¬ÒÔºóµÄ¸ü¸Ä¶¼»áÔÚÕâ¸öĞÂ¿½±´µÄ¶ÔÏóÉÏ½øĞĞ¡£
         BackTrace back = CloneUtil.clone(backtrace);
         back.setFlag(true);
 
-        // åœè¿æ“ä½œ
+        // Í£ÔË²Ù×÷
         List<Double> list1 = new ArrayList<>();
         list1.add(4.0);
-        list1.add(0.0);                                         // æ²¹ç½å·
-        list1.add(back.getTime());                              // å¼€å§‹ä¾›æ²¹t
-        list1.add(pipeStoptime);                                // ä¾›æ²¹ç½ç»“æŸt
-        list1.add(0.0);                                         // åŸæ²¹ç±»å‹
+        list1.add(0.0);                                         // ÓÍ¹ŞºÅ
+        list1.add(back.getTime());                              // ¿ªÊ¼¹©ÓÍt
+        list1.add(pipeStoptime);                                // ¹©ÓÍ¹Ş½áÊøt
+        list1.add(0.0);                                         // Ô­ÓÍÀàĞÍ
         back.getSchedulePlan().add(list1);
         back.setTime(list1.get(3));
 
