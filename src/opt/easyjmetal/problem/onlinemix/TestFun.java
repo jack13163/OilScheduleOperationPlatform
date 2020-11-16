@@ -1,6 +1,9 @@
 package opt.easyjmetal.problem.onlinemix;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class TestFun {
     public static void sort(double[][] ob, int[] order) {
@@ -81,6 +84,7 @@ public class TestFun {
     }
 
     public static double gDmix(List<List<Double>> a, int[][] c1) {//计算管道混合成本
+        double sum = 0;
         int K = 0;
         for (int i = 0; i < a.size(); i++) {
             if (a.get(i).get(0) == 4d) {
@@ -88,11 +92,11 @@ public class TestFun {
                 break;
             }
         }
-        double[][] m1 = new double[8][8];//用于存放混合次数
+        double[][] m1 = new double[6][6];//用于存放混合次数
+        // 过滤掉管道停运的操作
         List<List<Double>> PIPE = new ArrayList<>();
-        double sum = 0;
         for (int i = K; i < a.size(); i++) {
-            if (a.get(i).get(4) != 0d) {
+            if (a.get(i).get(4) != 0d && a.get(i).get(0) == 4) {
                 PIPE.add(a.get(i));
             }
         }
@@ -113,58 +117,53 @@ public class TestFun {
         return sum;
     }
 
-    public static double gDimix(List<List<Double>> a, int[][] c2) { //计算罐底混合成本
-        double[][] m2 = new double[8][8]; //存放各个类型油的混合次数
-        int K = 0;
-        for (int i = 0; i < a.size(); i++) {
-            if (a.get(i).get(0) >= 4d) {
-                K = i;
-                break;
+    public static double gDimix(Object[][] TKS, List<List<Double>> a, int[][] c2) { //计算罐底混合成本
+        double[][] m2 = new double[6][6]; //存放各个类型油的混合次数
+
+
+        // 初始装有的原油类型    TKS格式：容量  原油类型  已有容量 蒸馏塔  供油开始时间 供油结束时间  供油罐编号  混合原油类型集合
+        Map<String, List<Integer>> res = new HashMap<>();
+        for (int i = 0; i < TKS.length; i++) {
+            if (Integer.parseInt(TKS[i][2].toString()) > 0) {
+                String key = "TK" + (i + 1);
+                if (!res.containsKey(key)) {
+                    res.put(key, new ArrayList<>());
+                }
+                res.get(key).add(Integer.parseInt(TKS[i][1].toString()));
             }
         }
-        double[][] record = new double[K][5];
-        for (int i = 0; i < record.length; i++) {
-            for (int j = 0; j < 5; j++) {
-                record[i][j] = a.get(i).get(j);
+
+        // 后期转运的原油类型      转运plan格式：蒸馏塔号 | 油罐号 | 开始供油时间 | 结束供油时间 | 原油类型
+        List<List<Double>> lists = a.stream()
+                .filter(e -> e.get(0) == 4 && e.get(4) != 0)        // 过滤出转运记录，排除停运
+                .sorted((e1, e2) -> (int) (e1.get(2) - e2.get(2)))  // 按照转运开始时间排序
+                .collect(Collectors.toList());
+        for (int i = 0; i < lists.size(); i++) {
+            int tk = (int) lists.get(i).get(1).doubleValue();
+            String key = "TK" + tk;
+            if (!res.containsKey(key)) {
+                res.put(key, new ArrayList<>());
             }
+            res.get(key).add((int) lists.get(i).get(4).doubleValue());
         }
-        sort(record, new int[]{1}); //按照油罐序号升序排列
-        //统计各个油罐的使用次数
-        List<Double> list = new ArrayList<Double>();
-        List<Double> list1 = new ArrayList<Double>();
-        for (int i = 0; i < record.length; i++) { //存放所有的油罐号
-            list.add(record[i][1]);
-            list1.add(record[i][1]);
-        }
-        HashSet h = new HashSet(list1);
-        list1.clear();
-        list1.addAll(h);
-        Collections.sort(list1);
-        int[] tks = new int[list1.size()]; //记录各个油罐罐使用次数
-        for (int i = 0; i < tks.length; i++) {
-            for (int j = 0; j < list.size(); j++) {
-                if (Double.toString(list1.get(i)).equals(Double.toString(list.get(j)))) {
-                    tks[i]++;
+
+        // 统计各个油罐的使用次数
+        for (String key : res.keySet()) {
+            List<Integer> oilTypes = res.get(key);
+            for (int i = 0; i < oilTypes.size() - 1; i++) {
+                int preType = oilTypes.get(i);
+                int nextType = oilTypes.get(i + 1);
+                if(preType != nextType){
+                    m2[preType - 1][nextType - 1]++;
                 }
             }
         }
-        //根据炼油记录表分析罐底混合次数
-        for (int i = 0; i < tks.length; i++) {
-            int tmp = 0;
-            for (int j = 0; j < record.length - 1; j++) {
-                if ((int) record[j][1] == i + 1) {
-                    tmp++;
-                    if (tmp >= tks[i]) break;
-                    if (!(Double.toString(record[j][4]).equals(record[j + 1][4]))) {
-                        m2[(int) record[j][4] - 1][(int) record[j + 1][4] - 1]++;
-                    }
-                }
-            }
-        }
+
+        // 计算混合成本
         double sum = 0;
         for (int i = 0; i < m2.length; i++) {
             for (int j = 0; j < m2[0].length; j++) {
-                sum = sum + m2[i][j] * c2[i][j];
+                sum += m2[i][j] * c2[i][j];
             }
         }
         return sum;
@@ -186,5 +185,26 @@ public class TestFun {
             }
         }
         return a;
+    }
+
+    /**
+     * 提取数字
+     *
+     * @param line
+     * @return
+     */
+    public static List<Double> getNumber(String line) {
+        String regEx = "([1-9]\\d*\\.?\\d*)|(0\\.\\d*[1-9])";
+        Matcher matcher = Pattern.compile(regEx).matcher(line);
+        List<String> res = new ArrayList<>();
+        while (matcher.find()) {
+            String tmp = matcher.group();//tmp为括号中的内容，您可以自己进行下一步的处理
+            res.add(tmp);
+        }
+        return res.stream().mapToDouble(e -> Double.parseDouble(e)).boxed().collect(Collectors.toList());
+    }
+
+    public static void main(String[] args) {
+        getNumber("This order was 234.35placed for QT3000! OK?").forEach(e -> System.out.println(e));
     }
 }

@@ -71,27 +71,25 @@ public class Oilschdule {
         int popsize = pop.length;
 
         int[][] c1 = new int[][]{
-                {0, 11, 12, 15, 10, 15, 16, 18},
-                {11, 0, 11, 12, 13, 10, 14, 15},
-                {12, 11, 0, 10, 12, 13, 15, 17},
-                {13, 12, 10, 0, 11, 12, 13, 14},
-                {10, 13, 12, 11, 0, 11, 12, 13},
-                {15, 10, 12, 12, 11, 0, 11, 12},
-                {15, 15, 14, 13, 12, 11, 0, 11},
-                {15, 17, 13, 11, 11, 10, 11, 0}
+                {0, 11, 12, 15, 10, 15},
+                {11, 0, 11, 12, 13, 10},
+                {12, 11, 0, 10, 12, 13},
+                {13, 12, 10, 0, 11, 12},
+                {10, 13, 12, 11, 0, 11},
+                {15, 10, 12, 12, 11, 0}
         };// 管道混合成本
         int[][] c2 = new int[][]{
-                {0, 11, 12, 13, 10, 15, 16, 18},
-                {11, 0, 11, 12, 13, 10, 14, 15},
-                {12, 11, 0, 10, 12, 13, 15, 17},
-                {13, 12, 10, 0, 11, 12, 13, 14},
-                {10, 13, 12, 11, 0, 11, 12, 13},
-                {15, 10, 13, 12, 11, 0, 11, 12},
-                {15, 15, 14, 13, 12, 11, 0, 11},
-                {15, 17, 13, 12, 11, 10, 11, 0}
+                {0, 11, 12, 13, 10, 15},
+                {11, 0, 11, 12, 13, 10},
+                {12, 11, 0, 10, 12, 13},
+                {13, 12, 10, 0, 11, 12},
+                {10, 13, 12, 11, 0, 11},
+                {15, 10, 13, 12, 11, 0}
         };// 罐底混合成本
 
         for (int p = 0; p < popsize; p++) { //解遍历
+            double[] x = pop[p];
+            List<List<Double>> schedulePlan = new ArrayList<>();
             BackTrace back = null;
 
             // 炼油计划
@@ -111,51 +109,84 @@ public class Oilschdule {
             ds3.add(new KeyValue("M2", 11872.0));
             feedingPackages.put("DS3", ds3);
 
-            Object[][] TKS = new Object[][]{                     // 容量  原油类型  已有容量 蒸馏塔  供油开始时间 供油结束时间
-                    {20000, 1, 3500, 1, 0, 0},
-                    {20000, 2, 7200, 3, 0, 0},
-                    {20000, 3, 12000, 2, 0, 0},
-                    {20000, 4, 20000, 3, 0, 0},
-                    {16000, 5, 16000, 2, 0, 0},
-                    {16000, inf, 0, 0, 0, 0},
-                    {16000, inf, 0, 0, 0, 0},
-                    {16000, inf, 0, 0, 0, 0},
-                    {16000, inf, 0, 0, 0, 0},
-                    {16000, inf, 0, 0, 0, 0}
+            // 初始状态下供油罐的状态
+            Object[][] TKS = new Object[][]{  // 容量  原油类型  已有容量 蒸馏塔  供油开始时间 供油结束时间  供油罐编号  混合原油类型集合
+                    {20000, 1, 1400, 0, 0, 0, 1, new HashMap<String, String>() {{
+                        put("DS1:M1:FP1", "TK1:" + 1400);
+                    }}},
+                    {20000, 2, 6320, 0, 0, 0, 2, new HashMap<String, String>() {{
+                        put("DS3:M2:FP1", "TK2:" + 4320);
+                        put("DS2:M3:FP1", "TK2:" + 2000);
+                    }}},
+                    {20000, 3, 10000, 0, 0, 0, 3, new HashMap<String, String>() {{
+                        put("DS2:M3:FP1", "TK3:" + 10000);
+                    }}},
+                    {20000, 4, 20000, 0, 0, 0, 4, new HashMap<String, String>() {{
+                        put("DS3:M4:FP2", "TK4:" + 20000);
+                    }}},
+                    {20000, 5, 18100, 0, 0, 0, 5, new HashMap<String, String>() {{
+                        put("DS1:M1:FP1", "TK5:" + 2100);
+                        put("DS2:M5:FP2", "TK5:" + 16000);
+                    }}},
+                    {16000, 6, 2880, 0, 0, 0, 6, new HashMap<String, String>() {{
+                        put("DS3:M2:FP1", "TK6:" + 2880);
+                    }}},
+                    {16000, inf, 0, 0, 0, 0, 7, null},
+                    {16000, inf, 0, 0, 0, 0, 8, null},
+                    {16000, inf, 0, 0, 0, 0, 9, null},
+                    {16000, inf, 0, 0, 0, 0, 10, null}
             };
 
-            double[] x = pop[p];
-            List<List<Double>> schedulePlan = new ArrayList<>();
-
-            // 初始指派
+            Map<String, List<String>> tmpMap = new HashMap<>();
+            for (int i = 0; i < TKS.length; i++) {
+                if (TKS[i][7] != null) {
+                    Map<String, String> stringStringMap = (Map<String, String>) TKS[i][7];
+                    for (String key : stringStringMap.keySet()) {
+                        if (!tmpMap.containsKey(key)) {
+                            tmpMap.put(key, new LinkedList<>());
+                        }
+                        tmpMap.get(key).add(stringStringMap.get(key));
+                    }
+                }
+            }
             double[] DSFET = new double[]{0, 0, 0};
-            for (int k = 0; k < TKS.length; k++) { // 油罐选择
-                if (Double.parseDouble(TKS[k][1].toString()) != inf) {
-                    int ds = Integer.parseInt(TKS[k][3].toString());
-                    String type = TKS[k][1].toString();
-                    double vol = Double.parseDouble(TKS[k][2].toString());
-                    double Temp = DSFET[ds - 1];
-                    DSFET[ds - 1] = Temp + vol / DSFR[ds - 1];
-                    List<Double> list = new ArrayList<>();
-                    list.add((double) ds);// 蒸馏塔号
-                    list.add((double) k + 1); // 油罐号
-                    list.add((double) Math.round(Temp * 100.0) / 100.0);            // 开始供油t
-                    list.add((double) Math.round(DSFET[ds - 1] * 100.0) / 100.0);   // 供油罐结束t
-                    list.add(Double.parseDouble(type));                             // 原油类型
-                    schedulePlan.add(list);
-                    TKS[k][3] = ds; // 记录蒸馏塔
-                    TKS[k][4] = Temp;// 供油开始时间
-                    TKS[k][5] = DSFET[ds - 1];// 供油结束时间
+            // 逐个蒸馏塔进行指派
+            for (int i = 0; i < DSFET.length; i++) {
+                int ds = i + 1;
+                Queue<KeyValue> FP = feedingPackages.get("DS" + ds);
+                int fp_ind = 1;
+
+                while (!FP.isEmpty()) {
+                    // 计算最需要转运的原油类型
+                    String type = FP.peek().getType();
+                    // 当前蒸馏塔对应的进料包
+                    List<String> tkAndVolumes = tmpMap.get("DS" + ds + ":" + type + ":FP" + fp_ind);
+
+                    // 判断是否结束
+                    if (tkAndVolumes == null || tkAndVolumes.isEmpty()) {
+                        break;
+                    }
+
+                    // 执行ODF
+                    List<Integer> tks = new ArrayList<>();
+                    double vol = 0;
+                    for (int j = 0; j < tkAndVolumes.size(); j++) {
+                        List<Double> res = TestFun.getNumber(tkAndVolumes.get(j));
+                        tks.add((int) res.get(0).doubleValue());// 保存供油罐的编号
+                        vol += res.get(1);
+                    }
+                    doODF(schedulePlan, DSFET, ds, type, tks, vol);
 
                     // 进料包减去罐中的原油
                     Queue<KeyValue> keyValues = feedingPackages.get("DS" + ds);
-                    if (keyValues.peek().getType().equals("M" + type)) {
+                    if (keyValues.peek().getType().equals(type)) {
                         if (keyValues.peek().getVolume() == vol) {
                             keyValues.remove();
                         } else {
                             keyValues.peek().setVolume(keyValues.peek().getVolume() - vol);
                         }
                     }
+                    fp_ind++;
                 }
             }
 
@@ -168,7 +199,7 @@ public class Oilschdule {
                 f1 = TestFun.gNum(back.getSchedulePlan());        // 供油罐个数
                 f2 = TestFun.gChange(back.getSchedulePlan());     // 蒸馏塔的油罐切换次数
                 f3 = TestFun.gDmix(back.getSchedulePlan(), c1);   // 管道混合成本
-                f4 = TestFun.gDimix(back.getSchedulePlan(), c2);  // 罐底混合成本
+                f4 = TestFun.gDimix(TKS, back.getSchedulePlan(), c2);  // 罐底混合成本
             } else {
                 f1 = inf;
                 f2 = inf;
@@ -180,7 +211,7 @@ public class Oilschdule {
                 t_list.add(x[i]);
             }
 
-            if(f1 < TKS.length){
+            if (f1 < TKS.length) {
                 System.out.println("找到一个使用罐个数较少的解");
             }
 
@@ -191,6 +222,22 @@ public class Oilschdule {
             eff.add(t_list);
         }
         return eff;
+    }
+
+    private static void doODF(List<List<Double>> schedulePlan, double[] DSFET, int ds, String type, List<Integer> tks, double vol) {
+        double Temp = DSFET[ds - 1];
+        DSFET[ds - 1] = Temp + vol / DSFR[ds - 1];
+        List<Double> list = new ArrayList<>();
+        list.add((double) ds);                                          // 蒸馏塔号
+        list.add((double) tks.get(0));                                  // 供油罐1
+        list.add((double) Math.round(Temp * 100.0) / 100.0);            // 开始供油t
+        list.add((double) Math.round(DSFET[ds - 1] * 100.0) / 100.0);   // 供油罐结束t
+        list.add(Double.parseDouble(type.substring(1)));                // 原油类型
+        if (tks.size() > 1) {
+            list.add((double) tks.get(1));                              // 供油罐2
+        }
+
+        schedulePlan.add(list);
     }
 
     /**
