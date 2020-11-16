@@ -34,50 +34,51 @@ import java.util.List;
  **/
 public class OnlineMixOIL extends Problem {
 
-  public OnlineMixOIL(String solutionType) {
-    numberOfVariables_  = 75;
-    numberOfObjectives_ = 4;
-    problemName_        = "OnlineMixOIL";
-        
-    lowerLimit_ = new double[numberOfVariables_];
-    upperLimit_ = new double[numberOfVariables_];
-    for (int i = 0; i < numberOfVariables_; i++) {
-      lowerLimit_[i] = 0.0;
-      upperLimit_[1] = 1.0;
-    }
-        
-    if (solutionType.compareTo("BinaryReal") == 0)
-      solutionType_ = new BinaryRealSolutionType(this) ;
-    else if (solutionType.compareTo("Real") == 0)
-    	solutionType_ = new RealSolutionType(this) ;
-    else {
-    	System.out.println("Error: solution type " + solutionType + " invalid") ;
-    	System.exit(-1) ;
-    }  
-  }
-     
-  /** 
-  * 评价适应度
-  * @param solution The solution to evaluate
-   * @throws JMException 
-  */
-  public void evaluate(Solution solution) throws JMException {
-    XReal vars = new XReal(solution) ;
+    public OnlineMixOIL(String solutionType) {
+        numberOfVariables_ = 75;
+        numberOfObjectives_ = 4;
+        problemName_ = "OnlineMixOIL";
 
-    double [] x = new double[numberOfVariables_] ;
-    for (int i = 0 ; i < numberOfVariables_; i++) {
-      x[i] = vars.getValue(i);
+        lowerLimit_ = new double[numberOfVariables_];
+        upperLimit_ = new double[numberOfVariables_];
+        for (int i = 0; i < numberOfVariables_; i++) {
+            lowerLimit_[i] = 0.0;
+            upperLimit_[i] = 1.0;
+        }
+
+        if (solutionType.compareTo("BinaryReal") == 0)
+            solutionType_ = new BinaryRealSolutionType(this);
+        else if (solutionType.compareTo("Real") == 0)
+            solutionType_ = new RealSolutionType(this);
+        else {
+            System.out.println("Error: solution type " + solutionType + " invalid");
+            System.exit(-1);
+        }
     }
 
-    double[][] pop = new double[1][x.length];
-    for (int i = 0; i < x.length; i++) {
-      pop[0][i] = x[i];
+    /**
+     * 评价适应度
+     *
+     * @param solution The solution to evaluate
+     * @throws JMException
+     */
+    public void evaluate(Solution solution) throws JMException {
+        XReal vars = new XReal(solution);
+
+        double[] x = new double[numberOfVariables_];
+        for (int i = 0; i < numberOfVariables_; i++) {
+            x[i] = vars.getValue(i);
+        }
+
+        double[][] pop = new double[1][x.length];
+        for (int i = 0; i < x.length; i++) {
+            pop[0][i] = x[i];
+        }
+        List<List<Double>> eff = Oilschdule.fat(pop, false);
+
+        solution.setObjective(0, eff.get(0).get(x.length + 0));
+        solution.setObjective(1, eff.get(0).get(x.length + 1));
+        solution.setObjective(2, eff.get(0).get(x.length + 2));
+        solution.setObjective(3, eff.get(0).get(x.length + 3));
     }
-    List<List<Double>> eff = Oilschdule.fat(pop);
-    
-    solution.setObjective(0,eff.get(0).get(x.length + 0));
-    solution.setObjective(1,eff.get(0).get(x.length + 1));
-    solution.setObjective(2,eff.get(0).get(x.length + 2));
-    solution.setObjective(3,eff.get(0).get(x.length + 3));
-  }
 }

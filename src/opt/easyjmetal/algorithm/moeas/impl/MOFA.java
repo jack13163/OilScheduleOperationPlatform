@@ -79,7 +79,7 @@ public class MOFA extends Algorithm {
 
         // 初始化外部储备集
         external_archive_ = new SolutionSet(externalArchiveSize);
-        Utils.initializeExternalArchive(population_, populationSize_, external_archive_);
+        external_archive_ = Utils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         // 迭代更新
         do {
@@ -107,8 +107,8 @@ public class MOFA extends Algorithm {
                         int ind = new Random().nextInt(eSize);
                         Solution g = external_archive_.get(ind);
                         List<Solution> res = firefly_move(population_.get(i), population_.get(j), beta0, gamma, false, g);
-                        population_.replace(i, res.get(0));// 这里没有进行越界处理
-                        population_.replace(j, res.get(1));// 这里没有进行越界处理
+                        population_.replace(i, res.get(0));
+                        population_.replace(j, res.get(1));
                     }
                 }
             }
@@ -212,26 +212,29 @@ public class MOFA extends Algorithm {
                         + omega0 * beta * (s1.getDecisionVariables()[i].getValue() - s2.getDecisionVariables()[i].getValue())
                         + (1 - omega0) * beta_g * (g.getDecisionVariables()[i].getValue() - s2.getDecisionVariables()[i].getValue()));
             }
+            res.add(new_x);
         } else {
             // 获得x1与精英个体g之间的距离
             double r_g = get_distance(s1, g);
             // 获得x1和g之间的吸引力
             double beta_g = get_attraction(r_g, beta0, gamma);
-            Solution new_x = CloneUtil.clone(s1);
+            Solution new_x = new Solution(s1);
             for (int i = 0; i < V; i++) {
                 new_x.getDecisionVariables()[i].setValue(omega0 * s1.getDecisionVariables()[i].getValue()
                         + (1 - omega0) * beta_g * (g.getDecisionVariables()[i].getValue() - s1.getDecisionVariables()[i].getValue()));
             }
+            res.add(new_x);
 
             // 获得x2与精英个体g之间的距离
             r_g = get_distance(s2, g);
             // 获得x2和g之间的吸引力
             beta_g = get_attraction(r_g, beta0, gamma);
-            new_x = CloneUtil.clone(s1);
+            Solution new_y = new Solution(s1);
             for (int i = 0; i < V; i++) {
-                new_x.getDecisionVariables()[i].setValue(omega0 * s2.getDecisionVariables()[i].getValue()
+                new_y.getDecisionVariables()[i].setValue(omega0 * s2.getDecisionVariables()[i].getValue()
                         + (1 - omega0) * beta_g * (g.getDecisionVariables()[i].getValue() - s2.getDecisionVariables()[i].getValue()));
             }
+            res.add(new_y);
         }
 
         // 越界处理

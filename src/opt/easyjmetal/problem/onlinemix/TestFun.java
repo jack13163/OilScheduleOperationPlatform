@@ -68,19 +68,40 @@ public class TestFun {
         return h.size();
     }
 
-    public static double gChange(List<List<Double>> a) { //油罐切换次数
-        double K = 0;
-        double[] array = new double[a.size()];
-        for (int i = 0; i < a.size(); i++) {
-            array[i] = a.get(i).get(0);
-        }
-        for (int i = 0; i < a.size(); i++) {
-            if (a.get(i).get(0) >= TestFun.getMax(array)) {
-                K = i;
-                break;
+    public static double gChange(Object[][] TKS, List<List<Double>> a) { //油罐切换次数
+        // 初始装有的原油类型    TKS格式：容量  原油类型  已有容量 蒸馏塔  供油开始时间 供油结束时间  供油罐编号  混合原油类型集合
+        Map<String, Integer> res = new HashMap<>();
+        for (int i = 0; i < TKS.length; i++) {
+            if (Integer.parseInt(TKS[i][2].toString()) > 0) {
+                String key = "TK" + (i + 1);
+                if (!res.containsKey(key)) {
+                    res.put(key, 0);
+                }
+                res.put(key, res.get(key) + 1);
             }
         }
-        return K;
+
+        // 后期转运的原油类型      转运plan格式：蒸馏塔号 | 油罐号 | 开始供油时间 | 结束供油时间 | 原油类型
+        List<List<Double>> lists = a.stream()
+                .filter(e -> e.get(0) == 4 && e.get(4) != 0)        // 过滤出转运记录，排除停运
+                .sorted((e1, e2) -> (int) (e1.get(2) - e2.get(2)))  // 按照转运开始时间排序
+                .collect(Collectors.toList());
+        for (int i = 0; i < lists.size(); i++) {
+            int tk = (int) lists.get(i).get(1).doubleValue();
+            String key = "TK" + tk;
+            if (!res.containsKey(key)) {
+                res.put(key, 0);
+            }
+            res.put(key, res.get(key) + 1);
+        }
+
+        // 统计各个油罐的使用次数
+        int count = 0;
+        for (String key : res.keySet()) {
+            count += res.get(key);
+        }
+
+        return count;
     }
 
     public static double gDmix(List<List<Double>> a, int[][] c1) {//计算管道混合成本
@@ -119,7 +140,6 @@ public class TestFun {
 
     public static double gDimix(Object[][] TKS, List<List<Double>> a, int[][] c2) { //计算罐底混合成本
         double[][] m2 = new double[6][6]; //存放各个类型油的混合次数
-
 
         // 初始装有的原油类型    TKS格式：容量  原油类型  已有容量 蒸馏塔  供油开始时间 供油结束时间  供油罐编号  混合原油类型集合
         Map<String, List<Integer>> res = new HashMap<>();

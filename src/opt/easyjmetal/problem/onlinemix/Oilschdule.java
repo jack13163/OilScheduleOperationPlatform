@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 public class Oilschdule {
 
+    public static boolean _showGante = true;
+
     public static class KeyValue implements Serializable {
         private String type;
         private double volume;
@@ -43,7 +45,7 @@ public class Oilschdule {
                 pop[i][j] = Math.random();  // 产生随机种群
             }
         }
-        fat(pop);
+        fat(pop, true);
     }
 
     // 混合配方
@@ -64,7 +66,8 @@ public class Oilschdule {
     static double[] DSFR = new double[]{250, 279, 304}; // 蒸馏塔炼油速率
     static int PIPEFR = 840;                            // 匀速
 
-    public static List<List<Double>> fat(double[][] pop) {
+    public static List<List<Double>> fat(double[][] pop, boolean showGante) {
+        _showGante = showGante;
         List<List<Double>> eff = new ArrayList<List<Double>>();
         double inf = -1;
         double f1, f2, f3, f4;
@@ -196,10 +199,10 @@ public class Oilschdule {
             back = backSchedule(back);//每次返回一个可行调度解
 
             if (back.getFlag()) {
-                f1 = TestFun.gNum(back.getSchedulePlan());        // 供油罐个数
-                f2 = TestFun.gChange(back.getSchedulePlan());     // 蒸馏塔的油罐切换次数
-                f3 = TestFun.gDmix(back.getSchedulePlan(), c1);   // 管道混合成本
-                f4 = TestFun.gDimix(TKS, back.getSchedulePlan(), c2);  // 罐底混合成本
+                f1 = TestFun.gNum(back.getSchedulePlan());              // 供油罐个数
+                f2 = TestFun.gChange(TKS, back.getSchedulePlan());      // 蒸馏塔的油罐切换次数
+                f3 = TestFun.gDmix(back.getSchedulePlan(), c1);         // 管道混合成本
+                f4 = TestFun.gDimix(TKS, back.getSchedulePlan(), c2);   // 罐底混合成本
             } else {
                 f1 = inf;
                 f2 = inf;
@@ -347,12 +350,15 @@ public class Oilschdule {
 
         BackTrace back = CloneUtil.clone(backTrace);
         back.setFlag(false);
+
         // 绘制甘特图
-        PlotUtils.plotSchedule2(back.getSchedulePlan());
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if(_showGante) {
+            PlotUtils.plotSchedule2(back.getSchedulePlan());
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         List<Integer> ET = getET(back);
@@ -676,7 +682,7 @@ public class Oilschdule {
         list1.add(0.0);                                         // 油罐号
         list1.add(back.getTime());                              // 开始供油t
         list1.add(pipeStoptime);                                // 供油罐结束t
-        list1.add(0.0);            // 原油类型
+        list1.add(0.0);                                         // 原油类型
         back.getSchedulePlan().add(list1);
         back.setTime(list1.get(3));
 

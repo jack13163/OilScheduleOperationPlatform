@@ -8,6 +8,8 @@ import java.util.List;
 public class PlotUtils {
     private static ChartFrame chartFrame = null;
 
+    public static boolean showDetail = false;
+
     /**
      * 绘制调度的甘特图
      * <p>
@@ -20,7 +22,10 @@ public class PlotUtils {
         try {
             int size = operations.size();
             double[][] data = new double[size][6];
-            System.out.println("--------------------------------------------------------------------------------");
+
+            if(showDetail) {
+                System.out.println("-------------------------------------详细调度-------------------------------------------");
+            }
             for (int i = 0; i < operations.size(); i++) {
 
                 // 区分转运和炼油
@@ -42,9 +47,10 @@ public class PlotUtils {
                     data[i][5] = -1;
                 }
 
-                System.out.println(data[i][0] + "," + data[i][1] + "," + data[i][2] + "," + data[i][3] + "," + data[i][4] + (data[i][5] < 0 ? "" : "," + data[i][5]));
+                if(showDetail) {
+                    System.out.println(data[i][0] + "," + data[i][1] + "," + data[i][2] + "," + data[i][3] + "," + data[i][4] + (data[i][5] < 0 ? "" : "," + data[i][5]));
+                }
             }
-            System.out.println("--------------------------------------------------------------------------------");
 
             if (chartFrame == null) {
                 chartFrame = new ChartFrame();

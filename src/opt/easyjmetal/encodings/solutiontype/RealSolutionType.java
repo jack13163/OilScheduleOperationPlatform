@@ -26,10 +26,12 @@ import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.SolutionType;
 import opt.easyjmetal.core.Variable;
 
+import java.io.Serializable;
+
 /**
  * Class representing a solution type composed of real variables
  */
-public class RealSolutionType extends SolutionType {
+public class RealSolutionType extends SolutionType implements Serializable {
 
 	/**
 	 * Constructor
