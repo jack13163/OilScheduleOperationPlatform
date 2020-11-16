@@ -19,7 +19,7 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.algorithm.cmoeas.util;
+package opt.easyjmetal.algorithm.moeas.util;
 
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.qualityindicator.Epsilon;
@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Utilities methods to used by MOEA/D
+ * 无约束优化算法帮助类
  */
 public class Utils {
     public static final String resultBaseDirectory_ = "result/easyjmetal";
@@ -50,7 +50,7 @@ public class Utils {
             sum += (vector1[n] - vector2[n]) * (vector1[n] - vector2[n]);
         }
         return Math.sqrt(sum);
-    } // distVector
+    }
 
     public static void minFastSort(double x[], int idx[], int n, int m) {
         for (int i = 0; i < m; i++) {
@@ -62,11 +62,10 @@ public class Utils {
                     int id = idx[i];
                     idx[i] = idx[j];
                     idx[j] = id;
-                } // if
+                }
             }
-        } // for
-
-    } // minFastSort
+        }
+    }
 
 
     public static int[] returnSortedIndex(double x[], int flag) {
@@ -212,36 +211,36 @@ public class Utils {
         return Math.sqrt(sum);
     }
 
-    public Algorithm getAlgorithm(String name, Object[] params) throws JMException {
-        // Params are the arguments
-        // The number of argument must correspond with the algorithm constructor params
-        String base = "opt.easyjmetal.algorithm.cmoeas.";
+    /**
+     * 利用反射创建算法实例
+     * @param name
+     * @param params
+     * @return
+     * @throws JMException
+     */
+    public static Algorithm getAlgorithm(String name, Object[] params) throws JMException {
+        String base = "opt.easyjmetal.algorithm.moeas.";
 
-        if (name.equalsIgnoreCase("NSGAIII_CDP")) {
-            base += "nsgaiii_cdp.";
-        } else if (name.equalsIgnoreCase("SPEA2_CDP")) {
-            base += "spea2_cdp.";
-        } else if (name.equalsIgnoreCase("ISDEPLUS_CDP")) {
-            base += "isdeplus_cdp.";
+        if (name.equalsIgnoreCase("NSGAII")) {
+            base += "impl.";
+        } else if (name.equalsIgnoreCase("MOFA")) {
+            base += "impl.";
         }
 
         try {
             Class AlgorithmClass = Class.forName(base + name);
             Constructor[] constructors = AlgorithmClass.getConstructors();
             int i = 0;
-            //find the constructor
-            while ((i < constructors.length) &&
-                    (constructors[i].getParameterTypes().length != params.length)) {
+            // 根据参数个数查找构造函数
+            while ((i < constructors.length) && (constructors[i].getParameterTypes().length != params.length)) {
                 i++;
             }
-            // constructors[i] is the selected one constructor
             Algorithm algorithm = (Algorithm) constructors[i].newInstance(params);
             return algorithm;
-        }// try
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new JMException("Exception in " + name + ".getAlgorithm()");
-        } // catch
+        }
     }
 
     public static void repairSolution(Solution solution, Problem problem_) throws JMException {
@@ -272,6 +271,7 @@ public class Utils {
 
     /**
      * 更新储备集
+     *
      * @param pop
      * @param popSize
      * @param externalArchive
@@ -314,6 +314,7 @@ public class Utils {
 
     /**
      * 初始化储备集
+     *
      * @param pop
      * @param popSize
      * @param externalArchive
@@ -374,7 +375,7 @@ public class Utils {
     /**
      * Generate the Pareto Front
      *
-     * @param configList 配置列表
+     * @param configList         配置列表
      * @param algorithmNameList_ 算法列表
      * @param problemList_       问题列表
      * @param independentRuns_   独立运行次数
@@ -383,7 +384,7 @@ public class Utils {
         String paretoFrontPath = resultBaseDirectory_ + "/PF/";
 
         List<Solution> allSolutions = new ArrayList<>();
-        for(String config: configList) {
+        for (String config : configList) {
             List<Solution> solutionList = new ArrayList<>();
             for (String problemName : problemList_) {
                 for (String algorithmName : algorithmNameList_) {
@@ -468,16 +469,16 @@ public class Utils {
             boolean flag = false;
 
             for (String problemName : problemList_) {
-                if(flag){
+                if (flag) {
                     break;
                 }
                 for (String algorithmName : algorithmNameList_) {
-                    if(flag){
+                    if (flag) {
                         break;
                     }
                     for (int numRun = 0; numRun < independentRuns_; numRun++) {
                         // 没有找到就继续找，否则，退出
-                        if(flag){
+                        if (flag) {
                             break;
                         }
                         String tableName = problemName + "_" + (numRun + 1);
@@ -662,7 +663,7 @@ public class Utils {
     /**
      * Generate the Quality Indicators
      *
-     * @param configList 配置列表
+     * @param configList         配置列表
      * @param algorithmNameList_ 算法列表
      * @param problemList_       问题列表
      * @param indicatorList_     指标列表

@@ -469,7 +469,7 @@ public class Solution implements Serializable {
 	 */
 	public void setDecisionVariables(Variable[] variables) {
 		variable_ = variables;
-	} // setDecisionVariables
+	}
 
 	public Problem getProblem() {
 		return problem_;

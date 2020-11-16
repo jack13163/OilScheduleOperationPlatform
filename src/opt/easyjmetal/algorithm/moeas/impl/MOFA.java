@@ -65,14 +65,14 @@ public class MOFA extends Algorithm {
         externalArchiveSize = (Integer) getInputParameter("externalArchiveSize");
         dataDirectory_ = getInputParameter("dataDirectory").toString();
         String dbName = getInputParameter("DBName").toString();
-        int runningTime = (Integer) getInputParameter("runningTime") + 1; // start from 1
+        int runningTime = (Integer) getInputParameter("runningTime");
         population_ = new SolutionSet(populationSize_);
         gamma = (Integer) getInputParameter("gamma");
         beta0 = (Integer) getInputParameter("beta0");
 
         // 创建数据表，方便后面保存结果
-        String problemName = problem_.getName() + "_" + runningTime;
-        SqlUtils.CreateTable(problemName, dbName);
+        String tableName = "MOFA_" + runningTime;
+        SqlUtils.CreateTable(tableName, dbName);
 
         // 初始化种群
         initPopulation();
@@ -122,7 +122,7 @@ public class MOFA extends Algorithm {
             Utils.updateExternalArchive(population_, populationSize_, external_archive_);
         } while (evaluations_ < maxEvaluations_);
 
-        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
 
         return external_archive_;
     }

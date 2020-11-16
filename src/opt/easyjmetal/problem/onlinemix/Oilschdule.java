@@ -90,7 +90,7 @@ public class Oilschdule {
                 {15, 10, 13, 12, 11, 0}
         };// 罐底混合成本
 
-        for (int p = 0; p < popsize; p++) { //解遍历
+        for (int p = 0; p < popsize; p++) { // 解遍历
             double[] x = pop[p];
             List<List<Double>> schedulePlan = new ArrayList<>();
             BackTrace back = null;
