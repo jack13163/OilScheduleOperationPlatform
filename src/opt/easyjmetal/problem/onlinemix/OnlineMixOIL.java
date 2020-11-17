@@ -22,6 +22,7 @@ package opt.easyjmetal.problem.onlinemix;
 
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.Solution;
+import opt.easyjmetal.core.Variable;
 import opt.easyjmetal.encodings.solutiontype.BinaryRealSolutionType;
 import opt.easyjmetal.encodings.solutiontype.RealSolutionType;
 import opt.easyjmetal.util.JMException;
@@ -63,22 +64,30 @@ public class OnlineMixOIL extends Problem {
      * @throws JMException
      */
     public void evaluate(Solution solution) throws JMException {
+        // 解码前的准备操作
         XReal vars = new XReal(solution);
-
         double[] x = new double[numberOfVariables_];
         for (int i = 0; i < numberOfVariables_; i++) {
             x[i] = vars.getValue(i);
         }
-
         double[][] pop = new double[1][x.length];
         for (int i = 0; i < x.length; i++) {
             pop[0][i] = x[i];
         }
+
+        // 解码
         List<List<Double>> eff = Oilschdule.fat(pop, false);
 
-        solution.setObjective(0, eff.get(0).get(x.length + 0));
-        solution.setObjective(1, eff.get(0).get(x.length + 1));
-        solution.setObjective(2, eff.get(0).get(x.length + 2));
-        solution.setObjective(3, eff.get(0).get(x.length + 3));
+        // 更新解，因为解码过程中会修改染色体
+        Variable[] decisionVariables = solution.getDecisionVariables();
+        for (int i = 0; i < numberOfVariables_; i++) {
+            decisionVariables[i].setValue(eff.get(0).get(i));
+        }
+
+        // 设置目标值
+        solution.setObjective(0, eff.get(0).get(numberOfVariables_ + 0));
+        solution.setObjective(1, eff.get(0).get(numberOfVariables_ + 1));
+        solution.setObjective(2, eff.get(0).get(numberOfVariables_ + 2));
+        solution.setObjective(3, eff.get(0).get(numberOfVariables_ + 3));
     }
 }
