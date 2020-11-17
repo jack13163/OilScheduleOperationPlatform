@@ -12,7 +12,7 @@ import java.util.List;
 public class OnlineMix_MOEAs_main {
 
     public static void main(String[] args) throws Exception {
-        batchRun(Arrays.asList( "NSGAII"), 3);
+        batchRun(Arrays.asList("NSGAII"), 10);
     }
 
     /**
@@ -27,11 +27,15 @@ public class OnlineMix_MOEAs_main {
         String mainPath = System.getProperty("user.dir");
         Problem problem = (new ProblemFactory()).getProblem(problemName, new Object[]{"Real"});
 
-        // 算法运行结果保存的路径
+        // 先清楚上次运行的结果
         String resultFile = mainPath + "/" + problem.getName() + ".db";
-        FileUtils.deleteFile(resultFile);
+        boolean deleted = false;
+        do {
+            deleted = FileUtils.deleteFile(resultFile);
+            Thread.sleep(500);
+        } while (!deleted);
 
-        // 独立运行
+        // 独立运行若干次
         for (int j = 0; j < runtime; j++) {
             for (int i = 0; i < algorithmNames.size(); i++) {
                 // 定义算法
