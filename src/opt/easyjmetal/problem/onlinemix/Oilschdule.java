@@ -417,7 +417,7 @@ public class Oilschdule {
                         }
                         // 试调度，需要选择两个塔
                         back = tryschedule(back, TK1, TK2, DS);
-                        if (back.getFlag() && (OilSchedule.Schedulable(back))) {
+                        if (back.getFlag() && (schedulable(back))) {
                             ff = true;
                         }
                     }
@@ -687,5 +687,23 @@ public class Oilschdule {
         back.setTime(list1.get(3));
 
         return back;
+    }
+
+    /**
+     * 判断当前系统状态是否可调度
+     * @param backTrace
+     * @return
+     */
+    public static boolean schedulable(BackTrace backTrace) {
+
+        // 判断当前时间是否有蒸馏塔的炼油计划即将延误
+        double[] feedTime = backTrace.getFeedTime();
+        for (int i = 0; i < feedTime.length; i++) {
+            if(backTrace.getTime() + Oilschdule.RT > feedTime[i]){
+                return false;
+            }
+        }
+
+        return true;
     }
 }
