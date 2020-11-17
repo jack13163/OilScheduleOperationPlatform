@@ -48,7 +48,7 @@ public class OnlineMix_MOEAs_decode {
             x[0][i] = decisionVariables[i].getValue();
         }
 
-        List<List<Double>> eff = Oilschdule.fat(x, true);
+        List<List<Double>> eff = Oilschdule.fat(x, false);
 
         // 对比目标值是否前后一致
         if (solution.getObjective(0) == eff.get(0).get(numberOfVariables + 0)
