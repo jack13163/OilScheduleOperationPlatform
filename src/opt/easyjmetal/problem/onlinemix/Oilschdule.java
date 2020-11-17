@@ -63,8 +63,8 @@ public class Oilschdule {
     }
 
     static int RT = 6;                                  // 驻留时间
-    static double[] DSFR = new double[]{250, 279, 304}; // 蒸馏塔炼油速率
-    static int PIPEFR = 840;                            // 匀速
+    private static double[] DSFR = new double[]{250, 279, 304}; // 蒸馏塔炼油速率
+    private static int PIPEFR = 840;                            // 匀速
 
     public static List<List<Double>> fat(double[][] pop, boolean showGante) {
         _showGante = showGante;
@@ -399,24 +399,28 @@ public class Oilschdule {
                         back = stop(back, pipeStoptime);
                         footprint[0] = 1;
                     }
-                } else if (ET.size() > 1) {
-                    // TK1和TK2应该不等
+                } else if (ET.size() >= 1) {
                     int TK1 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep()], ET.size() - 1));// 返回0 ~ ET.size - 1的数
                     int TK2 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep() + 1], ET.size() - 1));// 返回0 ~ ET.size - 1的数
                     int DS = UD.get(TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size() - 1));// 需要确保DS_NO小于UD.size()
 
-                    // 确保两个供油罐不相等
-                    while (TK1 == TK2) {
-                        back.getX()[3 * back.getStep() + 1] = Math.random();
-                        TK2 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep() + 1], ET.size() - 1));// 返回0 ~ ET.size - 1的数
+                    // 判断油罐是否足够，每次指派需要一个或者两个
+                    int numberOfTanksNeeded = getNumberOfTanksNeeded(back, DS);
+                    if(ET.size() >= numberOfTanksNeeded) {
+                        // 判断是否需要两个供油罐
+                        if (numberOfTanksNeeded > 1) {
+                            // 确保两个供油罐不相等
+                            while (TK1 == TK2) {
+                                back.getX()[3 * back.getStep() + 1] = Math.random();
+                                TK2 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep() + 1], ET.size() - 1));// 返回0 ~ ET.size - 1的数
+                            }
+                        }
+                        // 试调度，需要选择两个塔
+                        back = tryschedule(back, TK1, TK2, DS);
+                        if (back.getFlag() && (OilSchedule.Schedulable(back))) {
+                            ff = true;
+                        }
                     }
-                    // 试调度，需要选择两个塔
-                    back = tryschedule(back, TK1, TK2, DS);
-                    if (back.getFlag() && (OilSchedule.Schedulable(back))) {
-                        ff = true;
-                    }
-                } else {
-                    ff = false;
                 }
 
                 if (ff) {

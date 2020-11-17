@@ -29,7 +29,7 @@ public class OnlineMix_MOEAs_decode {
             }
         }
 
-        // 输出结果一致比例
+        // 输出结果一致比例【暂时问题：选罐随机，因此可能造成解不一致，考虑确定性的规则选罐】
         System.out.println("共有" + solutionSet.size() + "个非支配解，其中" + count + "个解和预期结果一致");
     }
 

@@ -59,7 +59,7 @@ public class OnlineMixOIL extends Problem {
     /**
      * 评价适应度
      *
-     * @param solution The solution to evaluate
+     * @param solution 个体【染色体/解】
      * @throws JMException
      */
     public void evaluate(Solution solution) throws JMException {
