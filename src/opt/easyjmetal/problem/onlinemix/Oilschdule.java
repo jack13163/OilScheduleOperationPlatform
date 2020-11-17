@@ -6,6 +6,11 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * 两点改进：
+ * 1.管道转运原油的顺序；
+ * 2.不同速率转运原油的情况下的管道能耗。
+ */
 public class Oilschdule {
 
     public static boolean _showGante = true;
@@ -37,7 +42,7 @@ public class Oilschdule {
     }
 
     public static void main(String[] args) {
-        int k = 75;
+        int k = 125;
         int popsize = 50;
         double[][] pop = new double[popsize][k];
         for (int i = 0; i < popsize; i++) {
@@ -62,15 +67,14 @@ public class Oilschdule {
         peifang.put("M8", "R5:R4=2:1");
     }
 
-    static int RT = 6;                                          // 驻留时间
-    private static double[] DSFR = new double[]{250, 279, 304}; // 蒸馏塔炼油速率
-    private static int PIPEFR = 840;                            // 匀速
+    static int RT = 6;                                              // 驻留时间
+    private static double[] DSFR = new double[]{250, 279, 304};     // 蒸馏塔炼油速率
+    private static double[] PIPEFR = new double[]{500, 700, 840};   // 匀速
 
     public static List<List<Double>> fat(double[][] pop, boolean showGante) {
         _showGante = showGante;
-        List<List<Double>> eff = new ArrayList<List<Double>>();
+        List<List<Double>> eff = new ArrayList<>();
         double inf = -1;
-        double f1, f2, f3, f4;
         int popsize = pop.length;
 
         int[][] c1 = new int[][]{
@@ -198,16 +202,19 @@ public class Oilschdule {
             back.setFlag(false);
             back = backSchedule(back);//每次返回一个可行调度解
 
+            double f1, f2, f3, f4, f5;
             if (back.getFlag()) {
                 f1 = TestFun.gNum(back.getSchedulePlan());              // 供油罐个数
                 f2 = TestFun.gChange(TKS, back.getSchedulePlan());      // 蒸馏塔的油罐切换次数
                 f3 = TestFun.gDmix(back.getSchedulePlan(), c1);         // 管道混合成本
                 f4 = TestFun.gDimix(TKS, back.getSchedulePlan(), c2);   // 罐底混合成本
+                f5 = TestFun.gEnergyCost(back.getSchedulePlan(), new double[]{1, 2, 3}, PIPEFR);   // 罐底混合成本
             } else {
                 f1 = inf;
                 f2 = inf;
                 f3 = inf;
                 f4 = inf;
+                f5 = inf;
             }
 
             // 显示目标值
@@ -217,6 +224,7 @@ public class Oilschdule {
                 System.out.println("蒸馏塔的油罐切换次数:   " + f2);
                 System.out.println("管道混合成本:         " + f3);
                 System.out.println("罐底混合成本:         " + f4);
+                System.out.println("管道转运能耗成本:      " + f5);
                 System.out.println("----------------------------------------------------");
             }
 
@@ -229,6 +237,7 @@ public class Oilschdule {
             t_list.add(f2);
             t_list.add(f3);
             t_list.add(f4);
+            t_list.add(f5);
             eff.add(t_list);
         }
         return eff;
@@ -389,7 +398,7 @@ public class Oilschdule {
 
                 ET = getET(back);
                 UD = getUD(back);
-                int DS_NO = TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size());// 返回0-UD.size()
+                int DS_NO = TestFun.getInt(back.getX()[5 * back.getStep() + 2], UD.size());// 返回0-UD.size()
 
                 if (footprint[0] == 0 && (DS_NO == UD.size() || ET.size() < getNumberOfTanksNeeded(back, UD.get(DS_NO)))) {
                     // 停运情况：供油罐的个数不够所需要的，一个或两个【停运：1.为了等待空闲供油罐的释放；2.不得不停运】
@@ -411,9 +420,12 @@ public class Oilschdule {
                         footprint[0] = 1;
                     }
                 } else if (ET.size() >= 1) {
-                    int TK1 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep()], ET.size() - 1));// 返回0 ~ ET.size - 1的数
-                    int TK2 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep() + 1], ET.size() - 1));// 返回0 ~ ET.size - 1的数
-                    int DS = UD.get(TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size() - 1));// 需要确保DS_NO小于UD.size()
+                    // 转运情况：供油罐的个数大于等于所需要的，一个或两个以上
+                    int TK1 = ET.get(TestFun.getInt(back.getX()[5 * back.getStep()], ET.size() - 1));// 返回0 ~ ET.size - 1的数
+                    int TK2 = ET.get(TestFun.getInt(back.getX()[5 * back.getStep() + 1], ET.size() - 1));// 返回0 ~ ET.size - 1的数
+                    int DS = UD.get(TestFun.getInt(back.getX()[5 * back.getStep() + 2], UD.size() - 1));// 需要确保DS_NO小于UD.size()
+                    double PIPESPEED = PIPEFR[TestFun.getInt(back.getX()[5 * back.getStep() + 3], PIPEFR.length - 1)];// 返回0 ~ PIPEFR.length - 1的数
+                    boolean REVERSE = TestFun.getInt(back.getX()[5 * back.getStep() + 4], 1) == 1 ? true : false;// 返回0 ~ 1的数
 
                     // 判断油罐是否足够，每次指派需要一个或者两个
                     int numberOfTanksNeeded = getNumberOfTanksNeeded(back, DS);
@@ -422,12 +434,12 @@ public class Oilschdule {
                         if (numberOfTanksNeeded > 1) {
                             // 确保两个供油罐不相等
                             while (TK1 == TK2) {
-                                back.getX()[3 * back.getStep() + 1] = Math.random();
-                                TK2 = ET.get(TestFun.getInt(back.getX()[3 * back.getStep() + 1], ET.size() - 1));// 返回0 ~ ET.size - 1的数
+                                back.getX()[5 * back.getStep() + 1] = Math.random();
+                                TK2 = ET.get(TestFun.getInt(back.getX()[5 * back.getStep() + 1], ET.size() - 1));// 返回0 ~ ET.size - 1的数
                             }
                         }
                         // 试调度，需要选择两个塔
-                        back = tryschedule(back, TK1, TK2, DS);
+                        back = tryschedule(back, TK1, TK2, DS, PIPESPEED, REVERSE);
                         if (back.getFlag() && (schedulable(back))) {
                             ff = true;
                         }
@@ -446,8 +458,12 @@ public class Oilschdule {
                     for (int i = 0; i < footprint.length; i++) {
                         if (footprint[i] == 0) {
                             // 第一个为停运，后面依次为蒸馏塔1，蒸馏塔2，...
-                            while (TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size()) != i) {
-                                back.getX()[3 * back.getStep() + 2] = Math.random();
+                            while (TestFun.getInt(back.getX()[5 * back.getStep() + 2], UD.size()) != i) {
+                                back.getX()[5 * back.getStep() + 2] = Math.random();
+                            }
+                            // 转运速度调整为最大
+                            while (TestFun.getInt(back.getX()[5 * back.getStep() + 3], PIPEFR.length - 1) != PIPEFR.length - 1) {
+                                back.getX()[5 * back.getStep() + 3] = Math.random();
                             }
 
                             footprint[i] = 1;
@@ -499,11 +515,15 @@ public class Oilschdule {
 
     /**
      * 试调度
-     *
-     * @param backtrace 调度之前的系统状态
-     * @return 调度之后的系统状态【back】
+     * @param backtrace
+     * @param TK1
+     * @param TK2
+     * @param DS
+     * @param pipeSpeed  管道转运速率
+     * @param reverse    管道转运原油包的顺序
+     * @return
      */
-    public static BackTrace tryschedule(BackTrace backtrace, int TK1, int TK2, int DS) {
+    public static BackTrace tryschedule(BackTrace backtrace, int TK1, int TK2, int DS, double pipeSpeed, boolean reverse) {
 
         // 拷贝一份调度之前的系统状态，以后的更改都会在这个新拷贝的对象上进行。
         BackTrace back = CloneUtil.clone(backtrace);
@@ -518,7 +538,7 @@ public class Oilschdule {
         List<KeyValue> oilTypeVolumeRates = getKeyValues(type);
 
         // 1.计算能够转运的最大体积
-        double[] V = getSafeVolume(back, DS, oilTypeVolumeRates);
+        double[] V = getSafeVolume(back, DS, oilTypeVolumeRates, pipeSpeed);
         double total = 0;
         int types = V.length;
         for (int i = 0; i < types; i++) {
@@ -563,13 +583,31 @@ public class Oilschdule {
                 FP.peek().setVolume(FP.peek().getVolume() - total);
             }
 
+            // 判断是否需要调换两次转运原油的顺序
+            double[] T = new double[types];
+            T[0] = Double.parseDouble(oilTypeVolumeRates.get(0).getType().substring(1));
+            if(types > 1) {
+                T[1] = Double.parseDouble(oilTypeVolumeRates.get(1).getType().substring(1));
+                if (reverse) {
+                    // 交换原油体积
+                    double tmp = V[0];
+                    V[0] = V[1];
+                    V[1] = tmp;
+                    // 交换原油类型
+                    tmp = T[0];
+                    T[0] = T[1];
+                    T[1] = tmp;
+                }
+            }
+
             // 第一次转运操作
             List<Double> list1 = new ArrayList<>();
             list1.add(4.0);
             list1.add((double) TK1);                                                                    // 油罐号
             list1.add((double) Math.round(back.getTime() * 100.0) / 100.0);                             // 开始供油t
-            list1.add((double) Math.round((back.getTime() + V[0] / PIPEFR) * 100.0) / 100.0);           // 供油罐结束t
-            list1.add(Double.parseDouble(oilTypeVolumeRates.get(0).getType().substring(1)));            // 原油类型
+            list1.add((double) Math.round((back.getTime() + V[0] / pipeSpeed) * 100.0) / 100.0);           // 供油罐结束t
+            list1.add(T[0]);                 // 原油类型
+            list1.add(pipeSpeed);            // 转运速度
             back.getSchedulePlan().add(list1);
             back.setTime(list1.get(3));
 
@@ -579,8 +617,9 @@ public class Oilschdule {
                 list2.add(4.0);
                 list2.add((double) TK2);                                                                // 油罐号
                 list2.add((double) Math.round(back.getTime() * 100.0) / 100.0);                         // 开始供油t
-                list2.add((double) Math.round((back.getTime() + V[1] / PIPEFR) * 100.0) / 100.0);       // 供油罐结束t
-                list2.add(Double.parseDouble(oilTypeVolumeRates.get(1).getType().substring(1)));        // 原油类型
+                list2.add((double) Math.round((back.getTime() + V[1] / pipeSpeed) * 100.0) / 100.0);       // 供油罐结束t
+                list2.add(T[1]);              // 原油类型
+                list2.add(pipeSpeed);         // 转运速度
                 back.getSchedulePlan().add(list2);
                 back.setTime(list2.get(3));
             }
@@ -649,9 +688,10 @@ public class Oilschdule {
      * @param back
      * @param DS
      * @param oilTypeVolumes
+     * @param pipeSpeed
      * @return
      */
-    public static double[] getSafeVolume(BackTrace back, int DS, List<KeyValue> oilTypeVolumes) {
+    public static double[] getSafeVolume(BackTrace back, int DS, List<KeyValue> oilTypeVolumes, double pipeSpeed) {
         int len = oilTypeVolumes.size();
         double[] V = new double[len];
 
@@ -662,7 +702,7 @@ public class Oilschdule {
         double endTime = getFeedingEndTime(back.getSchedulePlan(), back.getTime(), DS);
 
         // 计算能够转运的最大的原油体积
-        double volume = PIPEFR * (endTime - currentTime - RT);
+        double volume = pipeSpeed * (endTime - currentTime - RT);
 
         // 计算原始种类的原油需要转运的体积
         for (int i = 0; i < len; i++) {

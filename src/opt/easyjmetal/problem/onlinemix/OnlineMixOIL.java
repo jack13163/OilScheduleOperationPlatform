@@ -36,8 +36,8 @@ import java.util.List;
 public class OnlineMixOIL extends Problem {
 
     public OnlineMixOIL(String solutionType) {
-        numberOfVariables_ = 75;
-        numberOfObjectives_ = 4;
+        numberOfVariables_ = 125;
+        numberOfObjectives_ = 5;
         problemName_ = "OnlineMixOIL";
 
         lowerLimit_ = new double[numberOfVariables_];
@@ -89,5 +89,6 @@ public class OnlineMixOIL extends Problem {
         solution.setObjective(1, eff.get(0).get(numberOfVariables_ + 1));
         solution.setObjective(2, eff.get(0).get(numberOfVariables_ + 2));
         solution.setObjective(3, eff.get(0).get(numberOfVariables_ + 3));
+        solution.setObjective(4, eff.get(0).get(numberOfVariables_ + 4));
     }
 }

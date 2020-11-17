@@ -48,7 +48,6 @@ public class OnlineMix_MOEAs_main {
                 algorithm.setInputParameter("gamma", 1);
                 algorithm.setInputParameter("beta0", 1);
 
-
                 System.out.println("==================================================================");
                 // 运行算法
                 System.out.println("The " + j + " run of " + algorithmName);

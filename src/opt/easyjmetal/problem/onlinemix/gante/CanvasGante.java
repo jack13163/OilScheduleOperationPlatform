@@ -121,7 +121,6 @@ public class CanvasGante extends Canvas {
                 }
             }
 
-
             // 绘制详细的调度数据的边界和标签
             for (int i = 0; i < data.length; i++) {
                 // 使用不同的颜色填充封闭的矩形区域
@@ -135,7 +134,8 @@ public class CanvasGante extends Canvas {
                 int data_x = (int) MathUtil.round(margin_left + label_width + MathUtil.multiply(start, scale_x), 0).doubleValue();
                 int data_y = (int) MathUtil.round(margin_top + MathUtil.multiply(ds, scale_y), 0).doubleValue();
                 int data_width = (int) MathUtil.round(MathUtil.multiply(MathUtil.subtract(end, start), scale_x), 0).doubleValue();
-                // 不显示停运
+                // ODF格式：蒸馏塔号 | 油罐号1 | 开始供油时间 | 结束供油时间 | 原油类型 | 油罐号2
+                // ODT格式：蒸馏塔号 | 油罐号  | 开始供油时间 | 结束供油时间 | 原油类型 | 转运速度
                 if (oiltype >= 0) {
                     g.setColor(Color.black);
 
@@ -153,7 +153,7 @@ public class CanvasGante extends Canvas {
                     // 绘制标签
                     if(oiltype > 0) {
                         g.setFont(new Font("Times new Roman", Font.BOLD, 14));
-                        String str = "CT" + tank + (tank2 > 0 ? ",CT" + tank2 : "");
+                        String str = "CT" + tank + (ds < 3 && tank2 > 0 ? ",CT" + tank2 : "");
 
                         List<Oilschdule.KeyValue> keyValues = Oilschdule.getKeyValues("M" + oiltype);
                         if (keyValues.size() > 1 && ds < 3) {
@@ -161,7 +161,6 @@ public class CanvasGante extends Canvas {
                         }
                         g.drawString(str, data_x, data_y);
                     }
-
                 }
             }
 

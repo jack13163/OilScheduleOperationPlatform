@@ -106,6 +106,7 @@ public class TestFun {
 
     /**
      * 计算管道混合成本
+     *
      * @param a
      * @param c1
      * @return
@@ -146,6 +147,7 @@ public class TestFun {
 
     /**
      * 计算罐底混合成本
+     *
      * @param TKS
      * @param a
      * @param c2
@@ -186,7 +188,7 @@ public class TestFun {
             for (int i = 0; i < oilTypes.size() - 1; i++) {
                 int preType = oilTypes.get(i);
                 int nextType = oilTypes.get(i + 1);
-                if(preType != nextType){
+                if (preType != nextType) {
                     m2[preType - 1][nextType - 1]++;
                 }
             }
@@ -200,6 +202,51 @@ public class TestFun {
             }
         }
         return sum;
+    }
+
+    /**
+     * 计算管道的转运能耗
+     *
+     * @param a           调度计划
+     * @param costPerHour 单位时间能耗
+     * @param PIPEFR      管道转运速度
+     * @return
+     */
+    public static double gEnergyCost(List<List<Double>> a, double[] costPerHour, double[] PIPEFR) {
+
+        double result = 0.0;
+
+        // 后期转运的原油类型      ODT格式：蒸馏塔号 | 油罐号 | 开始供油时间 | 结束供油时间 | 原油类型  |  转运速度
+        List<List<Double>> lists = a.stream()
+                .filter(e -> e.get(0) == 4 && e.get(4) != 0)        // 过滤出转运记录，排除停运
+                .sorted((e1, e2) -> (int) (e1.get(2) - e2.get(2)))  // 按照转运开始时间排序
+                .collect(Collectors.toList());
+        for (int i = 0; i < lists.size(); i++) {
+            double speed = lists.get(i).get(5).doubleValue();
+            int ind = getIndex(PIPEFR, speed);
+            double cost = costPerHour[ind];
+            double start = lists.get(i).get(2).doubleValue();
+            double end = lists.get(i).get(3).doubleValue();
+            // 成本 = 单位时间成本 * 总时间
+            result += cost * (end - start);
+        }
+
+        return Math.round(result * 100.0) / 100.0;
+    }
+
+    /**
+     * 获取某一个元素所在数组的位置
+     * @param arr
+     * @param value
+     * @return
+     */
+    public static int getIndex(double[] arr, double value) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == value) {
+                return i;
+            }
+        }
+        return -1;//如果未找到返回-1
     }
 
     public static double sum(double[] array) {
