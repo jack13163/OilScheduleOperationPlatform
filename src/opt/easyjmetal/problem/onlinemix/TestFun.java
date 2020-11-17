@@ -104,7 +104,13 @@ public class TestFun {
         return count;
     }
 
-    public static double gDmix(List<List<Double>> a, int[][] c1) {//计算管道混合成本
+    /**
+     * 计算管道混合成本
+     * @param a
+     * @param c1
+     * @return
+     */
+    public static double gDmix(List<List<Double>> a, int[][] c1) {
         double sum = 0;
         int K = 0;
         for (int i = 0; i < a.size(); i++) {
@@ -138,7 +144,14 @@ public class TestFun {
         return sum;
     }
 
-    public static double gDimix(Object[][] TKS, List<List<Double>> a, int[][] c2) { //计算罐底混合成本
+    /**
+     * 计算罐底混合成本
+     * @param TKS
+     * @param a
+     * @param c2
+     * @return
+     */
+    public static double gDimix(Object[][] TKS, List<List<Double>> a, int[][] c2) {
         double[][] m2 = new double[6][6]; //存放各个类型油的混合次数
 
         // 初始装有的原油类型    TKS格式：容量  原油类型  已有容量 蒸馏塔  供油开始时间 供油结束时间  供油罐编号  混合原油类型集合

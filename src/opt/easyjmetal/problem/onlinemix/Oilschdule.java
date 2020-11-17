@@ -62,7 +62,7 @@ public class Oilschdule {
         peifang.put("M8", "R5:R4=2:1");
     }
 
-    static int RT = 6;                                  // 驻留时间
+    static int RT = 6;                                          // 驻留时间
     private static double[] DSFR = new double[]{250, 279, 304}; // 蒸馏塔炼油速率
     private static int PIPEFR = 840;                            // 匀速
 
@@ -209,6 +209,17 @@ public class Oilschdule {
                 f3 = inf;
                 f4 = inf;
             }
+
+            // 显示目标值
+            if (_showGante) {
+                System.out.println("--------------------当前解的目标值--------------------");
+                System.out.println("供油罐个数:           " + f1);
+                System.out.println("蒸馏塔的油罐切换次数:   " + f2);
+                System.out.println("管道混合成本:         " + f3);
+                System.out.println("罐底混合成本:         " + f4);
+                System.out.println("----------------------------------------------------");
+            }
+
             List<Double> t_list = new ArrayList<>();
             for (int i = 0; i < back.getX().length; i++) {
                 t_list.add(back.getX()[i]);
@@ -348,7 +359,7 @@ public class Oilschdule {
         back.setFlag(false);
 
         // 绘制甘特图
-        if(_showGante) {
+        if (_showGante) {
             PlotUtils.plotSchedule2(back.getSchedulePlan());
             try {
                 Thread.sleep(10);
@@ -406,7 +417,7 @@ public class Oilschdule {
 
                     // 判断油罐是否足够，每次指派需要一个或者两个
                     int numberOfTanksNeeded = getNumberOfTanksNeeded(back, DS);
-                    if(ET.size() >= numberOfTanksNeeded) {
+                    if (ET.size() >= numberOfTanksNeeded) {
                         // 判断是否需要两个供油罐
                         if (numberOfTanksNeeded > 1) {
                             // 确保两个供油罐不相等
@@ -431,19 +442,15 @@ public class Oilschdule {
                     UD = getUD(back);
                     back.setFlag(false);
 
-                    //*********** 策略是否已经全部执行尝试 **********
                     //*************** 更改蒸馏塔 *****************
                     for (int i = 0; i < footprint.length; i++) {
                         if (footprint[i] == 0) {
-                            if (i > 0) {
-                                // 有两个及以上的空罐
-                                while (TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size() - 1) != i - 1) {
-                                    back.getX()[3 * back.getStep() + 2] = Math.random();
-                                }
-                                footprint[i] = 1;
-                            } else {
-                                footprint[i] = 1;
+                            // 第一个为停运，后面依次为蒸馏塔1，蒸馏塔2，...
+                            while (TestFun.getInt(back.getX()[3 * back.getStep() + 2], UD.size()) != i) {
+                                back.getX()[3 * back.getStep() + 2] = Math.random();
                             }
+
+                            footprint[i] = 1;
                             break;
                         }
                     }
@@ -691,6 +698,7 @@ public class Oilschdule {
 
     /**
      * 判断当前系统状态是否可调度
+     *
      * @param backTrace
      * @return
      */
@@ -699,7 +707,7 @@ public class Oilschdule {
         // 判断当前时间是否有蒸馏塔的炼油计划即将延误
         double[] feedTime = backTrace.getFeedTime();
         for (int i = 0; i < feedTime.length; i++) {
-            if(backTrace.getTime() + Oilschdule.RT > feedTime[i]){
+            if (backTrace.getTime() + Oilschdule.RT > feedTime[i]) {
                 return false;
             }
         }
