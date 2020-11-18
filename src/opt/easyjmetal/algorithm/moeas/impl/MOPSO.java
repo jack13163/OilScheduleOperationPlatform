@@ -1,5 +1,6 @@
-package opt.easyjmetal.algorithm.moeas.impl.mopso;
+package opt.easyjmetal.algorithm.moeas.impl;
 
+import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
@@ -17,15 +18,75 @@ import opt.easyjmetal.util.pseudorandom.JMetalRandom;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
-public class MOPSOTemplate extends AbstractParticleSwarmOptimization {
+public class MOPSO extends Algorithm {
+    public MOPSO(Problem problem) {
+        super(problem);
 
+        this.problem = problem;
+        this.evaluator = new SequentialSolutionListEvaluator();
+        this.uniformMutation = new UniformMutation(new HashMap<String, Object>(){{
+            put("probability", 0.8);
+            put("perturbation", 20);
+        }});
+        this.nonUniformMutation = new NonUniformMutation(new HashMap<String, Object>(){{
+            put("probability", 0.8);
+            put("perturbation", 20);
+            put("maxIterations", maxIterations);
+        }});
+        localBest = new Solution[swarmSize];
+        leaderArchive = new CrowdingArchive(this.archiveSize, problem.getNumberOfObjectives());
+        epsilonArchive = new NonDominatedArchive();
+        dominanceComparator = new DominanceComparator();
+        crowdingDistanceComparator = new CrowdingDistanceComparator();
+        speed = new double[swarmSize][problem.getNumberOfVariables()];
+        randomGenerator = JMetalRandom.getInstance();
+        crowdingDistance = new CrowdingDistance();
+    }
+
+    public MOPSO setSwarmSize(int swarmSize) {
+        this.swarmSize = swarmSize;
+        return this;
+    }
+
+    public MOPSO setArchiveSize(int archiveSize) {
+        this.archiveSize = archiveSize;
+        return this;
+    }
+
+    public MOPSO setMaxIterations(int maxIterations) {
+        this.maxIterations = maxIterations;
+        return this;
+    }
+
+    public int getArchiveSize() {
+        return archiveSize;
+    }
+
+    public int getSwarmSize() {
+        return swarmSize;
+    }
+
+    public int getMaxIterations() {
+        return maxIterations;
+    }
+
+    public List<Solution> getSwarm() {
+        return swarm;
+    }
+
+    public void setSwarm(List<Solution> swarm) {
+        this.swarm = swarm;
+    }
+
+    private List<Solution> swarm;
     private Problem problem;
     SolutionListEvaluator evaluator;
-    private int swarmSize;
-    private int archiveSize;
-    private int maxIterations;
+    private int swarmSize = 100;
+    private int archiveSize = 100;
+    private int maxIterations = 100;
     private int currentIteration;
     private Solution[] localBest;
     private CrowdingArchive leaderArchive;
@@ -38,50 +99,20 @@ public class MOPSOTemplate extends AbstractParticleSwarmOptimization {
     private JMetalRandom randomGenerator;
     private CrowdingDistance crowdingDistance;
 
-    public MOPSOTemplate(Problem problem, int swarmSize,
-                         int maxIterations, int archiveSize, UniformMutation uniformMutation,
-                         NonUniformMutation nonUniformMutation) {
-        this.problem = problem;
-        this.evaluator = new SequentialSolutionListEvaluator();
-
-        this.swarmSize = swarmSize;
-        this.maxIterations = maxIterations;
-        this.archiveSize = archiveSize;
-
-        this.uniformMutation = uniformMutation;
-        this.nonUniformMutation = nonUniformMutation;
-
-        localBest = new Solution[swarmSize];
-        leaderArchive = new CrowdingArchive(this.archiveSize, problem.getNumberOfObjectives());
-        epsilonArchive = new NonDominatedArchive();
-
-        dominanceComparator = new DominanceComparator();
-        crowdingDistanceComparator = new CrowdingDistanceComparator();
-
-        speed = new double[swarmSize][problem.getNumberOfVariables()];
-
-        randomGenerator = JMetalRandom.getInstance();
-        crowdingDistance = new CrowdingDistance();
-    }
-
-    @Override
     protected void initProgress() {
         currentIteration = 1;
         crowdingDistance.computeDensityEstimator(leaderArchive.getSolutionList());
     }
 
-    @Override
     protected void updateProgress() {
         currentIteration += 1;
         crowdingDistance.computeDensityEstimator(leaderArchive.getSolutionList());
     }
 
-    @Override
     protected boolean isStoppingConditionReached() {
         return currentIteration >= maxIterations;
     }
 
-    @Override
     protected List<Solution> createInitialSwarm() throws ClassNotFoundException {
         List<Solution> swarm = new ArrayList<>(swarmSize);
 
@@ -94,7 +125,6 @@ public class MOPSOTemplate extends AbstractParticleSwarmOptimization {
         return swarm;
     }
 
-    @Override
     protected List<Solution> evaluateSwarm(List<Solution> swarm) throws JMException {
         for (int i = 0; i < swarmSize; i++) {
             problem.evaluate(swarm.get(i));
@@ -102,7 +132,6 @@ public class MOPSOTemplate extends AbstractParticleSwarmOptimization {
         return swarm;
     }
 
-    @Override
     public SolutionSet getResult() {
         List<Solution> solutionList = this.epsilonArchive.getSolutionList();
         SolutionSet solutionSet = new SolutionSet();
@@ -112,7 +141,6 @@ public class MOPSOTemplate extends AbstractParticleSwarmOptimization {
         return solutionSet;
     }
 
-    @Override
     protected void initializeLeader(List<Solution> swarm) {
         for (Solution solution : swarm) {
             Solution particle = new Solution(solution);
@@ -122,7 +150,6 @@ public class MOPSOTemplate extends AbstractParticleSwarmOptimization {
         }
     }
 
-    @Override
     protected void initializeParticlesMemory(List<Solution> swarm) {
         for (int i = 0; i < swarm.size(); i++) {
             Solution particle = new Solution(swarm.get(i));
@@ -130,7 +157,6 @@ public class MOPSOTemplate extends AbstractParticleSwarmOptimization {
         }
     }
 
-    @Override
     protected void updateVelocity(List<Solution> swarm) throws JMException {
         double r1, r2, W, C1, C2;
         Solution bestGlobal;
@@ -172,7 +198,6 @@ public class MOPSOTemplate extends AbstractParticleSwarmOptimization {
     /**
      * Update the position of each particle
      */
-    @Override
     protected void updatePosition(List<Solution> swarm) throws JMException {
         for (int i = 0; i < swarmSize; i++) {
             Solution particle = swarm.get(i);
@@ -190,7 +215,6 @@ public class MOPSOTemplate extends AbstractParticleSwarmOptimization {
         }
     }
 
-    @Override
     protected void updateParticlesMemory(List<Solution> swarm) {
         for (int i = 0; i < swarm.size(); i++) {
             int flag = dominanceComparator.compare(swarm.get(i), localBest[i]);
@@ -201,7 +225,6 @@ public class MOPSOTemplate extends AbstractParticleSwarmOptimization {
         }
     }
 
-    @Override
     protected void initializeVelocity(List<Solution> swarm) {
         for (int i = 0; i < swarm.size(); i++) {
             for (int j = 0; j < problem.getNumberOfVariables(); j++) {
@@ -213,7 +236,6 @@ public class MOPSOTemplate extends AbstractParticleSwarmOptimization {
     /**
      * Apply a mutation operator to all particles in the swarm (perturbation)
      */
-    @Override
     protected void perturbation(List<Solution> swarm) throws JMException {
         nonUniformMutation.setParameter("currentIteration", currentIteration);
 
@@ -231,7 +253,6 @@ public class MOPSOTemplate extends AbstractParticleSwarmOptimization {
      *
      * @param swarm List of solutions (swarm)
      */
-    @Override
     protected void updateLeaders(List<Solution> swarm) {
         for (Solution solution : swarm) {
             Solution particle = new Solution(solution);
@@ -239,5 +260,35 @@ public class MOPSOTemplate extends AbstractParticleSwarmOptimization {
                 epsilonArchive.add(new Solution(particle));
             }
         }
+    }
+
+    /**
+     * 算法主流程
+     * @return
+     * @throws JMException
+     * @throws ClassNotFoundException
+     */
+    public SolutionSet execute() throws JMException, ClassNotFoundException {
+        swarm = createInitialSwarm();
+        swarm = evaluateSwarm(swarm);
+        initializeVelocity(swarm);
+        initializeParticlesMemory(swarm);
+        initializeLeader(swarm);
+        initProgress();
+
+        while (!isStoppingConditionReached()) {
+            updateVelocity(swarm);
+            updatePosition(swarm);
+            perturbation(swarm);
+            swarm = evaluateSwarm(swarm);
+            updateLeaders(swarm);
+            updateParticlesMemory(swarm);
+            updateProgress();
+        }
+        SolutionSet solutionSet = new SolutionSet(swarmSize);
+        for (int i = 0; i < swarm.size(); i++) {
+            solutionSet.add(swarm.get(i));
+        }
+        return solutionSet;
     }
 }

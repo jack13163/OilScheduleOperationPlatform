@@ -58,7 +58,7 @@ public class SolutionSet implements Serializable {
     public SolutionSet(int maximumSize) {
         solutionsList_ = new ArrayList<Solution>();
         capacity_ = maximumSize;
-    } // SolutionSet
+    }
 
     /**
      * Inserts a new solution into the SolutionSet.
