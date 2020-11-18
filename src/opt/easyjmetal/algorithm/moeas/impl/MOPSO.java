@@ -15,6 +15,7 @@ import opt.easyjmetal.util.distance.impl.CrowdingDistance;
 import opt.easyjmetal.util.evaluator.SolutionListEvaluator;
 import opt.easyjmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 import opt.easyjmetal.util.pseudorandom.JMetalRandom;
+import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -269,6 +270,12 @@ public class MOPSO extends Algorithm {
      * @throws ClassNotFoundException
      */
     public SolutionSet execute() throws JMException, ClassNotFoundException {
+        String dbName = getInputParameter("DBName").toString();
+        int runningTime = (Integer) getInputParameter("runningTime");
+        // 创建数据表，方便后面保存结果
+        String tableName = "MOFA_" + runningTime;
+        SqlUtils.CreateTable(tableName, dbName);
+
         swarm = createInitialSwarm();
         swarm = evaluateSwarm(swarm);
         initializeVelocity(swarm);
@@ -289,6 +296,9 @@ public class MOPSO extends Algorithm {
         for (int i = 0; i < swarm.size(); i++) {
             solutionSet.add(swarm.get(i));
         }
+        // 插入到数据库中
+        SqlUtils.InsertSolutionSet(dbName, tableName, solutionSet);
+
         return solutionSet;
     }
 }

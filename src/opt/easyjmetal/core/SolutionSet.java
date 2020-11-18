@@ -28,33 +28,17 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Class representing a SolutionSet (a set of solutions)
+ * 解集
  */
 public class SolutionSet implements Serializable {
 
-    /**
-     * Stores a list of <code>solution</code> objects.
-     */
     protected final List<Solution> solutionsList_;
+    private int capacity_ = Integer.MAX_VALUE;
 
-    /**
-     * Maximum size of the solution set
-     */
-    private int capacity_ = 0;
-
-    /**
-     * Constructor.
-     * Creates an unbounded solution set.
-     */
     public SolutionSet() {
         solutionsList_ = new ArrayList<Solution>();
     }
 
-    /**
-     * Creates a empty solutionSet with a maximum capacity.
-     *
-     * @param maximumSize Maximum size.
-     */
     public SolutionSet(int maximumSize) {
         solutionsList_ = new ArrayList<Solution>();
         capacity_ = maximumSize;
@@ -73,11 +57,11 @@ public class SolutionSet implements Serializable {
             Configuration.logger_.severe("Capacity is : " + capacity_);
             Configuration.logger_.severe("\t Size is: " + this.size());
             return false;
-        } // if
+        }
 
         solutionsList_.add(solution);
         return true;
-    } // add
+    }
 
     public boolean add(int index, Solution solution) {
         solutionsList_.add(index, solution);
@@ -108,19 +92,7 @@ public class SolutionSet implements Serializable {
 
         return worstKnown.getOverallConstraintViolation();
 
-    } // indexWorst
-  /*
-  public void add(Solution solution) {
-    if (solutionsList_.size() == capacity_)
-      try {
-        throw new JMException("SolutionSet.Add(): the population is full") ;
-      } catch (JMException e) {
-        e.printStackTrace();
-      }
-    else
-      solutionsList_.add(solution);
-  }
-  */
+    }
 
     /**
      * Returns the ith solution in the set.
@@ -134,7 +106,7 @@ public class SolutionSet implements Serializable {
             throw new IndexOutOfBoundsException("Index out of Bound " + i);
         }
         return solutionsList_.get(i);
-    } // get
+    }
 
     /**
      * Returns the maximum capacity of the solution set
