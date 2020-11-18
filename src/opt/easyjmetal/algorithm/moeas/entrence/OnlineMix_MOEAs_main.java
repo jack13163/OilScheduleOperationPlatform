@@ -1,6 +1,6 @@
 package opt.easyjmetal.algorithm.moeas.entrence;
 
-import opt.easyjmetal.algorithm.moeas.util.Utils;
+import opt.easyjmetal.algorithm.moeas.util.AlgorithmFactory;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.problem.ProblemFactory;
@@ -41,7 +41,7 @@ public class OnlineMix_MOEAs_main {
             for (int i = 0; i < algorithmNames.size(); i++) {
                 // 定义算法
                 String algorithmName = algorithmNames.get(i);
-                Algorithm algorithm = Utils.getAlgorithm(algorithmName, new Object[]{problem});
+                Algorithm algorithm = AlgorithmFactory.getAlgorithm(algorithmName, new Object[]{problem});
                 // 参数设置
                 algorithm.setInputParameter("AlgorithmName", algorithmName);
                 algorithm.setInputParameter("populationSize", 100);
