@@ -1,6 +1,7 @@
 package opt.easyjmetal.algorithm.moeas.impl;
 
 import opt.easyjmetal.algorithm.cmoeas.util.Utils;
+import opt.easyjmetal.algorithm.moeas.util.PlotObjectives;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.Solution;
@@ -69,6 +70,7 @@ public class MOFA extends Algorithm {
         population_ = new SolutionSet(populationSize_);
         gamma = (Integer) getInputParameter("gamma");
         beta0 = (Integer) getInputParameter("beta0");
+        boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
 
         // 创建数据表，方便后面保存结果
         String tableName = "MOFA_" + runningTime;
@@ -120,6 +122,11 @@ public class MOFA extends Algorithm {
 
             // 更新储备集
             Utils.updateExternalArchive(population_, populationSize_, external_archive_);
+
+            // 显示当前储备集中的解
+            if (isDisplay_) {
+                PlotObjectives.plotSolutions("MOFA", external_archive_);
+            }
         } while (evaluations_ < maxEvaluations_);
 
         SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);

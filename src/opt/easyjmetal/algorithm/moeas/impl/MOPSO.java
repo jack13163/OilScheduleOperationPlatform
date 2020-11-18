@@ -1,5 +1,6 @@
 package opt.easyjmetal.algorithm.moeas.impl;
 
+import opt.easyjmetal.algorithm.moeas.util.PlotObjectives;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.Solution;
@@ -275,6 +276,7 @@ public class MOPSO extends Algorithm {
         // 创建数据表，方便后面保存结果
         String tableName = "MOPSO_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
+        boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
 
         swarm = createInitialSwarm();
         swarm = evaluateSwarm(swarm);
@@ -291,13 +293,18 @@ public class MOPSO extends Algorithm {
             updateLeaders(swarm);
             updateParticlesMemory(swarm);
             updateProgress();
+
+            // 显示当前储备集中的解
+            if (isDisplay_) {
+                PlotObjectives.plotSolutions("MOPSO", epsilonArchive);
+            }
         }
         SolutionSet solutionSet = new SolutionSet(swarmSize);
         for (int i = 0; i < swarm.size(); i++) {
             solutionSet.add(swarm.get(i));
         }
         // 插入到数据库中
-        SqlUtils.InsertSolutionSet(dbName, tableName, getResult());
+        SqlUtils.InsertSolutionSet(dbName, tableName, epsilonArchive);
 
         return solutionSet;
     }

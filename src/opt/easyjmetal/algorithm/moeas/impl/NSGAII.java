@@ -1,6 +1,7 @@
 package opt.easyjmetal.algorithm.moeas.impl;
 
 import opt.easyjmetal.algorithm.cmoeas.util.Utils;
+import opt.easyjmetal.algorithm.moeas.util.PlotObjectives;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.operator.crossover.CrossoverFactory;
 import opt.easyjmetal.operator.mutation.MutationFactory;
@@ -28,6 +29,7 @@ public class NSGAII extends Algorithm {
         int runningTime = (Integer) getInputParameter("runningTime");
         int populationSize_ = (Integer) getInputParameter("populationSize");
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
+        boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
         String dbName = getInputParameter("DBName").toString();
         Operator mutationOperator_ = MutationFactory.getMutationOperator("PolynomialMutation", new HashMap(){{
             put("probability", 1.0 / problem_.getNumberOfVariables());// 变异概率
@@ -137,6 +139,11 @@ public class NSGAII extends Algorithm {
             }
 
             Utils.updateExternalArchive(population_, populationSize_, external_archive_);
+
+            // 显示当前储备集中的解
+            if (isDisplay_) {
+                PlotObjectives.plotSolutions("NSGAII", external_archive_);
+            }
 
             if (gen % 50 == 0) {
                 allPop = allPop.union(population_);

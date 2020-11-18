@@ -291,7 +291,7 @@ public class PlotObjectives {
 
     private static JFrame frame = new JFrame("RESULTS VISUALIZATION");
     static {
-        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(1024, 420);
         frame.setLocationRelativeTo(null);
     }
@@ -299,9 +299,10 @@ public class PlotObjectives {
     /**
      * 绘制种群
      *
+     * @param title
      * @param solutionSet
      */
-    public static void plotSolutions(SolutionSet solutionSet) {
+    public static void plotSolutions(String title, SolutionSet solutionSet) {
         try {
             //横坐标
             String[] categories = new String[]{"Tank Number", "Switch Times", "Pipeline Mix", "Tank Mix", "Energy Consumption"};
@@ -322,7 +323,7 @@ public class PlotObjectives {
                 @SneakyThrows
                 @Override
                 public void run() {
-                    ChartPanel chartPanel = new PlotObjectives().createChart("Population", "Objectives", "Value", categories, series);
+                    ChartPanel chartPanel = new PlotObjectives().createChart(title, "Objectives", "Value", categories, series);
                     frame.getContentPane().add(chartPanel);
                     chartPanel.updateUI();
                 }
@@ -347,7 +348,7 @@ public class PlotObjectives {
         String dbName = problem.getName();
         String tableName = "MOEAD_1";
         SolutionSet solutionSet = SqlUtils.SelectData(dbName, tableName);
-        plotSolutions(solutionSet);
+        plotSolutions("MOEAD", solutionSet);
     }
 
     /**

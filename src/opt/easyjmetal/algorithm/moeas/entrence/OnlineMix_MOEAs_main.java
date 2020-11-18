@@ -12,7 +12,7 @@ import java.util.List;
 public class OnlineMix_MOEAs_main {
 
     public static void main(String[] args) throws Exception {
-        batchRun(Arrays.asList("MOEAD"), 3);
+        batchRun(Arrays.asList("MOEAD", "MOFA", "MOPSO", "NSGAII"), 3);
     }
 
     /**
@@ -38,9 +38,12 @@ public class OnlineMix_MOEAs_main {
 
         // 参数配置
         int popSize = 100;
+        int externalArchiveSize = 100;
         int neighborSize = (int) (0.1 * popSize);
         int maxFES = 10000;
         int updateNumber = 2;
+        double gamma = 1;
+        double beta0 = 1;
         double deDelta = 0.9;
         Boolean isDisplay = true;
         int plotFlag = 0; // 0 for the working population; 1 for the external archive
@@ -55,12 +58,14 @@ public class OnlineMix_MOEAs_main {
                 algorithm.setInputParameter("AlgorithmName", algorithmName);
                 algorithm.setInputParameter("populationSize", popSize);
                 algorithm.setInputParameter("maxEvaluations", maxFES);
-                algorithm.setInputParameter("externalArchiveSize", 100);
+                algorithm.setInputParameter("externalArchiveSize", externalArchiveSize);
                 algorithm.setInputParameter("runningTime", j + 1);
                 algorithm.setInputParameter("weightsDirectory", mainPath + "/resources/MOEAD_Weights/");
                 algorithm.setInputParameter("DBName", problemName);
                 algorithm.setInputParameter("T", neighborSize);
                 algorithm.setInputParameter("delta", deDelta);
+                algorithm.setInputParameter("gamma", gamma);
+                algorithm.setInputParameter("beta0", beta0);
                 algorithm.setInputParameter("nr", updateNumber);
                 algorithm.setInputParameter("isDisplay", isDisplay);
                 algorithm.setInputParameter("plotFlag", plotFlag);

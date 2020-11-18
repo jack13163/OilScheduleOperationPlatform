@@ -429,13 +429,13 @@ public class MOEAD extends Algorithm {
         if (flag == 0) {
             // plot the population
             if (population_ != null && population_.size() > 0) {
-                PlotObjectives.plotSolutions(population_);
+                PlotObjectives.plotSolutions("MOEAD", population_);
             }
         }
         if (flag == 1) {
             // plot the population
             if (external_archive_ != null && external_archive_.size() > 0) {
-                PlotObjectives.plotSolutions(external_archive_);
+                PlotObjectives.plotSolutions("MOEAD", external_archive_);
             }
         }
     }
