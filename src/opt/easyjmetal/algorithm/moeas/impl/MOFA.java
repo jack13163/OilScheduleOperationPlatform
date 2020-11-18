@@ -64,12 +64,11 @@ public class MOFA extends Algorithm {
         maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         populationSize_ = (Integer) getInputParameter("populationSize");
         externalArchiveSize = (Integer) getInputParameter("externalArchiveSize");
-        dataDirectory_ = getInputParameter("dataDirectory").toString();
         String dbName = getInputParameter("DBName").toString();
         int runningTime = (Integer) getInputParameter("runningTime");
         population_ = new SolutionSet(populationSize_);
-        gamma = (Integer) getInputParameter("gamma");
-        beta0 = (Integer) getInputParameter("beta0");
+        gamma = Double.parseDouble(getInputParameter("gamma").toString());
+        beta0 = Double.parseDouble(getInputParameter("beta0").toString());
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
 
         // 创建数据表，方便后面保存结果
