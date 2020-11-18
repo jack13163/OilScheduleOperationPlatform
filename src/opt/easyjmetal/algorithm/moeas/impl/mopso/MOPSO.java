@@ -16,7 +16,7 @@ public class MOPSO extends Algorithm {
 
     private int swarmSize = 100;
     private int archiveSize = 100;
-    private int maxIterations = 25000;
+    private int maxIterations = 100;
 
     public MOPSO(Problem problem) {
         super(problem);
