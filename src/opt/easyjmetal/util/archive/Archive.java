@@ -20,7 +20,10 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package opt.easyjmetal.util.archive;
 
+import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
+
+import java.util.List;
 
 /**
  * This class represents the super class for archive objects.
@@ -30,4 +33,10 @@ public class Archive extends SolutionSet {
   public Archive (int size) {
     super(size);
   }
-} // Archive
+
+  public Archive() {}
+
+  public List<Solution> getSolutionList() {
+    return solutionsList_;
+  }
+}

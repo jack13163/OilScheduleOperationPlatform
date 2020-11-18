@@ -502,7 +502,7 @@ public class DMOPSO implements Algorithm<List<DoubleSolution>> {
 
     @Override
     public String getDescription() {
-        return "MOPSO with decomposition";
+        return "MOPSOTemplate with decomposition";
     }
 
     @Override

@@ -25,7 +25,7 @@ import opt.easyjmetal.qualityindicator.util.MetricsUtil;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.comparators.CrowdingDistanceComparator;
 import opt.easyjmetal.util.comparators.DominanceComparator;
-import opt.easyjmetal.util.comparators.EqualSolutions;
+import opt.easyjmetal.util.comparators.EqualSolutionsComparator;
 
 import java.util.Comparator;
 
@@ -76,7 +76,7 @@ public class HypervolumeArchive extends Archive {
     maxSize_          = maxSize;
     objectives_       = numberOfObjectives;        
     dominance_        = new DominanceComparator();
-    equals_           = new EqualSolutions();
+    equals_           = new EqualSolutionsComparator();
     distance_         = new Distance();
     utils_            = new MetricsUtil() ;
     offset_           = 100 ;

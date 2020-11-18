@@ -12,7 +12,7 @@ import java.util.List;
 public class OnlineMix_MOEAs_main {
 
     public static void main(String[] args) throws Exception {
-        batchRun(Arrays.asList("NSGAII"), 10);
+        batchRun(Arrays.asList("MOPSO"), 3);
     }
 
     /**
@@ -34,6 +34,7 @@ public class OnlineMix_MOEAs_main {
             deleted = FileUtils.deleteFile(resultFile);
             Thread.sleep(500);
         } while (!deleted);
+        System.out.println("Initialization finished successfully...");
 
         // 独立运行若干次
         for (int j = 0; j < runtime; j++) {

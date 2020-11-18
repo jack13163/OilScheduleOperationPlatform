@@ -1,4 +1,4 @@
-//  EqualSolutions.java
+//  EqualSolutionsComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -31,7 +31,7 @@ import java.util.Comparator;
  * equal or not. A dominance test is applied to decide about what solution
  * is the best.
  */
-public class EqualSolutions implements Comparator{        
+public class EqualSolutionsComparator implements Comparator{
    
   /**
    * Compares two solutions.
@@ -92,5 +92,5 @@ public class EqualSolutions implements Comparator{
     }
       return 2;
   } // compare
-} // EqualSolutions
+} // EqualSolutionsComparator
 

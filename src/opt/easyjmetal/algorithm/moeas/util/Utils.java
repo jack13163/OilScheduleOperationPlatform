@@ -225,6 +225,8 @@ public class Utils {
             base += "impl.";
         } else if (name.equalsIgnoreCase("MOFA")) {
             base += "impl.";
+        } else if (name.equalsIgnoreCase("MOPSO")) {
+            base += "impl.mopso.";
         }
 
         try {

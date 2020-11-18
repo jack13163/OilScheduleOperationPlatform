@@ -24,7 +24,7 @@ package opt.easyjmetal.util.archive;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.Spea2Fitness;
 import opt.easyjmetal.util.comparators.DominanceComparator;
-import opt.easyjmetal.util.comparators.EqualSolutions;
+import opt.easyjmetal.util.comparators.EqualSolutionsComparator;
 import opt.easyjmetal.util.comparators.FitnessComparator;
 
 import java.util.Comparator;
@@ -64,7 +64,7 @@ import java.util.Comparator;
     super(maxSize);
     maxSize_           = maxSize                   ;        
     dominance_         = new DominanceComparator() ;
-    equals_            = new EqualSolutions()      ;
+    equals_            = new EqualSolutionsComparator()      ;
     fitnessComparator_ = new FitnessComparator();
   } // StrengthRawFitnessArchive
     

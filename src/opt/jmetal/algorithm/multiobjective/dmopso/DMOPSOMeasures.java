@@ -100,7 +100,7 @@ public class DMOPSOMeasures extends DMOPSO implements Measurable {
 
     @Override
     public String getDescription() {
-        return "MOPSO with decomposition. Version using measures";
+        return "MOPSOTemplate with decomposition. Version using measures";
     }
 
     @Override

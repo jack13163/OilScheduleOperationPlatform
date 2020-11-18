@@ -26,7 +26,7 @@ import opt.easyjmetal.qualityindicator.R2;
 import opt.easyjmetal.util.PseudoRandom;
 import opt.easyjmetal.util.comparators.CrowdingDistanceComparator;
 import opt.easyjmetal.util.comparators.DominanceComparator;
-import opt.easyjmetal.util.comparators.EqualSolutions;
+import opt.easyjmetal.util.comparators.EqualSolutionsComparator;
 
 import java.util.Comparator;
 
@@ -72,7 +72,7 @@ public class R2Archive extends Archive {
     maxSize_          = maxSize;
     objectives_       = 2;        // hardcoded
     dominance_        = new DominanceComparator();
-    equals_           = new EqualSolutions();
+    equals_           = new EqualSolutionsComparator();
     crowdingDistance_ = new CrowdingDistanceComparator();
     r2Indicator_       = new R2();
 
@@ -90,7 +90,7 @@ public class R2Archive extends Archive {
     maxSize_          = maxSize;
     objectives_       = numberOfObjectives;        
     dominance_        = new DominanceComparator();
-    equals_           = new EqualSolutions();
+    equals_           = new EqualSolutionsComparator();
     crowdingDistance_ = new CrowdingDistanceComparator();
     r2Indicator_      = new R2(numberOfObjectives,file);
 

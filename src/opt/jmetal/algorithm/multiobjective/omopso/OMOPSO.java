@@ -1,9 +1,5 @@
 package opt.jmetal.algorithm.multiobjective.omopso;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import opt.jmetal.algorithm.impl.AbstractParticleSwarmOptimization;
 import opt.jmetal.operator.impl.mutation.NonUniformMutation;
 import opt.jmetal.operator.impl.mutation.UniformMutation;
@@ -16,6 +12,10 @@ import opt.jmetal.util.comparator.DominanceComparator;
 import opt.jmetal.util.evaluator.SolutionListEvaluator;
 import opt.jmetal.util.pseudorandom.JMetalRandom;
 import opt.jmetal.util.solutionattribute.impl.CrowdingDistance;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Class implementing the OMOPSO algorithm
@@ -262,7 +262,7 @@ public class OMOPSO extends AbstractParticleSwarmOptimization<DoubleSolution, Li
 
     @Override
     public String getDescription() {
-        return "Optimized MOPSO";
+        return "Optimized MOPSOTemplate";
     }
 
     @Override
@@ -274,7 +274,5 @@ public class OMOPSO extends AbstractParticleSwarmOptimization<DoubleSolution, Li
     @Override
     public void clearSolutions() {
         // TODO Auto-generated method stub
-
     }
-
 }

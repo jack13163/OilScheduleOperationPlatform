@@ -24,7 +24,7 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.archive.Archive;
 import opt.easyjmetal.util.comparators.CrowdingComparator;
 import opt.easyjmetal.util.comparators.DominanceComparator;
-import opt.easyjmetal.util.comparators.EqualSolutions;
+import opt.easyjmetal.util.comparators.EqualSolutionsComparator;
 
 import java.util.Comparator;
 
@@ -68,7 +68,7 @@ public class FastHypervolumeArchive extends Archive {
     maxSize_          = maxSize;
     objectives_       = numberOfObjectives;        
     dominance_        = new DominanceComparator();
-    equals_           = new EqualSolutions();
+    equals_           = new EqualSolutionsComparator();
     referencePoint_   = new Solution(objectives_) ;
     for (int i = 0; i < objectives_; i++)
       referencePoint_.setObjective(i, Double.MAX_VALUE) ;
