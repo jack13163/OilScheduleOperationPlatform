@@ -1,6 +1,6 @@
 package opt.easyjmetal.algorithm.moeas.entrence;
 
-import opt.easyjmetal.algorithm.moeas.util.AlgorithmFactory;
+import opt.easyjmetal.algorithm.moeas.AlgorithmFactory;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.problem.ProblemFactory;
@@ -25,7 +25,7 @@ public class OnlineMix_MOEAs_main {
     private static void batchRun(List<String> algorithmNames, int runtime) throws Exception {
         String problemName = "OnlineMixOIL";
         String mainPath = System.getProperty("user.dir");
-        Problem problem = (new ProblemFactory()).getProblem(problemName, new Object[]{"Real"});
+        Problem problem = ProblemFactory.getProblem(problemName, new Object[]{"Real"});
 
         // 先清楚上次运行的结果
         String resultFile = mainPath + "/" + problem.getName() + ".db";

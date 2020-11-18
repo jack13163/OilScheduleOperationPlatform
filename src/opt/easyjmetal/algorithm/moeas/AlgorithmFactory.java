@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.moeas.util;
+package opt.easyjmetal.algorithm.moeas;
 
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.util.JMException;

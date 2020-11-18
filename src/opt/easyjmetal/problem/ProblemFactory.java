@@ -27,9 +27,6 @@ import opt.easyjmetal.util.JMException;
 
 import java.lang.reflect.Constructor;
 
-/**
- * This class represents a factory for problems
- */
 public class ProblemFactory {
     /**
      * Creates an object representing a problem
@@ -39,10 +36,7 @@ public class ProblemFactory {
      * @return The object representing the problem
      * @throws JMException
      */
-    public Problem getProblem(String name, Object[] params) throws JMException {
-        // Params are the arguments
-        // The number of argument must correspond with the problem constructor params
-
+    public static Problem getProblem(String name, Object[] params) throws JMException {
         String base = "opt.easyjmetal.problem.";
         if (name.substring(0, name.length() - 1).equalsIgnoreCase("LIRCMOP")) {
             base += "LIRCMOP.";
@@ -60,21 +54,18 @@ public class ProblemFactory {
             Class problemClass = Class.forName(base + name);
             Constructor[] constructors = problemClass.getConstructors();
             int i = 0;
-            //find the constructor
-            while ((i < constructors.length) &&
-                    (constructors[i].getParameterTypes().length != params.length)) {
+            // 查找构造函数
+            while ((i < constructors.length) && (constructors[i].getParameterTypes().length != params.length)) {
                 i++;
             }
-            // constructors[i] is the selected one constructor
             Problem problem = (Problem) constructors[i].newInstance(params);
             return problem;
-        }// try
-        catch (Exception e) {
+        } catch (Exception e) {
             Configuration.logger_.severe("ProblemFactory.getProblem: " +
                     "Problem '" + name + "' does not exist. " +
                     "Please, check the problem names in opt.easyjmetal.problem");
             e.printStackTrace();
             throw new JMException("Exception in " + name + ".getProblem()");
-        } // catch
+        }
     }
 }

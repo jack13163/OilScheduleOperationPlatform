@@ -273,7 +273,7 @@ public class MOPSO extends Algorithm {
         String dbName = getInputParameter("DBName").toString();
         int runningTime = (Integer) getInputParameter("runningTime");
         // 创建数据表，方便后面保存结果
-        String tableName = "MOFA_" + runningTime;
+        String tableName = "MOPSO_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 
         swarm = createInitialSwarm();
