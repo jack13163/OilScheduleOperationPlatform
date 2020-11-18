@@ -23,6 +23,8 @@ public class AlgorithmFactory {
             base += "impl.";
         } else if (name.equalsIgnoreCase("MOPSO")) {
             base += "impl.";
+        } else if (name.equalsIgnoreCase("MOEAD")) {
+            base += "impl.";
         }
 
         try {

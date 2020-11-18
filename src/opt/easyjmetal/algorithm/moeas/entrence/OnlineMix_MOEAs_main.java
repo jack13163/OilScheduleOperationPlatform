@@ -12,7 +12,7 @@ import java.util.List;
 public class OnlineMix_MOEAs_main {
 
     public static void main(String[] args) throws Exception {
-        batchRun(Arrays.asList("MOPSO"), 3);
+        batchRun(Arrays.asList("MOEAD"), 3);
     }
 
     /**
@@ -36,6 +36,15 @@ public class OnlineMix_MOEAs_main {
         } while (!deleted);
         System.out.println("Initialization finished successfully...");
 
+        // 参数配置
+        int popSize = 100;
+        int neighborSize = (int) (0.1 * popSize);
+        int maxFES = 10000;
+        int updateNumber = 2;
+        double deDelta = 0.9;
+        Boolean isDisplay = true;
+        int plotFlag = 0; // 0 for the working population; 1 for the external archive
+
         // 独立运行若干次
         for (int j = 0; j < runtime; j++) {
             for (int i = 0; i < algorithmNames.size(); i++) {
@@ -44,14 +53,17 @@ public class OnlineMix_MOEAs_main {
                 Algorithm algorithm = AlgorithmFactory.getAlgorithm(algorithmName, new Object[]{problem});
                 // 参数设置
                 algorithm.setInputParameter("AlgorithmName", algorithmName);
-                algorithm.setInputParameter("populationSize", 100);
-                algorithm.setInputParameter("maxEvaluations", 10000);
+                algorithm.setInputParameter("populationSize", popSize);
+                algorithm.setInputParameter("maxEvaluations", maxFES);
                 algorithm.setInputParameter("externalArchiveSize", 100);
                 algorithm.setInputParameter("runningTime", j + 1);
-                algorithm.setInputParameter("dataDirectory", mainPath + "/pf_data/" + problem.getName() + "/");
+                algorithm.setInputParameter("weightsDirectory", mainPath + "/resources/MOEAD_Weights/");
                 algorithm.setInputParameter("DBName", problemName);
-                algorithm.setInputParameter("gamma", 1);
-                algorithm.setInputParameter("beta0", 1);
+                algorithm.setInputParameter("T", neighborSize);
+                algorithm.setInputParameter("delta", deDelta);
+                algorithm.setInputParameter("nr", updateNumber);
+                algorithm.setInputParameter("isDisplay", isDisplay);
+                algorithm.setInputParameter("plotFlag", plotFlag);
 
                 System.out.println("==================================================================");
                 // 运行算法

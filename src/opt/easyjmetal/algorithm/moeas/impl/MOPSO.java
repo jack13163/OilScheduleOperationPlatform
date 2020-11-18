@@ -297,7 +297,7 @@ public class MOPSO extends Algorithm {
             solutionSet.add(swarm.get(i));
         }
         // 插入到数据库中
-        SqlUtils.InsertSolutionSet(dbName, tableName, solutionSet);
+        SqlUtils.InsertSolutionSet(dbName, tableName, getResult());
 
         return solutionSet;
     }

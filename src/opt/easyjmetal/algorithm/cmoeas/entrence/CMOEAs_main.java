@@ -79,8 +79,6 @@ public class CMOEAs_main {
         Operator selection;            // Selection operator
         HashMap parameters;           // Operator parameters
 
-/////////////////////////////////////////// parameter setting //////////////////////////////////
-
         int popSize = 100;
         int neighborSize = (int) (0.1 * popSize);
         int maxFES = 50000;
@@ -88,14 +86,10 @@ public class CMOEAs_main {
         double deDelta = 0.9;
         double DeCrossRate = 1.0;
         double DeFactor = 0.5;
-
         double tao = 0.1;
         double alpha = 0.9;
         double threshold = 1e-3;
-
-        // IDEA parameter
         float infeasibleRatio = 0.1f;
-
         String AlgorithmName = algorithmName;
 
         String mainPath = System.getProperty("user.dir");
@@ -112,9 +106,6 @@ public class CMOEAs_main {
 
         Object[] params = {"Real"};
         String[] problemStrings = {"EDFPS", "EDFTSS"};
-
-//////////////////////////////////////// End parameter setting //////////////////////////////////
-
 
         for (int i = 0; i < problemStrings.length; i++) {
             problem = (new ProblemFactory()).getProblem(problemStrings[i], params);
