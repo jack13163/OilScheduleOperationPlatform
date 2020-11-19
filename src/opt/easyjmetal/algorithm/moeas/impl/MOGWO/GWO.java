@@ -78,11 +78,10 @@ public class GWO {
                 GGreyWolves.get(i).setPosition(bound_check(GGreyWolves.get(i).getPosition(), low, up));
 
                 GGreyWolves.get(i).setFit(UF1.fitness(GGreyWolves.get(i).getPosition()));
-
             }
             GGreyWolves = DetermineDomination(GGreyWolves);
 
-            //本次更新产生的非支配解
+            // 本次更新产生的非支配解
             List<Wolf> non_dominated_wolves = GetNonDominatedParticles(GGreyWolves);
 
             Archive.addAll(non_dominated_wolves);
