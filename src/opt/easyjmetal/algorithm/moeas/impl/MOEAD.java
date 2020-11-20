@@ -40,6 +40,7 @@ public class MOEAD extends Algorithm {
         functionType_ = "_TCHE2";
     }
 
+    @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
         int runningTime;
         evaluations_ = 0;
@@ -57,11 +58,11 @@ public class MOEAD extends Algorithm {
         neighborhood_ = new int[populationSize_][T_];
         z_ = new double[problem_.getNumberOfObjectives()];
         lambda_ = new double[populationSize_][problem_.getNumberOfObjectives()];
-        Operator mutation_ = MutationFactory.getMutationOperator("PolynomialMutation", new HashMap(){{
+        Operator mutation_ = MutationFactory.getMutationOperator("PolynomialMutation", new HashMap() {{
             put("probability", 1.0 / problem_.getNumberOfVariables());// 变异概率
             put("distributionIndex", 20.0);
         }});
-        Operator crossover_ = CrossoverFactory.getCrossoverOperator("SBXCrossover", new HashMap<String, Double>(){{
+        Operator crossover_ = CrossoverFactory.getCrossoverOperator("SBXCrossover", new HashMap<String, Double>() {{
             put("probability", 1.0);
             put("distributionIndex", 20.0);
         }});
@@ -183,8 +184,7 @@ public class MOEAD extends Algorithm {
                 lambda_[n][0] = a;
                 lambda_[n][1] = 1 - a;
             }
-        }
-        else {
+        } else {
             String dataFileName;
             dataFileName = "W" + problem_.getNumberOfObjectives() + "D_" +
                     populationSize_ + ".dat";
@@ -248,6 +248,7 @@ public class MOEAD extends Algorithm {
 
     /**
      * 初始化理想点
+     *
      * @throws JMException
      * @throws ClassNotFoundException
      */

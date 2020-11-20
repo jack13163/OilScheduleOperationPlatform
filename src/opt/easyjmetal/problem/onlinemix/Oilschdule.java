@@ -515,12 +515,13 @@ public class Oilschdule {
 
     /**
      * 试调度
+     *
      * @param backtrace
      * @param TK1
      * @param TK2
      * @param DS
-     * @param pipeSpeed  管道转运速率
-     * @param reverse    管道转运原油包的顺序
+     * @param pipeSpeed 管道转运速率
+     * @param reverse   管道转运原油包的顺序
      * @return
      */
     public static BackTrace tryschedule(BackTrace backtrace, int TK1, int TK2, int DS, double pipeSpeed, boolean reverse) {
@@ -586,7 +587,7 @@ public class Oilschdule {
             // 判断是否需要调换两次转运原油的顺序
             double[] T = new double[types];
             T[0] = Double.parseDouble(oilTypeVolumeRates.get(0).getType().substring(1));
-            if(types > 1) {
+            if (types > 1) {
                 T[1] = Double.parseDouble(oilTypeVolumeRates.get(1).getType().substring(1));
                 if (reverse) {
                     // 交换原油体积

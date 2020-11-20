@@ -7,19 +7,16 @@ import java.util.stream.Collectors;
 
 public class TestFun {
     public static void sort(double[][] ob, int[] order) {
-        Arrays.sort(ob, new Comparator<Object>() {
-            public int compare(Object o1, Object o2) {    //降序排列
-                double[] one = (double[]) o1;
-                double[] two = (double[]) o2;
-                for (int i = 0; i < order.length; i++) {
-                    int k = order[i];
-                    if (one[k] > two[k]) return 1; //返回值大于0，将前一个目标值和后一个目标值交换
-                    else if (one[k] < two[k]) return -1;
-                    else continue;
-                }
-                return 0;
+        Arrays.sort(ob, (o1, o2) -> {    //降序排列
+            double[] one = (double[]) o1;
+            double[] two = (double[]) o2;
+            for (int i = 0; i < order.length; i++) {
+                int k = order[i];
+                if (one[k] > two[k]) return 1; //返回值大于0，将前一个目标值和后一个目标值交换
+                else if (one[k] < two[k]) return -1;
+                else continue;
             }
-
+            return 0;
         });
     }
 
@@ -29,7 +26,9 @@ public class TestFun {
         if (index == 1000) {
             index = 0;
         }
-        if (a != 0) a = sequence[index];  //ceil向无穷大方向取整,将随机产生的数转换为混沌序列
+        if (a != 0) {
+            a = sequence[index];  //ceil向无穷大方向取整,将随机产生的数转换为混沌序列
+        }
         if (a == 1) {
             return len;
         } else {
@@ -57,11 +56,24 @@ public class TestFun {
         return max;
     }
 
-    public static double gNum(List<List<Double>> a) { //计算供油罐个数
-        List<Double> TKset = new ArrayList<Double>();
+    /**
+     * 计算供油罐个数
+     *
+     * @param a 调度计划
+     * @return
+     */
+    public static double gNum(List<List<Double>> a) {
+        // ODF格式：蒸馏塔号 | 油罐号1 | 开始供油时间 | 结束供油时间 | 原油类型 | 油罐号2
+        // ODT格式：蒸馏塔号 | 油罐号  | 开始供油时间 | 结束供油时间 | 原油类型 | 转运速度
+        List<Double> TKset = new ArrayList<>();
         for (int i = 0; i < a.size(); i++) {
-            if (a.get(i).get(1) != 0) {
+            // 根据ODF进行计算
+            if (a.get(i).get(0) <= 3) {
                 TKset.add(a.get(i).get(1));
+                // 判断是否还需要再使用一个供油罐
+                if (a.get(i).size() > 5) {
+                    TKset.add(a.get(i).get(5));
+                }
             }
         }
         HashSet h = new HashSet(TKset);
@@ -81,7 +93,7 @@ public class TestFun {
             }
         }
 
-        // 后期转运的原油类型      转运plan格式：蒸馏塔号 | 油罐号 | 开始供油时间 | 结束供油时间 | 原油类型
+        // 后期转运的原油类型      ODT格式：蒸馏塔号 | 油罐号 | 开始供油时间 | 结束供油时间 | 原油类型
         List<List<Double>> lists = a.stream()
                 .filter(e -> e.get(0) == 4 && e.get(4) != 0)        // 过滤出转运记录，排除停运
                 .sorted((e1, e2) -> (int) (e1.get(2) - e2.get(2)))  // 按照转运开始时间排序
@@ -168,7 +180,7 @@ public class TestFun {
             }
         }
 
-        // 后期转运的原油类型      转运plan格式：蒸馏塔号 | 油罐号 | 开始供油时间 | 结束供油时间 | 原油类型
+        // 后期转运的原油类型      ODT格式：蒸馏塔号 | 油罐号 | 开始供油时间 | 结束供油时间 | 原油类型
         List<List<Double>> lists = a.stream()
                 .filter(e -> e.get(0) == 4 && e.get(4) != 0)        // 过滤出转运记录，排除停运
                 .sorted((e1, e2) -> (int) (e1.get(2) - e2.get(2)))  // 按照转运开始时间排序
@@ -236,6 +248,7 @@ public class TestFun {
 
     /**
      * 获取某一个元素所在数组的位置
+     *
      * @param arr
      * @param value
      * @return
