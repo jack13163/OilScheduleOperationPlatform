@@ -54,6 +54,7 @@ public class CanvasGante extends Canvas {
      *
      * @param g
      */
+    @Override
     public void update(Graphics g) {
         super.update(g);
         drawGante(g);

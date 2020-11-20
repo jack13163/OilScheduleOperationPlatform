@@ -69,7 +69,7 @@ public class Oilschdule {
 
     static int RT = 6;                                              // 驻留时间
     private static double[] DSFR = new double[]{250, 279, 304};     // 蒸馏塔炼油速率
-    private static double[] PIPEFR = new double[]{500, 700, 840};   // 匀速
+    private static double[] PIPEFR = new double[]{600, 840, 1000};  // 匀速
 
     public static List<List<Double>> fat(double[][] pop, boolean showGante) {
         _showGante = showGante;

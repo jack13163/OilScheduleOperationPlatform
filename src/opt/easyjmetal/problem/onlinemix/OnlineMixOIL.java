@@ -14,7 +14,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -47,11 +47,11 @@ public class OnlineMixOIL extends Problem {
             upperLimit_[i] = 1.0;
         }
 
-        if (solutionType.compareTo("BinaryReal") == 0)
+        if (solutionType.compareTo("BinaryReal") == 0) {
             solutionType_ = new BinaryRealSolutionType(this);
-        else if (solutionType.compareTo("Real") == 0)
+        } else if (solutionType.compareTo("Real") == 0) {
             solutionType_ = new RealSolutionType(this);
-        else {
+        } else {
             System.out.println("Error: solution type " + solutionType + " invalid");
             System.exit(-1);
         }
@@ -63,6 +63,7 @@ public class OnlineMixOIL extends Problem {
      * @param solution 个体【染色体/解】
      * @throws JMException
      */
+    @Override
     public void evaluate(Solution solution) throws JMException {
         // 解码前的准备操作
         XReal vars = new XReal(solution);
