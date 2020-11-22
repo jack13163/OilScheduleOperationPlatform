@@ -69,7 +69,7 @@ public class Oilschdule {
 
     static int RT = 6;                                              // 驻留时间
     private static double[] DSFR = new double[]{250, 279, 304};     // 蒸馏塔炼油速率
-    private static double[] PIPEFR = new double[]{600, 840, 1000};  // 匀速
+    private static double[] PIPEFR = new double[]{550, 840, 1000};  // 匀速
 
     public static List<List<Double>> fat(double[][] pop, boolean showGante) {
         _showGante = showGante;
@@ -97,7 +97,6 @@ public class Oilschdule {
         for (int p = 0; p < popsize; p++) { // 解遍历
             double[] x = pop[p];
             List<List<Double>> schedulePlan = new ArrayList<>();
-            BackTrace back = null;
 
             // 炼油计划
             Map<String, Queue<KeyValue>> feedingPackages = new HashMap<>();
@@ -198,8 +197,7 @@ public class Oilschdule {
             }
 
             //*******************回溯部分开始*********************//
-            back = new BackTrace(x, 0, 0.0, DSFET, feedingPackages, TKS, schedulePlan);
-            back.setFlag(false);
+            BackTrace back = new BackTrace(x, 0, 0.0, DSFET, feedingPackages, TKS, schedulePlan);
             back = backSchedule(back);//每次返回一个可行调度解
 
             double f1, f2, f3, f4, f5;
@@ -363,13 +361,9 @@ public class Oilschdule {
      * @return 调度之后的系统状态
      */
     public static BackTrace backSchedule(BackTrace backTrace) {
-
-        BackTrace back = CloneUtil.clone(backTrace);
-        back.setFlag(false);
-
         // 绘制甘特图
         if (_showGante) {
-            PlotUtils.plotSchedule2(back.getSchedulePlan());
+            PlotUtils.plotSchedule2(backTrace.getSchedulePlan());
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -377,30 +371,26 @@ public class Oilschdule {
             }
         }
 
-        List<Integer> ET = getET(back);
-        List<Integer> UD = getUD(back);
-        int[] footprint = new int[UD.size() + 1];
-        // 没有可用的供油罐，当前状态为不可行状态
+        List<Integer> ET = getET(backTrace);
+        List<Integer> UD = getUD(backTrace);
+        // 没有可用的供油罐，只能停运
         if (ET.isEmpty()) {
-            for (int i = 0; i < footprint.length; i++) {
-                footprint[i] = 1;
-            }
+            backTrace.setFootprint(new int[1]);
+        } else {
+            backTrace.setFootprint(new int[UD.size() + 1]);
         }
 
-        // 判断是否完成炼油计划
-        if (isFinished(back)) {
-            back.setFlag(true);
-        } else if (back.getStep() >= 25) {
-            back.setFlag(false);
-        } else {
-            while (TestFun.all(footprint) == 0 && !back.getFlag() && back.getStep() < 25) {
+        if (!backTrace.getFlag() && backTrace.getStep() < 25) {
+            // 判断是否尝试过所有的策略
+            while (!backTrace.allTested()) {
                 boolean ff = false;
-
+                BackTrace back = CloneUtil.clone(backTrace);
                 ET = getET(back);
                 UD = getUD(back);
-                int DS_NO = TestFun.getInt(back.getX()[5 * back.getStep() + 2], UD.size());// 返回0-UD.size()
+                int DS_NO = TestFun.getInt(back.getX()[5 * back.getStep() + 2], UD.size());
 
-                if (footprint[0] == 0 && (DS_NO == UD.size() || ET.size() < getNumberOfTanksNeeded(back, UD.get(DS_NO)))) {
+                if (back.notStoped()
+                        && (DS_NO == UD.size() || ET.size() < getNumberOfTanksNeeded(back, UD.get(DS_NO)))) {
                     // 停运情况：供油罐的个数不够所需要的，一个或两个【停运：1.为了等待空闲供油罐的释放；2.不得不停运】
                     double pipeStoptime = getPipeStopTime(back);
                     // 计算停运截至时间，即能够停运的最晚时间
@@ -414,18 +404,15 @@ public class Oilschdule {
                     tmp -= RT;
                     // 若能够停运，则停运
                     if (pipeStoptime > 0 && pipeStoptime < tmp) {
-                        ff = true;
-                        // 进行停运
-                        back = stop(back, pipeStoptime);
-                        footprint[0] = 1;
+                        ff = stop(back, pipeStoptime);
                     }
-                } else if (ET.size() >= 1) {
+                } else if (ET.size() >= 1 && DS_NO < UD.size()) {
                     // 转运情况：供油罐的个数大于等于所需要的，一个或两个以上
-                    int TK1 = ET.get(TestFun.getInt(back.getX()[5 * back.getStep()], ET.size() - 1));// 返回0 ~ ET.size - 1的数
-                    int TK2 = ET.get(TestFun.getInt(back.getX()[5 * back.getStep() + 1], ET.size() - 1));// 返回0 ~ ET.size - 1的数
-                    int DS = UD.get(TestFun.getInt(back.getX()[5 * back.getStep() + 2], UD.size() - 1));// 需要确保DS_NO小于UD.size()
-                    double PIPESPEED = PIPEFR[TestFun.getInt(back.getX()[5 * back.getStep() + 3], PIPEFR.length - 1)];// 返回0 ~ PIPEFR.length - 1的数
-                    boolean REVERSE = TestFun.getInt(back.getX()[5 * back.getStep() + 4], 1) == 1 ? true : false;// 返回0 ~ 1的数
+                    int TK1 = ET.get(TestFun.getInt(back.getX()[5 * back.getStep()], ET.size() - 1));
+                    int TK2 = ET.get(TestFun.getInt(back.getX()[5 * back.getStep() + 1], ET.size() - 1));
+                    int DS = UD.get(DS_NO);
+                    double PIPESPEED = PIPEFR[TestFun.getInt(back.getX()[5 * back.getStep() + 3], PIPEFR.length - 1)];
+                    boolean REVERSE = TestFun.getInt(back.getX()[5 * back.getStep() + 4], 1) == 1 ? true : false;
 
                     // 判断油罐是否足够，每次指派需要一个或者两个
                     int numberOfTanksNeeded = getNumberOfTanksNeeded(back, DS);
@@ -435,45 +422,72 @@ public class Oilschdule {
                             // 确保两个供油罐不相等
                             while (TK1 == TK2) {
                                 back.getX()[5 * back.getStep() + 1] = Math.random();
-                                TK2 = ET.get(TestFun.getInt(back.getX()[5 * back.getStep() + 1], ET.size() - 1));// 返回0 ~ ET.size - 1的数
+                                TK2 = ET.get(TestFun.getInt(back.getX()[5 * back.getStep() + 1], ET.size() - 1));
                             }
                         }
                         // 试调度，需要选择两个塔
-                        back = tryschedule(back, TK1, TK2, DS, PIPESPEED, REVERSE);
-                        if (back.getFlag() && (schedulable(back))) {
+                        boolean success = tryschedule(back, TK1, TK2, DS, PIPESPEED, REVERSE);
+                        // 判断试调度是否成功
+                        if (success && schedulable(back)) {
                             ff = true;
                         }
                     }
                 }
 
+                // *********** 判断调度是否成功 ************
+                boolean badRetrunFlag = false;
                 if (ff) {
                     back.setStep(back.getStep() + 1);
-                    back = backSchedule(back);
-                } else {
-                    back = CloneUtil.clone(backTrace); // 数据回滚
-                    UD = getUD(back);
-                    back.setFlag(false);
-
-                    //*************** 更改蒸馏塔 *****************
-                    for (int i = 0; i < footprint.length; i++) {
-                        if (footprint[i] == 0) {
-                            // 第一个为停运，后面依次为蒸馏塔1，蒸馏塔2，...
-                            while (TestFun.getInt(back.getX()[5 * back.getStep() + 2], UD.size()) != i) {
-                                back.getX()[5 * back.getStep() + 2] = Math.random();
+                    if (!back.getFlag()) {
+                        BackTrace newBackTrace = backSchedule(back);
+                        // 判断调度是否结束
+                        if (newBackTrace.isFlag()) {
+                            // 绘制甘特图
+                            if (_showGante && newBackTrace.getStep() == back.getStep() + 1) {
+                                PlotUtils.plotSchedule2(newBackTrace.getSchedulePlan());
+                                try {
+                                    Thread.sleep(10);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                            // 转运速度调整为最大
-                            while (TestFun.getInt(back.getX()[5 * back.getStep() + 3], PIPEFR.length - 1) != PIPEFR.length - 1) {
-                                back.getX()[5 * back.getStep() + 3] = Math.random();
-                            }
+                            return newBackTrace;
+                        }
+                        // 判断回溯调度是否成功
+                        if (back.allTested()) {
+                            badRetrunFlag = true;
+                        }
+                    } else {
+                        return back;
+                    }
+                }
 
-                            footprint[i] = 1;
+                // *********** 调度失败，更改蒸策略 ************
+                if (!ff || badRetrunFlag) {
+                    for (int i = backTrace.getFootprint().length - 1; i >= 0; i--) {
+                        if (backTrace.getFootprint()[i] == 0) {
+                            int speed_ind = TestFun.getInt(backTrace.getX()[5 * backTrace.getStep() + 3], PIPEFR.length - 1);
+                            if (speed_ind != PIPEFR.length - 1) {
+                                // 转运速度调整为最大，接下来将再次尝试使用最大速度转运是否成功
+                                while (speed_ind != PIPEFR.length - 1) {
+                                    backTrace.getX()[5 * backTrace.getStep() + 3] = Math.random();
+                                    speed_ind = TestFun.getInt(backTrace.getX()[5 * backTrace.getStep() + 3], PIPEFR.length - 1);
+                                }
+                            } else {
+                                // 转运速度已经是最大速度了，标记当前步骤不可行，并更改编码
+                                backTrace.mark(DS_NO);
+                                while (DS_NO != i) {
+                                    backTrace.getX()[5 * backTrace.getStep() + 2] = Math.random();
+                                    DS_NO = TestFun.getInt(backTrace.getX()[5 * backTrace.getStep() + 2], UD.size());
+                                }
+                            }
                             break;
                         }
                     }
                 }
             }
         }
-        return back;
+        return backTrace;
     }
 
     /**
@@ -487,7 +501,7 @@ public class Oilschdule {
 
         // 按照油罐进行分组
         Map<Double, List<List<Double>>> collect = backTrace.getSchedulePlan().stream()
-                .filter(e -> e.get(0) <= 3 && e.get(3) > backTrace.getTime()) // 过滤
+                .filter(e -> e.get(0) <= 3 && e.get(3) > backTrace.getTime())
                 .collect(Collectors.groupingBy(e -> e.get(1)));
         for (Double d : collect.keySet()) {
             List<List<Double>> lists = collect.get(d);
@@ -516,7 +530,7 @@ public class Oilschdule {
     /**
      * 试调度
      *
-     * @param backtrace
+     * @param back
      * @param TK1
      * @param TK2
      * @param DS
@@ -524,10 +538,7 @@ public class Oilschdule {
      * @param reverse   管道转运原油包的顺序
      * @return
      */
-    public static BackTrace tryschedule(BackTrace backtrace, int TK1, int TK2, int DS, double pipeSpeed, boolean reverse) {
-
-        // 拷贝一份调度之前的系统状态，以后的更改都会在这个新拷贝的对象上进行。
-        BackTrace back = CloneUtil.clone(backtrace);
+    public static boolean tryschedule(BackTrace back, int TK1, int TK2, int DS, double pipeSpeed, boolean reverse) {
 
         // 当前进料包
         Map<String, Queue<KeyValue>> FPs = back.getFP();
@@ -639,11 +650,14 @@ public class Oilschdule {
             back.getSchedulePlan().add(list3);
             back.getFeedTime()[DS - 1] = list3.get(3);                                          // 更新炼油结束时间
 
-            back.setFlag(true);
-        } else {
-            back.setFlag(false);
+            // 判断是否完成所有的连有计划
+            if (isFinished(back)) {
+                back.setFlag(true);
+            }
+
+            return true;
         }
-        return back;
+        return false;
     }
 
     /**
@@ -716,14 +730,9 @@ public class Oilschdule {
     /**
      * 停运
      *
-     * @param backtrace 调度之前的系统状态
-     * @return 调度之后的系统状态【back】
+     * @param back 系统状态
      */
-    public static BackTrace stop(BackTrace backtrace, double pipeStoptime) {
-        // 拷贝一份调度之前的系统状态，以后的更改都会在这个新拷贝的对象上进行。
-        BackTrace back = CloneUtil.clone(backtrace);
-        back.setFlag(true);
-
+    public static boolean stop(BackTrace back, double pipeStoptime) {
         // 停运操作
         List<Double> list1 = new ArrayList<>();
         list1.add(4.0);
@@ -733,8 +742,7 @@ public class Oilschdule {
         list1.add(0.0);                                         // 原油类型
         back.getSchedulePlan().add(list1);
         back.setTime(list1.get(3));
-
-        return back;
+        return true;
     }
 
     /**

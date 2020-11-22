@@ -10,6 +10,7 @@ public class BackTrace implements Serializable {
     private int step;
     private double time;        // 当前时刻
     private double[] feedTime;  // 炼油结束时刻
+    private int[] footprint;    // 足迹
     private double[] x;
     private Map<String, Queue<Oilschdule.KeyValue>> FP;
     private Object[][] TKS;
@@ -19,6 +20,7 @@ public class BackTrace implements Serializable {
                      Map<String, Queue<Oilschdule.KeyValue>> FP,
                      Object[][] TKS,
                      List<List<Double>> schedulePlan) {
+        this.Flag = false;
         this.step = step;
         this.x = x;
         this.FP = FP;
@@ -28,6 +30,42 @@ public class BackTrace implements Serializable {
         this.schedulePlan = schedulePlan;
     }
 
+    public int[] getFootprint() {
+        return footprint;
+    }
+
+    public void setFootprint(int[] footprint) {
+        this.footprint = footprint;
+    }
+
+    /**
+     * 判断是否全部测试过
+     * @return
+     */
+    public boolean allTested() {
+        for (int i = 0; i < footprint.length; i++) {
+            if (footprint[i] == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 判断是否已经停运过
+     * @return
+     */
+    public boolean notStoped() {
+        return footprint[footprint.length - 1] == 0;
+    }
+
+    /**
+     * 标记已经尝试过
+     * @return
+     */
+    public void mark(int point) {
+        footprint[point] = 1;
+    }
     public boolean isFlag() {
         return Flag;
     }

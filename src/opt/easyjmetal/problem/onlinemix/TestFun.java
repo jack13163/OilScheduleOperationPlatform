@@ -20,7 +20,13 @@ public class TestFun {
         });
     }
 
-    public static int getInt(double a, int len) {  //返回一个0-length之间的整数
+    /**
+     * 返回一个0-len之间的整数
+     * @param a
+     * @param len
+     * @return
+     */
+    public static int getInt(double a, int len) {
         double[] sequence = getHDsequence(0.29583, 1000);
         int index = (int) (Math.ceil(a * 1000));
         if (index == 1000) {
@@ -268,16 +274,6 @@ public class TestFun {
             sum = sum + array[i];
         }
         return sum;
-    }
-
-    public static int all(int[] array) {
-        int a = 1;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == 0) {
-                a = 0;
-            }
-        }
-        return a;
     }
 
     /**
