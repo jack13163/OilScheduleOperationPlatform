@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.cmoeas.util.statistics;
+package opt.easyjmetal.algorithm.util.statistics;
 
 public class Pareja implements Comparable {
 

@@ -1,9 +1,12 @@
 package opt.easyjmetal.algorithm.moeas.entrence;
 
-import opt.easyjmetal.algorithm.cmoeas.util.Utils;
-import opt.easyjmetal.algorithm.cmoeas.util.statistics.*;
+import opt.easyjmetal.algorithm.util.Utils;
+import opt.easyjmetal.algorithm.util.statistics.*;
 import opt.easyjmetal.util.JMException;
 
+/**
+ * 分析多目标进化算法运行效果
+ */
 public class OnlineMix_MOEAs_analysis {
     public static void main(String[] args) {
         try {

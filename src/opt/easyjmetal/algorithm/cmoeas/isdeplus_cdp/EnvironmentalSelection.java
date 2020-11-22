@@ -1,6 +1,6 @@
 package opt.easyjmetal.algorithm.cmoeas.isdeplus_cdp;
 
-import opt.easyjmetal.algorithm.cmoeas.util.FitnessComparator;
+import opt.easyjmetal.algorithm.util.FitnessComparator;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 

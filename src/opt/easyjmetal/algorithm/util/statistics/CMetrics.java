@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.cmoeas.util.statistics;
+package opt.easyjmetal.algorithm.util.statistics;
 
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.JMException;
@@ -62,7 +62,7 @@ public class CMetrics {
                 for (int run = 0; run < runs_; run++) {
                     List<List<Double>> runList = new ArrayList<>();
                     try {
-                        SolutionSet solutionSet = SqlUtils.SelectData(algorithmList_.get(algorithm), problemList_.get(problem) + "_" + (run + 1));
+                        SolutionSet solutionSet = SqlUtils.SelectData(problemList_.get(problem), algorithmList_.get(algorithm) + "_" + (run + 1));
                         double[][] objectives = solutionSet.writeObjectivesToMatrix();
 
                         for (int i = 0; i < objectives.length; i++) {

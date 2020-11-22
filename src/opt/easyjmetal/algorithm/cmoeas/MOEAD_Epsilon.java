@@ -5,7 +5,7 @@
 // This class implements a constrained version of the MOEAD algorithm based on the Epsilon method.
 package opt.easyjmetal.algorithm.cmoeas;
 
-import opt.easyjmetal.algorithm.cmoeas.util.Utils;
+import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.PseudoRandom;

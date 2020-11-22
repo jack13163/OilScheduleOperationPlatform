@@ -1,6 +1,6 @@
 package opt.easyjmetal.algorithm.cmoeas.entrence;
 
-import opt.easyjmetal.algorithm.cmoeas.util.Utils;
+import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.util.JMException;
 
 public class CMOEAs_analysis_exp2 {

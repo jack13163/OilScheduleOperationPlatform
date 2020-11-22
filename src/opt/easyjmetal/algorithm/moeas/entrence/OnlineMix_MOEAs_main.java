@@ -13,6 +13,7 @@ public class OnlineMix_MOEAs_main {
 
     public static void main(String[] args) throws Exception {
         batchRun(Arrays.asList("MOFA", "MOPSO", "MOEAD", "NSGAII"), 3);
+//        batchRun(Arrays.asList("MOFA"), 1);
     }
 
     /**

@@ -3,7 +3,7 @@
 // Part I: Solving Problems with Box Constraints.
 package opt.easyjmetal.algorithm.cmoeas.nsgaiii_cdp;
 
-import opt.easyjmetal.algorithm.cmoeas.util.Utils;
+import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;

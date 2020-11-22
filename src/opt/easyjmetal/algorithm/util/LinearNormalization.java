@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.cmoeas.util;
+package opt.easyjmetal.algorithm.util;
 
 /**
  * 最大最小归一化【按列】

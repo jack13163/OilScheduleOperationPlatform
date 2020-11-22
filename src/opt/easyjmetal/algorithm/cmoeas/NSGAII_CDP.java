@@ -4,7 +4,7 @@
 
 package opt.easyjmetal.algorithm.cmoeas;
 
-import opt.easyjmetal.algorithm.cmoeas.util.Utils;
+import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;

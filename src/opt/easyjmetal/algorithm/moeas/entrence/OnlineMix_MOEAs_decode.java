@@ -11,14 +11,14 @@ import opt.easyjmetal.util.sqlite.SqlUtils;
 import java.util.List;
 
 /**
- * 解码
+ * 测试解码出来的结果是否一致
  */
 public class OnlineMix_MOEAs_decode {
 
     public static void main(String[] args) throws Exception {
         OnlineMixOIL problem = new OnlineMixOIL("Real");
         String dbName = problem.getName();
-        String tableName = "NSGAII_1";
+        String tableName = "MOEAD_1";
 
         SolutionSet solutionSet = SqlUtils.SelectData(dbName, tableName);
         int count = 0;
@@ -29,7 +29,7 @@ public class OnlineMix_MOEAs_decode {
             }
         }
 
-        // 输出结果一致比例【暂时问题：选罐随机，因此可能造成解不一致，考虑确定性的规则选罐】
+        // 输出结果一致比例
         System.out.println("共有" + solutionSet.size() + "个非支配解，其中" + count + "个解和预期结果一致");
     }
 

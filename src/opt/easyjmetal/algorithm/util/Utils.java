@@ -15,11 +15,11 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.algorithm.cmoeas.util;
+package opt.easyjmetal.algorithm.util;
 
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.qualityindicator.Epsilon;
@@ -354,8 +354,8 @@ public class Utils {
                 List<Solution> solutionList2 = new ArrayList<>();
 
                 for (int numRun = 0; numRun < independentRuns_; numRun++) {
-                    String tableName = problemName + "_" + (numRun + 1);
-                    SolutionSet tmp = SqlUtils.SelectData(algorithmName, tableName);
+                    String tableName = algorithmName + "_" + (numRun + 1);
+                    SolutionSet tmp = SqlUtils.SelectData(problemName, tableName);
                     for (int i = 0; i < tmp.size(); i++) {
                         solutionList.add(tmp.get(i));
                         solutionList2.add(tmp.get(i));
@@ -560,8 +560,8 @@ public class Utils {
 
         String paretoFrontPath = resultBaseDirectory_ + "/" + problemName + ".pf";
         double[][] trueFront = new Hypervolume().utils_.readFront(paretoFrontPath);
-        String dbName = algorithmName;
-        String tableName = problemName + "_" + runId;
+        String dbName = problemName;
+        String tableName = algorithmName + "_" + runId;
         double[][] solutionFront = SqlUtils.SelectData(dbName, tableName).writeObjectivesToMatrix();
 
         if (indicatorName.equals("HV")) {

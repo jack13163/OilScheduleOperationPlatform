@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.cmoeas.util.statistics;
+package opt.easyjmetal.algorithm.util.statistics;
 
 import java.io.*;
 import java.util.Arrays;

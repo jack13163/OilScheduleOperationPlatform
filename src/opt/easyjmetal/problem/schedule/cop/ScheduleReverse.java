@@ -1,6 +1,6 @@
 package opt.easyjmetal.problem.schedule.cop;
 
-import opt.easyjmetal.algorithm.cmoeas.util.Utils;
+import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.JMException;
 

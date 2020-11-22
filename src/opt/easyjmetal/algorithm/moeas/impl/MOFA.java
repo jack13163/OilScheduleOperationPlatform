@@ -1,6 +1,6 @@
 package opt.easyjmetal.algorithm.moeas.impl;
 
-import opt.easyjmetal.algorithm.cmoeas.util.Utils;
+import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.algorithm.moeas.util.PlotObjectives;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Problem;
@@ -96,10 +96,10 @@ public class MOFA extends Algorithm {
                         Solution g = external_archive_.get(ind);
                         if (domination == 0) {
                             // i支配j
-                            population_.replace(j, firefly_move(population_.get(i), population_.get(j),beta0, gamma, true, g).get(0));// 这里没有进行越界处理
+                            population_.replace(j, firefly_move(population_.get(i), population_.get(j),beta0, gamma, true, g).get(0));
                         } else {
                             // j支配i
-                            population_.replace(i, firefly_move(population_.get(j), population_.get(i), beta0, gamma, true, g).get(0));// 这里没有进行越界处理
+                            population_.replace(i, firefly_move(population_.get(j), population_.get(i), beta0, gamma, true, g).get(0));
                         }
                     } else {
                         // i和j之间存在支配关系，从储备集中随机选取一个个体作为g
@@ -159,9 +159,9 @@ public class MOFA extends Algorithm {
 
         int M = s1.getNumberOfObjectives();
         for (int i = 0; i < M; i++) {
-            if (s1.getObjective(i) < s2.getObjective(i))
+            if (s1.getObjective(i) < s2.getObjective(i)) {
                 less = less + 1;
-            else if (s1.getObjective(i) == s2.getObjective(i)) {
+            } else if (s1.getObjective(i) == s2.getObjective(i)) {
                 equal = equal + 1;
             } else {
                 more = more + 1;

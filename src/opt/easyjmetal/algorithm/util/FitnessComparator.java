@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.cmoeas.util;
+package opt.easyjmetal.algorithm.util;
 
 
 import opt.easyjmetal.core.Solution;

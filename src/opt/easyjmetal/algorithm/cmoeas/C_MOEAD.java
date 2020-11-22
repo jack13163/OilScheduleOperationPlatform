@@ -2,7 +2,7 @@
 // "An adaptive constraint handling approach embedded MOEA/D". DOI: 10.1109/CEC.2012.6252868
 package opt.easyjmetal.algorithm.cmoeas;
 
-import opt.easyjmetal.algorithm.cmoeas.util.Utils;
+import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.PseudoRandom;

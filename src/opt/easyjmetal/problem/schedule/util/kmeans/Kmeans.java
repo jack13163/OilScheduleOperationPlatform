@@ -1,6 +1,6 @@
 package opt.easyjmetal.problem.schedule.util.kmeans;
 
-import opt.easyjmetal.algorithm.cmoeas.util.Utils;
+import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.fileinput.VectorFileUtils;
 import org.deeplearning4j.clustering.algorithm.Distance;
