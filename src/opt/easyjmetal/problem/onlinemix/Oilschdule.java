@@ -475,7 +475,11 @@ public class Oilschdule {
                                 }
                             } else {
                                 // 转运速度已经是最大速度了，标记当前步骤不可行，并更改编码
-                                backTrace.mark(DS_NO);
+                                if (ET.isEmpty()) {
+                                    backTrace.mark(0);
+                                } else {
+                                    backTrace.mark(DS_NO);
+                                }
                                 while (DS_NO != i) {
                                     backTrace.getX()[5 * backTrace.getStep() + 2] = Math.random();
                                     DS_NO = TestFun.getInt(backTrace.getX()[5 * backTrace.getStep() + 2], UD.size());
