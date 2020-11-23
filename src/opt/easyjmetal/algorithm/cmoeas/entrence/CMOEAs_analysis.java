@@ -1,9 +1,8 @@
 package opt.easyjmetal.algorithm.cmoeas.entrence;
 
 import opt.easyjmetal.statistics.*;
-import opt.easyjmetal.util.MoeadUtils;
-import opt.easyjmetal.algorithm.util.statistics.*;
 import opt.easyjmetal.util.JMException;
+import opt.easyjmetal.util.MoeadUtils;
 
 public class CMOEAs_analysis {
     public static void main(String[] args) {

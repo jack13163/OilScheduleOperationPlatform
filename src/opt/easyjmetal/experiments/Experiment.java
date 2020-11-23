@@ -26,7 +26,6 @@ import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.statistics.RBoxplot;
 import opt.easyjmetal.statistics.RWilcoxon;
 import opt.easyjmetal.statistics.Statistics;
-import opt.easyjmetal.experiments.util.RunExperiment;
 import opt.easyjmetal.qualityindicator.Epsilon;
 import opt.easyjmetal.qualityindicator.Hypervolume;
 import opt.easyjmetal.qualityindicator.InvertedGenerationalDistance;
