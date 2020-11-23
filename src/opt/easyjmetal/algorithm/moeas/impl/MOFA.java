@@ -1,13 +1,12 @@
 package opt.easyjmetal.algorithm.moeas.impl;
 
-import opt.easyjmetal.util.MoeadUtils;
-import opt.easyjmetal.util.PlotObjectives;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.problem.sj.CloneUtil;
 import opt.easyjmetal.util.JMException;
+import opt.easyjmetal.util.MoeadUtils;
+import opt.easyjmetal.util.PlotObjectives;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.util.ArrayList;
@@ -86,9 +85,11 @@ public class MOFA extends Algorithm {
             int[] permutation = new int[populationSize_];
             MoeadUtils.randomPermutation(permutation, populationSize_);
 
+            SolutionSet offspring = new SolutionSet(populationSize_);
+            offspring = offspring.union(population_);
             for (int i = 0; i < populationSize_; i++) {
                 for (int j = 0; j < populationSize_; j++) {
-                    int domination = get_domination(population_.get(i), population_.get(i));
+                    int domination = get_domination(population_.get(i), population_.get(j));
                     if (domination != -1) {
                         // i和j之间存在支配关系，从储备集中随机选取一个个体作为g
                         int eSize = external_archive_.size();
@@ -96,22 +97,23 @@ public class MOFA extends Algorithm {
                         Solution g = external_archive_.get(ind);
                         if (domination == 0) {
                             // i支配j
-                            population_.replace(j, firefly_move(population_.get(i), population_.get(j),beta0, gamma, true, g).get(0));
+                            offspring.replace(j, firefly_move(population_.get(i), population_.get(j),beta0, gamma, true, g).get(0));
                         } else {
                             // j支配i
-                            population_.replace(i, firefly_move(population_.get(j), population_.get(i), beta0, gamma, true, g).get(0));
+                            offspring.replace(i, firefly_move(population_.get(j), population_.get(i), beta0, gamma, true, g).get(0));
                         }
                     } else {
-                        // i和j之间存在支配关系，从储备集中随机选取一个个体作为g
+                        // i和j之间不存在支配关系，从储备集中随机选取一个个体作为g
                         int eSize = external_archive_.size();
                         int ind = new Random().nextInt(eSize);
                         Solution g = external_archive_.get(ind);
                         List<Solution> res = firefly_move(population_.get(i), population_.get(j), beta0, gamma, false, g);
-                        population_.replace(i, res.get(0));
-                        population_.replace(j, res.get(1));
+                        offspring.replace(i, res.get(0));
+                        offspring.replace(j, res.get(1));
                     }
                 }
             }
+            this.population_ = offspring;
 
             // 评估适应值
             for (int i = 0; i < this.populationSize_; i++) {
@@ -205,14 +207,14 @@ public class MOFA extends Algorithm {
 
         List<Solution> res = new ArrayList<>();
 
-        // 存在支配关系
         if (domination) {
+            // 存在支配关系
             // 获得x2与精英个体g之间的距离
             double r_g = get_distance(s2, g);
             // 获得x2和g之间的吸引力
             double beta_g = get_attraction(r_g, beta0, gamma);
 
-            Solution new_x = CloneUtil.clone(s1);
+            Solution new_x = new Solution(s1);
             for (int i = 0; i < V; i++) {
                 new_x.getDecisionVariables()[i].setValue(s1.getDecisionVariables()[i].getValue()
                         + omega0 * beta * (s1.getDecisionVariables()[i].getValue() - s2.getDecisionVariables()[i].getValue())
@@ -220,6 +222,7 @@ public class MOFA extends Algorithm {
             }
             res.add(new_x);
         } else {
+            // 不存在支配关系
             // 获得x1与精英个体g之间的距离
             Solution new_x = getSolution(s1, beta0, gamma, g, V, omega0);
             res.add(new_x);
@@ -289,7 +292,7 @@ public class MOFA extends Algorithm {
         int V = s1.getDecisionVariables().length;
         double distance = 0.0;
         for (int i = 0; i < V; i++) {
-            distance += Math.pow(s1.getDecisionVariables()[i].getValue() - s1.getDecisionVariables()[i].getValue(), 2);
+            distance += Math.pow(s1.getDecisionVariables()[i].getValue() - s2.getDecisionVariables()[i].getValue(), 2);
         }
         return distance;
     }

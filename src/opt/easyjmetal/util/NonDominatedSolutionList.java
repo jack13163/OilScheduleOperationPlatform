@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -29,7 +29,7 @@ import opt.easyjmetal.util.comparators.SolutionComparator;
 import java.util.Comparator;
 import java.util.Iterator;
 
-/** 
+/**
  * This class implements an unbound list of non-dominated solutions
  */
 public class NonDominatedSolutionList extends SolutionSet {
@@ -44,10 +44,10 @@ public class NonDominatedSolutionList extends SolutionSet {
 	 */
 	private static final Comparator equal_ = new SolutionComparator();
 
-	/** 
+	/**
 	 * Constructor.
 	 * The objects of this class are lists of non-dominated solutions according to
-	 * a Pareto dominance comparator. 
+	 * a Pareto dominance comparator.
 	 */
 	public NonDominatedSolutionList() {
 		super();
@@ -66,14 +66,15 @@ public class NonDominatedSolutionList extends SolutionSet {
 
 	/** Inserts a solution in the list
 	 * @param solution The solution to be inserted.
-	 * @return true if the operation success, and false if the solution is 
+	 * @return true if the operation success, and false if the solution is
 	 * dominated or if an identical individual exists.
 	 * The decision variables can be null if the solution is read from a file; in
 	 * that case, the domination tests are omitted
 	 */
-	public boolean add(Solution solution){
+	@Override
+    public boolean add(Solution solution){
 		if (solutionsList_.size() == 0) {
-			solutionsList_.add(solution);    
+			solutionsList_.add(solution);
 			return true ;
 		}
 		else {
@@ -89,18 +90,18 @@ public class NonDominatedSolutionList extends SolutionSet {
 				} else if (flag == 0) { // Non-dominated solutions
 					//flag = equal_.compare(solution,listIndividual);
 					//if (flag == 0) {
-					//	return false;   // The new solution is in the list  
+					//	return false;   // The new solution is in the list
 					//}
 				} else if (flag == 1) { // The new solution is dominated
 					return false;
 				}
-			} // while 
+			} // while
 			//} // if
 
 			//At this point, the solution is inserted into the list
-			solutionsList_.add(solution);                
+			solutionsList_.add(solution);
 
-			return true;        
+			return true;
 		}
-	} // add                   
+	} // add
 } // NonDominatedList

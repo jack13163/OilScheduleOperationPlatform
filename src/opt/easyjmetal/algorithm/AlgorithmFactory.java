@@ -35,7 +35,8 @@ public class AlgorithmFactory {
         } else if (name.equalsIgnoreCase("NSGAII")
                 || name.equalsIgnoreCase("MOFA")
                 || name.equalsIgnoreCase("MOPSO")
-                || name.equalsIgnoreCase("MOEAD")) {
+                || name.equalsIgnoreCase("MOEAD")
+                || name.equalsIgnoreCase("IBEA")) {
             base += "moeas.impl.";
         }
 

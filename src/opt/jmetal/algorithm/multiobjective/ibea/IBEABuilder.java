@@ -25,11 +25,6 @@ public class IBEABuilder implements AlgorithmBuilder<IBEA<DoubleSolution>> {
     private MutationOperator<DoubleSolution> mutation;
     private SelectionOperator<List<DoubleSolution>, DoubleSolution> selection;
 
-    /**
-     * Constructor
-     *
-     * @param problem
-     */
     public IBEABuilder(Problem<DoubleSolution> problem) {
         this.problem = problem;
         populationSize = 100;
@@ -47,7 +42,6 @@ public class IBEABuilder implements AlgorithmBuilder<IBEA<DoubleSolution>> {
         selection = new BinaryTournamentSelection<DoubleSolution>();
     }
 
-    /* Getters */
     public int getPopulationSize() {
         return populationSize;
     }
@@ -109,6 +103,7 @@ public class IBEABuilder implements AlgorithmBuilder<IBEA<DoubleSolution>> {
         return this;
     }
 
+    @Override
     public IBEA<DoubleSolution> build() {
         return new IBEA<DoubleSolution>(problem, populationSize, archiveSize, maxEvaluations, selection, crossover,
                 mutation);

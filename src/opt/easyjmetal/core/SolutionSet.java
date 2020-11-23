@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -36,21 +36,14 @@ public class SolutionSet implements Serializable {
     private int capacity_ = Integer.MAX_VALUE;
 
     public SolutionSet() {
-        solutionsList_ = new ArrayList<Solution>();
+        solutionsList_ = new ArrayList<>();
     }
 
     public SolutionSet(int maximumSize) {
-        solutionsList_ = new ArrayList<Solution>();
+        solutionsList_ = new ArrayList<>();
         capacity_ = maximumSize;
     }
 
-    /**
-     * Inserts a new solution into the SolutionSet.
-     *
-     * @param solution The <code>Solution</code> to store
-     * @return True If the <code>Solution</code> has been inserted, false
-     * otherwise.
-     */
     public boolean add(Solution solution) {
         if (solutionsList_.size() == capacity_) {
             Configuration.logger_.severe("The population is full");
@@ -94,13 +87,6 @@ public class SolutionSet implements Serializable {
 
     }
 
-    /**
-     * Returns the ith solution in the set.
-     *
-     * @param i Position of the solution to obtain.
-     * @return The <code>Solution</code> at the position i.
-     * @throws IndexOutOfBoundsException Exception
-     */
     public Solution get(int i) {
         if (i >= solutionsList_.size()) {
             throw new IndexOutOfBoundsException("Index out of Bound " + i);
@@ -108,27 +94,17 @@ public class SolutionSet implements Serializable {
         return solutionsList_.get(i);
     }
 
-    /**
-     * Returns the maximum capacity of the solution set
-     *
-     * @return The maximum capacity of the solution set
-     */
     public int getMaxSize() {
         return capacity_;
     } // getMaxSize
 
-    /**
-     * Sorts a SolutionSet using a <code>Comparator</code>.
-     *
-     * @param comparator <code>Comparator</code> used to sort.
-     */
     public void sort(Comparator comparator) {
         if (comparator == null) {
             Configuration.logger_.severe("No criterium for comparing exist");
             return;
-        } // if
+        }
         Collections.sort(solutionsList_, comparator);
-    } // sort
+    }
 
     /**
      * Returns the index of the best Solution using a <code>Comparator</code>.
@@ -156,8 +132,7 @@ public class SolutionSet implements Serializable {
         }
 
         return index;
-    } // indexBest
-
+    }
 
     /**
      * Returns the best Solution using a <code>Comparator</code>.
@@ -175,8 +150,7 @@ public class SolutionSet implements Serializable {
             return solutionsList_.get(indexBest);
         }
 
-    } // best
-
+    }
 
     /**
      * Returns the index of the worst Solution using a <code>Comparator</code>.
@@ -205,7 +179,7 @@ public class SolutionSet implements Serializable {
 
         return index;
 
-    } // indexWorst
+    }
 
     /**
      * Returns the worst Solution using a <code>Comparator</code>.
@@ -224,8 +198,7 @@ public class SolutionSet implements Serializable {
             return solutionsList_.get(index);
         }
 
-    } // worst
-
+    }
 
     /**
      * Returns the number of solutions in the SolutionSet.
@@ -234,7 +207,7 @@ public class SolutionSet implements Serializable {
      */
     public int size() {
         return solutionsList_.size();
-    } // size
+    }
 
     /**
      * Writes the objective function values of the <code>Solution</code>
@@ -262,7 +235,7 @@ public class SolutionSet implements Serializable {
             Configuration.logger_.severe("Error acceding to the file");
             e.printStackTrace();
         }
-    } // printObjectivesToFile
+    }
 
     /**
      * Writes the decision encodings.variable values of the <code>Solution</code>
@@ -279,8 +252,9 @@ public class SolutionSet implements Serializable {
             if (size() > 0) {
                 int numberOfVariables = solutionsList_.get(0).getDecisionVariables().length;
                 for (Solution aSolutionsList_ : solutionsList_) {
-                    for (int j = 0; j < numberOfVariables; j++)
+                    for (int j = 0; j < numberOfVariables; j++) {
                         bw.write(aSolutionsList_.getDecisionVariables()[j].toString() + " ");
+                    }
                     bw.newLine();
                 }
             }
@@ -289,8 +263,7 @@ public class SolutionSet implements Serializable {
             Configuration.logger_.severe("Error acceding to the file");
             e.printStackTrace();
         }
-    } // printVariablesToFile
-
+    }
 
     /**
      * Write the function values of feasible solutions into a file
@@ -361,7 +334,7 @@ public class SolutionSet implements Serializable {
             Configuration.logger_.severe("Size is: " + this.size());
         } // if
         solutionsList_.remove(i);
-    } // remove
+    }
 
 
     /**
@@ -383,8 +356,9 @@ public class SolutionSet implements Serializable {
     public SolutionSet union(SolutionSet solutionSet) {
         //Check the correct size. In development
         int newSize = this.size() + solutionSet.size();
-        if (newSize < capacity_)
+        if (newSize < capacity_) {
             newSize = capacity_;
+        }
 
         //Create a new population
         SolutionSet union = new SolutionSet(newSize);
@@ -433,8 +407,9 @@ public class SolutionSet implements Serializable {
     } // writeObjectivesMatrix
 
     public void printObjectives() {
-        for (int i = 0; i < solutionsList_.size(); i++)
+        for (int i = 0; i < solutionsList_.size(); i++) {
             System.out.println("" + solutionsList_.get(i));
+        }
     }
 
     public void setCapacity(int capacity) {
@@ -500,7 +475,4 @@ public class SolutionSet implements Serializable {
         solutionsList_.clear();
         solutionsList_.addAll(h);
     }
-
-
-} // SolutionSet
-
+}

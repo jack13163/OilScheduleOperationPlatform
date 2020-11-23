@@ -14,7 +14,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -66,7 +66,7 @@ public class FastHypervolumeArchive extends Archive {
   public FastHypervolumeArchive(int maxSize, int numberOfObjectives) {
     super(maxSize);
     maxSize_          = maxSize;
-    objectives_       = numberOfObjectives;        
+    objectives_       = numberOfObjectives;
     dominance_        = new DominanceComparator();
     equals_           = new EqualSolutionsComparator();
     referencePoint_   = new Solution(objectives_) ;
@@ -75,34 +75,35 @@ public class FastHypervolumeArchive extends Archive {
 
     crowdingDistance_ = new CrowdingComparator();
   } // FastHypervolumeArchive
-    
-  
+
+
   /**
    * Adds a <code>Solution</code> to the archive. If the <code>Solution</code>
-   * is dominated by any member of the archive, then it is discarded. If the 
+   * is dominated by any member of the archive, then it is discarded. If the
    * <code>Solution</code> dominates some members of the archive, these are
    * removed. If the archive is full and the <code>Solution</code> has to be
    * inserted, the solution contributing the least to the HV of the solution set
    * is discarded.
    * @param solution The <code>Solution</code>
-   * @return true if the <code>Solution</code> has been inserted, false 
+   * @return true if the <code>Solution</code> has been inserted, false
    * otherwise.
    */
+  @Override
   public boolean add(Solution solution){
     int flag = 0;
     int i = 0;
     Solution aux; //Store an solution temporally
 
     while (i < solutionsList_.size()){
-      aux = solutionsList_.get(i);            
-            
+      aux = solutionsList_.get(i);
+
       flag = dominance_.compare(solution,aux);
       if (flag == 1) {               // The solution to add is dominated
         return false;                // Discard the new solution
       } else if (flag == -1) {       // A solution in the archive is dominated
-        solutionsList_.remove(i);    // Remove it from the population            
+        solutionsList_.remove(i);    // Remove it from the population
       } else {
-          if (equals_.compare(aux,solution)==0) { // There is an equal solution 
+          if (equals_.compare(aux,solution)==0) { // There is an equal solution
                                                   // in the population
             return false; // Discard the new solution
           }  // if
@@ -119,8 +120,8 @@ public class FastHypervolumeArchive extends Archive {
     }
     return true;
   } // add
-  
-     
+
+
   /**
    * This method forces to compute the contribution of each solution (required for PAEShv)
    */

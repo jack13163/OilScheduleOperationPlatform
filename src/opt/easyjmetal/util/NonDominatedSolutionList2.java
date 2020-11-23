@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -29,7 +29,7 @@ import opt.easyjmetal.util.comparators.SolutionComparator;
 import java.util.Comparator;
 import java.util.Iterator;
 
-/** 
+/**
  * This class implements an unbound list of non-dominated solutions
  */
 public class NonDominatedSolutionList2 extends SolutionSet {
@@ -73,12 +73,13 @@ public class NonDominatedSolutionList2 extends SolutionSet {
 
 	/** Inserts a solution in the list
 	 * @param solution The solution to be inserted.
-	 * @return true if the operation success, and false if the solution is 
+	 * @return true if the operation success, and false if the solution is
 	 * dominated or if an identical individual exists.
 	 * The decision variables can be null if the solution is read from a file; in
 	 * that case, the domination tests are omitted
 	 */
-	public boolean add(Solution solution){
+	@Override
+    public boolean add(Solution solution){
 		if (solutionsList_.size() == 0) {
       Solution s = new Solution(solution.getNumberOfObjectives()) ;
       for (int i = 0; i < s.getNumberOfObjectives(); i++)
@@ -100,12 +101,12 @@ public class NonDominatedSolutionList2 extends SolutionSet {
 				} else if (flag == 0) { // Non-dominated solutions
 					//flag = equal_.compare(solution,listIndividual);
 					//if (flag == 0) {
-					//	return false;   // The new solution is in the list  
+					//	return false;   // The new solution is in the list
 					//}
 				} else if (flag == 1) { // The new solution is dominated
 					return false;
 				}
-			} // while 
+			} // while
 			//} // if
 
 			//At this point, the solution is inserted into the list
@@ -114,7 +115,7 @@ public class NonDominatedSolutionList2 extends SolutionSet {
         s.setObjective(i, solution.getObjective(i));
 			solutionsList_.add(s);
 
-			return true;        
+			return true;
 		}
-	} // add                   
+	} // add
 } // NonDominatedList
