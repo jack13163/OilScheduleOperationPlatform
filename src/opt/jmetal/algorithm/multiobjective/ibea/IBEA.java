@@ -1,8 +1,6 @@
 package opt.jmetal.algorithm.multiobjective.ibea;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import opt.easyjmetal.util.sqlite.SqlUtils;
 import opt.jmetal.algorithm.Algorithm;
 import opt.jmetal.operator.CrossoverOperator;
 import opt.jmetal.operator.MutationOperator;
@@ -12,6 +10,9 @@ import opt.jmetal.solution.Solution;
 import opt.jmetal.util.SolutionListUtils;
 import opt.jmetal.util.comparator.DominanceComparator;
 import opt.jmetal.util.solutionattribute.impl.Fitness;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class implements the IBEA algorithm

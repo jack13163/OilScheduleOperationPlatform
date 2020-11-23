@@ -127,6 +127,9 @@ public class IBEA extends Algorithm {
                 PlotObjectives.plotSolutions("IBEA", archive_);
             }
         }
+
+        SqlUtils.InsertSolutionSet(dbName, tableName, archive_);
+
         return population_;
     }
 
