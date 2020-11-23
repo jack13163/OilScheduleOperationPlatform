@@ -2,7 +2,7 @@
 // "An adaptive constraint handling approach embedded MOEA/D". DOI: 10.1109/CEC.2012.6252868
 package opt.easyjmetal.algorithm.cmoeas.impl;
 
-import opt.easyjmetal.algorithm.util.Utils;
+import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.PseudoRandom;
@@ -110,7 +110,7 @@ public class C_MOEAD extends Algorithm {
 
         // Initialize the external archive
         external_archive_ = new SolutionSet(populationSize_);
-        Utils.initializeExternalArchive(population_,populationSize_,external_archive_);
+        MoeadUtils.initializeExternalArchive(population_,populationSize_,external_archive_);
 
         // STEP 1.3. Initialize z_
         initIdealPoint();
@@ -130,7 +130,7 @@ public class C_MOEAD extends Algorithm {
         int gen = 0;
         do {
             int[] permutation = new int[populationSize_];
-            Utils.randomPermutation(permutation, populationSize_);
+            MoeadUtils.randomPermutation(permutation, populationSize_);
 
             for (int i = 0; i < populationSize_; i++) {
                 int n = permutation[i]; // or int n = i;
@@ -190,7 +190,7 @@ public class C_MOEAD extends Algorithm {
             gen += 1;
 
             //Update the external archive
-            Utils.updateExternalArchive(population_,populationSize_,external_archive_);
+            MoeadUtils.updateExternalArchive(population_,populationSize_,external_archive_);
 
             if (isDisplay_) {
                 plotPopulation(plotFlag_);
@@ -272,12 +272,12 @@ public class C_MOEAD extends Algorithm {
         for (int i = 0; i < populationSize_; i++) {
             // calculate the distances based on weight vectors
             for (int j = 0; j < populationSize_; j++) {
-                x[j] = Utils.distVector(lambda_[i], lambda_[j]);
+                x[j] = MoeadUtils.distVector(lambda_[i], lambda_[j]);
                 idx[j] = j;
             } // for
 
             // find 'niche' nearest neighboring subproblems
-            Utils.minFastSort(x, idx, populationSize_, T_);
+            MoeadUtils.minFastSort(x, idx, populationSize_, T_);
             System.arraycopy(idx, 0, neighborhood_[i], 0, T_);
         } // for
     } // initNeighborhood
@@ -360,7 +360,7 @@ public class C_MOEAD extends Algorithm {
         }
         int[] perm = new int[size];
 
-        Utils.randomPermutation(perm, size);
+        MoeadUtils.randomPermutation(perm, size);
 
         for (int i = 0; i < size; i++) {
             int k;
@@ -442,7 +442,7 @@ public class C_MOEAD extends Algorithm {
             theta = 5.0;
 
             // normalize the weight vector (line segment)
-            double nd = Utils.norm_vector(lambda, problem_.getNumberOfObjectives());
+            double nd = MoeadUtils.norm_vector(lambda, problem_.getNumberOfObjectives());
             for (int i = 0; i < problem_.getNumberOfObjectives(); i++)
                 lambda[i] = lambda[i] / nd;
 
@@ -454,12 +454,12 @@ public class C_MOEAD extends Algorithm {
                 realA[n] = (individual.getObjective(n) - z_[n]);
 
             // distance along the line segment
-            double d1 = Math.abs(Utils.innerproduct(realA, lambda));
+            double d1 = Math.abs(MoeadUtils.innerproduct(realA, lambda));
 
             // distance to the line segment
             for (int n = 0; n < problem_.getNumberOfObjectives(); n++)
                 realB[n] = (individual.getObjective(n) - (z_[n] + d1 * lambda[n]));
-            double d2 = Utils.norm_vector(realB, problem_.getNumberOfObjectives());
+            double d2 = MoeadUtils.norm_vector(realB, problem_.getNumberOfObjectives());
 
             fitness = d1 + theta * d2;
         } else {

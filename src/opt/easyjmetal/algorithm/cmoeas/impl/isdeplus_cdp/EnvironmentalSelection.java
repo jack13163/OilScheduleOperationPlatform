@@ -1,8 +1,8 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.isdeplus_cdp;
 
-import opt.easyjmetal.algorithm.util.FitnessComparator;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
+import opt.easyjmetal.util.comparators.FitnessComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;

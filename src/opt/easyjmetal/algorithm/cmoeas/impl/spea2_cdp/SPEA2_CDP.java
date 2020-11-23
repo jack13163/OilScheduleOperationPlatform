@@ -1,7 +1,7 @@
 // SPEA2: Improving the Strength Pareto Evolutionary Algorithm For Multiobjective Optimization.
 package opt.easyjmetal.algorithm.cmoeas.impl.spea2_cdp;
 
-import opt.easyjmetal.algorithm.util.Utils;
+import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
@@ -71,7 +71,7 @@ public class SPEA2_CDP extends Algorithm {
 
         // Initialize the external archive
         external_archive_ = new SolutionSet(populationSize_);
-        Utils.initializeExternalArchive(population_, populationSize_, external_archive_);
+        MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         //creat database
         String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
@@ -119,7 +119,7 @@ public class SPEA2_CDP extends Algorithm {
             // 环境选择
             population_ = replacement(population_, offspringPopulation_);
 
-            Utils.updateExternalArchive(population_, populationSize_, external_archive_);
+            MoeadUtils.updateExternalArchive(population_, populationSize_, external_archive_);
 
             if (gen % 50 == 0) {
                 allPop = allPop.union(population_);

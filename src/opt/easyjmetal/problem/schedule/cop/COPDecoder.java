@@ -1,6 +1,6 @@
 package opt.easyjmetal.problem.schedule.cop;
 
-import opt.easyjmetal.algorithm.util.Utils;
+import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.problem.schedule.Config;
 import opt.easyjmetal.problem.schedule.operation.Operation;
@@ -23,7 +23,7 @@ public class COPDecoder {
                 {815.42, 276.0, 230.0, 29.0, 11.0}
         };
         try {
-            Utils.getSolutionFromDB(algorithmNames, problemNames, runtimes, tofind, new Utils.ToDo() {
+            MoeadUtils.getSolutionFromDB(algorithmNames, problemNames, runtimes, tofind, new MoeadUtils.ToDo() {
                 @Override
                 public void dosomething(Solution solution, String rule) {
                     COPDecoder.decode(solution, rule);

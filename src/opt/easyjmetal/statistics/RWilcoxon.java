@@ -15,11 +15,11 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.experiments.util;
+package opt.easyjmetal.statistics;
 
 import opt.easyjmetal.experiments.Experiment;
 
@@ -28,7 +28,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Class producing R scripts that generate latex tables including the Wilcoxon 
+ * Class producing R scripts that generate latex tables including the Wilcoxon
  * rank-sum test
  */
 public class RWilcoxon {

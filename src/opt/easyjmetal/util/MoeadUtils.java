@@ -1,4 +1,4 @@
-//  Utils.java
+//  MoeadUtils.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,7 +19,7 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.algorithm.util;
+package opt.easyjmetal.util;
 
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.Solution;
@@ -42,7 +42,7 @@ import java.util.List;
 /**
  * Utilities methods to used by MOEA/D
  */
-public class Utils {
+public class MoeadUtils {
     public static final String resultBaseDirectory_ = "result/easyjmetal";
 
     public static double distVector(double[] vector1, double[] vector2) {

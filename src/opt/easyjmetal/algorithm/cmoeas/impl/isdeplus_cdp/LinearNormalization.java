@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.util;
+package opt.easyjmetal.algorithm.cmoeas.impl.isdeplus_cdp;
 
 /**
  * 最大最小归一化【按列】

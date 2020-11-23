@@ -1,6 +1,7 @@
 package opt.easyjmetal.algorithm.cmoeas.entrence;
 
-import opt.easyjmetal.algorithm.util.Utils;
+import opt.easyjmetal.statistics.*;
+import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.algorithm.util.statistics.*;
 import opt.easyjmetal.util.JMException;
 
@@ -14,9 +15,9 @@ public class CMOEAs_analysis {
             int runtimes = 10;
 
             // 生成pareto前沿面
-            Utils.generateParetoFront(algorithmNames, problemNames, runtimes);
+            MoeadUtils.generateParetoFront(algorithmNames, problemNames, runtimes);
             // 计算性能指标
-            Utils.generateQualityIndicators(algorithmNames, problemNames, indicatorNames, runtimes);
+            MoeadUtils.generateQualityIndicators(algorithmNames, problemNames, indicatorNames, runtimes);
 
             // Friedman测试
             Friedman.executeTest("HV", algorithmNames, problemNames);

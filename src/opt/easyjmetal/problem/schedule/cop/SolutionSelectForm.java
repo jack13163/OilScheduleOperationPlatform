@@ -1,6 +1,6 @@
 package opt.easyjmetal.problem.schedule.cop;
 
-import opt.easyjmetal.algorithm.util.Utils;
+import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.JMException;
 import opt.javasim.SimulationProcess;
@@ -294,11 +294,11 @@ public class SolutionSelectForm extends JFrame {
                     }
 
                     try {
-                        Utils.getSolutionFromDB(cbAlgorithmsForExperiment.getText().split(","),
+                        MoeadUtils.getSolutionFromDB(cbAlgorithmsForExperiment.getText().split(","),
                                 cbProblemsForExperiment.getText().split(","),
                                 Integer.parseInt(txtRuns.getText()),
                                 tofind,
-                                new Utils.ToDo() {
+                                new MoeadUtils.ToDo() {
                                     @Override
                                     public void dosomething(Solution solution, String rule) {
                                         // 解码位置
@@ -332,7 +332,7 @@ public class SolutionSelectForm extends JFrame {
                     public void run() {
                         try {
                             // 生成pareto前沿面
-                            String path = Utils.generateOilScheduleParetoFront(algorithmNames, problemNames, runtimes);
+                            String path = MoeadUtils.generateOilScheduleParetoFront(algorithmNames, problemNames, runtimes);
                             // 标记优秀的解
                             paintNodominanceSolution(resultTable, path);
                             // 比较两条管道的能耗【新增内容】
@@ -432,7 +432,7 @@ public class SolutionSelectForm extends JFrame {
                     // 查找出指定的解
                     double[][] tofind = new double[][]{{energyCost, pipeMix, tankMix, chargeTime, tankUsed}};
                     try {
-                        Utils.getSolutionFromDB(algorithmNames, problemNames, runtimes, tofind, new Utils.ToDo() {
+                        MoeadUtils.getSolutionFromDB(algorithmNames, problemNames, runtimes, tofind, new MoeadUtils.ToDo() {
                             @Override
                             public void dosomething(Solution solution, String rule) {
                                 // {硬约束违背，管道1转运能耗，管道2转运能耗，总转运能耗}

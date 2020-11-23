@@ -1,6 +1,6 @@
 package opt.easyjmetal.problem.schedule.util.kmeans;
 
-import opt.easyjmetal.algorithm.util.Utils;
+import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.fileinput.VectorFileUtils;
 import org.deeplearning4j.clustering.algorithm.Distance;
@@ -38,7 +38,7 @@ public class Kmeans {
         int runtimes = 10;
         // 生成pareto前沿面
         try {
-            Utils.generateOilScheduleParetoFront(algorithmNames, problemNames, runtimes);
+            MoeadUtils.generateOilScheduleParetoFront(algorithmNames, problemNames, runtimes);
         } catch (JMException e) {
             e.printStackTrace();
         }

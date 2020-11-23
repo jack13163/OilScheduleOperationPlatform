@@ -1,6 +1,6 @@
 package opt.easyjmetal.problem.schedule.cop;
 
-import opt.easyjmetal.algorithm.util.Utils;
+import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.JMException;
 
@@ -21,8 +21,8 @@ public class findBug {
         };
 
         try {
-            Utils.getSolutionFromDB(algorithmNameList, problemList, independentRuns, tofind,
-                    new Utils.ToDo() {
+            MoeadUtils.getSolutionFromDB(algorithmNameList, problemList, independentRuns, tofind,
+                    new MoeadUtils.ToDo() {
                         @Override
                         public void dosomething(Solution solution, String rule) {
                             // 解码位置

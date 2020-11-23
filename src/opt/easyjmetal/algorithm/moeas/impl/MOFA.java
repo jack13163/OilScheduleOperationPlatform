@@ -1,7 +1,7 @@
 package opt.easyjmetal.algorithm.moeas.impl;
 
-import opt.easyjmetal.algorithm.util.Utils;
-import opt.easyjmetal.algorithm.util.PlotObjectives;
+import opt.easyjmetal.util.MoeadUtils;
+import opt.easyjmetal.util.PlotObjectives;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.Solution;
@@ -79,12 +79,12 @@ public class MOFA extends Algorithm {
         initPopulation();
 
         // 初始化外部储备集
-        external_archive_ = Utils.initializeExternalArchive(population_, populationSize_, new SolutionSet(externalArchiveSize));
+        external_archive_ = MoeadUtils.initializeExternalArchive(population_, populationSize_, new SolutionSet(externalArchiveSize));
 
         // 迭代更新
         do {
             int[] permutation = new int[populationSize_];
-            Utils.randomPermutation(permutation, populationSize_);
+            MoeadUtils.randomPermutation(permutation, populationSize_);
 
             for (int i = 0; i < populationSize_; i++) {
                 for (int j = 0; j < populationSize_; j++) {
@@ -120,7 +120,7 @@ public class MOFA extends Algorithm {
             }
 
             // 更新储备集
-            Utils.updateExternalArchive(population_, populationSize_, external_archive_);
+            MoeadUtils.updateExternalArchive(population_, populationSize_, external_archive_);
 
             // 显示当前储备集中的解
             if (isDisplay_) {

@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -31,31 +31,34 @@ import java.util.Comparator;
  * <code>Solution</code> objects) based on the fitness value returned by the
  * method <code>getFitness</code>.
  */
-public class FitnessComparator implements Comparator {
-   
- /**
-  * Compares two solutions.
-  * @param o1 Object representing the first <code>Solution</code>.
-  * @param o2 Object representing the second <code>Solution</code>.
-  * @return -1, or 0, or 1 if o1 is less than, equal, or greater than o2,
-  * respectively.
-  */
-  public int compare(Object o1, Object o2) {
-    if (o1==null)
-      return 1;
-    else if (o2 == null)
-      return -1;
-    
-    double fitness1 = ((Solution)o1).getFitness();
-    double fitness2 = ((Solution)o2).getFitness();
-    if (fitness1 <  fitness2) {
-      return -1;
+public class FitnessComparator implements Comparator<Solution> {
+
+    /**
+     * Compares two solutions.
+     *
+     * @param o1 Object representing the first <code>Solution</code>.
+     * @param o2 Object representing the second <code>Solution</code>.
+     * @return -1, or 0, or 1 if o1 is less than, equal, or greater than o2,
+     * respectively.
+     */
+    @Override
+    public int compare(Solution o1, Solution o2) {
+        if (o1 == null) {
+            return 1;
+        } else if (o2 == null) {
+            return -1;
+        }
+
+        double fitness1 = o1.getFitness();
+        double fitness2 = o2.getFitness();
+        if (fitness1 < fitness2) {
+            return -1;
+        }
+
+        if (fitness1 > fitness2) {
+            return 1;
+        }
+
+        return 0;
     }
-    
-    if (fitness1 >  fitness2) {
-      return 1;
-    }
-    
-    return 0;
-  } // compare    
-} // FitnessComparator
+}

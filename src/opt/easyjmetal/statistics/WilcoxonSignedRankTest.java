@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.util.statistics;
+package opt.easyjmetal.statistics;
 
 import opt.easyjmetal.util.JMetalLogger;
 import org.apache.commons.lang3.ArrayUtils;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TTest {
+public class WilcoxonSignedRankTest {
     private static final String DEFAULT_LATEX_DIRECTORY = "latex";
     private static final String resultBaseDirectory_ = "result/easyjmetal";
 
@@ -21,7 +21,7 @@ public class TTest {
 
     private int[][][] better;
 
-    public TTest(String[] algorithmNameList_,
+    public WilcoxonSignedRankTest(String[] algorithmNameList_,
                  String[] problemList_, String[] indicList_) {
         if (algorithmNameList_.length < 2) {
             JMetalLogger.logger.info("请至少输入两种算法");
@@ -97,7 +97,7 @@ public class TTest {
 
                 for (int algorithm = 1; algorithm < algorithmListSize; algorithm++) {
                     // 将algorithm[0]和algorithm[1],algorithm[2]...对比
-                    double pValue = computeStatistics(data.get(indicator).get(problem).get(0),
+                    boolean xz = computeStatistics(data.get(indicator).get(problem).get(0),
                             data.get(indicator).get(problem).get(algorithm));
 
                     double mean_ours = Statistics.MeanValue(data.get(indicator).get(problem).get(0));
@@ -106,7 +106,7 @@ public class TTest {
                     // HV越大越好，其他指标越小越好
                     if (!indicList_.get(indicator).equals("HV")) {
                         // 判断差异性是否显著
-                        if (pValue < alpha_) {
+                        if (xz) {
                             if (mean_ours < mean_reference) {
                                 better[indicator][problem][algorithm] = 1;
                             } else if (mean_ours > mean_reference) {
@@ -117,7 +117,7 @@ public class TTest {
                         }
                     } else {
                         // 判断差异性是否显著
-                        if (pValue < alpha_) {
+                        if (xz) {
                             if (mean_ours > mean_reference) {
                                 better[indicator][problem][algorithm] = 1;
                             } else if (mean_ours < mean_reference) {
@@ -141,27 +141,27 @@ public class TTest {
             JMetalLogger.logger.info("Creating " + latexDirectoryName + " directory");
         }
         for (int i = 0; i < indicList_.size(); i++) {
-            String latexFile = latexDirectoryName + "/" + "TTest" + indicList_.get(i) + ".tex";
+            String latexFile = latexDirectoryName + "/" + "WilcoxonSignedRankTest" + indicList_.get(i) + ".tex";
             printHeaderLatexCommands(latexFile);
-            printData(latexFile, i, "TTest");
+            printData(latexFile, i, "WilcoxonSignedRankTest");
             printEndLatexCommands(latexFile);
         }
     }
 
     /**
-     * Computes pValue
+     * 判断差异性是否显著
      *
      * @param ours
      * @param reference
      * @return
      */
-    private double computeStatistics(List<Double> ours, List<Double> reference) {
+    private boolean computeStatistics(List<Double> ours, List<Double> reference) {
         Double[] ours_array = new Double[ours.size()];
         Double[] reference_array = new Double[reference.size()];
         ours.toArray(ours_array);
         reference.toArray(reference_array);
 
-        double pValue = Statistics.TTest(ArrayUtils.toPrimitive(ours_array), ArrayUtils.toPrimitive(reference_array));
+        boolean pValue = Statistics.WilcoxonSignedRankTest(ArrayUtils.toPrimitive(ours_array), ArrayUtils.toPrimitive(reference_array), alpha_);
         return pValue;
     }
 

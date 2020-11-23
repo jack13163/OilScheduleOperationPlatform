@@ -1,6 +1,6 @@
 package opt.easyjmetal.algorithm.cmoeas.entrence;
 
-import opt.easyjmetal.algorithm.util.Utils;
+import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.util.JMException;
 
 public class CMOEAs_analysis_exp2 {
@@ -14,10 +14,10 @@ public class CMOEAs_analysis_exp2 {
             int runtimes = 1;
 
             // 生成pareto前沿面
-            Utils.generateParetoFrontForAllConfigs(configs, algorithmNames, problemNames, runtimes);
+            MoeadUtils.generateParetoFrontForAllConfigs(configs, algorithmNames, problemNames, runtimes);
             // 计算性能指标
             for (int i = 0; i < configs.length; i++) {
-                double value = Utils.generateQualityIndicatorsForAllConfigs(configs[i], indicatorNames[0]);
+                double value = MoeadUtils.generateQualityIndicatorsForAllConfigs(configs[i], indicatorNames[0]);
                 System.out.println(configs[i] + " : " + value);
             }
 

@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.util.statistics;
+package opt.easyjmetal.statistics;
 
 import opt.easyjmetal.util.JMetalLogger;
 

@@ -1,4 +1,4 @@
-package opt.easyjmetal.experiments.util;
+package opt.easyjmetal.statistics;
 
 public class Pareja implements Comparable {
 
@@ -24,6 +24,4 @@ public class Pareja implements Comparable {
 	return -1;
     }else return 0;
   }
-
-
 }
