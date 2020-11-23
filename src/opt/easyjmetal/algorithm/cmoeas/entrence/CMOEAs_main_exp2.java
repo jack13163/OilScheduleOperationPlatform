@@ -1,6 +1,6 @@
 package opt.easyjmetal.algorithm.cmoeas.entrence;
 
-import opt.easyjmetal.util.MoeadUtils;
+import opt.easyjmetal.algorithm.AlgorithmFactory;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Operator;
 import opt.easyjmetal.core.Problem;
@@ -22,7 +22,7 @@ public class CMOEAs_main_exp2 {
         // 0 represents for DE, 1 represents for SBX
         int crossoverMethod = 1;
         String[] configNames = new String[] {
-                "config1",//data/configs/
+                "config1",
                 "config2",
                 "config3"
         };
@@ -113,11 +113,11 @@ public class CMOEAs_main_exp2 {
 //////////////////////////////////////// End parameter setting //////////////////////////////////
 
         for (int i = 0; i < problemStrings.length; i++) {
-            problem = (new ProblemFactory()).getProblem(problemStrings[i], params);
+            problem = ProblemFactory.getProblem(problemStrings[i], params);
 
             //define algorithm
             Object[] algorithmParams = {problem};
-            algorithm = (new MoeadUtils()).getAlgorithm(AlgorithmName, algorithmParams);
+            algorithm = AlgorithmFactory.getAlgorithm(AlgorithmName, algorithmParams);
 
             //define pareto file path
             String paretoPath = "result/easyjmetal/" + configName + problemStrings[i] + ".pf";

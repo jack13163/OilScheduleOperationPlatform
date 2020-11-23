@@ -2,8 +2,8 @@ package opt.easyjmetal.algorithm.cmoeas.impl.spea2_cdp;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
-
 import opt.easyjmetal.util.Distance;
+import opt.easyjmetal.util.comparators.FitnessComparator;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
