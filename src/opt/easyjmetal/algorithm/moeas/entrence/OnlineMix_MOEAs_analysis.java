@@ -2,7 +2,6 @@ package opt.easyjmetal.algorithm.moeas.entrence;
 
 import opt.easyjmetal.statistics.*;
 import opt.easyjmetal.util.MoeadUtils;
-import opt.easyjmetal.algorithm.util.statistics.*;
 import opt.easyjmetal.util.JMException;
 
 /**

@@ -25,8 +25,6 @@ package opt.easyjmetal.experiments;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.experiments.Experiment;
-import opt.easyjmetal.experiments.Settings;
 import opt.easyjmetal.util.JMException;
 
 import java.io.File;
