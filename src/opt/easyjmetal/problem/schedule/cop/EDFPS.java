@@ -151,6 +151,7 @@ public class EDFPS extends Problem {
      * @param solution The solution
      * @throws JMException
      */
+    @Override
     public void evaluateConstraints(Solution solution) throws JMException {
         solution.setOverallConstraintViolation(overallConstraintViolation);
         solution.setNumberOfViolatedConstraint(numberOfViolatedConstraint);

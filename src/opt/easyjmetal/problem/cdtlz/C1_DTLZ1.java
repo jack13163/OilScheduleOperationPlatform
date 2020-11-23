@@ -1,9 +1,8 @@
-package opt.jmetal.problem.multiobjective.cdtlz;
+package opt.easyjmetal.problem.cdtlz;
 
-import opt.jmetal.solution.DoubleSolution;
-import opt.jmetal.problem.multiobjective.dtlz.DTLZ1;
-import opt.jmetal.util.solutionattribute.impl.NumberOfViolatedConstraints;
-import opt.jmetal.util.solutionattribute.impl.OverallConstraintViolation;
+import opt.easyjmetal.core.Solution;
+import opt.easyjmetal.problem.dtlz.DTLZ1;
+import opt.easyjmetal.util.JMException;
 
 /**
  * Problem C1-DTLZ1, defined in: Jain, H. and K. Deb. "An Evolutionary
@@ -14,28 +13,23 @@ import opt.jmetal.util.solutionattribute.impl.OverallConstraintViolation;
  *
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
-@SuppressWarnings("serial")
 public class C1_DTLZ1 extends DTLZ1 {
-    public OverallConstraintViolation<DoubleSolution> overallConstraintViolationDegree;
-    public NumberOfViolatedConstraints<DoubleSolution> numberOfViolatedConstraints;
 
     public C1_DTLZ1(int numberOfVariables, int numberOfObjectives) {
         super(numberOfVariables, numberOfObjectives);
 
-        setNumberOfConstraints(1);
-        setName("C1_DTLZ1");
-
-        overallConstraintViolationDegree = new OverallConstraintViolation<DoubleSolution>();
-        numberOfViolatedConstraints = new NumberOfViolatedConstraints<DoubleSolution>();
+        numberOfConstraints_ = 1;
+        problemName_ = "C1_DTLZ1";
     }
 
     @Override
-    public void evaluate(DoubleSolution solution) {
+    public void evaluate(Solution solution) throws JMException {
         super.evaluate(solution);
         this.evaluateConstraints(solution);
     }
 
-    private void evaluateConstraints(DoubleSolution solution) {
+    @Override
+    public void evaluateConstraints(Solution solution) {
         double[] constraint = new double[this.getNumberOfConstraints()];
 
         double sum = 0;
@@ -53,8 +47,7 @@ public class C1_DTLZ1 extends DTLZ1 {
                 violatedConstraints++;
             }
         }
-
-        overallConstraintViolationDegree.setAttribute(solution, overallConstraintViolation);
-        numberOfViolatedConstraints.setAttribute(solution, violatedConstraints);
+        solution.setOverallConstraintViolation(overallConstraintViolation);
+        solution.setNumberOfViolatedConstraint(violatedConstraints);
     }
 }

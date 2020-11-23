@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -38,16 +38,26 @@ public class ProblemFactory {
      */
     public static Problem getProblem(String name, Object[] params) throws JMException {
         String base = "opt.easyjmetal.problem.";
-        if (name.substring(0, name.length() - 1).equalsIgnoreCase("LIRCMOP")) {
+        if (name.startsWith("LIRCMOP")) {
             base += "LIRCMOP.";
-        } else if (name.substring(0, name.length() - 2).equalsIgnoreCase("LIRCMOP")) {
-            base += "LIRCMOP.";
-        } else if (name.equalsIgnoreCase("EDFPS") || name.equalsIgnoreCase("EDFTSS")) {
+        } else if (name.equalsIgnoreCase("EDFPS")
+                || name.equalsIgnoreCase("EDFTSS")) {
             base += "schedule.cop.";
         } else if (name.equalsIgnoreCase("SJOil")) {
             base += "sj.";
         } else if (name.equalsIgnoreCase("OnlineMixOIL")) {
             base += "onlinemix.";
+        } else if (name.startsWith("UF")) {
+            base += "uf.";
+        } else if (name.startsWith("DTLZ")) {
+            base += "dtlz.";
+        } else if (name.equalsIgnoreCase("C1_DTLZ1")
+                || name.startsWith("C1_DTLZ3-")
+                || name.equalsIgnoreCase("C2_DTLZ2")
+                || name.equalsIgnoreCase("C3_DTLZ1")
+                || name.equalsIgnoreCase("C3_DTLZ4")
+                || name.startsWith("ConvexC2_DTLZ2-")) {
+            base += "cdtlz.";
         }
 
         try {
