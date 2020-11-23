@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.moeas.util;
+package opt.easyjmetal.algorithm.util;
 
 import lombok.SneakyThrows;
 import opt.easyjmetal.core.Solution;

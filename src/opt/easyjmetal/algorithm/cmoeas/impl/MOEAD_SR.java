@@ -1,11 +1,14 @@
-//  Push and Pull Search for Solving Constrained Multi-objective Optimization Problems
-package opt.easyjmetal.algorithm.cmoeas;
+//  This class implements a constrained version of the MOEAD algorithm based on the SR method.
+//
+//  T. P. Runarsson and X. Yao, ¡°Stochastic ranking for constrained evolutionary optimization,¡± IEEE Transactions on evolutionary computation, vol. 4, no. 3, pp. 284¨C294, 2000.
+package opt.easyjmetal.algorithm.cmoeas.impl;
 
 
 import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.jmathplot.ScatterPlot;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.io.BufferedReader;
@@ -15,10 +18,8 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 
-// This class implements a constrained version of the MOEAD algorithm based on
-// the IEpsilon method.
-public class PPS_MOEAD extends Algorithm {
 
+public class MOEAD_SR extends Algorithm {
     private int populationSize_;
     /**
      * Stores the population
@@ -28,8 +29,6 @@ public class PPS_MOEAD extends Algorithm {
      * Z vector (ideal point)
      */
     private double[] z_;
-
-    private double[] nz_;
     /**
      * Lambda vectors
      */
@@ -51,59 +50,41 @@ public class PPS_MOEAD extends Algorithm {
     private String functionType_;
     private int evaluations_;
     private String dataDirectory_;
-    private double epsilon_k_;
+    private ScatterPlot plot_;
     private SolutionSet external_archive_;
-
-
-    private double[][] idealPoints_;
-
-    private double[][] nazirPoints_;
-
-    double delta_;
-
-    private int l_  = 20;
-
-    double tao_ = 0.1 ;
-    double alpha_ = 0.95;
-
-    double threshold_change_;
+    private double srFactor_;
 
     /**
      * Constructor
      *
      * @param problem Problem to solve
      */
-    public PPS_MOEAD(Problem problem) {
+    public MOEAD_SR(Problem problem) {
         super(problem);
         functionType_ = "_TCHE2";
-    } // Push_pull
+    } // MOEAD_SR
 
     public SolutionSet execute() throws JMException, ClassNotFoundException {
         int runningTime;
         evaluations_ = 0;
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
-        populationSize_ = (Integer) getInputParameter("populationSize");
+        populationSize_ = (Integer) this.getInputParameter("populationSize");
         dataDirectory_ = getInputParameter("dataDirectory").toString();
         String dbName = getInputParameter("DBName").toString();
+        boolean isDisplay_ = (Boolean) this.getInputParameter("isDisplay");
+        int plotFlag_ = (Integer) getInputParameter("plotFlag");
         runningTime = (Integer) getInputParameter("runningTime") + 1; // start from 1
         population_ = new SolutionSet(populationSize_);
+        srFactor_ = (Double) getInputParameter("srFactor");
         T_ = (Integer) getInputParameter("T");
-        nr_ = (Integer) this.getInputParameter("nr");
-        delta_ = (Double) getInputParameter("delta");
+        nr_ = (Integer) getInputParameter("nr");
+        double delta_ = (Double) getInputParameter("delta");
         neighborhood_ = new int[populationSize_][T_];
+        String paratoFilePath_ = getInputParameter("paretoPath").toString();
         z_ = new double[problem_.getNumberOfObjectives()];
-        nz_ = new double[problem_.getNumberOfObjectives()];
         lambda_ = new double[populationSize_][problem_.getNumberOfObjectives()];
         Operator crossover_ = operators_.get("crossover"); // default: DE crossover
         Operator mutation_ = operators_.get("mutation");  // default: polynomial mutation
-
-
-        threshold_change_ = (Double) getInputParameter("threshold_change");
-
-        int maxGen = maxEvaluations_ / populationSize_ + 1;
-
-        idealPoints_ = new double[maxGen][problem_.getNumberOfObjectives()];
-        nazirPoints_ = new double[maxGen][problem_.getNumberOfObjectives()];
 
         //creat database
         String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
@@ -119,68 +100,30 @@ public class PPS_MOEAD extends Algorithm {
 
         initPopulation();
 
-        double[] change_ratio = new double[maxEvaluations_ / populationSize_];
-
-
-        // initialize external
         // Initialize the external archive
         external_archive_ = new SolutionSet(populationSize_);
         Utils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
-
-        int tc_ = (int) (0.8 * maxEvaluations_ / populationSize_);
-        double r_k_ = population_.GetFeasible_Ratio();
-        double cp_ = 2.0;
+        SolutionSet allPop = population_;
 
         // STEP 1.3. Initialize z_
         initIdealPoint();
-        initNadirPoint();
 
-
+        //display constraint info
+        if (isDisplay_ && paratoFilePath_ != null) {
+            if (plotFlag_ == 0) {
+                plot_ = new ScatterPlot(this.getClass().getName(), problem_.getName(), population_);
+            }
+            if (plotFlag_ == 1) {
+                plot_ = new ScatterPlot(this.getClass().getName(), problem_.getName(), external_archive_);
+            }
+            plot_.displayPf(paratoFilePath_);
+        }
 
         int gen = 0;
-        double epsilon_0_ = 0;
-        double changeRate = 1.0;
-        boolean pushStage = true;
 
-        change_ratio[0] = changeRate;
         // STEP 2. Update
         do {
-            setIdealAndNadirPoints(gen);
-
-            if(gen < l_){
-                change_ratio[gen] = changeRate;
-            }
-
-            if(gen >= l_ && gen <= tc_){
-                changeRate = MaxRateOfIdealAndNardirPoints(gen);
-
-                if(pushStage == true){
-                    change_ratio[gen] = changeRate;
-                }
-
-            }
-
-            if(gen < tc_) {
-
-                if (changeRate <= threshold_change_ && pushStage) {
-                    pushStage = false;
-                    epsilon_0_ = Math.abs(population_.MaxOverallConViolation());
-                    epsilon_k_ = epsilon_0_;
-                }
-
-                if (pushStage == false) {
-                    if (r_k_ < alpha_) {
-                        epsilon_k_ = (1 - tao_) * epsilon_k_;
-                    } else {
-                        epsilon_k_ = epsilon_0_ * Math.pow((1 - 1.0 * gen / tc_), cp_);
-                    }
-                }
-
-            } else {
-                    epsilon_k_ = 0;
-            }
-
             int[] permutation = new int[populationSize_];
             Utils.randomPermutation(permutation, populationSize_);
 
@@ -229,150 +172,34 @@ public class PPS_MOEAD extends Algorithm {
                 problem_.evaluateConstraints(child);
                 evaluations_++;
 
-
                 // STEP 2.3. Repair. Not necessary
 
                 // STEP 2.4. Update z_
-                updateIdealPoint(child);
+                updateReference(child);
 
                 // STEP 2.5. Update of solutions
-                updateProblem(child, n, type, pushStage);
+                updateProblem(child, n, type);
                 //updateProblem_new(child, n, type);
             } // for
 
-            r_k_ = population_.GetFeasible_Ratio();
-
-            // update external archive
+            // Update the external archive
             Utils.updateExternalArchive(population_, populationSize_, external_archive_);
-
+            allPop = allPop.union(population_);
+            // display populations
+            if (isDisplay_) {
+                plotPopulation(plotFlag_);
+            }
             gen = gen + 1;
 
         } while (evaluations_ < maxEvaluations_);
 
-        //outputResult2File(problemName, change_ratio);
-
         SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
         return external_archive_;
-
-
-
     }
 
-
-    private void updateProblem(Solution indiv, int id, int type, boolean pushStage) {
-        // indiv: child solution
-        // id:   the id of current subproblem
-        // type: update solutions in - neighborhood (1) or whole population (otherwise)
-        int size;
-        int time;
-
-        time = 0;
-
-        if (type == 1) {
-            size = neighborhood_[id].length;
-        } else {
-            size = population_.size();
-        }
-        int[] perm = new int[size];
-
-        Utils.randomPermutation(perm, size);
-
-        for (int i = 0; i < size; i++) {
-            int k;
-            if (type == 1) {
-                k = neighborhood_[id][perm[i]];
-            } else {
-                k = perm[i];      // calculate the values of objective function regarding the current subproblem
-            }
-            double f1, f2, con1, con2;
-
-            f1 = fitnessFunction(population_.get(k), lambda_[k]);
-            f2 = fitnessFunction(indiv, lambda_[k]);
-
-            con1 = Math.abs(population_.get(k).getOverallConstraintViolation());
-            con2 = Math.abs(indiv.getOverallConstraintViolation());
-
-            if(pushStage){
-                if (f2 < f1) {
-                    population_.replace(k, new Solution(indiv));
-                    time++;
-                }
-            }else {
-
-                if (con1 <= epsilon_k_ && con2 <= epsilon_k_) {
-                    if (f2 < f1) {
-                        population_.replace(k, new Solution(indiv));
-                        time++;
-                    }
-                } else if (con2 == con1) {
-                    if (f2 < f1) {
-                        population_.replace(k, new Solution(indiv));
-                        time++;
-                    }
-                } else if (con2 < con1) {
-                    population_.replace(k, new Solution(indiv));
-                    time++;
-                }
-            }
-
-            if (time >= nr_) {
-                return;
-            }
-        }
-    } // updateProblem
-
-
-    private void setIdealAndNadirPoints(int gen){
-
-        double[] temp_idealpoint = new double[problem_.getNumberOfObjectives()];
-        double[] temp_nazirpoint = new double[problem_.getNumberOfObjectives()];
-
-        for(int i = 0; i < problem_.getNumberOfObjectives(); i++){
-            temp_idealpoint[i] = 1e30;
-            temp_nazirpoint[i] = -1e30;
-        }
-
-        for (int i = 0; i < populationSize_; i++){
-            for (int j = 0; j < problem_.getNumberOfObjectives(); j++) {
-                if (population_.get(i).getObjective(j) < temp_idealpoint[j]) {
-                    temp_idealpoint[j] = population_.get(i).getObjective(j);
-                }
-                if (population_.get(i).getObjective(j) > temp_nazirpoint[j]) {
-                    temp_nazirpoint[j] = population_.get(i).getObjective(j);
-                }
-            }
-
-        }
-
-        for(int i = 0; i < problem_.getNumberOfObjectives(); i++){
-            idealPoints_[gen][i] = temp_idealpoint[i];
-            nazirPoints_[gen][i] = temp_nazirpoint[i];
-        }
-
-    }
-
-
-    private double MaxRateOfIdealAndNardirPoints(int gen){
-        double max_ideal = -1e30;
-        double max_nardir = -1e30;
-        double x_epsilon = 1e-10;
-        for(int i = 0 ; i < problem_.getNumberOfObjectives(); i++){
-            double temp_ideal  = Math.abs((idealPoints_[gen - l_][i] - idealPoints_[gen][i]) / Math.max(x_epsilon,Math.abs(idealPoints_[gen-l_][i])));
-            double temp_nardir = Math.abs((nazirPoints_[gen - l_][i] - nazirPoints_[gen][i]) / Math.max(x_epsilon,Math.abs(nazirPoints_[gen-l_][i])));
-
-            if(temp_ideal > max_ideal){
-                max_ideal = temp_ideal;
-            }
-
-            if(temp_nardir > max_nardir){
-                max_nardir = temp_nardir;
-            }
-        }
-
-        return Math.max(max_ideal,max_nardir);
-    }
-
-
+    /**
+     * initUniformWeight
+     */
     private void initUniformWeight() {
         if ((problem_.getNumberOfObjectives() == 2) && (populationSize_ <= 300)) {
             for (int n = 0; n < populationSize_; n++) {
@@ -416,7 +243,9 @@ public class PPS_MOEAD extends Algorithm {
         //System.exit(0) ;
     } // initUniformWeight
 
-
+    /**
+     *
+     */
     private void initNeighborhood() {
         double[] x = new double[populationSize_];
         int[] idx = new int[populationSize_];
@@ -434,6 +263,9 @@ public class PPS_MOEAD extends Algorithm {
         } // for
     } // initNeighborhood
 
+    /**
+     *
+     */
     private void initPopulation() throws JMException, ClassNotFoundException {
         for (int i = 0; i < populationSize_; i++) {
             Solution newSolution = new Solution(problem_);
@@ -444,23 +276,16 @@ public class PPS_MOEAD extends Algorithm {
         } // for
     } // initPopulation
 
+    /**
+     *
+     */
     private void initIdealPoint() throws JMException, ClassNotFoundException {
         for (int i = 0; i < problem_.getNumberOfObjectives(); i++) {
             z_[i] = 1.0e+30;
         } // for
 
         for (int i = 0; i < populationSize_; i++) {
-            updateIdealPoint(population_.get(i));
-        } // for
-    } // initIdealPoint
-
-    private void initNadirPoint() throws JMException, ClassNotFoundException {
-        for (int i = 0; i < problem_.getNumberOfObjectives(); i++) {
-            nz_[i] = -1.0e+30;
-        } // for
-
-        for (int i = 0; i < populationSize_; i++) {
-            updateNadirPoint(population_.get(i));
+            updateReference(population_.get(i));
         } // for
     } // initIdealPoint
 
@@ -498,18 +323,10 @@ public class PPS_MOEAD extends Algorithm {
         }
     } // matingSelection
 
-    private void updateIdealPoint(Solution individual) {
+    private void updateReference(Solution individual) {
         for (int n = 0; n < problem_.getNumberOfObjectives(); n++) {
             if (individual.getObjective(n) < z_[n]) {
                 z_[n] = individual.getObjective(n);
-            }
-        }
-    } // updateReference
-
-    private void updateNadirPoint(Solution individual) {
-        for (int n = 0; n < problem_.getNumberOfObjectives(); n++) {
-            if (individual.getObjective(n) > nz_[n]) {
-                nz_[n] = individual.getObjective(n);
             }
         }
     } // updateReference
@@ -544,26 +361,20 @@ public class PPS_MOEAD extends Algorithm {
             f1 = fitnessFunction(population_.get(k), lambda_[k]);
             f2 = fitnessFunction(indiv, lambda_[k]);
 
-            con1 = Math.abs(population_.get(k).getOverallConstraintViolation());
-            con2 = Math.abs(indiv.getOverallConstraintViolation());
+            con1 = population_.get(k).getOverallConstraintViolation();
+            con2 = indiv.getOverallConstraintViolation();
 
-            // use epsilon constraint method
-
-            if (con1 <= epsilon_k_ && con2 <= epsilon_k_) {
+            // use SR method
+            double rnd = PseudoRandom.randDouble();
+            if (con1 == con2 || rnd < srFactor_) {
                 if (f2 < f1) {
                     population_.replace(k, new Solution(indiv));
                     time++;
                 }
-            } else if (con2 == con1) {
-                if (f2 < f1) {
-                    population_.replace(k, new Solution(indiv));
-                    time++;
-                }
-            } else if (con2 < con1) {
+            } else if (con2 > con1) {
                 population_.replace(k, new Solution(indiv));
                 time++;
             }
-
             if (time >= nr_) {
                 return;
             }
@@ -642,5 +453,22 @@ public class PPS_MOEAD extends Algorithm {
         }
         return fitness;
     } // fitnessEvaluation
+
+    //Display the population in the objective space
+    private void plotPopulation(int flag) {
+        if (flag == 0) {
+            // plot the population
+            if (population_ != null && population_.size() > 0) {
+                plot_.displayPop(population_);
+            }
+        }
+        if (flag == 1) {
+            // plot the population
+            if (external_archive_ != null && external_archive_.size() > 0) {
+                plot_.displayPop(external_archive_);
+            }
+        }
+    }
+
 
 }

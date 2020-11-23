@@ -1,6 +1,6 @@
 package opt.easyjmetal.algorithm.moeas.entrence;
 
-import opt.easyjmetal.algorithm.moeas.AlgorithmFactory;
+import opt.easyjmetal.algorithm.AlgorithmFactory;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.problem.ProblemFactory;

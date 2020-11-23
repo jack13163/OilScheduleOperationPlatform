@@ -1,37 +1,42 @@
-// SPEA2: Improving the Strength Pareto Evolutionary Algorithm For Multiobjective Optimization.
-package opt.easyjmetal.algorithm.cmoeas.spea2_cdp;
+//  K. Deb, A. Pratap, S. Agarwal, and T. Meyarivan, ��A fast and elitist
+//  multiobjective genetic algorithm: NSGA-II,�� IEEE Transactions on
+//  Evolutionary Computation, vol. 6, no. 2, pp. 182�C197, Apr 2002.
+
+package opt.easyjmetal.algorithm.cmoeas.impl;
 
 import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
+import opt.easyjmetal.util.Ranking;
+import opt.easyjmetal.util.comparators.CrowdingComparator;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
-public class SPEA2_CDP extends Algorithm {
+
+/**
+ * Implementation of NSGA-II.
+ * This implementation of NSGA-II makes use of a QualityIndicator object
+ * to obtained the convergence speed of the algorithm. This version is used
+ * in the paper:
+ * A.J. Nebro, J.J. Durillo, C.A. Coello Coello, F. Luna, E. Alba
+ * "A Study of Convergence Speed in Multi-Objective Metaheuristics."
+ * To be presented in: PPSN'08. Dortmund. September 2008.
+ */
+
+public class NSGAII_CDP extends Algorithm {
     /**
      * Constructor
      *
      * @param problem Problem to solve
      */
-    public SPEA2_CDP(Problem problem) {
+    public NSGAII_CDP(Problem problem) {
         super(problem);
-    } // NSGAIII
-
+    } // NSGAII
+    private SolutionSet population_;
     private SolutionSet external_archive_;
-    private int populationSize_;
-    private int maxEvaluations_;
-    private String dataDirectory_;
-
-    Distance distance;
-
-    private int iterations;
-    private SolutionSet archive;// 档案集
-    private StrengthRawFitness strenghtRawFitness = new StrengthRawFitness();
-    private EnvironmentalSelection environmentalSelection;
-    private int k;
 
     /**
-     * Runs the SPEA2 algorithm.
+     * Runs the NSGA-II algorithm.
      *
      * @return a <code>SolutionSet</code> that is a set of non dominated solutions
      * as a result of the algorithm execution
@@ -39,17 +44,17 @@ public class SPEA2_CDP extends Algorithm {
      */
     public SolutionSet execute() throws JMException, ClassNotFoundException {
 
-        distance = new Distance();// 计算距离
         int runningTime = (Integer) getInputParameter("runningTime") + 1;
+        Distance distance = new Distance();
 
         //Read the parameters
-        populationSize_ = (Integer) getInputParameter("populationSize");
-        maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
+        int populationSize_ = (Integer) getInputParameter("populationSize");
+        int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         String dbName = getInputParameter("DBName").toString();
-        dataDirectory_ = getInputParameter("dataDirectory").toString();
+
 
         //Initialize the variables
-        SolutionSet population_ = new SolutionSet(populationSize_);
+        population_ = new SolutionSet(populationSize_);
         int evaluations_ = 0;
 
         //Read the operators
@@ -116,8 +121,46 @@ public class SPEA2_CDP extends Algorithm {
                 evaluations_ += 2;
             } // for
 
-            // 环境选择
-            population_ = replacement(population_, offspringPopulation_);
+            // Create the solutionSet union of solutionSet and offSpring
+            SolutionSet union_ = population_.union(offspringPopulation_);
+
+            // Ranking the union
+            Ranking ranking = new Ranking(union_);
+
+            int remain = populationSize_;
+            int index = 0;
+            SolutionSet front;
+            population_.clear();
+
+            // Obtain the next front
+            front = ranking.getSubfront(index);
+
+            while ((remain > 0) && (remain >= front.size())) {
+                //Assign crowding distance to individuals
+                distance.crowdingDistanceAssignment(front, problem_.getNumberOfObjectives());
+                //Add the individuals of this front
+                for (int k = 0; k < front.size(); k++) {
+                    population_.add(front.get(k));
+                } // for
+
+                //Decrement remain
+                remain = remain - front.size();
+
+                //Obtain the next front
+                index++;
+                if (remain > 0) {
+                    front = ranking.getSubfront(index);
+                } // if
+            } // while
+
+            // Remain is less than front(index).size, insert only the best one
+            if (remain > 0) {  // front contains individuals to insert
+                distance.crowdingDistanceAssignment(front, problem_.getNumberOfObjectives());
+                front.sort(new CrowdingComparator());
+                for (int k = 0; k < remain; k++) {
+                    population_.add(front.get(k));
+                } // for
+            } // if
 
             Utils.updateExternalArchive(population_, populationSize_, external_archive_);
 
@@ -132,16 +175,4 @@ public class SPEA2_CDP extends Algorithm {
         return external_archive_;
     } // execute
 
-    // 环境选择
-    protected SolutionSet replacement(SolutionSet population, SolutionSet offspringPopulation) throws JMException {
-
-        // Create the solutionSet union of solutionSet and offSpring
-        SolutionSet jointPopulation = population.union(offspringPopulation);
-
-        // Environmental selection
-        EnvironmentalSelection selection = new EnvironmentalSelection(populationSize_);
-        population = selection.execute(jointPopulation);
-
-        return population;
-    }
-}
+} // NSGA-II

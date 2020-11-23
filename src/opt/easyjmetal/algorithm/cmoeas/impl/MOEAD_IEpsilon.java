@@ -1,5 +1,9 @@
-// This class implements a constrained version of the MOEAD algorithm based on the CDP method.
-package opt.easyjmetal.algorithm.cmoeas;
+//  Z. Fan, W. Li, X. Cai, H. Huang, Y. Fang, Y. You, J. Mo, C. Wei,
+//  and E. D. Goodman, “An improved epsilon constraint-handling method
+//  in MOEA/D for cmops with large infeasible regions,” arXiv preprint
+//  arXiv:1707.08767, 2017.
+
+package opt.easyjmetal.algorithm.cmoeas.impl;
 
 import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.core.*;
@@ -11,11 +15,13 @@ import opt.easyjmetal.util.sqlite.SqlUtils;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-
-public class MOEAD_CDP extends Algorithm {
+// This class implements a constrained version of the MOEAD algorithm based on
+// the IEpsilon method.
+public class MOEAD_IEpsilon extends Algorithm {
 
     private int populationSize_;
     /**
@@ -29,6 +35,7 @@ public class MOEAD_CDP extends Algorithm {
     /**
      * Lambda vectors
      */
+    //Vector<Vector<Double>> lambda_ ;
     private double[][] lambda_;
     /**
      * T: neighbour size
@@ -47,17 +54,22 @@ public class MOEAD_CDP extends Algorithm {
     private int evaluations_;
     private String dataDirectory_;
     private ScatterPlot plot_;
+    private double epsilon_k_;
     private SolutionSet external_archive_;
+
+
+    private double phi_max_ = -1e30;
+
 
     /**
      * Constructor
      *
      * @param problem Problem to solve
      */
-    public MOEAD_CDP(Problem problem) {
+    public MOEAD_IEpsilon(Problem problem) {
         super(problem);
         functionType_ = "_TCHE2";
-    } // MOEAD_CDP
+    } // MOEAD_Epsilon
 
     public SolutionSet execute() throws JMException, ClassNotFoundException {
         int runningTime;
@@ -71,7 +83,7 @@ public class MOEAD_CDP extends Algorithm {
         runningTime = (Integer) getInputParameter("runningTime") + 1; // start from 1
         population_ = new SolutionSet(populationSize_);
         T_ = (Integer) getInputParameter("T");
-        nr_ = (Integer) getInputParameter("nr");
+        nr_ = (Integer) this.getInputParameter("nr");
         double delta_ = (Double) getInputParameter("delta");
         neighborhood_ = new int[populationSize_][T_];
         String paratoFilePath_ = this.getInputParameter("paretoPath").toString();
@@ -79,6 +91,7 @@ public class MOEAD_CDP extends Algorithm {
         lambda_ = new double[populationSize_][problem_.getNumberOfObjectives()];
         Operator crossover_ = operators_.get("crossover"); // default: DE crossover
         Operator mutation_ = operators_.get("mutation");  // default: polynomial mutation
+
 
         //creat database
         String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
@@ -94,10 +107,27 @@ public class MOEAD_CDP extends Algorithm {
 
         initPopulation();
 
+        // initialize external
         // Initialize the external archive
         external_archive_ = new SolutionSet(populationSize_);
-        external_archive_ = Utils.initializeExternalArchive(population_, populationSize_, external_archive_);
+        Utils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
+
+        // Initialize the epsilon_zero_
+        double[] constraints = new double[populationSize_];
+        for (int i = 0; i < populationSize_; i++) {
+            constraints[i] = population_.get(i).getOverallConstraintViolation();
+        }
+        Arrays.sort(constraints); // each constraints is less or equal than zero;
+        double epsilon_zero_ = Math.abs(constraints[(int) Math.ceil(0.05 * populationSize_)]);
+
+
+        if (phi_max_ < Math.abs(constraints[0])) {
+            phi_max_ = Math.abs(constraints[0]);
+        }
+        int tc_ = (int) (0.8 * maxEvaluations_ / populationSize_);
+        double r_k_ = population_.GetFeasible_Ratio();
+        double tao_ = 0.05;
         SolutionSet allPop = population_;
 
         // STEP 1.3. Initialize z_
@@ -115,9 +145,21 @@ public class MOEAD_CDP extends Algorithm {
         }
 
         int gen = 0;
+        epsilon_k_ = epsilon_zero_;
 
         // STEP 2. Update
         do {
+            // update the epsilon level
+            if (gen >= tc_) {
+                epsilon_k_ = 0;
+            } else {
+                if (r_k_ < 0.95) {
+                    epsilon_k_ = (1 - tao_) * epsilon_k_;
+                } else {
+                    epsilon_k_ = phi_max_ * (1 + tao_);
+                }
+            }
+
             int[] permutation = new int[populationSize_];
             Utils.randomPermutation(permutation, populationSize_);
 
@@ -166,6 +208,12 @@ public class MOEAD_CDP extends Algorithm {
                 problem_.evaluateConstraints(child);
                 evaluations_++;
 
+                //update phi_max_
+
+                if (phi_max_ < Math.abs(child.getOverallConstraintViolation())) {
+                    phi_max_ = Math.abs(child.getOverallConstraintViolation());
+                }
+
                 // STEP 2.3. Repair. Not necessary
 
                 // STEP 2.4. Update z_
@@ -173,26 +221,45 @@ public class MOEAD_CDP extends Algorithm {
 
                 // STEP 2.5. Update of solutions
                 updateProblem(child, n, type);
+                //updateProblem_new(child, n, type);
             } // for
 
-            // Update the external archive
+            r_k_ = population_.GetFeasible_Ratio();
+
+            // update external archive
             Utils.updateExternalArchive(population_, populationSize_, external_archive_);
-            allPop = allPop.union(population_);
+
             // display populations
             if (isDisplay_) {
                 plotPopulation(plotFlag_);
             }
             gen = gen + 1;
 
+            allPop = allPop.union(population_);
+
         } while (evaluations_ < maxEvaluations_);
 
+        // Update the external archive
+        Utils.updateExternalArchive(population_, populationSize_, external_archive_);
         SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
         return external_archive_;
     }
 
-    /**
-     * initUniformWeight
-     */
+    private void plotPopulation(int flag) {
+        if (flag == 0) {
+            // plot the population
+            if (population_ != null && population_.size() > 0) {
+                plot_.displayPop(population_);
+            }
+        }
+        if (flag == 1) {
+            // plot the population
+            if (external_archive_ != null && external_archive_.size() > 0) {
+                plot_.displayPop(external_archive_);
+            }
+        }
+    }
+
     private void initUniformWeight() {
         if ((problem_.getNumberOfObjectives() == 2) && (populationSize_ <= 300)) {
             for (int n = 0; n < populationSize_; n++) {
@@ -203,12 +270,12 @@ public class MOEAD_CDP extends Algorithm {
         } // if
         else {
             String dataFileName;
-            dataFileName = "W" + problem_.getNumberOfObjectives() + "D_" +
-                    populationSize_ + ".dat";
+            dataFileName = "W" + problem_.getNumberOfObjectives() + "D_" + populationSize_ + ".dat";
 
             try {
                 // Open the file
-                FileInputStream fis = new FileInputStream(dataDirectory_ + "/" + dataFileName);
+                String filepath = dataDirectory_ + "/" + dataFileName;
+                FileInputStream fis = new FileInputStream(filepath);
                 InputStreamReader isr = new InputStreamReader(fis);
                 BufferedReader br = new BufferedReader(isr);
                 int i = 0;
@@ -236,9 +303,6 @@ public class MOEAD_CDP extends Algorithm {
         //System.exit(0) ;
     } // initUniformWeight
 
-    /**
-     *
-     */
     private void initNeighborhood() {
         double[] x = new double[populationSize_];
         int[] idx = new int[populationSize_];
@@ -256,9 +320,6 @@ public class MOEAD_CDP extends Algorithm {
         } // for
     } // initNeighborhood
 
-    /**
-     *
-     */
     private void initPopulation() throws JMException, ClassNotFoundException {
         for (int i = 0; i < populationSize_; i++) {
             Solution newSolution = new Solution(problem_);
@@ -351,19 +412,26 @@ public class MOEAD_CDP extends Algorithm {
             f1 = fitnessFunction(population_.get(k), lambda_[k]);
             f2 = fitnessFunction(indiv, lambda_[k]);
 
-            con1 = population_.get(k).getOverallConstraintViolation();//约束违背值CV
-            con2 = indiv.getOverallConstraintViolation();
+            con1 = Math.abs(population_.get(k).getOverallConstraintViolation());
+            con2 = Math.abs(indiv.getOverallConstraintViolation());
 
-            // use CDP method
-            if (con1 == con2) {
+            // use epsilon constraint method
+
+            if (con1 <= epsilon_k_ && con2 <= epsilon_k_) {
                 if (f2 < f1) {
                     population_.replace(k, new Solution(indiv));
                     time++;
                 }
-            } else if (con2 > con1) {//谁的CV值大谁厉害
+            } else if (con2 == con1) {
+                if (f2 < f1) {
+                    population_.replace(k, new Solution(indiv));
+                    time++;
+                }
+            } else if (con2 < con1) {
                 population_.replace(k, new Solution(indiv));
                 time++;
             }
+
             if (time >= nr_) {
                 return;
             }
@@ -436,25 +504,11 @@ public class MOEAD_CDP extends Algorithm {
 
             fitness = d1 + theta * d2;
         } else {
-            System.out.println("MOEAD.fitnessFunction: unknown type " + functionType_);
+            System.out.println("MOEAD.fitnessFunction: unknown type "
+                    + functionType_);
             System.exit(-1);
         }
         return fitness;
     } // fitnessEvaluation
 
-    //Display the population in the objective space
-    private void plotPopulation(int flag) {
-        if (flag == 0) {
-            // plot the population
-            if (population_ != null && population_.size() > 0) {
-                plot_.displayPop(population_);
-            }
-        }
-        if (flag == 1) {
-            // plot the population
-            if (external_archive_ != null && external_archive_.size() > 0) {
-                plot_.displayPop(external_archive_);
-            }
-        }
-    }
 }

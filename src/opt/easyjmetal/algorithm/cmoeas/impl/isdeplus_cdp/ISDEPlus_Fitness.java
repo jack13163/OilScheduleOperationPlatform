@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.cmoeas.isdeplus_cdp;
+package opt.easyjmetal.algorithm.cmoeas.impl.isdeplus_cdp;
 
 import opt.easyjmetal.algorithm.util.LinearNormalization;
 import opt.easyjmetal.core.SolutionSet;

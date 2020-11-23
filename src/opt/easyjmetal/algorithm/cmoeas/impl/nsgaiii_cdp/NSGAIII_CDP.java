@@ -1,7 +1,7 @@
 // An Evolutionary Many-Objective Optimization Algorithm Using Reference-point
 // Based Non-dominated Sorting Approach,
 // Part I: Solving Problems with Box Constraints.
-package opt.easyjmetal.algorithm.cmoeas.nsgaiii_cdp;
+package opt.easyjmetal.algorithm.cmoeas.impl.nsgaiii_cdp;
 
 import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.core.*;

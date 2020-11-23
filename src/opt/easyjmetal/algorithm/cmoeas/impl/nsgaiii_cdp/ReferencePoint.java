@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.cmoeas.nsgaiii_cdp;
+package opt.easyjmetal.algorithm.cmoeas.impl.nsgaiii_cdp;
 
 import opt.easyjmetal.core.Solution;
 import opt.jmetal.util.pseudorandom.JMetalRandom;

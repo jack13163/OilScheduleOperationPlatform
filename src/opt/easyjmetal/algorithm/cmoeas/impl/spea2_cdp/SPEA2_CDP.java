@@ -1,28 +1,22 @@
-// ISDE+ - An Indicator for Multi and Many-objective Optimization.
-package opt.easyjmetal.algorithm.cmoeas.isdeplus_cdp;
+// SPEA2: Improving the Strength Pareto Evolutionary Algorithm For Multiobjective Optimization.
+package opt.easyjmetal.algorithm.cmoeas.impl.spea2_cdp;
 
 import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.Ranking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class ISDEPLUS_CDP extends Algorithm {
+public class SPEA2_CDP extends Algorithm {
     /**
      * Constructor
      *
      * @param problem Problem to solve
      */
-    public ISDEPLUS_CDP(Problem problem) {
+    public SPEA2_CDP(Problem problem) {
         super(problem);
-    }
+    } // NSGAIII
 
-    private SolutionSet population_;
     private SolutionSet external_archive_;
     private int populationSize_;
     private int maxEvaluations_;
@@ -32,6 +26,9 @@ public class ISDEPLUS_CDP extends Algorithm {
 
     private int iterations;
     private SolutionSet archive;// 档案集
+    private StrengthRawFitness strenghtRawFitness = new StrengthRawFitness();
+    private EnvironmentalSelection environmentalSelection;
+    private int k;
 
     /**
      * Runs the SPEA2 algorithm.
@@ -52,7 +49,7 @@ public class ISDEPLUS_CDP extends Algorithm {
         dataDirectory_ = getInputParameter("dataDirectory").toString();
 
         //Initialize the variables
-        population_ = new SolutionSet(populationSize_);
+        SolutionSet population_ = new SolutionSet(populationSize_);
         int evaluations_ = 0;
 
         //Read the operators
@@ -106,6 +103,7 @@ public class ISDEPLUS_CDP extends Algorithm {
                     offSpring[1] = (Solution) crossoverOperator_.execute(new Object[]{parents[1], parents});
                 } else {
                     System.out.println("unknown crossover");
+
                 }
                 mutationOperator_.execute(offSpring[0]);
                 mutationOperator_.execute(offSpring[1]);
@@ -138,36 +136,12 @@ public class ISDEPLUS_CDP extends Algorithm {
     protected SolutionSet replacement(SolutionSet population, SolutionSet offspringPopulation) throws JMException {
 
         // Create the solutionSet union of solutionSet and offSpring
-        SolutionSet jointPopulation = population_.union(offspringPopulation);
-
-        // Ranking the union
-        Ranking ranking = new Ranking(jointPopulation);
-
-        // List<Solution> pop = crowdingDistanceSelection(ranking);
-        SolutionSet pop = new SolutionSet(populationSize_);
-        List<SolutionSet> fronts = new ArrayList<>();
-        int rankingIndex = 0;
-        int candidateSolutions = 0;
-        while (candidateSolutions < populationSize_) {
-
-            SolutionSet solutions = ranking.getSubfront(rankingIndex);
-            fronts.add(solutions);
-
-            candidateSolutions += solutions.size();
-            if (pop.size() + solutions.size() <= populationSize_) {
-
-                for (int i = 0; i < solutions.size(); i++) {
-                    pop.add(solutions.get(i));
-                }
-            }
-            rankingIndex++;
-        }
+        SolutionSet jointPopulation = population.union(offspringPopulation);
 
         // Environmental selection
-        // A copy of the reference list should be used as parameter of the environmental selection
         EnvironmentalSelection selection = new EnvironmentalSelection(populationSize_);
-        pop = selection.execute(pop, fronts);
+        population = selection.execute(jointPopulation);
 
-        return pop;
+        return population;
     }
 }

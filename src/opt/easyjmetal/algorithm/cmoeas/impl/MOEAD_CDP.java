@@ -1,8 +1,5 @@
-//  This class implements a constrained version of the MOEAD algorithm based on the SR method.
-//
-//  T. P. Runarsson and X. Yao, “Stochastic ranking for constrained evolutionary optimization,” IEEE Transactions on evolutionary computation, vol. 4, no. 3, pp. 284–294, 2000.
-package opt.easyjmetal.algorithm.cmoeas;
-
+// This class implements a constrained version of the MOEAD algorithm based on the CDP method.
+package opt.easyjmetal.algorithm.cmoeas.impl;
 
 import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.core.*;
@@ -18,8 +15,8 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 
+public class MOEAD_CDP extends Algorithm {
 
-public class MOEAD_SR extends Algorithm {
     private int populationSize_;
     /**
      * Stores the population
@@ -32,7 +29,6 @@ public class MOEAD_SR extends Algorithm {
     /**
      * Lambda vectors
      */
-    //Vector<Vector<Double>> lambda_ ;
     private double[][] lambda_;
     /**
      * T: neighbour size
@@ -52,35 +48,33 @@ public class MOEAD_SR extends Algorithm {
     private String dataDirectory_;
     private ScatterPlot plot_;
     private SolutionSet external_archive_;
-    private double srFactor_;
 
     /**
      * Constructor
      *
      * @param problem Problem to solve
      */
-    public MOEAD_SR(Problem problem) {
+    public MOEAD_CDP(Problem problem) {
         super(problem);
         functionType_ = "_TCHE2";
-    } // MOEAD_SR
+    } // MOEAD_CDP
 
     public SolutionSet execute() throws JMException, ClassNotFoundException {
         int runningTime;
         evaluations_ = 0;
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
-        populationSize_ = (Integer) this.getInputParameter("populationSize");
+        populationSize_ = (Integer) getInputParameter("populationSize");
         dataDirectory_ = getInputParameter("dataDirectory").toString();
         String dbName = getInputParameter("DBName").toString();
-        boolean isDisplay_ = (Boolean) this.getInputParameter("isDisplay");
+        boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
         int plotFlag_ = (Integer) getInputParameter("plotFlag");
         runningTime = (Integer) getInputParameter("runningTime") + 1; // start from 1
         population_ = new SolutionSet(populationSize_);
-        srFactor_ = (Double) getInputParameter("srFactor");
         T_ = (Integer) getInputParameter("T");
         nr_ = (Integer) getInputParameter("nr");
         double delta_ = (Double) getInputParameter("delta");
         neighborhood_ = new int[populationSize_][T_];
-        String paratoFilePath_ = getInputParameter("paretoPath").toString();
+        String paratoFilePath_ = this.getInputParameter("paretoPath").toString();
         z_ = new double[problem_.getNumberOfObjectives()];
         lambda_ = new double[populationSize_][problem_.getNumberOfObjectives()];
         Operator crossover_ = operators_.get("crossover"); // default: DE crossover
@@ -102,7 +96,7 @@ public class MOEAD_SR extends Algorithm {
 
         // Initialize the external archive
         external_archive_ = new SolutionSet(populationSize_);
-        Utils.initializeExternalArchive(population_, populationSize_, external_archive_);
+        external_archive_ = Utils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         SolutionSet allPop = population_;
 
@@ -179,7 +173,6 @@ public class MOEAD_SR extends Algorithm {
 
                 // STEP 2.5. Update of solutions
                 updateProblem(child, n, type);
-                //updateProblem_new(child, n, type);
             } // for
 
             // Update the external archive
@@ -276,9 +269,6 @@ public class MOEAD_SR extends Algorithm {
         } // for
     } // initPopulation
 
-    /**
-     *
-     */
     private void initIdealPoint() throws JMException, ClassNotFoundException {
         for (int i = 0; i < problem_.getNumberOfObjectives(); i++) {
             z_[i] = 1.0e+30;
@@ -361,17 +351,16 @@ public class MOEAD_SR extends Algorithm {
             f1 = fitnessFunction(population_.get(k), lambda_[k]);
             f2 = fitnessFunction(indiv, lambda_[k]);
 
-            con1 = population_.get(k).getOverallConstraintViolation();
+            con1 = population_.get(k).getOverallConstraintViolation();//约束违背值CV
             con2 = indiv.getOverallConstraintViolation();
 
-            // use SR method
-            double rnd = PseudoRandom.randDouble();
-            if (con1 == con2 || rnd < srFactor_) {
+            // use CDP method
+            if (con1 == con2) {
                 if (f2 < f1) {
                     population_.replace(k, new Solution(indiv));
                     time++;
                 }
-            } else if (con2 > con1) {
+            } else if (con2 > con1) {//谁的CV值大谁厉害
                 population_.replace(k, new Solution(indiv));
                 time++;
             }
@@ -447,8 +436,7 @@ public class MOEAD_SR extends Algorithm {
 
             fitness = d1 + theta * d2;
         } else {
-            System.out.println("MOEAD.fitnessFunction: unknown type "
-                    + functionType_);
+            System.out.println("MOEAD.fitnessFunction: unknown type " + functionType_);
             System.exit(-1);
         }
         return fitness;
@@ -469,6 +457,4 @@ public class MOEAD_SR extends Algorithm {
             }
         }
     }
-
-
 }

@@ -21,7 +21,10 @@
 
 package opt.easyjmetal.algorithm.util;
 
-import opt.easyjmetal.core.*;
+import opt.easyjmetal.core.Problem;
+import opt.easyjmetal.core.Solution;
+import opt.easyjmetal.core.SolutionSet;
+import opt.easyjmetal.core.Variable;
 import opt.easyjmetal.qualityindicator.Epsilon;
 import opt.easyjmetal.qualityindicator.Hypervolume;
 import opt.easyjmetal.qualityindicator.InvertedGenerationalDistance;
@@ -33,7 +36,6 @@ import opt.easyjmetal.util.sqlite.SqlUtils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -210,38 +212,6 @@ public class Utils {
             sum += z[i] * z[i];
 
         return Math.sqrt(sum);
-    }
-
-    public Algorithm getAlgorithm(String name, Object[] params) throws JMException {
-        // Params are the arguments
-        // The number of argument must correspond with the algorithm constructor params
-        String base = "opt.easyjmetal.algorithm.cmoeas.";
-
-        if (name.equalsIgnoreCase("NSGAIII_CDP")) {
-            base += "nsgaiii_cdp.";
-        } else if (name.equalsIgnoreCase("SPEA2_CDP")) {
-            base += "spea2_cdp.";
-        } else if (name.equalsIgnoreCase("ISDEPLUS_CDP")) {
-            base += "isdeplus_cdp.";
-        }
-
-        try {
-            Class AlgorithmClass = Class.forName(base + name);
-            Constructor[] constructors = AlgorithmClass.getConstructors();
-            int i = 0;
-            //find the constructor
-            while ((i < constructors.length) &&
-                    (constructors[i].getParameterTypes().length != params.length)) {
-                i++;
-            }
-            // constructors[i] is the selected one constructor
-            Algorithm algorithm = (Algorithm) constructors[i].newInstance(params);
-            return algorithm;
-        }// try
-        catch (Exception e) {
-            e.printStackTrace();
-            throw new JMException("Exception in " + name + ".getAlgorithm()");
-        } // catch
     }
 
     public static void repairSolution(Solution solution, Problem problem_) throws JMException {

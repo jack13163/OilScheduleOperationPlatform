@@ -1,7 +1,7 @@
 package opt.easyjmetal.algorithm.moeas.impl;
 
 import opt.easyjmetal.algorithm.util.Utils;
-import opt.easyjmetal.algorithm.moeas.util.PlotObjectives;
+import opt.easyjmetal.algorithm.util.PlotObjectives;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.Solution;

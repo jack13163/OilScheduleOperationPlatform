@@ -1,25 +1,24 @@
-// Takahama T, Sakai S (2006) Constrained optimization by the ε constrained differential evolution
-// with gradient-based mutation and feasible elites.
-// In: 2006 IEEE international conference on evolutionary computation. IEEE, pp 1–8
-
-// This class implements a constrained version of the MOEAD algorithm based on the Epsilon method.
-package opt.easyjmetal.algorithm.cmoeas;
+// This class implements a constrained version of the MOEAD algorithm based on the paper:
+// "An adaptive constraint handling approach embedded MOEA/D". DOI: 10.1109/CEC.2012.6252868
+package opt.easyjmetal.algorithm.cmoeas.impl;
 
 import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.comparators.IConstraintViolationComparator;
+import opt.easyjmetal.util.comparators.ViolationThresholdComparator;
 import opt.easyjmetal.util.jmathplot.ScatterPlot;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-public class MOEAD_Epsilon extends Algorithm {
+
+public class C_MOEAD extends Algorithm {
 
     private int populationSize_;
     /**
@@ -33,7 +32,6 @@ public class MOEAD_Epsilon extends Algorithm {
     /**
      * Lambda vectors
      */
-    //Vector<Vector<Double>> lambda_ ;
     private double[][] lambda_;
     /**
      * T: neighbour size
@@ -50,23 +48,30 @@ public class MOEAD_Epsilon extends Algorithm {
     private int nr_;
     private String functionType_;
     private int evaluations_;
+
     private String dataDirectory_;
+
     private ScatterPlot plot_;
-    private double epsilon_k_;
+
     private SolutionSet external_archive_;
+
+    /**
+     * Use this encodings.variable as comparator for the constraints
+     */
+    private IConstraintViolationComparator comparator = new ViolationThresholdComparator();
 
     /**
      * Constructor
      *
      * @param problem Problem to solve
      */
-    public MOEAD_Epsilon(Problem problem) {
+    public C_MOEAD(Problem problem) {
         super(problem);
         functionType_ = "_TCHE2";
-    } // MOEAD_Epsilon
+    } // cMOEAD
 
     public SolutionSet execute() throws JMException, ClassNotFoundException {
-        int runningTime;
+        //Initialize the parameters of cMOEAD
         evaluations_ = 0;
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         populationSize_ = (Integer) getInputParameter("populationSize");
@@ -75,47 +80,38 @@ public class MOEAD_Epsilon extends Algorithm {
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
         int plotFlag_ = (Integer) getInputParameter("plotFlag");
 
-        runningTime = (Integer) getInputParameter("runningTime") + 1; // start from 1
+        int runningTime = (Integer) getInputParameter("runningTime") + 1; // start from 1
         population_ = new SolutionSet(populationSize_);
-
         T_ = (Integer) getInputParameter("T");
         nr_ = (Integer) getInputParameter("nr");
-        double delta_ = (Double) getInputParameter("delta");
+        double delta_ = (Double) getInputParameter("delta"); // probability that parent solutions are selected from neighbourhood
+
         neighborhood_ = new int[populationSize_][T_];
-        String paratoFilePath_ = this.getInputParameter("paretoPath").toString();
+        String paratoFilePath_ = getInputParameter("paretoPath").toString();
         z_ = new double[problem_.getNumberOfObjectives()];
         lambda_ = new double[populationSize_][problem_.getNumberOfObjectives()];
         Operator crossover_ = operators_.get("crossover"); // default: DE crossover
         Operator mutation_ = operators_.get("mutation");  // default: polynomial mutation
 
-        //creat database
+
+        //Create database and save the results
         String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
         SqlUtils.CreateTable(problemName, dbName);
 
         // STEP 1. Initialization
         // STEP 1.1. Compute euclidean distances between weight vectors and find T
         initUniformWeight();
-
         initNeighborhood();
 
         // STEP 1.2. Initialize population
-
         initPopulation();
+        SolutionSet allPop = population_;
+        ((ViolationThresholdComparator) this.comparator).updateThreshold(this.population_);
 
         // Initialize the external archive
         external_archive_ = new SolutionSet(populationSize_);
-        Utils.initializeExternalArchive(population_, populationSize_, external_archive_);
+        Utils.initializeExternalArchive(population_,populationSize_,external_archive_);
 
-        // Initialize the epsilon_zero_
-        double[] constraints = new double[populationSize_];
-        for (int i = 0; i < populationSize_; i++) {
-            constraints[i] = population_.get(i).getOverallConstraintViolation();
-        }
-        Arrays.sort(constraints);
-        double epsilon_zero_ = Math.abs(constraints[(int) Math.ceil(0.05 * populationSize_)]);
-        int tc_ = (int) (0.8 * maxEvaluations_ / populationSize_);
-        double cp_ = 2;
-        SolutionSet allPop = population_;
         // STEP 1.3. Initialize z_
         initIdealPoint();
 
@@ -130,17 +126,9 @@ public class MOEAD_Epsilon extends Algorithm {
             plot_.displayPf(paratoFilePath_);
         }
 
-        int gen = 0;
-
         // STEP 2. Update
+        int gen = 0;
         do {
-            // update the epsilon level
-            if (gen >= tc_) {
-                epsilon_k_ = 0;
-            } else {
-                epsilon_k_ = epsilon_zero_ * Math.pow(1 - 1.0 * gen / tc_, cp_);
-            }
-
             int[] permutation = new int[populationSize_];
             Utils.randomPermutation(permutation, populationSize_);
 
@@ -151,18 +139,16 @@ public class MOEAD_Epsilon extends Algorithm {
                 double rnd = PseudoRandom.randDouble();
 
                 // STEP 2.1. Mating selection based on probability
-                if (rnd < delta_) // if (rnd < realb)
-                {
+                if (rnd < delta_){ // if (rnd < realb)
                     type = 1;   // neighborhood
                 } else {
                     type = 2;   // whole population
                 }
                 Vector<Integer> p = new Vector<Integer>();
-                matingSelection(p, n, 2, type);
+                matingSelection(p, n,2, type);
 
                 // STEP 2.2. Reproduction
                 Solution child = null;
-
                 // Apply Crossover for Real codification
                 if (crossover_.getClass().getSimpleName().equalsIgnoreCase("SBXCrossover")) {
                     Solution[] parents = new Solution[2];
@@ -180,13 +166,14 @@ public class MOEAD_Epsilon extends Algorithm {
                 } else {
                     System.out.println("unknown crossover");
                 }
+
                 // Apply mutation
                 mutation_.execute(child);
-
 
                 // Evaluation
                 problem_.evaluate(child);
                 problem_.evaluateConstraints(child);
+
                 evaluations_++;
 
                 // STEP 2.3. Repair. Not necessary
@@ -196,18 +183,20 @@ public class MOEAD_Epsilon extends Algorithm {
 
                 // STEP 2.5. Update of solutions
                 updateProblem(child, n, type);
-                //updateProblem_new(child, n, type);
             } // for
 
-            // Update the external archive
-            Utils.updateExternalArchive(population_, populationSize_, external_archive_);
-            allPop = allPop.union(population_);
+            ((ViolationThresholdComparator) this.comparator).updateThreshold(this.population_);
 
-            // display populations
+            gen += 1;
+
+            //Update the external archive
+            Utils.updateExternalArchive(population_,populationSize_,external_archive_);
+
             if (isDisplay_) {
                 plotPopulation(plotFlag_);
             }
-            gen = gen + 1;
+
+            allPop = allPop.union(population_);
 
         } while (evaluations_ < maxEvaluations_);
 
@@ -215,6 +204,7 @@ public class MOEAD_Epsilon extends Algorithm {
         return external_archive_;
     }
 
+    //Display the population in the objective space
     private void plotPopulation(int flag) {
         if (flag == 0) {
             // plot the population
@@ -260,7 +250,6 @@ public class MOEAD_Epsilon extends Algorithm {
                     while (st.hasMoreTokens()) {
                         double value = new Double(st.nextToken());
                         lambda_[i][j] = value;
-                        //System.out.println("lambda["+i+","+j+"] = " + value) ;
                         j++;
                     }
                     aux = br.readLine();
@@ -276,9 +265,6 @@ public class MOEAD_Epsilon extends Algorithm {
         //System.exit(0) ;
     } // initUniformWeight
 
-    /**
-     *
-     */
     private void initNeighborhood() {
         double[] x = new double[populationSize_];
         int[] idx = new int[populationSize_];
@@ -296,12 +282,10 @@ public class MOEAD_Epsilon extends Algorithm {
         } // for
     } // initNeighborhood
 
-    /**
-     *
-     */
     private void initPopulation() throws JMException, ClassNotFoundException {
         for (int i = 0; i < populationSize_; i++) {
             Solution newSolution = new Solution(problem_);
+
             problem_.evaluate(newSolution);
             problem_.evaluateConstraints(newSolution);
             evaluations_++;
@@ -309,14 +293,10 @@ public class MOEAD_Epsilon extends Algorithm {
         } // for
     } // initPopulation
 
-    /**
-     *
-     */
     private void initIdealPoint() throws JMException, ClassNotFoundException {
         for (int i = 0; i < problem_.getNumberOfObjectives(); i++) {
             z_[i] = 1.0e+30;
         } // for
-
         for (int i = 0; i < populationSize_; i++) {
             updateReference(population_.get(i));
         } // for
@@ -389,36 +369,35 @@ public class MOEAD_Epsilon extends Algorithm {
             } else {
                 k = perm[i];      // calculate the values of objective function regarding the current subproblem
             }
-            double f1, f2, con1, con2;
+            double f1, f2;
 
             f1 = fitnessFunction(population_.get(k), lambda_[k]);
             f2 = fitnessFunction(indiv, lambda_[k]);
 
-            con1 = Math.abs(population_.get(k).getOverallConstraintViolation());
-            con2 = Math.abs(indiv.getOverallConstraintViolation());
 
-            // use epsilon constraint method【松弛方法】
-            if (con1 <= epsilon_k_ && con2 <= epsilon_k_) {
+            /***** This part is new according to the violation of constraints *****/
+            if (comparator.needToCompare(population_.get(k), indiv)) {
+                int flag = comparator.compare(population_.get(k), indiv);
+                if (flag == 1)
+                    population_.replace(k, new Solution(indiv));
+                else if (flag == 0)
+                    if (f2 < f1) {
+                        population_.replace(k, new Solution(indiv));
+                        time++;
+                    }
+            } else {
                 if (f2 < f1) {
                     population_.replace(k, new Solution(indiv));
                     time++;
                 }
-            } else if (con2 == con1 && f2 < f1) {
-                population_.replace(k, new Solution(indiv));
-                time++;
-            } else if (con2 < con1) {
-                population_.replace(k, new Solution(indiv));
-                time++;
             }
-
+            // the maximal number of solutions updated is not allowed to exceed 'limit'
             if (time >= nr_) {
                 return;
             }
-
         }
     } // updateProblem
 
-    // 计算适应度
     private double fitnessFunction(Solution individual, double[] lambda) {
         double fitness;
         fitness = 0.0;
@@ -484,9 +463,11 @@ public class MOEAD_Epsilon extends Algorithm {
 
             fitness = d1 + theta * d2;
         } else {
-            System.out.println("MOEAD.fitnessFunction: unknown type " + functionType_);
+            System.out.println("MOEAD.fitnessFunction: unknown type "
+                    + functionType_);
             System.exit(-1);
         }
         return fitness;
     } // fitnessEvaluation
+
 }

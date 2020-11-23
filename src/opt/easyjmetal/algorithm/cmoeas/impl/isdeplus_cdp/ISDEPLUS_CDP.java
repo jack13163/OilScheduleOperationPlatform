@@ -1,42 +1,40 @@
-//  K. Deb, A. Pratap, S. Agarwal, and T. Meyarivan, ��A fast and elitist
-//  multiobjective genetic algorithm: NSGA-II,�� IEEE Transactions on
-//  Evolutionary Computation, vol. 6, no. 2, pp. 182�C197, Apr 2002.
-
-package opt.easyjmetal.algorithm.cmoeas;
+// ISDE+ - An Indicator for Multi and Many-objective Optimization.
+package opt.easyjmetal.algorithm.cmoeas.impl.isdeplus_cdp;
 
 import opt.easyjmetal.algorithm.util.Utils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.Ranking;
-import opt.easyjmetal.util.comparators.CrowdingComparator;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Implementation of NSGA-II.
- * This implementation of NSGA-II makes use of a QualityIndicator object
- * to obtained the convergence speed of the algorithm. This version is used
- * in the paper:
- * A.J. Nebro, J.J. Durillo, C.A. Coello Coello, F. Luna, E. Alba
- * "A Study of Convergence Speed in Multi-Objective Metaheuristics."
- * To be presented in: PPSN'08. Dortmund. September 2008.
- */
 
-public class NSGAII_CDP extends Algorithm {
+public class ISDEPLUS_CDP extends Algorithm {
     /**
      * Constructor
      *
      * @param problem Problem to solve
      */
-    public NSGAII_CDP(Problem problem) {
+    public ISDEPLUS_CDP(Problem problem) {
         super(problem);
-    } // NSGAII
+    }
+
     private SolutionSet population_;
     private SolutionSet external_archive_;
+    private int populationSize_;
+    private int maxEvaluations_;
+    private String dataDirectory_;
+
+    Distance distance;
+
+    private int iterations;
+    private SolutionSet archive;// 档案集
 
     /**
-     * Runs the NSGA-II algorithm.
+     * Runs the SPEA2 algorithm.
      *
      * @return a <code>SolutionSet</code> that is a set of non dominated solutions
      * as a result of the algorithm execution
@@ -44,14 +42,14 @@ public class NSGAII_CDP extends Algorithm {
      */
     public SolutionSet execute() throws JMException, ClassNotFoundException {
 
+        distance = new Distance();// 计算距离
         int runningTime = (Integer) getInputParameter("runningTime") + 1;
-        Distance distance = new Distance();
 
         //Read the parameters
-        int populationSize_ = (Integer) getInputParameter("populationSize");
-        int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
+        populationSize_ = (Integer) getInputParameter("populationSize");
+        maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         String dbName = getInputParameter("DBName").toString();
-
+        dataDirectory_ = getInputParameter("dataDirectory").toString();
 
         //Initialize the variables
         population_ = new SolutionSet(populationSize_);
@@ -108,7 +106,6 @@ public class NSGAII_CDP extends Algorithm {
                     offSpring[1] = (Solution) crossoverOperator_.execute(new Object[]{parents[1], parents});
                 } else {
                     System.out.println("unknown crossover");
-
                 }
                 mutationOperator_.execute(offSpring[0]);
                 mutationOperator_.execute(offSpring[1]);
@@ -121,46 +118,8 @@ public class NSGAII_CDP extends Algorithm {
                 evaluations_ += 2;
             } // for
 
-            // Create the solutionSet union of solutionSet and offSpring
-            SolutionSet union_ = population_.union(offspringPopulation_);
-
-            // Ranking the union
-            Ranking ranking = new Ranking(union_);
-
-            int remain = populationSize_;
-            int index = 0;
-            SolutionSet front;
-            population_.clear();
-
-            // Obtain the next front
-            front = ranking.getSubfront(index);
-
-            while ((remain > 0) && (remain >= front.size())) {
-                //Assign crowding distance to individuals
-                distance.crowdingDistanceAssignment(front, problem_.getNumberOfObjectives());
-                //Add the individuals of this front
-                for (int k = 0; k < front.size(); k++) {
-                    population_.add(front.get(k));
-                } // for
-
-                //Decrement remain
-                remain = remain - front.size();
-
-                //Obtain the next front
-                index++;
-                if (remain > 0) {
-                    front = ranking.getSubfront(index);
-                } // if
-            } // while
-
-            // Remain is less than front(index).size, insert only the best one
-            if (remain > 0) {  // front contains individuals to insert
-                distance.crowdingDistanceAssignment(front, problem_.getNumberOfObjectives());
-                front.sort(new CrowdingComparator());
-                for (int k = 0; k < remain; k++) {
-                    population_.add(front.get(k));
-                } // for
-            } // if
+            // 环境选择
+            population_ = replacement(population_, offspringPopulation_);
 
             Utils.updateExternalArchive(population_, populationSize_, external_archive_);
 
@@ -175,4 +134,40 @@ public class NSGAII_CDP extends Algorithm {
         return external_archive_;
     } // execute
 
-} // NSGA-II
+    // 环境选择
+    protected SolutionSet replacement(SolutionSet population, SolutionSet offspringPopulation) throws JMException {
+
+        // Create the solutionSet union of solutionSet and offSpring
+        SolutionSet jointPopulation = population_.union(offspringPopulation);
+
+        // Ranking the union
+        Ranking ranking = new Ranking(jointPopulation);
+
+        // List<Solution> pop = crowdingDistanceSelection(ranking);
+        SolutionSet pop = new SolutionSet(populationSize_);
+        List<SolutionSet> fronts = new ArrayList<>();
+        int rankingIndex = 0;
+        int candidateSolutions = 0;
+        while (candidateSolutions < populationSize_) {
+
+            SolutionSet solutions = ranking.getSubfront(rankingIndex);
+            fronts.add(solutions);
+
+            candidateSolutions += solutions.size();
+            if (pop.size() + solutions.size() <= populationSize_) {
+
+                for (int i = 0; i < solutions.size(); i++) {
+                    pop.add(solutions.get(i));
+                }
+            }
+            rankingIndex++;
+        }
+
+        // Environmental selection
+        // A copy of the reference list should be used as parameter of the environmental selection
+        EnvironmentalSelection selection = new EnvironmentalSelection(populationSize_);
+        pop = selection.execute(pop, fronts);
+
+        return pop;
+    }
+}
