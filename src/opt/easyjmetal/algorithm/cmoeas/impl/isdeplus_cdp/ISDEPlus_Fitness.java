@@ -1,19 +1,11 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.isdeplus_cdp;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.DominanceComparator;
-
-import java.util.Comparator;
+import opt.easyjmetal.util.LinearNormalization;
 
 public class ISDEPlus_Fitness {
 
-    /**
-     * stores a <code>Comparator</code> for dominance checking
-     */
-    private static final Comparator DOMINANCE_COMPARATOR = new DominanceComparator();
-
     public ISDEPlus_Fitness() {
-
     }
 
     public void computeFitnessValue(SolutionSet solutionSet) {

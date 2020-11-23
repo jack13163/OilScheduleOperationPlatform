@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * @author Juanjo Durillo
- */
-@SuppressWarnings("serial")
 public class EnvironmentalSelection {
 
     private int solutionsToSelect;

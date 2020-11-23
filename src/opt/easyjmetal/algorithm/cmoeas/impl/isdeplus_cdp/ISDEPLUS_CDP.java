@@ -13,11 +13,7 @@ import java.util.List;
 
 
 public class ISDEPLUS_CDP extends Algorithm {
-    /**
-     * Constructor
-     *
-     * @param problem Problem to solve
-     */
+
     public ISDEPLUS_CDP(Problem problem) {
         super(problem);
     }
@@ -40,6 +36,7 @@ public class ISDEPLUS_CDP extends Algorithm {
      * as a result of the algorithm execution
      * @throws JMException
      */
+    @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
 
         distance = new Distance();// 计算距离

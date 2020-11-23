@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.cmoeas.impl.isdeplus_cdp;
+package opt.easyjmetal.util;
 
 /**
  * 最大最小归一化【按列】
@@ -35,30 +35,26 @@ public class LinearNormalization {
      * @param arr
      * @return
      */
-    public static int[] sortArray(double[]arr)
-    {
+    public static int[] sortArray(double[] arr) {
         double temp;
         int index;
-        int k=arr.length;
-        int[]Index= new int[k];
-        for(int i=0;i<k;i++)
-        {
-            Index[i]=i;
+        int k = arr.length;
+        int[] Index = new int[k];
+        for (int i = 0; i < k; i++) {
+            Index[i] = i;
         }
 
-        for(int i=0;i<arr.length;i++)
-        {
-            for(int j=0;j<arr.length-i-1;j++)
-            {
-                if(arr[j]>arr[j+1])//升序
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr.length - i - 1; j++) {
+                if (arr[j] > arr[j + 1])//升序
                 {
                     temp = arr[j];
-                    arr[j] = arr[j+1];
-                    arr[j+1] = temp;
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
 
-                    index=Index[j];
-                    Index[j] = Index[j+1];
-                    Index[j+1] = index;
+                    index = Index[j];
+                    Index[j] = Index[j + 1];
+                    Index[j + 1] = index;
                 }
             }
         }
