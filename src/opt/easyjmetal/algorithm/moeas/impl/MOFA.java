@@ -221,25 +221,11 @@ public class MOFA extends Algorithm {
             res.add(new_x);
         } else {
             // 获得x1与精英个体g之间的距离
-            double r_g = get_distance(s1, g);
-            // 获得x1和g之间的吸引力
-            double beta_g = get_attraction(r_g, beta0, gamma);
-            Solution new_x = new Solution(s1);
-            for (int i = 0; i < V; i++) {
-                new_x.getDecisionVariables()[i].setValue(omega0 * s1.getDecisionVariables()[i].getValue()
-                        + (1 - omega0) * beta_g * (g.getDecisionVariables()[i].getValue() - s1.getDecisionVariables()[i].getValue()));
-            }
+            Solution new_x = getSolution(s1, beta0, gamma, g, V, omega0);
             res.add(new_x);
 
             // 获得x2与精英个体g之间的距离
-            r_g = get_distance(s2, g);
-            // 获得x2和g之间的吸引力
-            beta_g = get_attraction(r_g, beta0, gamma);
-            Solution new_y = new Solution(s1);
-            for (int i = 0; i < V; i++) {
-                new_y.getDecisionVariables()[i].setValue(omega0 * s2.getDecisionVariables()[i].getValue()
-                        + (1 - omega0) * beta_g * (g.getDecisionVariables()[i].getValue() - s2.getDecisionVariables()[i].getValue()));
-            }
+            Solution new_y = getSolution(s2, beta0, gamma, g, V, omega0);
             res.add(new_y);
         }
 
@@ -249,6 +235,19 @@ public class MOFA extends Algorithm {
         }
 
         return res;
+    }
+
+    private Solution getSolution(Solution s1, double beta0, double gamma, Solution g, int v, double omega0) throws JMException {
+        // 获得x1与精英个体g之间的距离
+        double r_g = get_distance(s1, g);
+        // 获得x1和g之间的吸引力
+        double beta_g = get_attraction(r_g, beta0, gamma);
+        Solution new_x = new Solution(s1);
+        for (int i = 0; i < v; i++) {
+            new_x.getDecisionVariables()[i].setValue(omega0 * s1.getDecisionVariables()[i].getValue()
+                    + (1 - omega0) * beta_g * (g.getDecisionVariables()[i].getValue() - s1.getDecisionVariables()[i].getValue()));
+        }
+        return new_x;
     }
 
     /**
