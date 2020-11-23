@@ -1,6 +1,6 @@
 package opt.easyjmetal.algorithm.cmoeas.entrence;
 
-import opt.easyjmetal.algorithm.util.Utils;
+import opt.easyjmetal.algorithm.AlgorithmFactory;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Operator;
 import opt.easyjmetal.core.Problem;
@@ -108,10 +108,10 @@ public class CMOEAs_main {
         String[] problemStrings = {"EDFPS", "EDFTSS"};
 
         for (int i = 0; i < problemStrings.length; i++) {
-            problem = (new ProblemFactory()).getProblem(problemStrings[i], params);
+            problem = ProblemFactory.getProblem(problemStrings[i], params);
             //define algorithm
             Object[] algorithmParams = {problem};
-            algorithm = (new Utils()).getAlgorithm(AlgorithmName, algorithmParams);
+            algorithm = AlgorithmFactory.getAlgorithm(AlgorithmName, algorithmParams);
 
             //define pareto file path
             String paretoPath = mainPath + "/pf_data/" + problemStrings[i] + ".pf";
