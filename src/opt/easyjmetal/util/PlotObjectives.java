@@ -44,7 +44,7 @@ public class PlotObjectives {
     public static Color[] CHART_COLORS = {
             new Color(31, 129, 188), new Color(92, 92, 97), new Color(144, 237, 125), new Color(255, 188, 117),
             new Color(153, 158, 255), new Color(255, 117, 153), new Color(253, 236, 109), new Color(128, 133, 232),
-            new Color(158, 90, 102), new Color(255, 204, 102)};//颜色
+            new Color(158, 90, 102), new Color(255, 204, 102)};
 
     static {
         setChartTheme();
@@ -323,6 +323,7 @@ public class PlotObjectives {
                 @Override
                 public void run() {
                     ChartPanel chartPanel = new PlotObjectives().createChart(title, "Objectives", "Value", categories, series);
+                    frame.getContentPane().removeAll();
                     frame.getContentPane().add(chartPanel);
                     chartPanel.updateUI();
                 }
@@ -393,13 +394,6 @@ public class PlotObjectives {
             this.data = data;
         }
 
-        /**
-         *
-         * @param name
-         *            名称（线条名称）
-         * @param array
-         *            数据（线条上的所有数据值）
-         */
         public Serie(String name, Object[] array) {
             this.name = name;
             if (array != null) {
