@@ -11,24 +11,25 @@ import java.util.List;
 
 public class WilcoxonSignedRankTest {
     private static final String DEFAULT_LATEX_DIRECTORY = "latex";
-    private static final String resultBaseDirectory_ = "result/easyjmetal";
-
+    private String resultBaseDirectory_;
     private List<String> indicList_;
     private List<String> algorithmNameList_;
     private List<String> problemList_;
-
-    private double alpha_ = 0.05;// 置信度0.95
-
+    // 置信度0.95
+    private double alpha_ = 0.05;
     private int[][][] better;
 
     public WilcoxonSignedRankTest(String[] algorithmNameList_,
-                 String[] problemList_, String[] indicList_) {
+                                  String[] problemList_,
+                                  String[] indicList_,
+                                  String basePath) {
         if (algorithmNameList_.length < 2) {
             JMetalLogger.logger.info("请至少输入两种算法");
         }
         this.indicList_ = Arrays.asList(indicList_);
         this.algorithmNameList_ = Arrays.asList(algorithmNameList_);
         this.problemList_ = Arrays.asList(problemList_);
+        this.resultBaseDirectory_ = basePath;
     }
 
     public void run() {
@@ -52,19 +53,16 @@ public class WilcoxonSignedRankTest {
 
         for (int indicator = 0; indicator < indicList_.size(); indicator++) {
             // A data vector per problem
-            data.add(indicator, new ArrayList<List<List<Double>>>());
+            data.add(indicator, new ArrayList<>());
             for (int problem = 0; problem < problemList_.size(); problem++) {
                 data.get(indicator).add(problem, new ArrayList<List<Double>>());
 
                 for (int algorithm = 0; algorithm < algorithmNameList_.size(); algorithm++) {
                     data.get(indicator).get(problem).add(algorithm, new ArrayList<Double>());
 
-                    // 目录结构：result/data/algorithm/problem/indicator
-                    String directory = resultBaseDirectory_;
-                    directory += "/data/";
-                    directory += "/" + algorithmNameList_.get(algorithm);
-                    directory += "/" + problemList_.get(problem);
-                    directory += "/" + indicList_.get(indicator);
+
+                    // 目录结构：basePath/indicator/problem/algorithm.indicator
+                    String directory = resultBaseDirectory_ + "/indicator/" + problemList_.get(problem) + "/" + algorithmNameList_.get(algorithm) + "." + indicList_.get(indicator);
                     // Read values from data files
                     FileInputStream fis = new FileInputStream(directory);
                     InputStreamReader isr = new InputStreamReader(fis);
@@ -221,18 +219,18 @@ public class WilcoxonSignedRankTest {
                 // 比较第一个算法与其他算法的性能
                 for (int j = 1; j < algorithmNameList_.size(); j++) {
                     String m;
-                    if(better[indicatorIndex][i][j] == 0){
+                    if (better[indicatorIndex][i][j] == 0) {
                         m = "=";
-                    }else if(better[indicatorIndex][i][j] > 0){
+                    } else if (better[indicatorIndex][i][j] > 0) {
                         m = "+";
-                    }else{
+                    } else {
                         m = "-";
                     }
 
                     os.write("$" + m + "$");
-                    if(j < algorithmNameList_.size() - 1){
+                    if (j < algorithmNameList_.size() - 1) {
                         os.write(" & ");
-                    }else{
+                    } else {
                         os.write(" \\\\\n");
                     }
                 }

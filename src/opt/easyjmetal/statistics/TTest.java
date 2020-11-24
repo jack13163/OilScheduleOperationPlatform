@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TTest {
     private static final String DEFAULT_LATEX_DIRECTORY = "latex";
-    private static final String resultBaseDirectory_ = "result/easyjmetal";
+    private String resultBaseDirectory_;
 
     private List<String> indicList_;
     private List<String> algorithmNameList_;
@@ -22,13 +22,16 @@ public class TTest {
     private int[][][] better;
 
     public TTest(String[] algorithmNameList_,
-                 String[] problemList_, String[] indicList_) {
+                 String[] problemList_,
+                 String[] indicList_,
+                 String baseDirectory) {
         if (algorithmNameList_.length < 2) {
             JMetalLogger.logger.info("请至少输入两种算法");
         }
         this.indicList_ = Arrays.asList(indicList_);
         this.algorithmNameList_ = Arrays.asList(algorithmNameList_);
         this.problemList_ = Arrays.asList(problemList_);
+        this.resultBaseDirectory_ = baseDirectory;
     }
 
     public void run() {
@@ -59,12 +62,8 @@ public class TTest {
                 for (int algorithm = 0; algorithm < algorithmNameList_.size(); algorithm++) {
                     data.get(indicator).get(problem).add(algorithm, new ArrayList<Double>());
 
-                    // 目录结构：result/data/algorithm/problem/indicator
-                    String directory = resultBaseDirectory_;
-                    directory += "/data/";
-                    directory += "/" + algorithmNameList_.get(algorithm);
-                    directory += "/" + problemList_.get(problem);
-                    directory += "/" + indicList_.get(indicator);
+                    // 目录结构：basePath/indicator/problem/algorithm.indicator
+                    String directory = resultBaseDirectory_ + "/indicator/" + problemList_.get(problem) + "/" + algorithmNameList_.get(algorithm) + "." + indicList_.get(indicator);
                     // Read values from data files
                     FileInputStream fis = new FileInputStream(directory);
                     InputStreamReader isr = new InputStreamReader(fis);

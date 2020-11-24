@@ -21,19 +21,19 @@ import java.util.List;
  */
 public class CMetrics {
 
-    private static final String DEFAULT_LATEX_DIRECTORY = "latex";
-    private static final String resultBaseDirectory_ = "result/easyjmetal";
+    private static final String DEFAULT_LATEX_DIRECTORY = "c";
 
+    private String resultBaseDirectory_;
     private List<String> problemList_;
     private List<String> algorithmList_;
     private int runs_;
-
     private double[][][][] cvalues2;
 
-    public CMetrics(String[] problemNames, String[] algorithmNames, int runs) {
+    public CMetrics(String[] problemNames, String[] algorithmNames, int runs, String basePath) {
         this.problemList_ = Arrays.asList(problemNames);
         this.algorithmList_ = Arrays.asList(algorithmNames);
         this.runs_ = runs;
+        this.resultBaseDirectory_ = basePath;
     }
 
     public void run() {

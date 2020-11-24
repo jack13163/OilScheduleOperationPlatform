@@ -22,8 +22,8 @@ import java.util.*;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
 public class MeanStandardDeviation {
-    private static final String DEFAULT_LATEX_DIRECTORY = "latex";
-    private static final String resultBaseDirectory_ = "result/easyjmetal";
+    private static final String DEFAULT_LATEX_DIRECTORY = "mean_std";
+    private String resultBaseDirectory_;
 
     private List<String> indicList_;
     private List<String> algorithmNameList_;
@@ -38,17 +38,20 @@ public class MeanStandardDeviation {
     private double[][][] numberOfValues;
 
     public MeanStandardDeviation(String[] algorithmNameList_,
-                                 String[] problemList_, String[] indicList_) {
+                                 String[] problemList_,
+                                 String[] indicList_,
+                                 String basePath) {
         this.indicList_ = Arrays.asList(indicList_);
         this.algorithmNameList_ = Arrays.asList(algorithmNameList_);
         this.problemList_ = Arrays.asList(problemList_);
+        this.resultBaseDirectory_ = basePath;
     }
 
     public void run() {
         try {
             List<List<List<List<Double>>>> data = readDataFromFiles();
             computeDataStatistics(data);
-            generateLatexScript(data);
+            generateLatexScript();
         } catch (IOException ex) {
             JMetalLogger.logger.info("请生成指标值后再执行生成表格操作: " + ex.getMessage());
         }
@@ -85,29 +88,24 @@ public class MeanStandardDeviation {
     }
 
     /**
-     * 读取指标值
-     *
+     * 从指定的路径读取指标值，目录结构：basePath/indicator/problem/algorithm.indicator
      * @return
      * @throws IOException
      */
     private List<List<List<List<Double>>>> readDataFromFiles() throws IOException {
-        List<List<List<List<Double>>>> data = new ArrayList<List<List<List<Double>>>>(indicList_.size());
+        List<List<List<List<Double>>>> data = new ArrayList<>(indicList_.size());
 
         for (int indicator = 0; indicator < indicList_.size(); indicator++) {
             // A data vector per problem
-            data.add(indicator, new ArrayList<List<List<Double>>>());
+            data.add(indicator, new ArrayList<>());
             for (int problem = 0; problem < problemList_.size(); problem++) {
-                data.get(indicator).add(problem, new ArrayList<List<Double>>());
+                data.get(indicator).add(problem, new ArrayList<>());
 
                 for (int algorithm = 0; algorithm < algorithmNameList_.size(); algorithm++) {
-                    data.get(indicator).get(problem).add(algorithm, new ArrayList<Double>());
+                    data.get(indicator).get(problem).add(algorithm, new ArrayList<>());
 
-                    // 目录结构：result/data/algorithm/problem/indicator
-                    String directory = resultBaseDirectory_;
-                    directory += "/data/";
-                    directory += "/" + algorithmNameList_.get(algorithm);
-                    directory += "/" + problemList_.get(problem);
-                    directory += "/" + indicList_.get(indicator);
+                    // 目录结构：basePath/indicator/problem/algorithm.indicator
+                    String directory = resultBaseDirectory_ + "/indicator/" + problemList_.get(problem) + "/" + algorithmNameList_.get(algorithm) + "." + indicList_.get(indicator);
                     // Read values from data files
                     FileInputStream fis = new FileInputStream(directory);
                     InputStreamReader isr = new InputStreamReader(fis);
@@ -173,7 +171,7 @@ public class MeanStandardDeviation {
         }
     }
 
-    private void generateLatexScript(List<List<List<List<Double>>>> data) throws IOException {
+    private void generateLatexScript() throws IOException {
         String latexDirectoryName = resultBaseDirectory_ + "/" + DEFAULT_LATEX_DIRECTORY;
         File latexOutput;
         latexOutput = new File(latexDirectoryName);

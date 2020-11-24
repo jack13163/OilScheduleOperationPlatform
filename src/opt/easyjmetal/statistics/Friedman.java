@@ -7,8 +7,6 @@ import java.util.Vector;
 
 public class Friedman {
 
-    public static final String resultBaseDirectory_ = "result/easyjmetal";
-
     /**
      * Friedman检验
      * Rj表示第j个算法的平均排序
@@ -22,7 +20,10 @@ public class Friedman {
      *
      * @param indic 指标名称
      */
-    public static void executeTest(String indic, String[] algorithmNameList_, String[] problemList_) {
+    public static void executeTest(String indic,
+                                   String[] algorithmNameList_,
+                                   String[] problemList_,
+                                   String dirPath_) {
         Vector algoritmos;
         Vector datasets;
         Vector datos;
@@ -39,9 +40,9 @@ public class Friedman {
         double sumatoria = 0;
         double termino1, termino2;
 
-        /*Read the result file*/
-        String outDir = resultBaseDirectory_ + "/latex";
-        String outFile = outDir + "/FriedmanTest" + indic + ".tex";
+        // 文件输出路径
+        String outDir = dirPath_ + "/friedman/";
+        String outFile = dirPath_ + "FriedmanTest_" + indic + ".tex";
 
         StringBuilder Output = new StringBuilder();
         Output.append("\\documentclass{article}\n" +
@@ -61,20 +62,20 @@ public class Friedman {
         for (int alg = 0; alg < algorithmNameList_.length; alg++) {
             algoritmos.add(new String(algorithmNameList_[alg]));
             datos.add(new Vector());
-            String rutaAlg = resultBaseDirectory_ + "/data/" + algorithmNameList_[alg] + "/";
 
             for (int prob = 0; prob < problemList_.length; prob++) {
                 if (alg == 0) {
                     datasets.add(problemList_[prob]);
                 }
 
-                String ruta = rutaAlg + problemList_[prob] + "/" + indic;
+                // 指标文件所在的路径
+                String indicatorFilePath = dirPath_ + "/indicator/" + problemList_[prob] + "/"  + algorithmNameList_[alg] + "." + indic;
 
                 //Leemos el fichero
                 String cadena = "";
 
                 try {
-                    FileInputStream fis = new FileInputStream(ruta);
+                    FileInputStream fis = new FileInputStream(indicatorFilePath);
 
                     byte[] leido = new byte[4096];
                     int bytesLeidos = 0;
