@@ -17,7 +17,7 @@ import java.util.List;
 public class OnlineMix_MOEAs_main {
 
     public static void main(String[] args) throws Exception {
-//        batchRun(Arrays.asList("MOFA", "MOPSO", "MOEAD", "NSGAII", "ISDEPLUS", "IBEA"), 5);
+//        batchRun(Arrays.asList("MOFA", "MOPSO", "MOEAD", "NSGAII", "ISDEPLUS", "IBEA", "SPEA2"), 5);
 //        batchRun(Arrays.asList("ISDEPLUS"), 1);
 //        batchRun(Arrays.asList("IBEA"), 1);
         batchRun(Arrays.asList("IBEA"), 1);

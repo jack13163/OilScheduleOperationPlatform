@@ -9,9 +9,6 @@ import opt.easyjmetal.util.sqlite.SqlUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This class implements the IBEA algorithm
- */
 public class IBEA extends Algorithm {
     public static final int TOURNAMENTS_ROUNDS = 1;
     private List<List<Double>> indicatorValues_;
