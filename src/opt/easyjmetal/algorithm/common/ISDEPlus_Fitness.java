@@ -1,14 +1,15 @@
-package opt.easyjmetal.algorithm.cmoeas.impl.isdeplus_cdp;
+package opt.easyjmetal.algorithm.common;
 
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.LinearNormalization;
 
 public class ISDEPlus_Fitness {
 
-    public ISDEPlus_Fitness() {
-    }
-
-    public void computeFitnessValue(SolutionSet solutionSet) {
+    /**
+     * 计算解集的适应度值
+     * @param solutionSet
+     */
+    public static void computeFitnessValue(SolutionSet solutionSet) {
         // FunctionValue为目标函数值 ，N为种群规模，M为目标函数的数量
         double[][] distance = solutionSet.writeObjectivesToMatrix();
         int numOfObjects = solutionSet.get(0).getNumberOfObjectives();
@@ -18,7 +19,7 @@ public class ISDEPlus_Fitness {
 
         // 按照个体目标值的和的升序排序
         double[] sumedDistance = LinearNormalization.sumByRow(normalizedDistance);
-        int[] indexs = LinearNormalization.sortArray(sumedDistance);// 排序结果
+        int[] indexs = LinearNormalization.sortArray(sumedDistance);
 
         for (int i = 1; i < solutionSet.size(); i++) {
 

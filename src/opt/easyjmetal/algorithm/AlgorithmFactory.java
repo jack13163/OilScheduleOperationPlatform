@@ -37,7 +37,7 @@ public class AlgorithmFactory {
                 || name.equalsIgnoreCase("MOPSO")
                 || name.equalsIgnoreCase("MOEAD")
                 || name.equalsIgnoreCase("IBEA")
-                || name.equalsIgnoreCase("ISDEPLUS")
+                || name.equalsIgnoreCase("ISDEPlus")
                 || name.equalsIgnoreCase("SPEA2")) {
             base += "moeas.impl.";
         }

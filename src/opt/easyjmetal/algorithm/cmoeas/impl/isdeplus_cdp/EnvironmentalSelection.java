@@ -1,5 +1,6 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.isdeplus_cdp;
 
+import opt.easyjmetal.algorithm.common.ISDEPlus_Fitness;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.comparators.FitnessComparator;
@@ -11,18 +12,16 @@ import java.util.List;
 public class EnvironmentalSelection {
 
     private int solutionsToSelect;
-    private ISDEPlus_Fitness isdePlus_fitness;
 
     public EnvironmentalSelection(int solutionsToSelect) {
         this.solutionsToSelect = solutionsToSelect;
-        isdePlus_fitness = new ISDEPlus_Fitness();
     }
 
     public SolutionSet execute(SolutionSet pop, List<SolutionSet> fronts) {
         // 取出最后一层的解
         SolutionSet source2 = fronts.get(fronts.size() - 1);
         // 计算适应度值
-        isdePlus_fitness.computeFitnessValue(source2);
+        ISDEPlus_Fitness.computeFitnessValue(source2);
 
         List<Solution> source = new ArrayList<>(source2.size());
         for (int i = 0; i < source2.size(); i++) {

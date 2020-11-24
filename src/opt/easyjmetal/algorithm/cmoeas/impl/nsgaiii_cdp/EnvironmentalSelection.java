@@ -1,6 +1,7 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.nsgaiii_cdp;
 
 
+import opt.easyjmetal.algorithm.common.ReferencePoint;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.JMException;
@@ -9,7 +10,6 @@ import opt.jmetal.util.pseudorandom.JMetalRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("serial")
 public class EnvironmentalSelection {
 
     private List<SolutionSet> fronts;
@@ -101,8 +101,9 @@ public class EnvironmentalSelection {
             }
         }
 
-        for (int i = 0; i < N; i++)
+        for (int i = 0; i < N; i++) {
             x.add(0.0);
+        }
 
         for (int i = N - 1; i >= 0; i -= 1) {
             for (int known = i + 1; known < N; known += 1) {
@@ -228,8 +229,9 @@ public class EnvironmentalSelection {
     int FindNicheReferencePoint() {
         // find the minimal cluster size
         int min_size = Integer.MAX_VALUE;
-        for (ReferencePoint referencePoint : this.referencePoints)
+        for (ReferencePoint referencePoint : this.referencePoints) {
             min_size = Math.min(min_size, referencePoint.MemberSize());
+        }
 
         // find the reference points with the minimal cluster size Jmin
         List<Integer> min_rps = new ArrayList<>();
@@ -270,7 +272,9 @@ public class EnvironmentalSelection {
         // The comments show the C++ code
 
         // ---------- Steps 9-10 in Algorithm 1 ----------
-        if (source.size() == this.solutionsToSelect) return source;
+        if (source.size() == this.solutionsToSelect) {
+            return source;
+        }
 
 
         // ---------- Step 14 / Algorithm 2 ----------

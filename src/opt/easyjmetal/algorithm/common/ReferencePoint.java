@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.cmoeas.impl.nsgaiii_cdp;
+package opt.easyjmetal.algorithm.common;
 
 import opt.easyjmetal.core.Solution;
 import opt.jmetal.util.pseudorandom.JMetalRandom;
@@ -28,8 +28,9 @@ public class ReferencePoint {
      */
     public ReferencePoint(int size) {
         position = new ArrayList<>();
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; i++) {
             position.add(0.0);
+        }
         memberSize = 0;
         potentialMembers = new ArrayList<>();
     }

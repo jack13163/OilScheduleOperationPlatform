@@ -1,23 +1,20 @@
 // ISDE+ - An Indicator for Multi and Many-objective Optimization.
 package opt.easyjmetal.algorithm.moeas.impl;
 
+import opt.easyjmetal.algorithm.common.ISDEPlus_Fitness;
 import opt.easyjmetal.core.*;
-import opt.easyjmetal.operator.crossover.CrossoverFactory;
-import opt.easyjmetal.operator.mutation.MutationFactory;
-import opt.easyjmetal.operator.selection.SelectionFactory;
 import opt.easyjmetal.util.*;
 import opt.easyjmetal.util.comparators.FitnessComparator;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 
-public class ISDEPLUS extends Algorithm {
+public class ISDEPlus extends Algorithm {
 
-    public ISDEPLUS(Problem problem) {
+    public ISDEPlus(Problem problem) {
         super(problem);
     }
 
@@ -158,42 +155,6 @@ public class ISDEPLUS extends Algorithm {
     }
 
     /**
-     * 计算解集中每个个体的适应度值
-     *
-     * @param solutionSet
-     */
-    public void computeFitnessValue(SolutionSet solutionSet) {
-        // FunctionValue为目标函数值 ，N为种群规模，M为目标函数的数量
-        double[][] distance = solutionSet.writeObjectivesToMatrix();
-        int numOfObjects = solutionSet.get(0).getNumberOfObjectives();
-
-        // 最大最小归一化
-        double[][] normalizedDistance = LinearNormalization.normalize4Scale(distance);
-
-        // 按照个体目标值的和的升序排序
-        double[] sumedDistance = LinearNormalization.sumByRow(normalizedDistance);
-        int[] indexs = LinearNormalization.sortArray(sumedDistance);// 排序结果
-
-        for (int i = 1; i < solutionSet.size(); i++) {
-
-            // 计算第i个个体与前i-1个个体的SDE距离
-            double[] betweenDistances = new double[i];
-            for (int j = 0; j < i - 1; j++) {
-                for (int k = 0; k < numOfObjects; k++) {
-                    // 只计算qi<pj时的值
-                    if (normalizedDistance[indexs[i]][k] < normalizedDistance[indexs[j]][k]) {
-                        betweenDistances[j] += (normalizedDistance[indexs[i]][k] - normalizedDistance[indexs[j]][k]) * (normalizedDistance[indexs[i]][k] - normalizedDistance[indexs[j]][k]);
-                    }
-                }
-            }
-
-            // 求个体j与种群中其他个体的欧式距离的最小值
-            double minDistance = LinearNormalization.minV(betweenDistances);
-            solutionSet.get(indexs[i]).setFitness(Math.exp(-minDistance));
-        }
-    }
-
-    /**
      * 从临界层中选择一定数量的个体
      *
      * @param pop
@@ -205,7 +166,7 @@ public class ISDEPLUS extends Algorithm {
         // 取出最后一层的解
         SolutionSet source2 = fronts.get(fronts.size() - 1);
         // 计算适应度值
-        computeFitnessValue(source2);
+        ISDEPlus_Fitness.computeFitnessValue(source2);
 
         List<Solution> source = new ArrayList<>(source2.size());
         for (int i = 0; i < source2.size(); i++) {
