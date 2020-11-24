@@ -1,8 +1,9 @@
 package opt.easyjmetal.problem.schedule.cop;
 
-import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.JMException;
+import opt.easyjmetal.util.MoeadUtils;
+import opt.easyjmetal.util.ParetoFrontUtil;
 import opt.javasim.SimulationProcess;
 import opt.jmetal.problem.oil.sim.common.JTableHelper;
 import opt.jmetal.problem.oil.sim.common.ParetoHelper;
@@ -120,6 +121,7 @@ public class SolutionSelectForm extends JFrame {
         itemTop = new JMenuItem("最前(T)");
 
         itemTop.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 setAlwaysOnTop(!onTop);
                 onTop = !onTop;
@@ -132,6 +134,7 @@ public class SolutionSelectForm extends JFrame {
         });
         itemExit = new JMenuItem("退出(E)");
         itemExit.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
@@ -294,11 +297,11 @@ public class SolutionSelectForm extends JFrame {
                     }
 
                     try {
-                        MoeadUtils.getSolutionFromDB(cbAlgorithmsForExperiment.getText().split(","),
+                        ParetoFrontUtil.getSolutionFromDB(cbAlgorithmsForExperiment.getText().split(","),
                                 cbProblemsForExperiment.getText().split(","),
                                 Integer.parseInt(txtRuns.getText()),
                                 tofind,
-                                new MoeadUtils.ToDo() {
+                                new ParetoFrontUtil.ToDo() {
                                     @Override
                                     public void dosomething(Solution solution, String rule) {
                                         // 解码位置

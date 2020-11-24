@@ -1,8 +1,8 @@
 package opt.easyjmetal.problem.schedule.cop;
 
-import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.JMException;
+import opt.easyjmetal.util.ParetoFrontUtil;
 
 public class ScheduleReverse {
     public static void main(String[] args) {
@@ -32,8 +32,8 @@ public class ScheduleReverse {
         };
 
         try {
-            MoeadUtils.getSolutionFromDB(algorithmNameList, problemList, independentRuns, tofind,
-                    new MoeadUtils.ToDo() {
+            ParetoFrontUtil.getSolutionFromDB(algorithmNameList, problemList, independentRuns, tofind,
+                    new ParetoFrontUtil.ToDo() {
                         @Override
                         public void dosomething(Solution solution, String rule) {
                             // 解码位置

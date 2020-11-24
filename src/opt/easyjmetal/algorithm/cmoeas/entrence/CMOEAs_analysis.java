@@ -2,7 +2,7 @@ package opt.easyjmetal.algorithm.cmoeas.entrence;
 
 import opt.easyjmetal.statistics.*;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.MoeadUtils;
+import opt.easyjmetal.util.ParetoFrontUtil;
 
 public class CMOEAs_analysis {
     public static void main(String[] args) {
@@ -12,30 +12,31 @@ public class CMOEAs_analysis {
             String[] problemNames = {"EDF_PS", "EDF_TSS"};
             String[] indicatorNames = {"HV", "IGD"};
             int runtimes = 10;
+            String basePath = "result/easyjmetal/onlinemix/";
 
             // 生成pareto前沿面
-            MoeadUtils.generateParetoFront(algorithmNames, problemNames, runtimes);
+            ParetoFrontUtil.generateParetoFront(algorithmNames, problemNames, runtimes, basePath);
             // 计算性能指标
-            MoeadUtils.generateQualityIndicators(algorithmNames, problemNames, indicatorNames, runtimes);
+            ParetoFrontUtil.generateQualityIndicators(algorithmNames, problemNames, indicatorNames, runtimes, basePath);
 
             // Friedman测试
-            Friedman.executeTest("HV", algorithmNames, problemNames);
-            Friedman.executeTest("IGD", algorithmNames, problemNames);
+            Friedman.executeTest("HV", algorithmNames, problemNames, basePath);
+            Friedman.executeTest("IGD", algorithmNames, problemNames, basePath);
 
             // 生成均值和方差
-            MeanStandardDeviation generateLatexTables = new MeanStandardDeviation(algorithmNames, problemNames, indicatorNames);
+            MeanStandardDeviation generateLatexTables = new MeanStandardDeviation(algorithmNames, problemNames, indicatorNames, basePath);
             generateLatexTables.run();
 
             // 进行TTest
-            TTest tTest = new TTest(algorithmNames, problemNames, indicatorNames);
+            TTest tTest = new TTest(algorithmNames, problemNames, indicatorNames, basePath);
             tTest.run();
 
             // 进行TTest
-            WilcoxonSignedRankTest wilcoxonSignedRankTest = new WilcoxonSignedRankTest(algorithmNames, problemNames, indicatorNames);
+            WilcoxonSignedRankTest wilcoxonSignedRankTest = new WilcoxonSignedRankTest(algorithmNames, problemNames, indicatorNames, basePath);
             wilcoxonSignedRankTest.run();
 
             // 计算不同策略C指标
-            CMetrics cMetrics = new CMetrics(problemNames, algorithmNames,runtimes);
+            CMetrics cMetrics = new CMetrics(problemNames, algorithmNames,runtimes, basePath);
             cMetrics.run();
         } catch (JMException e) {
             e.printStackTrace();
