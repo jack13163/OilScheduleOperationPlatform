@@ -42,7 +42,7 @@ public class Friedman {
 
         // 文件输出路径
         String outDir = dirPath_ + "/friedman/";
-        String outFile = dirPath_ + "FriedmanTest_" + indic + ".tex";
+        String outFile = outDir + "FriedmanTest_" + indic + ".tex";
 
         StringBuilder Output = new StringBuilder();
         Output.append("\\documentclass{article}\n" +
