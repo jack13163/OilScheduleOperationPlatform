@@ -14,8 +14,6 @@ import java.util.List;
  */
 public class IBEA extends Algorithm {
     public static final int TOURNAMENTS_ROUNDS = 1;
-
-    private Problem problem_;
     private List<List<Double>> indicatorValues_;
     private double maxIndicatorValue_;
     private int populationSize_;
