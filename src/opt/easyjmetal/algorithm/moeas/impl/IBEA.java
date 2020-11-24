@@ -40,9 +40,9 @@ public class IBEA extends Algorithm {
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
 
         // 交叉选择算子
-        Operator mutationOperator_ = operators_.get("mutation");
-        Operator crossoverOperator_ = operators_.get("crossover");
-        Operator selectionOperator_ = operators_.get("selection");
+        Operator mutationOperator_ = (Operator) getInputParameter("mutation");
+        Operator crossoverOperator_ = (Operator) getInputParameter("crossover");
+        Operator selectionOperator_ = (Operator) getInputParameter("selection");
 
         // 创建数据表，方便后面保存结果
         String tableName = "IBEA_" + runningTime;

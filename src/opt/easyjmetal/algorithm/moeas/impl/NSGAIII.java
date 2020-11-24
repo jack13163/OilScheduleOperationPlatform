@@ -48,25 +48,22 @@ public class NSGAIII extends Algorithm {
         populationSize_ = (Integer) getInputParameter("populationSize");
         maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         String dbName = getInputParameter("DBName").toString();
-        dataDirectory_ = getInputParameter("dataDirectory").toString();
+        dataDirectory_ = getInputParameter("weightsDirectory").toString();
         lambda_ = new double[populationSize_][problem_.getNumberOfObjectives()];
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
 
-        //Initialize the variables
-        population_ = new SolutionSet(populationSize_);
-        int evaluations_ = 0;
-
-        //Read the operators
-        Operator mutationOperator_ = operators_.get("mutation");
-        Operator crossoverOperator_ = operators_.get("crossover");
-        Operator selectionOperator_ = operators_.get("selection");
-
+        // 交叉选择算子
+        Operator mutationOperator_ = (Operator) getInputParameter("mutation");
+        Operator crossoverOperator_ = (Operator) getInputParameter("crossover");
+        Operator selectionOperator_ = (Operator) getInputParameter("selection");
 
         // STEP 1. Initialization
         // STEP 1.1. Compute euclidean distances between weight vectors and find T
         initUniformWeight();
 
         // Create the initial solutionSet
+        population_ = new SolutionSet(populationSize_);
+        int evaluations_ = 0;
         for (int i = 0; i < populationSize_; i++) {
             Solution newSolution = new Solution(problem_);
             problem_.evaluate(newSolution);
@@ -80,7 +77,7 @@ public class NSGAIII extends Algorithm {
         MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         // 创建数据库记录数据
-        String problemName = problem_.getName() + "NSGAIII_" + Integer.toString(runningTime);
+        String problemName = "NSGAIII_" + runningTime;
         SqlUtils.CreateTable(problemName, dbName);
 
         while (evaluations_ < maxEvaluations_) {

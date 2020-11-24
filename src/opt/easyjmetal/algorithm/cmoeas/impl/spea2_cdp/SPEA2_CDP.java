@@ -1,6 +1,7 @@
 // SPEA2: Improving the Strength Pareto Evolutionary Algorithm For Multiobjective Optimization.
 package opt.easyjmetal.algorithm.cmoeas.impl.spea2_cdp;
 
+import opt.easyjmetal.algorithm.common.StrengthRawFitness;
 import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;

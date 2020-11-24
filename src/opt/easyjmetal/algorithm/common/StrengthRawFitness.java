@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.cmoeas.impl.spea2_cdp;
+package opt.easyjmetal.algorithm.common;
 
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.comparators.DominanceComparator;
@@ -9,8 +9,8 @@ import java.util.Comparator;
 public class StrengthRawFitness {
 
     private static final Comparator DOMINANCE_COMPARATOR = new DominanceComparator();
-
-    private int k; // k-th individual
+    // k-th individual
+    private int k;
 
     public StrengthRawFitness(int k) {
         this.k = k;

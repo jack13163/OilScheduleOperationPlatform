@@ -57,8 +57,8 @@ public class MOEAD extends Algorithm {
         lambda_ = new double[populationSize_][problem_.getNumberOfObjectives()];
 
         // 交叉选择算子
-        Operator mutation_ = operators_.get("mutation");
-        Operator crossover_ = operators_.get("crossover");
+        Operator mutation_ = (Operator) getInputParameter("mutation");
+        Operator crossover_ = (Operator) getInputParameter("crossover");
 
         // 创建数据表
         String problemName = "MOEAD_" + runningTime;

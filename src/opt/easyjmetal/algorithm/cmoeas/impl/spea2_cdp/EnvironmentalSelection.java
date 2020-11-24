@@ -1,5 +1,6 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.spea2_cdp;
 
+import opt.easyjmetal.algorithm.common.StrengthRawFitness;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.Distance;

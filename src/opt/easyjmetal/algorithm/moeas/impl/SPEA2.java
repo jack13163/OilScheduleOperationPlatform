@@ -1,17 +1,20 @@
 // SPEA2: Improving the Strength Pareto Evolutionary Algorithm For Multiobjective Optimization.
 package opt.easyjmetal.algorithm.moeas.impl;
 
+import opt.easyjmetal.algorithm.common.StrengthRawFitness;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.util.PlotObjectives;
-import opt.easyjmetal.util.comparators.DominanceComparator;
 import opt.easyjmetal.util.comparators.FitnessComparator;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class SPEA2 extends Algorithm {
 
@@ -40,14 +43,14 @@ public class SPEA2 extends Algorithm {
         populationSize_ = (Integer) getInputParameter("populationSize");
         maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         String dbName = getInputParameter("DBName").toString();
-        dataDirectory_ = getInputParameter("dataDirectory").toString();
+        dataDirectory_ = getInputParameter("weightsDirectory").toString();
         k_ = (Integer) getInputParameter("k");
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
 
         // 交叉选择算子
-        Operator mutationOperator_ = operators_.get("mutation");
-        Operator crossoverOperator_ = operators_.get("crossover");
-        Operator selectionOperator_ = operators_.get("selection");
+        Operator mutationOperator_ = (Operator) getInputParameter("mutation");
+        Operator crossoverOperator_ = (Operator) getInputParameter("crossover");
+        Operator selectionOperator_ = (Operator) getInputParameter("selection");
 
         // 创建初始种群
         SolutionSet population_ = new SolutionSet(populationSize_);
@@ -115,60 +118,6 @@ public class SPEA2 extends Algorithm {
         SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
 
         return external_archive_;
-    }
-
-    static class StrengthRawFitness {
-
-        private static final Comparator DOMINANCE_COMPARATOR = new DominanceComparator();
-
-        private int k; // k-th individual
-
-        public StrengthRawFitness(int k) {
-            this.k = k;
-        }
-
-        public StrengthRawFitness() {
-            this.k = 1;
-        }
-
-        public void computeDensityEstimator(SolutionSet solutionSet) {
-            double[][] distance = solutionSet.writeObjectivesToMatrix();
-            double[] strength = new double[solutionSet.size()];
-            double[] rawFitness = new double[solutionSet.size()];
-            double kDistance;
-
-            // strength(i) = |{j | j <- SolutionSet and i dominate j}|
-            for (int i = 0; i < solutionSet.size(); i++) {
-                for (int j = 0; j < solutionSet.size(); j++) {
-                    if (DOMINANCE_COMPARATOR.compare(solutionSet.get(i), solutionSet.get(j)) == -1) {
-                        strength[i] += 1.0;
-                    }
-                }
-            }
-
-            //Calculate the raw fitness
-            // rawFitness(i) = |{sum strenght(j) | j <- SolutionSet and j dominate i}|
-            for (int i = 0; i < solutionSet.size(); i++) {
-                for (int j = 0; j < solutionSet.size(); j++) {
-                    if (DOMINANCE_COMPARATOR.compare(solutionSet.get(i), solutionSet.get(j)) == 1) {
-                        rawFitness[i] += strength[j];
-                    }
-                }
-            }
-
-            // Add the distance to the k-th individual. In the reference paper of SPEA2,
-            // k = sqrt(population.size()), but a value of k = 1 is recommended. See
-            // http://www.tik.ee.ethz.ch/pisa/selectors/spea2/spea2_documentation.txt
-            for (int i = 0; i < distance.length; i++) {
-                Arrays.sort(distance[i]);
-                kDistance = 1.0 / (distance[i][k] + 2.0);
-                solutionSet.get(i).setFitness(rawFitness[i] + kDistance);
-            }
-        }
-
-        public int getK() {
-            return k;
-        }
     }
 
     /**

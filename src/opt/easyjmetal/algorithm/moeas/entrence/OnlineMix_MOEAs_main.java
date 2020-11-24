@@ -17,10 +17,11 @@ import java.util.List;
 public class OnlineMix_MOEAs_main {
 
     public static void main(String[] args) throws Exception {
-//        batchRun(Arrays.asList("MOFA", "MOPSO", "MOEAD", "NSGAII", "ISDEPlus", "IBEA", "SPEA2"), 5);
-//        batchRun(Arrays.asList("ISDEPlus"), 1);
-//        batchRun(Arrays.asList("IBEA"), 1);
-        batchRun(Arrays.asList("IBEA"), 1);
+        batchRun(Arrays.asList("MOFA", "MOPSO",
+                "MOEAD", "NSGAII",
+                "ISDEPlus", "IBEA",
+                "SPEA2", "NSGAIII"), 5);
+//        batchRun(Arrays.asList("MOFA"), 1);
     }
 
     /**
@@ -81,12 +82,12 @@ public class OnlineMix_MOEAs_main {
                 algorithm.setInputParameter("isDisplay", isDisplay);
                 algorithm.setInputParameter("plotFlag", plotFlag);
 
-                Operator mutationOperator_ = MutationFactory.getMutationOperator("PolynomialMutation", new HashMap(){{
+                Operator mutationOperator_ = MutationFactory.getMutationOperator("PolynomialMutation", new HashMap() {{
                     put("probability", 1.0 / problem.getNumberOfVariables());
                     put("distributionIndex", 20.0);
                 }});
                 algorithm.setInputParameter("mutation", mutationOperator_);
-                Operator crossoverOperator_ = CrossoverFactory.getCrossoverOperator("SBXCrossover", new HashMap<String, Double>(){{
+                Operator crossoverOperator_ = CrossoverFactory.getCrossoverOperator("SBXCrossover", new HashMap<String, Double>() {{
                     put("probability", 1.0);
                     put("distributionIndex", 20.0);
                 }});
