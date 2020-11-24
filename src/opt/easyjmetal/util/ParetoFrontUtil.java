@@ -35,7 +35,7 @@ public class ParetoFrontUtil {
             if (targetDir.exists()) {
                 FileUtils.forceMkdir(targetDir);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
@@ -162,11 +162,12 @@ public class ParetoFrontUtil {
 
     /**
      * 从数据库中查找出指定的个体，即目标值符合的个体
+     *
      * @param algorithmNameList_ 算法列表
      * @param problemList_       问题列表
      * @param independentRuns_   独立运行次数
      * @param toselect           要选择的个体
-     * @return                   符合条件的解的集合，多个符合条件的只返回一个
+     * @return 符合条件的解的集合，多个符合条件的只返回一个
      * @throws JMException
      */
     public static SolutionSet getSolutionFromDB(String[] algorithmNameList_,
@@ -223,9 +224,9 @@ public class ParetoFrontUtil {
     /**
      * 输出非支配解集
      *
-     * @param solutionList      非支配解集
-     * @param dirPath           保存目录
-     * @param filename          保存的文件名
+     * @param solutionList 非支配解集
+     * @param dirPath      保存目录
+     * @param filename     保存的文件名
      */
     public static String outputNondomincantSolutionSet(List<Solution> solutionList, String dirPath, String filename) {
 
@@ -244,7 +245,7 @@ public class ParetoFrontUtil {
     /**
      * 获取非支配解集
      *
-     * @param solutionList      算法运行结果集
+     * @param solutionList 算法运行结果集
      * @return
      */
     public static SolutionSet getNondominantSolutionSet(List<Solution> solutionList) {
@@ -259,21 +260,20 @@ public class ParetoFrontUtil {
         return nondominatedSolutionSet;
     }
 
-
     /**
      * 计算性能指标
      *
-     * @param algorithmName         算法
-     * @param problemName           问题
-     * @param indicatorName         指标名字
-     * @param runId                 运行编号，用于从数据库中查找算法运行结果
-     * @param trueParetoFrontPath   真实的pareto前沿路径
+     * @param algorithmName       算法
+     * @param problemName         问题
+     * @param indicatorName       指标名字
+     * @param runId               运行编号，用于从数据库中查找算法运行结果
+     * @param trueParetoFrontPath 真实的pareto前沿路径
      */
-    public static double calculateQualityIndicators(String algorithmName,
-                                                    String problemName,
-                                                    String indicatorName,
-                                                    int runId,
-                                                    String trueParetoFrontPath) throws JMException {
+    public static double calculateQualityIndicator(String algorithmName,
+                                                   String problemName,
+                                                   String indicatorName,
+                                                   int runId,
+                                                   String trueParetoFrontPath) throws JMException {
 
         // 加载真实的Pareto前沿
         double[][] trueFront = new Hypervolume().utils_.readFront(trueParetoFrontPath);
@@ -286,10 +286,30 @@ public class ParetoFrontUtil {
     }
 
     /**
+     * 计算性能指标
+     *
+     * @param indicatorName         指标的名称
+     * @param resultParetoFrontPath 算法运行结果
+     * @param trueParetoFrontPath   真实的pareto前沿路径
+     */
+    public static double calculateQualityIndicator(String indicatorName,
+                                                   String resultParetoFrontPath,
+                                                   String trueParetoFrontPath) throws JMException {
+
+        // 加载真实的Pareto前沿
+        double[][] trueFront = new Hypervolume().utils_.readFront(trueParetoFrontPath);
+        // 加载算法运行得到的非支配解集
+        double[][] resultParetoFront = new Hypervolume().utils_.readFront(resultParetoFrontPath);
+        // 计算并返回指标值
+        return calculateIndicatorValue(indicatorName, trueFront, resultParetoFront);
+    }
+
+    /**
      * 计算指标值
-     * @param indicatorName     指标名字
-     * @param trueFront         真实的pareto前沿
-     * @param solutionFront     算法运行结果
+     *
+     * @param indicatorName 指标名字
+     * @param trueFront     真实的pareto前沿
+     * @param solutionFront 算法运行结果
      * @return
      */
     private static double calculateIndicatorValue(String indicatorName, double[][] trueFront, double[][] solutionFront) {
@@ -368,7 +388,7 @@ public class ParetoFrontUtil {
 
             // 计算每次实验的指标值
             for (int numRun = 1; numRun <= independentRuns_; numRun++) {
-                double value = calculateQualityIndicators(algorithmName, problemName, indicator, numRun, trueParetoFilePath);
+                double value = calculateQualityIndicator(algorithmName, problemName, indicator, numRun, trueParetoFilePath);
                 writer.write(String.format("%.5f\n", value));
             }
 

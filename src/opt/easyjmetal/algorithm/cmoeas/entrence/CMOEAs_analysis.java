@@ -12,7 +12,7 @@ public class CMOEAs_analysis {
             String[] problemNames = {"EDF_PS", "EDF_TSS"};
             String[] indicatorNames = {"HV", "IGD"};
             int runtimes = 10;
-            String basePath = "result/easyjmetal/onlinemix/";
+            String basePath = "result/easyjmetal/twopipeline/";
 
             // 生成pareto前沿面
             ParetoFrontUtil.generateParetoFront(algorithmNames, problemNames, runtimes, basePath);

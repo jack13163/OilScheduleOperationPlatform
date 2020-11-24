@@ -1,7 +1,6 @@
 package opt.easyjmetal.algorithm.cmoeas.entrence;
 
-import opt.easyjmetal.util.MoeadUtils;
-import opt.easyjmetal.util.JMException;
+import opt.easyjmetal.util.ParetoFrontUtil;
 
 public class CMOEAs_analysis_exp2 {
     public static void main(String[] args) {
@@ -12,12 +11,15 @@ public class CMOEAs_analysis_exp2 {
             String[] indicatorNames = {"HV", "IGD"};
             String[] configs = {"config1", "config2", "config3"};
             int runtimes = 1;
+            String basePath = "result/easyjmetal/twopipeline/";
 
             // 生成pareto前沿面
-            MoeadUtils.generateParetoFrontForAllConfigs(configs, algorithmNames, problemNames, runtimes);
+            ParetoFrontUtil.generateParetoFrontForAllConfigs(configs, algorithmNames, problemNames, runtimes, basePath);
             // 计算性能指标
             for (int i = 0; i < configs.length; i++) {
-                double value = MoeadUtils.generateQualityIndicatorsForAllConfigs(configs[i], indicatorNames[0]);
+                String trueParetoFontPath = basePath + "oil.pf";
+                String resultParetoFontPath = basePath + configs[i] + ".pf";
+                double value = ParetoFrontUtil.calculateQualityIndicator(indicatorNames[0], resultParetoFontPath, trueParetoFontPath);
                 System.out.println(configs[i] + " : " + value);
             }
 
@@ -41,7 +43,7 @@ public class CMOEAs_analysis_exp2 {
 //            // 计算不同策略C指标
 //            CMetrics cMetrics = new CMetrics(problemNames, algorithmNames,runtimes);
 //            cMetrics.run();
-        } catch (JMException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

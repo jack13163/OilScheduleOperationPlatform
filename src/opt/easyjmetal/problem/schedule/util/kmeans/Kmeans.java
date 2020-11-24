@@ -1,7 +1,6 @@
 package opt.easyjmetal.problem.schedule.util.kmeans;
 
-import opt.easyjmetal.util.MoeadUtils;
-import opt.easyjmetal.util.JMException;
+import opt.easyjmetal.util.ParetoFrontUtil;
 import opt.easyjmetal.util.fileinput.VectorFileUtils;
 import org.deeplearning4j.clustering.algorithm.Distance;
 import org.deeplearning4j.clustering.cluster.ClusterSet;
@@ -36,15 +35,17 @@ public class Kmeans {
         String[] algorithmNames = {"NSGAII_CDP", "ISDEPLUS_CDP", "NSGAIII_CDP", "MOEAD_CDP", "MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "C_MOEAD", "PPS_MOEAD"};
         String[] problemNames = {"EDF_PS", "EDF_TSS"};
         int runtimes = 10;
+        String basePath = "result/easyjmetal/twopipeline/";
+
         // 生成pareto前沿面
         try {
-            MoeadUtils.generateOilScheduleParetoFront(algorithmNames, problemNames, runtimes);
-        } catch (JMException e) {
+            ParetoFrontUtil.generateOilScheduleParetoFront(algorithmNames, problemNames, runtimes, basePath);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         // 读取数据
-        double[][] data = VectorFileUtils.readDoubleValues("result/easyjmetal/oil.pf");
+        double[][] data = VectorFileUtils.readDoubleValues(basePath + "oil.pf");
 
         // 标准化
         INDArray indArray = Nd4j.create(data);                  // 创建张量矩阵

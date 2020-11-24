@@ -1,10 +1,10 @@
 package opt.easyjmetal.problem.schedule.cop;
 
-import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.problem.schedule.Config;
 import opt.easyjmetal.problem.schedule.operation.Operation;
 import opt.easyjmetal.util.JMException;
+import opt.easyjmetal.util.ParetoFrontUtil;
 
 import java.util.List;
 
@@ -23,12 +23,8 @@ public class COPDecoder {
                 {815.42, 276.0, 230.0, 29.0, 11.0}
         };
         try {
-            MoeadUtils.getSolutionFromDB(algorithmNames, problemNames, runtimes, tofind, new MoeadUtils.ToDo() {
-                @Override
-                public void dosomething(Solution solution, String rule) {
-                    COPDecoder.decode(solution, rule);
-                }
-            });
+            ParetoFrontUtil.getSolutionFromDB(algorithmNames, problemNames, runtimes, tofind,
+                    (solution, rule) -> COPDecoder.decode(solution, rule));
         } catch (JMException e) {
             e.printStackTrace();
         }
@@ -107,6 +103,7 @@ public class COPDecoder {
 
     /**
      * 解码两条管道的能耗
+     *
      * @param solution
      * @param ruleName
      * @return

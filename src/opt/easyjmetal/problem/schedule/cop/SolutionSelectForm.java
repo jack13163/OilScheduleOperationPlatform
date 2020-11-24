@@ -2,7 +2,6 @@ package opt.easyjmetal.problem.schedule.cop;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.util.ParetoFrontUtil;
 import opt.javasim.SimulationProcess;
 import opt.jmetal.problem.oil.sim.common.JTableHelper;
@@ -323,6 +322,7 @@ public class SolutionSelectForm extends JFrame {
         Box HBox10 = Box.createHorizontalBox();
         btnStartForExperiment = new JButton("开始实验");
         btnStartForExperiment.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 // 获取用户输入
                 final int runtimes = Integer.parseInt(txtRuns.getText());
@@ -334,8 +334,9 @@ public class SolutionSelectForm extends JFrame {
                     @Override
                     public void run() {
                         try {
+                            String basePath = "result/easyjmetal/twopipeline/";
                             // 生成pareto前沿面
-                            String path = MoeadUtils.generateOilScheduleParetoFront(algorithmNames, problemNames, runtimes);
+                            String path = ParetoFrontUtil.generateOilScheduleParetoFront(algorithmNames, problemNames, runtimes, basePath);
                             // 标记优秀的解
                             paintNodominanceSolution(resultTable, path);
                             // 比较两条管道的能耗【新增内容】
@@ -435,14 +436,15 @@ public class SolutionSelectForm extends JFrame {
                     // 查找出指定的解
                     double[][] tofind = new double[][]{{energyCost, pipeMix, tankMix, chargeTime, tankUsed}};
                     try {
-                        MoeadUtils.getSolutionFromDB(algorithmNames, problemNames, runtimes, tofind, new MoeadUtils.ToDo() {
-                            @Override
-                            public void dosomething(Solution solution, String rule) {
-                                // {硬约束违背，管道1转运能耗，管道2转运能耗，总转运能耗}
-                                double[] costs = COPDecoder.decodePipelineEnergyConsumption(solution, rule);
-                                stringBuilder.append(costs[0] + "," + costs[1] + "," + costs[2] + "," + costs[3] + "\n");
-                            }
-                        });
+                        ParetoFrontUtil.getSolutionFromDB(algorithmNames, problemNames, runtimes, tofind,
+                                new ParetoFrontUtil.ToDo() {
+                                    @Override
+                                    public void dosomething(Solution solution, String rule) {
+                                        // {硬约束违背，管道1转运能耗，管道2转运能耗，总转运能耗}
+                                        double[] costs = COPDecoder.decodePipelineEnergyConsumption(solution, rule);
+                                        stringBuilder.append(costs[0] + "," + costs[1] + "," + costs[2] + "," + costs[3] + "\n");
+                                    }
+                                });
                     } catch (JMException e) {
                         e.printStackTrace();
                     }
