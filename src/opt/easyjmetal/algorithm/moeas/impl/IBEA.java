@@ -1,16 +1,12 @@
 package opt.easyjmetal.algorithm.moeas.impl;
 
 import opt.easyjmetal.core.*;
-import opt.easyjmetal.operator.crossover.CrossoverFactory;
-import opt.easyjmetal.operator.mutation.MutationFactory;
-import opt.easyjmetal.operator.selection.SelectionFactory;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.PlotObjectives;
 import opt.easyjmetal.util.comparators.DominanceComparator;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -31,26 +27,9 @@ public class IBEA extends Algorithm {
     private int maxEvaluations_;
 
     protected SolutionSet archive_;
-    protected Operator crossoverOperator_;
-    protected Operator mutationOperator_;
-    protected Operator selectionOperator_;
 
-    public IBEA(Problem problem) throws JMException {
+    public IBEA(Problem problem) {
         super(problem);
-        this.problem_ = problem;
-        populationSize_ = 100;
-        archiveSize_ = 100;
-        maxEvaluations_ = 25000;
-
-        this.mutationOperator_ = MutationFactory.getMutationOperator("PolynomialMutation", new HashMap() {{
-            put("probability", 1.0 / problem_.getNumberOfVariables());// 变异概率
-            put("distributionIndex", 20.0);
-        }});
-        this.crossoverOperator_ = CrossoverFactory.getCrossoverOperator("SBXCrossover", new HashMap<String, Double>() {{
-            put("probability", 1.0);
-            put("distributionIndex", 20.0);
-        }});
-        this.selectionOperator_ = SelectionFactory.getSelectionOperator("BinaryTournament2", null);// 选择算子
     }
 
     @Override
@@ -64,6 +43,11 @@ public class IBEA extends Algorithm {
         int runningTime = (Integer) getInputParameter("runningTime");
         population_ = new SolutionSet(populationSize_);
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
+
+        // 交叉选择算子
+        Operator mutationOperator_ = operators_.get("mutation");
+        Operator crossoverOperator_ = operators_.get("crossover");
+        Operator selectionOperator_ = operators_.get("selection");
 
         // 创建数据表，方便后面保存结果
         String tableName = "IBEA_" + runningTime;

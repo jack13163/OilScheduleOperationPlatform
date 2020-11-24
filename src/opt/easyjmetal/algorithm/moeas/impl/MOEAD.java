@@ -1,11 +1,9 @@
 package opt.easyjmetal.algorithm.moeas.impl;
 
+import opt.easyjmetal.core.*;
+import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.util.PlotObjectives;
-import opt.easyjmetal.core.*;
-import opt.easyjmetal.operator.crossover.CrossoverFactory;
-import opt.easyjmetal.operator.mutation.MutationFactory;
-import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.PseudoRandom;
 import opt.easyjmetal.util.jmathplot.ScatterPlot;
 import opt.easyjmetal.util.sqlite.SqlUtils;
@@ -13,7 +11,6 @@ import opt.easyjmetal.util.sqlite.SqlUtils;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -50,7 +47,7 @@ public class MOEAD extends Algorithm {
         String dbName = getInputParameter("DBName").toString();
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
         int plotFlag_ = (Integer) getInputParameter("plotFlag");
-        runningTime = (Integer) getInputParameter("runningTime"); // start from 1
+        runningTime = (Integer) getInputParameter("runningTime");
         population_ = new SolutionSet(populationSize_);
         T_ = (Integer) getInputParameter("T");
         nr_ = (Integer) getInputParameter("nr");
@@ -58,14 +55,10 @@ public class MOEAD extends Algorithm {
         neighborhood_ = new int[populationSize_][T_];
         z_ = new double[problem_.getNumberOfObjectives()];
         lambda_ = new double[populationSize_][problem_.getNumberOfObjectives()];
-        Operator mutation_ = MutationFactory.getMutationOperator("PolynomialMutation", new HashMap() {{
-            put("probability", 1.0 / problem_.getNumberOfVariables());// 变异概率
-            put("distributionIndex", 20.0);
-        }});
-        Operator crossover_ = CrossoverFactory.getCrossoverOperator("SBXCrossover", new HashMap<String, Double>() {{
-            put("probability", 1.0);
-            put("distributionIndex", 20.0);
-        }});
+
+        // 交叉选择算子
+        Operator mutation_ = operators_.get("mutation");
+        Operator crossover_ = operators_.get("crossover");
 
         // 创建数据表
         String problemName = "MOEAD_" + runningTime;

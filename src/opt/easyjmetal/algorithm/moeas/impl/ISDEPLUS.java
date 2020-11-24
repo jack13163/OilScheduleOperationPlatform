@@ -47,15 +47,11 @@ public class ISDEPLUS extends Algorithm {
         population_ = new SolutionSet(populationSize_);
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
         this.population_ = new SolutionSet(populationSize_);
-        this.mutationOperator_ = MutationFactory.getMutationOperator("PolynomialMutation", new HashMap() {{
-            put("probability", 1.0 / problem_.getNumberOfVariables());// 变异概率
-            put("distributionIndex", 20.0);
-        }});
-        this.crossoverOperator_ = CrossoverFactory.getCrossoverOperator("SBXCrossover", new HashMap<String, Double>() {{
-            put("probability", 1.0);
-            put("distributionIndex", 20.0);
-        }});
-        this.selectionOperator_ = SelectionFactory.getSelectionOperator("BinaryTournament2", null);// 选择算子
+
+        // 交叉选择算子
+        Operator mutationOperator_ = operators_.get("mutation");
+        Operator crossoverOperator_ = operators_.get("crossover");
+        Operator selectionOperator_ = operators_.get("selection");
 
         // 创建数据表，方便后面保存结果
         String tableName = "ISDEPlus_" + runningTime;

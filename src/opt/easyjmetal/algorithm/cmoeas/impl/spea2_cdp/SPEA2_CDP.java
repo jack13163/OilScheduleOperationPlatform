@@ -8,14 +8,10 @@ import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 public class SPEA2_CDP extends Algorithm {
-    /**
-     * Constructor
-     *
-     * @param problem Problem to solve
-     */
+
     public SPEA2_CDP(Problem problem) {
         super(problem);
-    } // NSGAIII
+    }
 
     private SolutionSet external_archive_;
     private int populationSize_;
@@ -24,19 +20,12 @@ public class SPEA2_CDP extends Algorithm {
 
     Distance distance;
 
-    private int iterations;
     private SolutionSet archive;// 档案集
     private StrengthRawFitness strenghtRawFitness = new StrengthRawFitness();
     private EnvironmentalSelection environmentalSelection;
     private int k;
 
-    /**
-     * Runs the SPEA2 algorithm.
-     *
-     * @return a <code>SolutionSet</code> that is a set of non dominated solutions
-     * as a result of the algorithm execution
-     * @throws JMException
-     */
+    @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
 
         distance = new Distance();// 计算距离
@@ -114,7 +103,7 @@ public class SPEA2_CDP extends Algorithm {
                 offspringPopulation_.add(offSpring[0]);
                 offspringPopulation_.add(offSpring[1]);
                 evaluations_ += 2;
-            } // for
+            }
 
             // 环境选择
             population_ = replacement(population_, offspringPopulation_);
@@ -125,12 +114,12 @@ public class SPEA2_CDP extends Algorithm {
                 allPop = allPop.union(population_);
             }
             gen++;
-        } // while
+        }
 
         SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
 
         return external_archive_;
-    } // execute
+    }
 
     // 环境选择
     protected SolutionSet replacement(SolutionSet population, SolutionSet offspringPopulation) throws JMException {

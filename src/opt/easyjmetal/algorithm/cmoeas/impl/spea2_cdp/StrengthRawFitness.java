@@ -6,11 +6,8 @@ import opt.easyjmetal.util.comparators.DominanceComparator;
 import java.util.Arrays;
 import java.util.Comparator;
 
-@SuppressWarnings("serial")
 public class StrengthRawFitness {
-    /**
-     * stores a <code>Comparator</code> for dominance checking
-     */
+
     private static final Comparator DOMINANCE_COMPARATOR = new DominanceComparator();
 
     private int k; // k-th individual

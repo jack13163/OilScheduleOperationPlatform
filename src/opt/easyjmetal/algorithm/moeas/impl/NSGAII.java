@@ -1,18 +1,9 @@
 package opt.easyjmetal.algorithm.moeas.impl;
 
-import opt.easyjmetal.util.MoeadUtils;
-import opt.easyjmetal.util.PlotObjectives;
 import opt.easyjmetal.core.*;
-import opt.easyjmetal.operator.crossover.CrossoverFactory;
-import opt.easyjmetal.operator.mutation.MutationFactory;
-import opt.easyjmetal.operator.selection.SelectionFactory;
-import opt.easyjmetal.util.Distance;
-import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.Ranking;
+import opt.easyjmetal.util.*;
 import opt.easyjmetal.util.comparators.CrowdingComparator;
 import opt.easyjmetal.util.sqlite.SqlUtils;
-
-import java.util.HashMap;
 
 public class NSGAII extends Algorithm {
 
@@ -31,15 +22,11 @@ public class NSGAII extends Algorithm {
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
         String dbName = getInputParameter("DBName").toString();
-        Operator mutationOperator_ = MutationFactory.getMutationOperator("PolynomialMutation", new HashMap(){{
-            put("probability", 1.0 / problem_.getNumberOfVariables());// 变异概率
-            put("distributionIndex", 20.0);
-        }});
-        Operator crossoverOperator_ = CrossoverFactory.getCrossoverOperator("SBXCrossover", new HashMap<String, Double>(){{
-            put("probability", 1.0);
-            put("distributionIndex", 20.0);
-        }});
-        Operator selectionOperator_ = SelectionFactory.getSelectionOperator("BinaryTournament2", null);// 选择算子
+
+        // 交叉选择算子
+        Operator mutationOperator_ = operators_.get("mutation");
+        Operator crossoverOperator_ = operators_.get("crossover");
+        Operator selectionOperator_ = operators_.get("selection");
 
         // 生成初始种群
         population_ = new SolutionSet(populationSize_);
@@ -52,8 +39,6 @@ public class NSGAII extends Algorithm {
             population_.add(newSolution);
         }
 
-        SolutionSet allPop = population_;
-
         // 初始化外部储备集
         external_archive_ = new SolutionSet(populationSize_);
         MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
@@ -62,7 +47,6 @@ public class NSGAII extends Algorithm {
         String tableName = "NSGAII_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 
-        int gen = 0;
         while (evaluations_ < maxEvaluations_) {
             // 生成子代个体
             SolutionSet offspringPopulation_ = new SolutionSet(populationSize_);
@@ -144,11 +128,6 @@ public class NSGAII extends Algorithm {
             if (isDisplay_) {
                 PlotObjectives.plotSolutions("NSGAII", external_archive_);
             }
-
-            if (gen % 50 == 0) {
-                allPop = allPop.union(population_);
-            }
-            gen++;
         }
 
         SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);

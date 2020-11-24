@@ -11,10 +11,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * @author Juanjo Durillo
- */
-@SuppressWarnings("serial")
 public class EnvironmentalSelection {
 
     private int solutionsToSelect;

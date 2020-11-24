@@ -49,11 +49,6 @@ public class MOFA extends Algorithm {
      */
     public MOFA(Problem problem) {
         super(problem);
-        this.populationSize_ = 100;         // 种群大小
-        this.maxEvaluations_ = 500;         // 最大迭代次数
-        this.externalArchiveSize = 100;     // 外部档案规模
-        this.gamma = 1;                     // 光吸收系数
-        this.beta0 = 1;                     // 最大吸引力
     }
 
     @Override

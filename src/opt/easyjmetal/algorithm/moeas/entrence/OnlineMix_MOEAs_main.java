@@ -2,18 +2,25 @@ package opt.easyjmetal.algorithm.moeas.entrence;
 
 import opt.easyjmetal.algorithm.AlgorithmFactory;
 import opt.easyjmetal.core.Algorithm;
+import opt.easyjmetal.core.Operator;
 import opt.easyjmetal.core.Problem;
+import opt.easyjmetal.operator.crossover.CrossoverFactory;
+import opt.easyjmetal.operator.mutation.MutationFactory;
+import opt.easyjmetal.operator.selection.SelectionFactory;
 import opt.easyjmetal.problem.ProblemFactory;
 import opt.easyjmetal.util.FileUtils;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class OnlineMix_MOEAs_main {
 
     public static void main(String[] args) throws Exception {
-//        batchRun(Arrays.asList("MOFA", "MOPSO", "MOEAD", "NSGAII"), 5);
-        batchRun(Arrays.asList("ISDEPLUS"), 1);
+//        batchRun(Arrays.asList("MOFA", "MOPSO", "MOEAD", "NSGAII", "ISDEPLUS", "IBEA"), 5);
+//        batchRun(Arrays.asList("ISDEPLUS"), 1);
+//        batchRun(Arrays.asList("IBEA"), 1);
+        batchRun(Arrays.asList("IBEA"), 1);
     }
 
     /**
@@ -46,8 +53,10 @@ public class OnlineMix_MOEAs_main {
         double gamma = 1;
         double beta0 = 1;
         double deDelta = 0.9;
+        int k = 1;
         Boolean isDisplay = true;
-        int plotFlag = 0; // 0 for the working population; 1 for the external archive
+        // 0 for the working population; 1 for the external archive
+        int plotFlag = 0;
 
         // 独立运行若干次
         for (int j = 0; j < runtime; j++) {
@@ -68,8 +77,22 @@ public class OnlineMix_MOEAs_main {
                 algorithm.setInputParameter("gamma", gamma);
                 algorithm.setInputParameter("beta0", beta0);
                 algorithm.setInputParameter("nr", updateNumber);
+                algorithm.setInputParameter("k", k);
                 algorithm.setInputParameter("isDisplay", isDisplay);
                 algorithm.setInputParameter("plotFlag", plotFlag);
+
+                Operator mutationOperator_ = MutationFactory.getMutationOperator("PolynomialMutation", new HashMap(){{
+                    put("probability", 1.0 / problem.getNumberOfVariables());
+                    put("distributionIndex", 20.0);
+                }});
+                algorithm.setInputParameter("mutation", mutationOperator_);
+                Operator crossoverOperator_ = CrossoverFactory.getCrossoverOperator("SBXCrossover", new HashMap<String, Double>(){{
+                    put("probability", 1.0);
+                    put("distributionIndex", 20.0);
+                }});
+                algorithm.setInputParameter("crossover", crossoverOperator_);
+                Operator selectionOperator_ = SelectionFactory.getSelectionOperator("BinaryTournament2", null);
+                algorithm.setInputParameter("selection", selectionOperator_);
 
                 System.out.println("==================================================================");
                 // 运行算法
