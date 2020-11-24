@@ -60,7 +60,7 @@ public class Friedman {
         datos = new Vector();
 
         for (int alg = 0; alg < algorithmNameList_.length; alg++) {
-            algoritmos.add(new String(algorithmNameList_[alg]));
+            algoritmos.add(algorithmNameList_[alg]);
             datos.add(new Vector());
 
             for (int prob = 0; prob < problemList_.length; prob++) {
@@ -109,8 +109,8 @@ public class Friedman {
                 } else {
                     ((Vector) datos.elementAt(alg)).add(new Double(valor));
                 }
-            } // for
-        } // for
+            }
+        }
 
 
         /*Compute the average performance per algorithm for each data set*/

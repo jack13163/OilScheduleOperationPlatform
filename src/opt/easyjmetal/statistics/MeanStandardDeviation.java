@@ -172,7 +172,7 @@ public class MeanStandardDeviation {
     }
 
     private void generateLatexScript() throws IOException {
-        String latexDirectoryName = resultBaseDirectory_ + "/" + DEFAULT_LATEX_DIRECTORY;
+        String latexDirectoryName = resultBaseDirectory_ + DEFAULT_LATEX_DIRECTORY;
         File latexOutput;
         latexOutput = new File(latexDirectoryName);
         if (!latexOutput.exists()) {

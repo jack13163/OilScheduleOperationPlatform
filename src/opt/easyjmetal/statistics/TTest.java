@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TTest {
-    private static final String DEFAULT_LATEX_DIRECTORY = "latex";
+    private static final String DEFAULT_LATEX_DIRECTORY = "ttest";
     private String resultBaseDirectory_;
 
     private List<String> indicList_;
@@ -132,7 +132,7 @@ public class TTest {
     }
 
     private void generateLatexScript(List<List<List<List<Double>>>> data) throws IOException {
-        String latexDirectoryName = resultBaseDirectory_ + "/" + DEFAULT_LATEX_DIRECTORY;
+        String latexDirectoryName = resultBaseDirectory_ + DEFAULT_LATEX_DIRECTORY;
         File latexOutput;
         latexOutput = new File(latexDirectoryName);
         if (!latexOutput.exists()) {

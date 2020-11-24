@@ -42,7 +42,7 @@ public class NSGAIII extends Algorithm {
     public SolutionSet execute() throws JMException, ClassNotFoundException {
 
         distance = new Distance();// 计算距离
-        int runningTime = (Integer) getInputParameter("runningTime") + 1;
+        int runningTime = (Integer) getInputParameter("runningTime");
 
         //Read the parameters
         populationSize_ = (Integer) getInputParameter("populationSize");

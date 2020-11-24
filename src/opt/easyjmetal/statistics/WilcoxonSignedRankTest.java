@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class WilcoxonSignedRankTest {
-    private static final String DEFAULT_LATEX_DIRECTORY = "latex";
+    private static final String DEFAULT_LATEX_DIRECTORY = "wilcoxonranktest";
     private String resultBaseDirectory_;
     private List<String> indicList_;
     private List<String> algorithmNameList_;
