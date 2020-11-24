@@ -24,9 +24,9 @@ public class NSGAII extends Algorithm {
         String dbName = getInputParameter("DBName").toString();
 
         // 交叉选择算子
-        Operator mutationOperator_ = operators_.get("mutation");
-        Operator crossoverOperator_ = operators_.get("crossover");
-        Operator selectionOperator_ = operators_.get("selection");
+        Operator mutationOperator_ = (Operator) getInputParameter("mutation");
+        Operator crossoverOperator_ = (Operator) getInputParameter("crossover");
+        Operator selectionOperator_ = (Operator) getInputParameter("selection");
 
         // 生成初始种群
         population_ = new SolutionSet(populationSize_);
