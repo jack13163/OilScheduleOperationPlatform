@@ -10,6 +10,7 @@ import opt.easyjmetal.operator.selection.SelectionFactory;
 import opt.easyjmetal.problem.ProblemFactory;
 import opt.easyjmetal.util.FileUtils;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -19,9 +20,9 @@ public class OnlineMix_MOEAs_main {
     public static void main(String[] args) throws Exception {
         batchRun(Arrays.asList(
                 "MOEAD", "NSGAII",
-//                "MOFA", "MOPSO",
-//                "ISDEPlus", "IBEA",
-                "SPEA2", "NSGAIII"), 2);
+                "MOFA", "MOPSO",
+                "ISDEPlus", "IBEA",
+                "SPEA2", "NSGAIII"), 10);
 //        batchRun(Arrays.asList("MOFA"), 1);
     }
 
@@ -41,10 +42,21 @@ public class OnlineMix_MOEAs_main {
         // 先清楚上次运行的结果
         String resultFile = basePath + "/" + problem.getName() + ".db";
         boolean deleted = false;
-        do {
-            deleted = FileUtils.deleteFile(resultFile);
-            Thread.sleep(500);
-        } while (!deleted);
+
+        // 判断问题路径是否存在，若不存在，则创建
+        File dir = new File(basePath);
+        if(!dir.exists()){
+            org.apache.commons.io.FileUtils.forceMkdir(dir);
+        }
+
+        // 判断数据库文件是否存在，若存在，则删除
+        File file = new File(resultFile);
+        if(file.exists()) {
+            do {
+                deleted = FileUtils.deleteFile(resultFile);
+                Thread.sleep(500);
+            } while (!deleted);
+        }
         System.out.println("Initialization finished successfully...");
 
         // 参数配置
