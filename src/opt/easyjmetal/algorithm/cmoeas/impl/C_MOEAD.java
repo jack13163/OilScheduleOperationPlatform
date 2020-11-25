@@ -97,7 +97,7 @@ public class C_MOEAD extends Algorithm {
 
 
         //Create database and save the results
-        String dbName = dataDirectory_ + problem_.getName() + ".db";
+        String dbName = dataDirectory_ + problem_.getName();
         String tableName = "C_MOEAD_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 

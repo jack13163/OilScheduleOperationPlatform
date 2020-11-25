@@ -78,7 +78,7 @@ public class MOEAD_CDP extends Algorithm {
         Operator mutation_ = operators_.get("mutation");  // default: polynomial mutation
 
         //creat database
-        String dbName = dataDirectory_ + problem_.getName() + ".db";
+        String dbName = dataDirectory_ + problem_.getName();
         String tableName = "MOEAD_CDP_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 

@@ -76,7 +76,7 @@ public class NSGAII_CDP extends Algorithm {
         MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         //creat database
-        String dbName = dataDirectory_ + problem_.getName() + ".db";
+        String dbName = dataDirectory_ + problem_.getName();
         String tableName = "NSGAII_CDP_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 

@@ -73,7 +73,7 @@ public class ISDEPLUS_CDP extends Algorithm {
 
         //creat database
         String tableName = "ISDEPLUS_CDP_" + runningTime;
-        String dbName = dataDirectory_ + problem_.getName() + ".db";
+        String dbName = dataDirectory_ + problem_.getName();
         SqlUtils.CreateTable(tableName, dbName);
 
         int gen = 0;
