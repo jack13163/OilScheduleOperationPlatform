@@ -300,7 +300,7 @@ public class ParetoFrontUtil {
      */
     public static double calculateQualityIndicator(String indicatorName,
                                                    String resultParetoFrontPath,
-                                                   String trueParetoFrontPath) throws JMException {
+                                                   String trueParetoFrontPath) {
 
         // 加载真实的Pareto前沿
         double[][] trueFront = new Hypervolume().utils_.readFront(trueParetoFrontPath);

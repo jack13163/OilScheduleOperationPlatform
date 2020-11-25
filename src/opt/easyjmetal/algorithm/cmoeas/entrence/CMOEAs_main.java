@@ -8,7 +8,6 @@ import opt.easyjmetal.operator.crossover.CrossoverFactory;
 import opt.easyjmetal.operator.mutation.MutationFactory;
 import opt.easyjmetal.operator.selection.SelectionFactory;
 import opt.easyjmetal.problem.ProblemFactory;
-import opt.easyjmetal.util.FileUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -78,7 +77,7 @@ public class CMOEAs_main {
 
         int popSize = 100;
         int neighborSize = (int) (0.1 * popSize);
-        int maxFES = 50000;
+        int maxFES = 1000;
         int updateNumber = 2;
         double deDelta = 0.9;
         double DeCrossRate = 1.0;
@@ -90,7 +89,7 @@ public class CMOEAs_main {
         String AlgorithmName = algorithmName;
         // 权重文件路径
         String weightPath = "resources/MOEAD_Weights/";
-        int runtime = 10;
+        int runtime = 2;
         // 是否显示详细调度
         Boolean isDisplay = false;
         // 0: population; 1: external archive
@@ -105,10 +104,6 @@ public class CMOEAs_main {
         for (int i = 0; i < problemStrings.length; i++) {
             // 问题
             Problem problem = ProblemFactory.getProblem(problemStrings[i], params);
-
-            // 结果保存路径
-            String resultFile = basePath + problem.getName() + ".db";
-            FileUtils.deleteFile(resultFile);
 
             // 算法
             Object[] algorithmParams = {problem};
