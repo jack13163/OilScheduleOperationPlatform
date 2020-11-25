@@ -51,31 +51,28 @@ public class MOEAD_Epsilon extends Algorithm {
     private String functionType_;
     private int evaluations_;
     private String dataDirectory_;
+    private String weightDirectory_;
     private ScatterPlot plot_;
     private double epsilon_k_;
     private SolutionSet external_archive_;
 
-    /**
-     * Constructor
-     *
-     * @param problem Problem to solve
-     */
     public MOEAD_Epsilon(Problem problem) {
         super(problem);
         functionType_ = "_TCHE2";
-    } // MOEAD_Epsilon
+    }
 
+    @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
         int runningTime;
         evaluations_ = 0;
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         populationSize_ = (Integer) getInputParameter("populationSize");
         dataDirectory_ = getInputParameter("dataDirectory").toString();
-        String dbName = getInputParameter("DBName").toString();
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
+        weightDirectory_ = getInputParameter("weightDirectory").toString();
         int plotFlag_ = (Integer) getInputParameter("plotFlag");
 
-        runningTime = (Integer) getInputParameter("runningTime") + 1; // start from 1
+        runningTime = (Integer) getInputParameter("runningTime") + 1;
         population_ = new SolutionSet(populationSize_);
 
         T_ = (Integer) getInputParameter("T");
@@ -89,7 +86,8 @@ public class MOEAD_Epsilon extends Algorithm {
         Operator mutation_ = operators_.get("mutation");  // default: polynomial mutation
 
         //creat database
-        String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
+        String dbName = dataDirectory_ + problem_.getName() + ".db";
+        String problemName = "MOEAD_Epsilon_" + runningTime;
         SqlUtils.CreateTable(problemName, dbName);
 
         // STEP 1. Initialization
@@ -248,7 +246,7 @@ public class MOEAD_Epsilon extends Algorithm {
 
             try {
                 // Open the file
-                FileInputStream fis = new FileInputStream(dataDirectory_ + "/" + dataFileName);
+                FileInputStream fis = new FileInputStream(weightDirectory_ + dataFileName);
                 InputStreamReader isr = new InputStreamReader(fis);
                 BufferedReader br = new BufferedReader(isr);
                 int i = 0;
@@ -268,13 +266,11 @@ public class MOEAD_Epsilon extends Algorithm {
                 }
                 br.close();
             } catch (Exception e) {
-                System.out.println("initUniformWeight: failed when reading for file: " + dataDirectory_ + "/" + dataFileName);
+                System.out.println("initUniformWeight: failed when reading for file: " + weightDirectory_ + dataFileName);
                 e.printStackTrace();
             }
-        } // else
-
-        //System.exit(0) ;
-    } // initUniformWeight
+        }
+    }
 
     /**
      *

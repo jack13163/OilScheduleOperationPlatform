@@ -89,7 +89,7 @@ public class CMOEAs_main {
         float infeasibleRatio = 0.1f;
         String AlgorithmName = algorithmName;
         // 权重文件路径
-        String weightPath = "resources/MOEAD_Weights";
+        String weightPath = "resources/MOEAD_Weights/";
         int runtime = 10;
         // 是否显示详细调度
         Boolean isDisplay = false;
@@ -121,7 +121,10 @@ public class CMOEAs_main {
             algorithm.setInputParameter("AlgorithmName", AlgorithmName);
             algorithm.setInputParameter("populationSize", popSize);
             algorithm.setInputParameter("maxEvaluations", maxFES);
-            algorithm.setInputParameter("dataDirectory", weightPath);
+            // 实验数据存放的路径
+            algorithm.setInputParameter("dataDirectory", basePath);
+            // 权重文件存放的路径
+            algorithm.setInputParameter("weightDirectory", weightPath);
             algorithm.setInputParameter("T", neighborSize);
             algorithm.setInputParameter("delta", deDelta);
             algorithm.setInputParameter("nr", updateNumber);

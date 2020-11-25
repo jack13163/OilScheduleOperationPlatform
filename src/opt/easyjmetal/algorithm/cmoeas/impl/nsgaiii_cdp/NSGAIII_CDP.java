@@ -20,27 +20,21 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 public class NSGAIII_CDP extends Algorithm {
-    /**
-     * Constructor
-     *
-     * @param problem Problem to solve
-     */
+
     public NSGAIII_CDP(Problem problem) {
         super(problem);
-    } // NSGAIII
+    }
 
     private SolutionSet population_;
     private SolutionSet external_archive_;
     private int populationSize_;
     private int maxEvaluations_;
     private String dataDirectory_;
+    private String weightDirectory_;
 
     Distance distance;
 
-    /**
-     * 参考点
-     */
-    //Vector<Vector<Double>> lambda_ ;
+    // 参考点
     private double[][] lambda_;
     protected List<ReferencePoint> referencePoints = new Vector<>();
 
@@ -51,16 +45,17 @@ public class NSGAIII_CDP extends Algorithm {
      * as a result of the algorithm execution
      * @throws JMException
      */
+    @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
 
-        distance = new Distance();// 计算距离
+        distance = new Distance();
         int runningTime = (Integer) getInputParameter("runningTime") + 1;
 
         //Read the parameters
         populationSize_ = (Integer) getInputParameter("populationSize");
         maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
-        String dbName = getInputParameter("DBName").toString();
         dataDirectory_ = getInputParameter("dataDirectory").toString();
+        weightDirectory_ = getInputParameter("weightDirectory").toString();
         lambda_ = new double[populationSize_][problem_.getNumberOfObjectives()];
 
         //Initialize the variables
@@ -85,7 +80,7 @@ public class NSGAIII_CDP extends Algorithm {
             problem_.evaluateConstraints(newSolution);
             evaluations_++;
             population_.add(newSolution);
-        } //for
+        }
 
         SolutionSet allPop = population_;
 
@@ -94,9 +89,9 @@ public class NSGAIII_CDP extends Algorithm {
         MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         //creat database
-        String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
-        SqlUtils.CreateTable(problemName, dbName);
-
+        String dbName = dataDirectory_ + problem_.getName() + ".db";
+        String tableName = "NSGAIII_CDP_" + runningTime;
+        SqlUtils.CreateTable(tableName, dbName);
 
         int gen = 0;
         // Generations
@@ -146,12 +141,12 @@ public class NSGAIII_CDP extends Algorithm {
                 allPop = allPop.union(population_);
             }
             gen++;
-        } // while
+        }
 
-        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
 
         return external_archive_;
-    } // execute
+    }
 
 
     // Generate the reference points and random population
@@ -161,15 +156,15 @@ public class NSGAIII_CDP extends Algorithm {
                 double a = 1.0 * n / (populationSize_ - 1);
                 lambda_[n][0] = a;
                 lambda_[n][1] = 1 - a;
-            } // for
-        } // if
+            }
+        }
         else {
             String dataFileName;
             dataFileName = "W" + problem_.getNumberOfObjectives() + "D_" + populationSize_ + ".dat";
 
             try {
-                // Open the file
-                String filepath = dataDirectory_ + "/" + dataFileName;
+                // 读取权重文件
+                String filepath = weightDirectory_ + dataFileName;
                 FileInputStream fis = new FileInputStream(filepath);
                 InputStreamReader isr = new InputStreamReader(fis);
                 BufferedReader br = new BufferedReader(isr);
@@ -190,7 +185,7 @@ public class NSGAIII_CDP extends Algorithm {
                 }
                 br.close();
             } catch (Exception e) {
-                System.out.println("initUniformWeight: failed when reading for file: " + dataDirectory_ + "/" + dataFileName);
+                System.out.println("initUniformWeight: failed when reading for file: " + weightDirectory_ + dataFileName);
                 e.printStackTrace();
             }
         }
@@ -243,5 +238,5 @@ public class NSGAIII_CDP extends Algorithm {
         }
         return copy;
     }
-} // NSGA-III
+}
 

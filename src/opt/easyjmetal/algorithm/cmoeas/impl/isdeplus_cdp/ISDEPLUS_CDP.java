@@ -39,13 +39,12 @@ public class ISDEPLUS_CDP extends Algorithm {
     @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
 
-        distance = new Distance();// 计算距离
+        distance = new Distance();
         int runningTime = (Integer) getInputParameter("runningTime") + 1;
 
         //Read the parameters
         populationSize_ = (Integer) getInputParameter("populationSize");
         maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
-        String dbName = getInputParameter("DBName").toString();
         dataDirectory_ = getInputParameter("dataDirectory").toString();
 
         //Initialize the variables
@@ -58,14 +57,13 @@ public class ISDEPLUS_CDP extends Algorithm {
         Operator selectionOperator_ = operators_.get("selection");
 
         // Create the initial solutionSet
-        Solution newSolution;
         for (int i = 0; i < populationSize_; i++) {
-            newSolution = new Solution(problem_);
+            Solution newSolution = new Solution(problem_);
             problem_.evaluate(newSolution);
             problem_.evaluateConstraints(newSolution);
             evaluations_++;
             population_.add(newSolution);
-        } //for
+        }
 
         SolutionSet allPop = population_;
 
@@ -74,8 +72,9 @@ public class ISDEPLUS_CDP extends Algorithm {
         MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         //creat database
-        String problemName = problem_.getName() + "_" + runningTime;
-        SqlUtils.CreateTable(problemName, dbName);
+        String tableName = "ISDEPLUS_CDP_" + runningTime;
+        String dbName = dataDirectory_ + problem_.getName() + ".db";
+        SqlUtils.CreateTable(tableName, dbName);
 
         int gen = 0;
         // Generations
@@ -113,7 +112,7 @@ public class ISDEPLUS_CDP extends Algorithm {
                 offspringPopulation_.add(offSpring[0]);
                 offspringPopulation_.add(offSpring[1]);
                 evaluations_ += 2;
-            } // for
+            }
 
             // 环境选择
             population_ = replacement(population_, offspringPopulation_);
@@ -126,7 +125,7 @@ public class ISDEPLUS_CDP extends Algorithm {
             gen++;
         } // while
 
-        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
 
         return external_archive_;
     } // execute

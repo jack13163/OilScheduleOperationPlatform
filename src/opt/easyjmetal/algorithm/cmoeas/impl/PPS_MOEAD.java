@@ -51,6 +51,7 @@ public class PPS_MOEAD extends Algorithm {
     private String functionType_;
     private int evaluations_;
     private String dataDirectory_;
+    private String weightDirectory_;
     private double epsilon_k_;
     private SolutionSet external_archive_;
 
@@ -61,31 +62,27 @@ public class PPS_MOEAD extends Algorithm {
 
     double delta_;
 
-    private int l_  = 20;
+    private int l_ = 20;
 
-    double tao_ = 0.1 ;
+    double tao_ = 0.1;
     double alpha_ = 0.95;
 
     double threshold_change_;
 
-    /**
-     * Constructor
-     *
-     * @param problem Problem to solve
-     */
     public PPS_MOEAD(Problem problem) {
         super(problem);
         functionType_ = "_TCHE2";
-    } // Push_pull
+    }
 
+    @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
         int runningTime;
         evaluations_ = 0;
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         populationSize_ = (Integer) getInputParameter("populationSize");
         dataDirectory_ = getInputParameter("dataDirectory").toString();
-        String dbName = getInputParameter("DBName").toString();
-        runningTime = (Integer) getInputParameter("runningTime") + 1; // start from 1
+        weightDirectory_ = getInputParameter("weightDirectory").toString();
+        runningTime = (Integer) getInputParameter("runningTime") + 1;
         population_ = new SolutionSet(populationSize_);
         T_ = (Integer) getInputParameter("T");
         nr_ = (Integer) this.getInputParameter("nr");
@@ -106,8 +103,9 @@ public class PPS_MOEAD extends Algorithm {
         nazirPoints_ = new double[maxGen][problem_.getNumberOfObjectives()];
 
         //creat database
-        String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
-        SqlUtils.CreateTable(problemName, dbName);
+        String dbName = dataDirectory_ + problem_.getName() + ".db";
+        String tableName = "PPS_MOEAD_" + runningTime;
+        SqlUtils.CreateTable(tableName, dbName);
 
         // STEP 1. Initialization
         // STEP 1.1. Compute euclidean distances between weight vectors and find T
@@ -137,7 +135,6 @@ public class PPS_MOEAD extends Algorithm {
         initNadirPoint();
 
 
-
         int gen = 0;
         double epsilon_0_ = 0;
         double changeRate = 1.0;
@@ -148,20 +145,20 @@ public class PPS_MOEAD extends Algorithm {
         do {
             setIdealAndNadirPoints(gen);
 
-            if(gen < l_){
+            if (gen < l_) {
                 change_ratio[gen] = changeRate;
             }
 
-            if(gen >= l_ && gen <= tc_){
+            if (gen >= l_ && gen <= tc_) {
                 changeRate = MaxRateOfIdealAndNardirPoints(gen);
 
-                if(pushStage == true){
+                if (pushStage == true) {
                     change_ratio[gen] = changeRate;
                 }
 
             }
 
-            if(gen < tc_) {
+            if (gen < tc_) {
 
                 if (changeRate <= threshold_change_ && pushStage) {
                     pushStage = false;
@@ -178,7 +175,7 @@ public class PPS_MOEAD extends Algorithm {
                 }
 
             } else {
-                    epsilon_k_ = 0;
+                epsilon_k_ = 0;
             }
 
             int[] permutation = new int[populationSize_];
@@ -251,11 +248,8 @@ public class PPS_MOEAD extends Algorithm {
 
         //outputResult2File(problemName, change_ratio);
 
-        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
         return external_archive_;
-
-
-
     }
 
 
@@ -292,12 +286,12 @@ public class PPS_MOEAD extends Algorithm {
             con1 = Math.abs(population_.get(k).getOverallConstraintViolation());
             con2 = Math.abs(indiv.getOverallConstraintViolation());
 
-            if(pushStage){
+            if (pushStage) {
                 if (f2 < f1) {
                     population_.replace(k, new Solution(indiv));
                     time++;
                 }
-            }else {
+            } else {
 
                 if (con1 <= epsilon_k_ && con2 <= epsilon_k_) {
                     if (f2 < f1) {
@@ -322,17 +316,17 @@ public class PPS_MOEAD extends Algorithm {
     } // updateProblem
 
 
-    private void setIdealAndNadirPoints(int gen){
+    private void setIdealAndNadirPoints(int gen) {
 
         double[] temp_idealpoint = new double[problem_.getNumberOfObjectives()];
         double[] temp_nazirpoint = new double[problem_.getNumberOfObjectives()];
 
-        for(int i = 0; i < problem_.getNumberOfObjectives(); i++){
+        for (int i = 0; i < problem_.getNumberOfObjectives(); i++) {
             temp_idealpoint[i] = 1e30;
             temp_nazirpoint[i] = -1e30;
         }
 
-        for (int i = 0; i < populationSize_; i++){
+        for (int i = 0; i < populationSize_; i++) {
             for (int j = 0; j < problem_.getNumberOfObjectives(); j++) {
                 if (population_.get(i).getObjective(j) < temp_idealpoint[j]) {
                     temp_idealpoint[j] = population_.get(i).getObjective(j);
@@ -344,7 +338,7 @@ public class PPS_MOEAD extends Algorithm {
 
         }
 
-        for(int i = 0; i < problem_.getNumberOfObjectives(); i++){
+        for (int i = 0; i < problem_.getNumberOfObjectives(); i++) {
             idealPoints_[gen][i] = temp_idealpoint[i];
             nazirPoints_[gen][i] = temp_nazirpoint[i];
         }
@@ -352,26 +346,25 @@ public class PPS_MOEAD extends Algorithm {
     }
 
 
-    private double MaxRateOfIdealAndNardirPoints(int gen){
+    private double MaxRateOfIdealAndNardirPoints(int gen) {
         double max_ideal = -1e30;
         double max_nardir = -1e30;
         double x_epsilon = 1e-10;
-        for(int i = 0 ; i < problem_.getNumberOfObjectives(); i++){
-            double temp_ideal  = Math.abs((idealPoints_[gen - l_][i] - idealPoints_[gen][i]) / Math.max(x_epsilon,Math.abs(idealPoints_[gen-l_][i])));
-            double temp_nardir = Math.abs((nazirPoints_[gen - l_][i] - nazirPoints_[gen][i]) / Math.max(x_epsilon,Math.abs(nazirPoints_[gen-l_][i])));
+        for (int i = 0; i < problem_.getNumberOfObjectives(); i++) {
+            double temp_ideal = Math.abs((idealPoints_[gen - l_][i] - idealPoints_[gen][i]) / Math.max(x_epsilon, Math.abs(idealPoints_[gen - l_][i])));
+            double temp_nardir = Math.abs((nazirPoints_[gen - l_][i] - nazirPoints_[gen][i]) / Math.max(x_epsilon, Math.abs(nazirPoints_[gen - l_][i])));
 
-            if(temp_ideal > max_ideal){
+            if (temp_ideal > max_ideal) {
                 max_ideal = temp_ideal;
             }
 
-            if(temp_nardir > max_nardir){
+            if (temp_nardir > max_nardir) {
                 max_nardir = temp_nardir;
             }
         }
 
-        return Math.max(max_ideal,max_nardir);
+        return Math.max(max_ideal, max_nardir);
     }
-
 
     private void initUniformWeight() {
         if ((problem_.getNumberOfObjectives() == 2) && (populationSize_ <= 300)) {
@@ -379,8 +372,8 @@ public class PPS_MOEAD extends Algorithm {
                 double a = 1.0 * n / (populationSize_ - 1);
                 lambda_[n][0] = a;
                 lambda_[n][1] = 1 - a;
-            } // for
-        } // if
+            }
+        }
         else {
             String dataFileName;
             dataFileName = "W" + problem_.getNumberOfObjectives() + "D_" +
@@ -388,7 +381,7 @@ public class PPS_MOEAD extends Algorithm {
 
             try {
                 // Open the file
-                FileInputStream fis = new FileInputStream(dataDirectory_ + "/" + dataFileName);
+                FileInputStream fis = new FileInputStream(weightDirectory_ + dataFileName);
                 InputStreamReader isr = new InputStreamReader(fis);
                 BufferedReader br = new BufferedReader(isr);
                 int i = 0;
@@ -408,12 +401,10 @@ public class PPS_MOEAD extends Algorithm {
                 }
                 br.close();
             } catch (Exception e) {
-                System.out.println("initUniformWeight: failed when reading for file: " + dataDirectory_ + "/" + dataFileName);
+                System.out.println("initUniformWeight: failed when reading for file: " + weightDirectory_ + dataFileName);
                 e.printStackTrace();
             }
-        } // else
-
-        //System.exit(0) ;
+        }
     } // initUniformWeight
 
 

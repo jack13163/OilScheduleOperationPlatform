@@ -46,26 +46,23 @@ public class MOEAD_CDP extends Algorithm {
     private String functionType_;
     private int evaluations_;
     private String dataDirectory_;
+    private String weightDirectory_;
     private ScatterPlot plot_;
     private SolutionSet external_archive_;
 
-    /**
-     * Constructor
-     *
-     * @param problem Problem to solve
-     */
     public MOEAD_CDP(Problem problem) {
         super(problem);
         functionType_ = "_TCHE2";
-    } // MOEAD_CDP
+    }
 
+    @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
         int runningTime;
         evaluations_ = 0;
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         populationSize_ = (Integer) getInputParameter("populationSize");
         dataDirectory_ = getInputParameter("dataDirectory").toString();
-        String dbName = getInputParameter("DBName").toString();
+        weightDirectory_ = getInputParameter("weightDirectory").toString();
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
         int plotFlag_ = (Integer) getInputParameter("plotFlag");
         runningTime = (Integer) getInputParameter("runningTime") + 1; // start from 1
@@ -81,8 +78,9 @@ public class MOEAD_CDP extends Algorithm {
         Operator mutation_ = operators_.get("mutation");  // default: polynomial mutation
 
         //creat database
-        String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
-        SqlUtils.CreateTable(problemName, dbName);
+        String dbName = dataDirectory_ + problem_.getName() + ".db";
+        String tableName = "MOEAD_CDP_" + runningTime;
+        SqlUtils.CreateTable(tableName, dbName);
 
         // STEP 1. Initialization
         // STEP 1.1. Compute euclidean distances between weight vectors and find T
@@ -186,7 +184,7 @@ public class MOEAD_CDP extends Algorithm {
 
         } while (evaluations_ < maxEvaluations_);
 
-        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
         return external_archive_;
     }
 
@@ -199,16 +197,15 @@ public class MOEAD_CDP extends Algorithm {
                 double a = 1.0 * n / (populationSize_ - 1);
                 lambda_[n][0] = a;
                 lambda_[n][1] = 1 - a;
-            } // for
-        } // if
-        else {
+            }
+        } else {
             String dataFileName;
             dataFileName = "W" + problem_.getNumberOfObjectives() + "D_" +
                     populationSize_ + ".dat";
 
             try {
                 // Open the file
-                FileInputStream fis = new FileInputStream(dataDirectory_ + "/" + dataFileName);
+                FileInputStream fis = new FileInputStream(weightDirectory_ + dataFileName);
                 InputStreamReader isr = new InputStreamReader(fis);
                 BufferedReader br = new BufferedReader(isr);
                 int i = 0;
@@ -228,13 +225,11 @@ public class MOEAD_CDP extends Algorithm {
                 }
                 br.close();
             } catch (Exception e) {
-                System.out.println("initUniformWeight: failed when reading for file: " + dataDirectory_ + "/" + dataFileName);
+                System.out.println("initUniformWeight: failed when reading for file: " + weightDirectory_ + dataFileName);
                 e.printStackTrace();
             }
-        } // else
-
-        //System.exit(0) ;
-    } // initUniformWeight
+        }
+    }
 
     /**
      *

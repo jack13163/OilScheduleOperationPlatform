@@ -24,14 +24,10 @@ import opt.easyjmetal.util.sqlite.SqlUtils;
  */
 
 public class NSGAII_CDP extends Algorithm {
-    /**
-     * Constructor
-     *
-     * @param problem Problem to solve
-     */
+
     public NSGAII_CDP(Problem problem) {
         super(problem);
-    } // NSGAII
+    }
     private SolutionSet population_;
     private SolutionSet external_archive_;
 
@@ -69,7 +65,7 @@ public class NSGAII_CDP extends Algorithm {
             problem_.evaluateConstraints(newSolution);
             evaluations_++;
             population_.add(newSolution);
-        } //for
+        }
 
         SolutionSet allPop = population_;
 

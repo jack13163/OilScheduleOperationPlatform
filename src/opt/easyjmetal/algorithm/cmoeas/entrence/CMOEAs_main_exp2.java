@@ -58,7 +58,7 @@ public class CMOEAs_main_exp2 {
         for (int i = 0; i < algorithmSet.length; i++) {
             System.out.println("The tested algorithm: " + algorithmSet[i]);
             System.out.println("The process: " + String.format("%.2f", (100.0 * i / algorithmSet.length)) + "%");
-            stringBuilder.append(singleRun(configName, algorithmSet[i], crossMethod)); // 0 represents for DE, 1 represents for SBX
+            stringBuilder.append(singleRun(configName, algorithmSet[i], crossMethod));
         }
 
         fileWritter.write(stringBuilder.toString());

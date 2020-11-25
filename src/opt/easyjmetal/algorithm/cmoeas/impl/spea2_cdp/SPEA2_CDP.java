@@ -35,7 +35,6 @@ public class SPEA2_CDP extends Algorithm {
         //Read the parameters
         populationSize_ = (Integer) getInputParameter("populationSize");
         maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
-        String dbName = getInputParameter("DBName").toString();
         dataDirectory_ = getInputParameter("dataDirectory").toString();
 
         //Initialize the variables
@@ -64,8 +63,9 @@ public class SPEA2_CDP extends Algorithm {
         MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         //creat database
-        String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
-        SqlUtils.CreateTable(problemName, dbName);
+        String dbName = dataDirectory_ + problem_.getName() + ".db";
+        String tableName = "SPEA2_CDP_" + runningTime;
+        SqlUtils.CreateTable(tableName, dbName);
 
         int gen = 0;
         // Generations
@@ -117,7 +117,7 @@ public class SPEA2_CDP extends Algorithm {
             gen++;
         }
 
-        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
 
         return external_archive_;
     }

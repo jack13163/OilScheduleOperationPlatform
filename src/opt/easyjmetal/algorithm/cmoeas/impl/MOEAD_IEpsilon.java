@@ -53,31 +53,25 @@ public class MOEAD_IEpsilon extends Algorithm {
     private String functionType_;
     private int evaluations_;
     private String dataDirectory_;
+    private String weightDirectory_;
     private ScatterPlot plot_;
     private double epsilon_k_;
     private SolutionSet external_archive_;
-
-
     private double phi_max_ = -1e30;
 
-
-    /**
-     * Constructor
-     *
-     * @param problem Problem to solve
-     */
     public MOEAD_IEpsilon(Problem problem) {
         super(problem);
         functionType_ = "_TCHE2";
-    } // MOEAD_Epsilon
+    }
 
+    @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
         int runningTime;
         evaluations_ = 0;
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         populationSize_ = (Integer) getInputParameter("populationSize");
         dataDirectory_ = getInputParameter("dataDirectory").toString();
-        String dbName = getInputParameter("DBName").toString();
+        weightDirectory_ = getInputParameter("weightDirectory").toString();
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
         int plotFlag_ = (Integer) getInputParameter("plotFlag");
         runningTime = (Integer) getInputParameter("runningTime") + 1; // start from 1
@@ -94,8 +88,9 @@ public class MOEAD_IEpsilon extends Algorithm {
 
 
         //creat database
-        String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
-        SqlUtils.CreateTable(problemName, dbName);
+        String dbName = dataDirectory_ + problem_.getName() + ".db";
+        String tableName = "MOEAD_IEpsilon_" + runningTime;
+        SqlUtils.CreateTable(tableName, dbName);
 
         // STEP 1. Initialization
         // STEP 1.1. Compute euclidean distances between weight vectors and find T
@@ -241,7 +236,7 @@ public class MOEAD_IEpsilon extends Algorithm {
 
         // Update the external archive
         MoeadUtils.updateExternalArchive(population_, populationSize_, external_archive_);
-        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
         return external_archive_;
     }
 
@@ -274,7 +269,7 @@ public class MOEAD_IEpsilon extends Algorithm {
 
             try {
                 // Open the file
-                String filepath = dataDirectory_ + "/" + dataFileName;
+                String filepath = weightDirectory_ + dataFileName;
                 FileInputStream fis = new FileInputStream(filepath);
                 InputStreamReader isr = new InputStreamReader(fis);
                 BufferedReader br = new BufferedReader(isr);
@@ -295,12 +290,10 @@ public class MOEAD_IEpsilon extends Algorithm {
                 }
                 br.close();
             } catch (Exception e) {
-                System.out.println("initUniformWeight: failed when reading for file: " + dataDirectory_ + "/" + dataFileName);
+                System.out.println("initUniformWeight: failed when reading for file: " + weightDirectory_ + dataFileName);
                 e.printStackTrace();
             }
-        } // else
-
-        //System.exit(0) ;
+        }
     } // initUniformWeight
 
     private void initNeighborhood() {

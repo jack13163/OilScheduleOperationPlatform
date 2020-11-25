@@ -50,6 +50,7 @@ public class C_MOEAD extends Algorithm {
     private int evaluations_;
 
     private String dataDirectory_;
+    private String weightDirectory_;
 
     private ScatterPlot plot_;
 
@@ -68,15 +69,16 @@ public class C_MOEAD extends Algorithm {
     public C_MOEAD(Problem problem) {
         super(problem);
         functionType_ = "_TCHE2";
-    } // cMOEAD
+    }
 
+    @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
         //Initialize the parameters of cMOEAD
         evaluations_ = 0;
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         populationSize_ = (Integer) getInputParameter("populationSize");
         dataDirectory_ = getInputParameter("dataDirectory").toString();
-        String dbName = getInputParameter("DBName").toString();
+        weightDirectory_ = getInputParameter("weightDirectory").toString();
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
         int plotFlag_ = (Integer) getInputParameter("plotFlag");
 
@@ -95,8 +97,9 @@ public class C_MOEAD extends Algorithm {
 
 
         //Create database and save the results
-        String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
-        SqlUtils.CreateTable(problemName, dbName);
+        String dbName = dataDirectory_ + problem_.getName() + ".db";
+        String tableName = "C_MOEAD_" + runningTime;
+        SqlUtils.CreateTable(tableName, dbName);
 
         // STEP 1. Initialization
         // STEP 1.1. Compute euclidean distances between weight vectors and find T
@@ -200,7 +203,7 @@ public class C_MOEAD extends Algorithm {
 
         } while (evaluations_ < maxEvaluations_);
 
-        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
         return external_archive_;
     }
 
@@ -229,16 +232,16 @@ public class C_MOEAD extends Algorithm {
                 double a = 1.0 * n / (populationSize_ - 1);
                 lambda_[n][0] = a;
                 lambda_[n][1] = 1 - a;
-            } // for
-        } // if
+            }
+        }
         else {
             String dataFileName;
             dataFileName = "W" + problem_.getNumberOfObjectives() + "D_" +
                     populationSize_ + ".dat";
 
             try {
-                // Open the file
-                FileInputStream fis = new FileInputStream(dataDirectory_ + "/" + dataFileName);
+                // 读取权重文件
+                FileInputStream fis = new FileInputStream(weightDirectory_ + dataFileName);
                 InputStreamReader isr = new InputStreamReader(fis);
                 BufferedReader br = new BufferedReader(isr);
                 int i = 0;
@@ -257,13 +260,11 @@ public class C_MOEAD extends Algorithm {
                 }
                 br.close();
             } catch (Exception e) {
-                System.out.println("initUniformWeight: failed when reading for file: " + dataDirectory_ + "/" + dataFileName);
+                System.out.println("initUniformWeight: failed when reading for file: " + weightDirectory_ + dataFileName);
                 e.printStackTrace();
             }
-        } // else
-
-        //System.exit(0) ;
-    } // initUniformWeight
+        }
+    }
 
     private void initNeighborhood() {
         double[] x = new double[populationSize_];
