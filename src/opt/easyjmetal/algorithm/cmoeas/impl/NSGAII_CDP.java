@@ -42,6 +42,7 @@ public class NSGAII_CDP extends Algorithm {
      * as a result of the algorithm execution
      * @throws JMException
      */
+    @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
 
         int runningTime = (Integer) getInputParameter("runningTime") + 1;
@@ -50,8 +51,6 @@ public class NSGAII_CDP extends Algorithm {
         //Read the parameters
         int populationSize_ = (Integer) getInputParameter("populationSize");
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
-        String dbName = getInputParameter("DBName").toString();
-
 
         //Initialize the variables
         population_ = new SolutionSet(populationSize_);
@@ -79,8 +78,9 @@ public class NSGAII_CDP extends Algorithm {
         MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         //creat database
-        String problemName = problem_.getName() + "_" + Integer.toString(runningTime);
-        SqlUtils.CreateTable(problemName, dbName);
+        String dbName = problem_.getName();
+        String tableName = "NSGAII_CDP_" + runningTime;
+        SqlUtils.CreateTable(tableName, dbName);
 
         int gen = 0;
         // Generations
@@ -119,7 +119,7 @@ public class NSGAII_CDP extends Algorithm {
                 offspringPopulation_.add(offSpring[0]);
                 offspringPopulation_.add(offSpring[1]);
                 evaluations_ += 2;
-            } // for
+            }
 
             // Create the solutionSet union of solutionSet and offSpring
             SolutionSet union_ = population_.union(offspringPopulation_);
@@ -141,7 +141,7 @@ public class NSGAII_CDP extends Algorithm {
                 //Add the individuals of this front
                 for (int k = 0; k < front.size(); k++) {
                     population_.add(front.get(k));
-                } // for
+                }
 
                 //Decrement remain
                 remain = remain - front.size();
@@ -150,17 +150,17 @@ public class NSGAII_CDP extends Algorithm {
                 index++;
                 if (remain > 0) {
                     front = ranking.getSubfront(index);
-                } // if
-            } // while
+                }
+            }
 
             // Remain is less than front(index).size, insert only the best one
-            if (remain > 0) {  // front contains individuals to insert
+            if (remain > 0) {
                 distance.crowdingDistanceAssignment(front, problem_.getNumberOfObjectives());
                 front.sort(new CrowdingComparator());
                 for (int k = 0; k < remain; k++) {
                     population_.add(front.get(k));
-                } // for
-            } // if
+                }
+            }
 
             MoeadUtils.updateExternalArchive(population_, populationSize_, external_archive_);
 
@@ -168,11 +168,10 @@ public class NSGAII_CDP extends Algorithm {
                 allPop = allPop.union(population_);
             }
             gen++;
-        } // while
+        }
 
-        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
 
         return external_archive_;
-    } // execute
-
-} // NSGA-II
+    }
+}

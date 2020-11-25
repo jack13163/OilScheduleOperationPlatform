@@ -17,7 +17,7 @@ public class OnlineMix_MOEAs_analysis {
             String[] problemNames = {"OnlineMixOIL"};
             String[] indicatorNames = {"HV", "IGD"};
             int runtimes = 5;
-            // 结果路径
+            // 结果生成的路径
             String basePath = "result/easyjmetal/onlinemix/";
 
             // 生成pareto前沿面

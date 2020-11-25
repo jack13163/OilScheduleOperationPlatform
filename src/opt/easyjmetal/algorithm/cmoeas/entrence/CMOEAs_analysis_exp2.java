@@ -1,5 +1,6 @@
 package opt.easyjmetal.algorithm.cmoeas.entrence;
 
+import opt.easyjmetal.statistics.*;
 import opt.easyjmetal.util.ParetoFrontUtil;
 
 public class CMOEAs_analysis_exp2 {
@@ -23,26 +24,26 @@ public class CMOEAs_analysis_exp2 {
                 System.out.println(configs[i] + " : " + value);
             }
 
-//
-//            // Friedman测试
-//            Friedman.executeTest("HV", algorithmNames, problemNames);
-//            Friedman.executeTest("IGD", algorithmNames, problemNames);
-//
-//            // 生成均值和方差
-//            MeanStandardDeviation generateLatexTables = new MeanStandardDeviation(algorithmNames, problemNames, indicatorNames);
-//            generateLatexTables.run();
-//
-//            // 进行TTest
-//            TTest tTest = new TTest(algorithmNames, problemNames, indicatorNames);
-//            tTest.run();
-//
-//            // 进行TTest
-//            WilcoxonSignedRankTest wilcoxonSignedRankTest = new WilcoxonSignedRankTest(algorithmNames, problemNames, indicatorNames);
-//            wilcoxonSignedRankTest.run();
-//
-//            // 计算不同策略C指标
-//            CMetrics cMetrics = new CMetrics(problemNames, algorithmNames,runtimes);
-//            cMetrics.run();
+
+            // Friedman测试
+            Friedman.executeTest("HV", algorithmNames, problemNames, basePath);
+            Friedman.executeTest("IGD", algorithmNames, problemNames, basePath);
+
+            // 生成均值和方差
+            MeanStandardDeviation generateLatexTables = new MeanStandardDeviation(algorithmNames, problemNames, indicatorNames, basePath);
+            generateLatexTables.run();
+
+            // 进行TTest
+            TTest tTest = new TTest(algorithmNames, problemNames, indicatorNames, basePath);
+            tTest.run();
+
+            // 进行TTest
+            WilcoxonSignedRankTest wilcoxonSignedRankTest = new WilcoxonSignedRankTest(algorithmNames, problemNames, indicatorNames, basePath);
+            wilcoxonSignedRankTest.run();
+
+            // 计算不同策略C指标
+            CMetrics cMetrics = new CMetrics(problemNames, algorithmNames,runtimes, basePath);
+            cMetrics.run();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -4,7 +4,6 @@ import opt.easyjmetal.algorithm.AlgorithmFactory;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Operator;
 import opt.easyjmetal.core.Problem;
-import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.operator.crossover.CrossoverFactory;
 import opt.easyjmetal.operator.mutation.MutationFactory;
 import opt.easyjmetal.operator.selection.SelectionFactory;
@@ -48,20 +47,20 @@ public class CMOEAs_main {
         int algorithmNo = algorithmSet.length;
 
         // 输出运行时间
-        String basePath = "result/easyjmetal/";
+        String basePath = "result/easyjmetal/twopipeline/";
         File dir = new File(basePath);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
-        //true = append file
+        // 每次新建文件true = append file
         FileWriter fileWritter = new FileWriter(basePath + "runtimes.txt", false);
         StringBuilder stringBuilder = new StringBuilder();
 
         for (int i = 0; i < algorithmNo; i++) {
             System.out.println("The tested algorithm: " + algorithmSet[i]);
             System.out.println("The process: " + String.format("%.2f", (100.0 * i / algorithmNo)) + "%");
-            stringBuilder.append(singleRun(algorithmSet[i], crossMethod)); // 0 represents for DE, 1 represents for SBX
+            stringBuilder.append(singleRun(algorithmSet[i], crossMethod, basePath));
         }
 
         fileWritter.write(stringBuilder.toString());
@@ -69,11 +68,9 @@ public class CMOEAs_main {
         fileWritter.close();
     }
 
-    private static String singleRun(String algorithmName, int crossMethod) throws Exception {
+    private static String singleRun(String algorithmName, int crossMethod, String basePath) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
 
-        Problem problem;                // The problem to solve
-        Algorithm algorithm;            // The algorithm to use
         Operator crossover;            // Crossover operator
         Operator mutation;             // Mutation operator
         Operator selection;            // Selection operator
@@ -91,30 +88,35 @@ public class CMOEAs_main {
         double threshold = 1e-3;
         float infeasibleRatio = 0.1f;
         String AlgorithmName = algorithmName;
-
-        String mainPath = System.getProperty("user.dir");
-        String weightPath = "resources/MOEAD_Weights";// 权重文件路径
-        int runtime = 10;// 独立运行次数
+        // 权重文件路径
+        String weightPath = "resources/MOEAD_Weights";
+        int runtime = 10;
+        // 是否显示详细调度
         Boolean isDisplay = false;
-        int plotFlag = 0; // 0 for the working population; 1 for the external archive
-
+        // 0: population; 1: external archive
+        int plotFlag = 0;
         // MOEAD_SR parameters
         double srFactor = 0.05;
 
-        String resultFile = mainPath + "/" + AlgorithmName + ".db";
-        FileUtils.deleteFile(resultFile);
-
-        Object[] params = {"Real"};
+        // 算法需要传入两个参数，一个是编码方式，另一个是xml配置文件所在的路径
+        Object[] params = {"Real", "data/configs/config1.xml"};
         String[] problemStrings = {"EDFPS", "EDFTSS"};
 
         for (int i = 0; i < problemStrings.length; i++) {
-            problem = ProblemFactory.getProblem(problemStrings[i], params);
-            //define algorithm
-            Object[] algorithmParams = {problem};
-            algorithm = AlgorithmFactory.getAlgorithm(AlgorithmName, algorithmParams);
+            // 问题
+            Problem problem = ProblemFactory.getProblem(problemStrings[i], params);
 
-            //define pareto file path
-            String paretoPath = mainPath + "/pf_data/" + problemStrings[i] + ".pf";
+            // 结果保存路径
+            String resultFile = basePath + problem.getName() + ".db";
+            FileUtils.deleteFile(resultFile);
+
+            // 算法
+            Object[] algorithmParams = {problem};
+            Algorithm algorithm = AlgorithmFactory.getAlgorithm(AlgorithmName, algorithmParams);
+
+            // pareto文件路径
+            String paretoPath = basePath + problem.getName() + ".pf";
+
             // Algorithm parameters
             algorithm.setInputParameter("AlgorithmName", AlgorithmName);
             algorithm.setInputParameter("populationSize", popSize);
@@ -132,14 +134,14 @@ public class CMOEAs_main {
             algorithm.setInputParameter("threshold_change", threshold);
             algorithm.setInputParameter("infeasibleRatio", infeasibleRatio);
 
-            // Crossover operator
-            if (crossMethod == 0) {                      // DE operator
+            // 交叉算子
+            if (crossMethod == 0) {
                 parameters = new HashMap();
                 parameters.put("CR", DeCrossRate);
                 parameters.put("F", DeFactor);
                 crossover = CrossoverFactory.getCrossoverOperator("DifferentialEvolutionCrossover", parameters);
                 algorithm.addOperator("crossover", crossover);
-            } else if (crossMethod == 1) {                // SBX operator
+            } else if (crossMethod == 1) {
                 parameters = new HashMap();
                 parameters.put("probability", 1.0);
                 parameters.put("distributionIndex", 20.0);
@@ -147,27 +149,27 @@ public class CMOEAs_main {
                 algorithm.addOperator("crossover", crossover);
             }
 
-            // Mutation operator
+            // 变异算子
             parameters = new HashMap();
-            parameters.put("probability", 1.0 / problem.getNumberOfVariables());// 变异概率
+            parameters.put("probability", 1.0 / problem.getNumberOfVariables());
             parameters.put("distributionIndex", 20.0);
             mutation = MutationFactory.getMutationOperator("PolynomialMutation", parameters);
             algorithm.addOperator("mutation", mutation);
 
-            // Selection Operator
+            // 选择算子
             parameters = null;
-            selection = SelectionFactory.getSelectionOperator("BinaryTournament2", parameters);// 选择算子
+            selection = SelectionFactory.getSelectionOperator("BinaryTournament2", parameters);
             algorithm.addOperator("selection", selection);
-            // each problem runs runtime times
+
+            // 独立运行若干次
             for (int j = 0; j < runtime; j++) {
                 System.out.println("==================================================================");
                 algorithm.setInputParameter("runningTime", j);
-                // Execute the Algorithm
+                // 运行算法，并记录运行时间
                 System.out.println("The " + j + " run of " + algorithmName);
                 long initTime = System.currentTimeMillis();
-                SolutionSet pop = algorithm.execute();
+                algorithm.execute();
                 long estimatedTime = System.currentTimeMillis() - initTime;
-                // Result messages
                 System.out.println("Total execution time: " + estimatedTime + "ms");
                 System.out.println("Problem:  " + problemStrings[i] + "  running time:  " + j);
                 System.out.println("==================================================================");

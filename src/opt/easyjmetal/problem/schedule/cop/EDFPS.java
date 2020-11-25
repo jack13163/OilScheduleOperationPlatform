@@ -16,8 +16,10 @@ import java.util.List;
  * ProblemFactory反射的方式创建对象
  */
 public class EDFPS extends Problem {
-    private boolean ShowDetail = true;//显示甘特图
-    private boolean ShowEachStep = false;//显示每一步
+    //显示甘特图
+    private boolean ShowDetail = true;
+    // 显示每一步
+    private boolean ShowEachStep = false;
 
     private Config config;
     // 约束
