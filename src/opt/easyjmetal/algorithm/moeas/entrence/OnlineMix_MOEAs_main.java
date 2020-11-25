@@ -33,11 +33,12 @@ public class OnlineMix_MOEAs_main {
      */
     private static void batchRun(List<String> algorithmNames, int runtime) throws Exception {
         String problemName = "OnlineMixOIL";
-        String mainPath = System.getProperty("user.dir");
+        String basePath = "result/easyjmetal/onlinemix/";
+        String weightPath = "resources/MOEAD_Weights/";
         Problem problem = ProblemFactory.getProblem(problemName, new Object[]{"Real"});
 
         // 先清楚上次运行的结果
-        String resultFile = mainPath + "/" + problem.getName() + ".db";
+        String resultFile = basePath + "/" + problem.getName() + ".db";
         boolean deleted = false;
         do {
             deleted = FileUtils.deleteFile(resultFile);
@@ -71,8 +72,10 @@ public class OnlineMix_MOEAs_main {
                 algorithm.setInputParameter("maxEvaluations", maxFES);
                 algorithm.setInputParameter("externalArchiveSize", externalArchiveSize);
                 algorithm.setInputParameter("runningTime", j + 1);
-                algorithm.setInputParameter("weightsDirectory", mainPath + "/resources/MOEAD_Weights/");
-                algorithm.setInputParameter("DBName", problemName);
+                // 结果保存路径
+                algorithm.setInputParameter("dataDirectory", basePath);
+                // 参考点文件路径
+                algorithm.setInputParameter("weightsDirectory", weightPath);
                 algorithm.setInputParameter("T", neighborSize);
                 algorithm.setInputParameter("delta", deDelta);
                 algorithm.setInputParameter("gamma", gamma);

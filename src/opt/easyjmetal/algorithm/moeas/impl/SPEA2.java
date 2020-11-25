@@ -42,8 +42,7 @@ public class SPEA2 extends Algorithm {
         int runningTime = (Integer) getInputParameter("runningTime");
         populationSize_ = (Integer) getInputParameter("populationSize");
         maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
-        String dbName = getInputParameter("DBName").toString();
-        dataDirectory_ = getInputParameter("weightsDirectory").toString();
+        dataDirectory_ = getInputParameter("dataDirectory").toString();
         k_ = (Integer) getInputParameter("k");
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
 
@@ -68,6 +67,7 @@ public class SPEA2 extends Algorithm {
         MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         // 创建数据表记录数据
+        String dbName = dataDirectory_ + problem_.getName();
         String tableName = "SPEA2_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 

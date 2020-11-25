@@ -16,6 +16,7 @@ public class IBEA extends Algorithm {
     private int populationSize_;
     private int archiveSize_;
     private SolutionSet population_;
+    private String dataDirectory_;
     // 当前迭代次数
     private int evaluations_;
     // 最大迭代次数
@@ -34,8 +35,8 @@ public class IBEA extends Algorithm {
         maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         populationSize_ = (Integer) getInputParameter("populationSize");
         archiveSize_ = (Integer) getInputParameter("externalArchiveSize");
-        String dbName = getInputParameter("DBName").toString();
         int runningTime = (Integer) getInputParameter("runningTime");
+        dataDirectory_ = getInputParameter("dataDirectory").toString();
         population_ = new SolutionSet(populationSize_);
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
 
@@ -45,6 +46,7 @@ public class IBEA extends Algorithm {
         Operator selectionOperator_ = (Operator) getInputParameter("selection");
 
         // 创建数据表，方便后面保存结果
+        String dbName = dataDirectory_ + problem_.getName();
         String tableName = "IBEA_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 

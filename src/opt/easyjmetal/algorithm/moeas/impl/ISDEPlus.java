@@ -39,10 +39,10 @@ public class ISDEPlus extends Algorithm {
         maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         populationSize_ = (Integer) getInputParameter("populationSize");
         archiveSize_ = (Integer) getInputParameter("externalArchiveSize");
-        String dbName = getInputParameter("DBName").toString();
         int runningTime = (Integer) getInputParameter("runningTime");
         population_ = new SolutionSet(populationSize_);
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
+        dataDirectory_ = getInputParameter("dataDirectory").toString();
         this.population_ = new SolutionSet(populationSize_);
 
         // 交叉选择算子
@@ -51,6 +51,7 @@ public class ISDEPlus extends Algorithm {
         Operator selectionOperator_ = (Operator) getInputParameter("selection");
 
         // 创建数据表，方便后面保存结果
+        String dbName = dataDirectory_ + problem_.getName();
         String tableName = "ISDEPlus_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 

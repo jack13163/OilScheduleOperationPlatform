@@ -28,7 +28,8 @@ public class MOEAD extends Algorithm {
     private int nr_;
     private String functionType_;
     private int evaluations_;
-    private String weightsDirectory_;
+    private String dataDirectory_;
+    private String weightDirectory_;
     private ScatterPlot plot_;
     private SolutionSet external_archive_;
 
@@ -43,8 +44,8 @@ public class MOEAD extends Algorithm {
         evaluations_ = 0;
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         populationSize_ = (Integer) getInputParameter("populationSize");
-        weightsDirectory_ = getInputParameter("weightsDirectory").toString();
-        String dbName = getInputParameter("DBName").toString();
+        dataDirectory_ = getInputParameter("dataDirectory").toString();
+        weightDirectory_ = getInputParameter("weightDirectory").toString();
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
         int plotFlag_ = (Integer) getInputParameter("plotFlag");
         runningTime = (Integer) getInputParameter("runningTime");
@@ -61,8 +62,9 @@ public class MOEAD extends Algorithm {
         Operator crossover_ = (Operator) getInputParameter("crossover");
 
         // 创建数据表
-        String problemName = "MOEAD_" + runningTime;
-        SqlUtils.CreateTable(problemName, dbName);
+        String dbName = dataDirectory_ + problem_.getName();
+        String tableName = "MOEAD_" + runningTime;
+        SqlUtils.CreateTable(tableName, dbName);
 
         // STEP 1. Initialization
         // STEP 1.1. Compute euclidean distances between weight vectors and find T
@@ -163,7 +165,7 @@ public class MOEAD extends Algorithm {
 
         } while (evaluations_ < maxEvaluations_);
 
-        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
         return external_archive_;
     }
 
@@ -183,7 +185,7 @@ public class MOEAD extends Algorithm {
                     populationSize_ + ".dat";
 
             try {
-                FileInputStream fis = new FileInputStream(weightsDirectory_ + "/" + dataFileName);
+                FileInputStream fis = new FileInputStream(weightDirectory_ + dataFileName);
                 InputStreamReader isr = new InputStreamReader(fis);
                 BufferedReader br = new BufferedReader(isr);
                 int i = 0;
@@ -203,7 +205,7 @@ public class MOEAD extends Algorithm {
                 }
                 br.close();
             } catch (Exception e) {
-                System.out.println("initUniformWeight: failed when reading for file: " + weightsDirectory_ + "/" + dataFileName);
+                System.out.println("initUniformWeight: failed when reading for file: " + weightDirectory_ + dataFileName);
                 e.printStackTrace();
             }
         }

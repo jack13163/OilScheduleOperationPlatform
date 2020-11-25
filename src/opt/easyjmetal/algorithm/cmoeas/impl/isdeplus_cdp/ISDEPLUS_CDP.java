@@ -27,7 +27,7 @@ public class ISDEPLUS_CDP extends Algorithm {
     Distance distance;
 
     private int iterations;
-    private SolutionSet archive;// 档案集
+    private SolutionSet archive;
 
     /**
      * Runs the SPEA2 algorithm.

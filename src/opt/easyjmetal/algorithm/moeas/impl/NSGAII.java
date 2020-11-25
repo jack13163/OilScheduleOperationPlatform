@@ -13,6 +13,7 @@ public class NSGAII extends Algorithm {
 
     private SolutionSet population_;
     private SolutionSet external_archive_;
+    private String dataDirectory_;
 
     @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
@@ -21,7 +22,7 @@ public class NSGAII extends Algorithm {
         int populationSize_ = (Integer) getInputParameter("populationSize");
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
-        String dbName = getInputParameter("DBName").toString();
+        dataDirectory_ = getInputParameter("dataDirectory").toString();
 
         // 交叉选择算子
         Operator mutationOperator_ = (Operator) getInputParameter("mutation");
@@ -44,6 +45,7 @@ public class NSGAII extends Algorithm {
         MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         // 创建数据表，用来保存结果
+        String dbName = dataDirectory_ + problem_.getName();
         String tableName = "NSGAII_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 

@@ -28,6 +28,7 @@ public class NSGAIII extends Algorithm {
     private int populationSize_;
     private int maxEvaluations_;
     private String dataDirectory_;
+    private String weightDirectory_;
 
     Distance distance;
 
@@ -41,14 +42,14 @@ public class NSGAIII extends Algorithm {
     @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
 
-        distance = new Distance();// 计算距离
+        distance = new Distance();
         int runningTime = (Integer) getInputParameter("runningTime");
 
         //Read the parameters
         populationSize_ = (Integer) getInputParameter("populationSize");
         maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
-        String dbName = getInputParameter("DBName").toString();
-        dataDirectory_ = getInputParameter("weightsDirectory").toString();
+        dataDirectory_ = getInputParameter("dataDirectory").toString();
+        weightDirectory_ = getInputParameter("weightDirectory").toString();
         lambda_ = new double[populationSize_][problem_.getNumberOfObjectives()];
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
 
@@ -77,8 +78,9 @@ public class NSGAIII extends Algorithm {
         MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         // 创建数据库记录数据
-        String problemName = "NSGAIII_" + runningTime;
-        SqlUtils.CreateTable(problemName, dbName);
+        String dbName = dataDirectory_ + problem_.getName();
+        String tableName = "NSGAIII_" + runningTime;
+        SqlUtils.CreateTable(tableName, dbName);
 
         while (evaluations_ < maxEvaluations_) {
             // Create the offSpring solutionSet
@@ -126,7 +128,7 @@ public class NSGAIII extends Algorithm {
             }
         }
 
-        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
+        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
 
         return external_archive_;
     } // execute
@@ -147,7 +149,7 @@ public class NSGAIII extends Algorithm {
 
             try {
                 // Open the file
-                String filepath = dataDirectory_ + "/" + dataFileName;
+                String filepath = weightDirectory_ + dataFileName;
                 FileInputStream fis = new FileInputStream(filepath);
                 InputStreamReader isr = new InputStreamReader(fis);
                 BufferedReader br = new BufferedReader(isr);
@@ -168,7 +170,7 @@ public class NSGAIII extends Algorithm {
                 }
                 br.close();
             } catch (Exception e) {
-                System.out.println("initUniformWeight: failed when reading for file: " + dataDirectory_ + "/" + dataFileName);
+                System.out.println("initUniformWeight: failed when reading for file: " + weightDirectory_ + dataFileName);
                 e.printStackTrace();
             }
         }

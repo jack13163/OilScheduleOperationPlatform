@@ -24,6 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MOPSO extends Algorithm {
+
+    private String dataDirectory_;
+
     public MOPSO(Problem problem) {
         super(problem);
 
@@ -272,9 +275,11 @@ public class MOPSO extends Algorithm {
      */
     @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
-        String dbName = getInputParameter("DBName").toString();
         int runningTime = (Integer) getInputParameter("runningTime");
+        dataDirectory_ = getInputParameter("dataDirectory").toString();
+
         // 创建数据表，方便后面保存结果
+        String dbName = dataDirectory_ + problem_.getName();
         String tableName = "MOPSO_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
