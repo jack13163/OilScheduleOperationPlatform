@@ -30,6 +30,7 @@ public class NSGAII_CDP extends Algorithm {
     }
     private SolutionSet population_;
     private SolutionSet external_archive_;
+    private String dataDirectory_;
 
     /**
      * Runs the NSGA-II algorithm.
@@ -47,6 +48,7 @@ public class NSGAII_CDP extends Algorithm {
         //Read the parameters
         int populationSize_ = (Integer) getInputParameter("populationSize");
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
+        dataDirectory_ = getInputParameter("dataDirectory").toString();
 
         //Initialize the variables
         population_ = new SolutionSet(populationSize_);
@@ -74,7 +76,7 @@ public class NSGAII_CDP extends Algorithm {
         MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         //creat database
-        String dbName = problem_.getName();
+        String dbName = dataDirectory_ + problem_.getName() + ".db";
         String tableName = "NSGAII_CDP_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 

@@ -178,7 +178,7 @@ public class MOEAD_SR extends Algorithm {
                 // STEP 2.5. Update of solutions
                 updateProblem(child, n, type);
                 //updateProblem_new(child, n, type);
-            } // for
+            }
 
             // Update the external archive
             MoeadUtils.updateExternalArchive(population_, populationSize_, external_archive_);
