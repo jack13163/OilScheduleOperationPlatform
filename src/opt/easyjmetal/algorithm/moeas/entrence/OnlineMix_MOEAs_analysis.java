@@ -10,13 +10,14 @@ import opt.easyjmetal.util.ParetoFrontUtil;
 public class OnlineMix_MOEAs_analysis {
     public static void main(String[] args) {
         try {
-            String[] algorithmNames = {"MOFA", "MOPSO",
+            String[] algorithmNames = {
                     "MOEAD", "NSGAII",
-                    "ISDEPlus", "IBEA",
+//                    "MOFA", "MOPSO",
+//                    "ISDEPlus", "IBEA",
                     "SPEA2", "NSGAIII"};
             String[] problemNames = {"OnlineMixOIL"};
             String[] indicatorNames = {"HV", "IGD"};
-            int runtimes = 5;
+            int runtimes = 2;
             // 结果生成的路径
             String basePath = "result/easyjmetal/onlinemix/";
 

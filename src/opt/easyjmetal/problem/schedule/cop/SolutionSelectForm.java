@@ -32,6 +32,8 @@ public class SolutionSelectForm extends JFrame {
     private static final long serialVersionUID = 1L;
     private static Logger logger = LogManager.getLogger(SolutionSelectForm.class.getName());
 
+    private static final String basePath_ = "result/easyjmetal/twopipeline";
+
     // UI∆§∑Ù
     private static final String[] themes = {"com.jtattoo.plaf.smart.SmartLookAndFeel",
             "com.jtattoo.plaf.mcwin.McWinLookAndFeel", "com.jtattoo.plaf.luna.LunaLookAndFeel",
@@ -306,7 +308,7 @@ public class SolutionSelectForm extends JFrame {
                                         // Ω‚¬ÎŒª÷√
                                         COPDecoder.decode(solution, rule, true);
                                     }
-                                });
+                                }, basePath_);
                     } catch (JMException ex) {
                         ex.printStackTrace();
                     }
@@ -444,7 +446,7 @@ public class SolutionSelectForm extends JFrame {
                                         double[] costs = COPDecoder.decodePipelineEnergyConsumption(solution, rule);
                                         stringBuilder.append(costs[0] + "," + costs[1] + "," + costs[2] + "," + costs[3] + "\n");
                                     }
-                                });
+                                }, basePath_);
                     } catch (JMException e) {
                         e.printStackTrace();
                     }

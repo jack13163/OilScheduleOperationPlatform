@@ -22,6 +22,7 @@ public class ScheduleReverse {
                 "EDF_TSS"
         };
         int independentRuns = 10;
+        String basePath_ = "result/easyjmetal/twopipeline";
 
         // 查找出指定的解
         double[][] tofind = new double[][]{
@@ -39,7 +40,7 @@ public class ScheduleReverse {
                             // 解码位置
                             COPDecoder.decode(solution, rule, false);
                         }
-                    });
+                    }, basePath_);
         } catch (JMException ex) {
             ex.printStackTrace();
         }

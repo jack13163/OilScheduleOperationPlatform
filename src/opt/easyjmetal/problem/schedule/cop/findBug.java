@@ -14,6 +14,7 @@ public class findBug {
                 "EDF_TSS"
         };
         int independentRuns = 10;
+        String basePath_ = "result/easyjmetal/twopipeline";
 
         // 查找出指定的解
         double[][] tofind = new double[][]{
@@ -28,7 +29,7 @@ public class findBug {
                             // 解码位置
                             COPDecoder.decode(solution, rule, true);
                         }
-                    });
+                    }, basePath_);
         } catch (JMException ex) {
             ex.printStackTrace();
         }

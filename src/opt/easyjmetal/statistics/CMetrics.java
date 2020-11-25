@@ -52,7 +52,7 @@ public class CMetrics {
      * @return
      * @throws IOException
      */
-    private List<List<List<List<List<Double>>>>> readDataFromFiles2() throws IOException {
+    private List<List<List<List<List<Double>>>>> readDataFromFiles2() {
         List<List<List<List<List<Double>>>>> data = new ArrayList<>();
 
         for (int problem = 0; problem < problemList_.size(); problem++) {
@@ -62,7 +62,9 @@ public class CMetrics {
                 for (int run = 0; run < runs_; run++) {
                     List<List<Double>> runList = new ArrayList<>();
                     try {
-                        SolutionSet solutionSet = SqlUtils.SelectData(problemList_.get(problem), algorithmList_.get(algorithm) + "_" + (run + 1));
+                        String dbName = resultBaseDirectory_ + problemList_.get(problem);
+                        String tableName = algorithmList_.get(algorithm) + "_" + (run + 1);
+                        SolutionSet solutionSet = SqlUtils.SelectData(dbName, tableName);
                         double[][] objectives = solutionSet.writeObjectivesToMatrix();
 
                         for (int i = 0; i < objectives.length; i++) {

@@ -17,6 +17,7 @@ public class COPDecoder {
                 "MOEAD_SR", "C_MOEAD", "PPS_MOEAD"};
         String[] problemNames = {"EDF_PS", "EDF_TSS"};
         int runtimes = 10;
+        String basePath_ = "result/easyjmetal/twopipeline";
 
         // 查找出指定的解
         double[][] tofind = new double[][]{
@@ -24,7 +25,7 @@ public class COPDecoder {
         };
         try {
             ParetoFrontUtil.getSolutionFromDB(algorithmNames, problemNames, runtimes, tofind,
-                    (solution, rule) -> COPDecoder.decode(solution, rule));
+                    (solution, rule) -> COPDecoder.decode(solution, rule), basePath_);
         } catch (JMException e) {
             e.printStackTrace();
         }

@@ -17,10 +17,11 @@ import java.util.List;
 public class OnlineMix_MOEAs_main {
 
     public static void main(String[] args) throws Exception {
-        batchRun(Arrays.asList("MOFA", "MOPSO",
+        batchRun(Arrays.asList(
                 "MOEAD", "NSGAII",
-                "ISDEPlus", "IBEA",
-                "SPEA2", "NSGAIII"), 5);
+//                "MOFA", "MOPSO",
+//                "ISDEPlus", "IBEA",
+                "SPEA2", "NSGAIII"), 2);
 //        batchRun(Arrays.asList("MOFA"), 1);
     }
 
@@ -75,7 +76,7 @@ public class OnlineMix_MOEAs_main {
                 // 结果保存路径
                 algorithm.setInputParameter("dataDirectory", basePath);
                 // 参考点文件路径
-                algorithm.setInputParameter("weightsDirectory", weightPath);
+                algorithm.setInputParameter("weightDirectory", weightPath);
                 algorithm.setInputParameter("T", neighborSize);
                 algorithm.setInputParameter("delta", deDelta);
                 algorithm.setInputParameter("gamma", gamma);

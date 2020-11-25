@@ -23,16 +23,16 @@ public class ParetoFrontUtil {
      * @param algorithmNameList_  算法列表
      * @param problemList_        问题列表
      * @param independentRuns_    独立运行次数
-     * @param paretoFrontDirPath_ 用于保存结果的根路径
+     * @param basePath_           用于保存结果的根路径
      */
     public static void generateParetoFront(String[] algorithmNameList_,
                                            String[] problemList_,
                                            int independentRuns_,
-                                           String paretoFrontDirPath_) throws JMException {
+                                           String basePath_) throws JMException {
         try {
             // 判断路径是否存在，若不存在，则创建
-            File targetDir = new File(paretoFrontDirPath_);
-            if (targetDir.exists()) {
+            File targetDir = new File(basePath_);
+            if (!targetDir.exists()) {
                 FileUtils.forceMkdir(targetDir);
             }
         } catch (Exception ex) {
@@ -48,7 +48,7 @@ public class ParetoFrontUtil {
                 List<Solution> solutionList2 = new ArrayList<>();
 
                 for (int numRun = 0; numRun < independentRuns_; numRun++) {
-                    String dbName = problemName;
+                    String dbName = basePath_ + problemName;
                     String tableName = algorithmName + "_" + (numRun + 1);
                     SolutionSet tmp = SqlUtils.SelectData(dbName, tableName);
                     for (int i = 0; i < tmp.size(); i++) {
@@ -58,11 +58,11 @@ public class ParetoFrontUtil {
                 }
 
                 // 输出该问题的各个算法的非支配解集
-                outputNondomincantSolutionSet(solutionList2, paretoFrontDirPath_, algorithmName + "_" + problemName + ".pf");
+                outputNondomincantSolutionSet(solutionList2, basePath_, algorithmName + "_" + problemName + ".pf");
             }
 
             // 输出当前问题的非支配解集
-            outputNondomincantSolutionSet(solutionList, paretoFrontDirPath_, problemName + ".pf");
+            outputNondomincantSolutionSet(solutionList, basePath_, problemName + ".pf");
         }
     }
 
@@ -167,6 +167,8 @@ public class ParetoFrontUtil {
      * @param problemList_       问题列表
      * @param independentRuns_   独立运行次数
      * @param toselect           要选择的个体
+     * @param todo               要对个体执行的操作
+     * @param basePath_          数据库所在的文件夹
      * @return 符合条件的解的集合，多个符合条件的只返回一个
      * @throws JMException
      */
@@ -174,7 +176,8 @@ public class ParetoFrontUtil {
                                                 String[] problemList_,
                                                 int independentRuns_,
                                                 double[][] toselect,
-                                                ToDo todo) throws JMException {
+                                                ToDo todo,
+                                                String basePath_) throws JMException {
         SolutionSet solutionSet = new SolutionSet(toselect.length);
 
         // 判断当前个体是否为待查找的个体
@@ -194,8 +197,9 @@ public class ParetoFrontUtil {
                         if (flag) {
                             break;
                         }
-                        String tableName = problemName + "_" + (numRun + 1);
-                        SolutionSet tmp = SqlUtils.SelectData(algorithmName, tableName);
+                        String dbName = basePath_ + problemName;
+                        String tableName = algorithmName + "_" + (numRun + 1);
+                        SolutionSet tmp = SqlUtils.SelectData(dbName, tableName);
                         for (int i = 0; i < tmp.size() && !flag; i++) {
                             flag = true;
                             Solution solution = tmp.get(i);
@@ -267,18 +271,20 @@ public class ParetoFrontUtil {
      * @param problemName         问题
      * @param indicatorName       指标名字
      * @param runId               运行编号，用于从数据库中查找算法运行结果
+     * @param basePath            数据结果保存根路径
      * @param trueParetoFrontPath 真实的pareto前沿路径
      */
     public static double calculateQualityIndicator(String algorithmName,
                                                    String problemName,
                                                    String indicatorName,
                                                    int runId,
+                                                   String basePath,
                                                    String trueParetoFrontPath) throws JMException {
 
         // 加载真实的Pareto前沿
         double[][] trueFront = new Hypervolume().utils_.readFront(trueParetoFrontPath);
         // 加载算法运行得到的非支配解集
-        String dbName = problemName;
+        String dbName = basePath + problemName;
         String tableName = algorithmName + "_" + runId;
         double[][] solutionFront = SqlUtils.SelectData(dbName, tableName).writeObjectivesToMatrix();
         // 计算并返回指标值
@@ -375,10 +381,10 @@ public class ParetoFrontUtil {
                                              String trueParetoFilePath,
                                              String algorithmName,
                                              String problemName,
-                                             String indicator) throws JMException {
+                                             String indicator) {
         try {
             // 输出到文件
-            String indicatorDir = dirPath_ + "/indicator/" + problemName + "/";
+            String indicatorDir = dirPath_ + "indicator/" + problemName + "/";
             File file = new File(indicatorDir);
             if (!file.exists()) {
                 file.mkdirs();// 不存在，则创建目录
@@ -388,7 +394,7 @@ public class ParetoFrontUtil {
 
             // 计算每次实验的指标值
             for (int numRun = 1; numRun <= independentRuns_; numRun++) {
-                double value = calculateQualityIndicator(algorithmName, problemName, indicator, numRun, trueParetoFilePath);
+                double value = calculateQualityIndicator(algorithmName, problemName, indicator, numRun, dirPath_, trueParetoFilePath);
                 writer.write(String.format("%.5f\n", value));
             }
 
