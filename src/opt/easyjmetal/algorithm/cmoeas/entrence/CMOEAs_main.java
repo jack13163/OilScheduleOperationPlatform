@@ -70,26 +70,27 @@ public class CMOEAs_main {
     private static String singleRun(String algorithmName, int crossMethod, String basePath) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
 
-        Operator crossover;            // Crossover operator
-        Operator mutation;             // Mutation operator
-        Operator selection;            // Selection operator
-        HashMap parameters;           // Operator parameters
+        Operator crossover;
+        Operator mutation;
+        Operator selection;
+        HashMap parameters;
 
         int popSize = 100;
-        int neighborSize = (int) (0.1 * popSize);
-        int maxFES = 1000;
+        int maxFES = 50000;
         int updateNumber = 2;
+        int neighborSize = (int) (0.1 * popSize);
         double deDelta = 0.9;
         double DeCrossRate = 1.0;
         double DeFactor = 0.5;
         double tao = 0.1;
         double alpha = 0.9;
-        double threshold = 1e-3;
         float infeasibleRatio = 0.1f;
         String AlgorithmName = algorithmName;
+        double threshold = 1e-3;
         // 权重文件路径
         String weightPath = "resources/MOEAD_Weights/";
-        int runtime = 2;
+        // 迭代次数
+        int runtime = 10;
         // 是否显示详细调度
         Boolean isDisplay = false;
         // 0: population; 1: external archive

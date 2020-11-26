@@ -44,6 +44,45 @@ J_ε: Number of charging tanks to use;
 
 ![](img/单步仿真.png)
 
+指标生成为tex文档，利用texlive自动生成pdf文档：
+
+```java
+String[] algorithmNames = {"NSGAII_CDP", "ISDEPLUS_CDP", "NSGAIII_CDP", "MOEAD_CDP", "MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "C_MOEAD", "PPS_MOEAD"};
+String[] problemNames = {"EDF_PS", "EDF_TSS"};
+String[] indicatorNames = {"HV", "IGD"};
+int runtimes = 2;
+String basePath = "result/easyjmetal/twopipeline/";
+
+// 生成pareto前沿面
+ParetoFrontUtil.generateParetoFront(algorithmNames, problemNames, runtimes, basePath);
+// 计算性能指标
+ParetoFrontUtil.generateQualityIndicators(algorithmNames, problemNames, indicatorNames, runtimes, basePath);
+
+// Friedman测试
+Friedman.executeTest("HV", algorithmNames, problemNames, basePath);
+Friedman.executeTest("IGD", algorithmNames, problemNames, basePath);
+
+// 生成均值和方差
+MeanStandardDeviation generateLatexTables = new MeanStandardDeviation(algorithmNames, problemNames, indicatorNames, basePath);
+generateLatexTables.run();
+
+// 进行TTest
+TTest tTest = new TTest(algorithmNames, problemNames, indicatorNames, basePath);
+tTest.run();
+
+// 进行TTest
+WilcoxonSignedRankTest wilcoxonSignedRankTest = new WilcoxonSignedRankTest(algorithmNames, problemNames, indicatorNames, basePath);
+wilcoxonSignedRankTest.run();
+
+// 计算不同策略C指标
+CMetrics cMetrics = new CMetrics(problemNames, algorithmNames,runtimes, basePath);
+cMetrics.run();
+```
+
+![tex文档](img/tex文档.jpg)
+
+![pdf文档](img/tex文档运行生成pdf.jpg)
+
 
 感谢：
 
