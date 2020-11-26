@@ -12,13 +12,13 @@ public class OnlineMix_MOEAs_analysis {
         try {
             String[] algorithmNames = {
                     "MOEAD", "NSGAII",
-//                    "MOFA", "MOPSO",
-//                    "ISDEPlus", "IBEA",
+                    "MOFA", "MOPSO",
+                    "ISDEPlus", "IBEA",
                     "SPEA2", "NSGAIII"};
             String[] problemNames = {"OnlineMixOIL"};
             String[] indicatorNames = {"HV", "IGD"};
-            int runtimes = 2;
-            // 结果生成的路径
+            int runtimes = 10;
+            // 结果生成的路径，建议：每个问题建立一个单独的文件夹
             String basePath = "result/easyjmetal/onlinemix/";
 
             // 生成pareto前沿面
@@ -49,5 +49,4 @@ public class OnlineMix_MOEAs_analysis {
             e.printStackTrace();
         }
     }
-
 }
