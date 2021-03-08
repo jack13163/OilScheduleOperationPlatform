@@ -127,15 +127,14 @@ public class EnvironmentalSelection {
 
         List<Double> intercepts = new ArrayList<>();
 
-        if (duplicate) // cannot construct the unique hyperplane (this is a casual method to deal with the condition)
-        {
+        if (duplicate) {
             for (int f = 0; f < numberOfObjectives; f += 1) {
                 // extreme_points[f] stands for the individual with the largest value of objective f
                 intercepts.add(extreme_points.get(f).getObjective(f));
             }
         } else {
             // Find the equation of the hyperplane
-            List<Double> b = new ArrayList<>(); //(pop[0].objs().size(), 1.0);
+            List<Double> b = new ArrayList<>();
             for (int i = 0; i < numberOfObjectives; i++) {
                 b.add(1.0);
             }
@@ -172,7 +171,6 @@ public class EnvironmentalSelection {
                     } else {
                         s.setConvertedObjective(f, s.getConvertedObjective(f) / (10e-10));
                     }
-
                 }
             }
         }
@@ -193,7 +191,10 @@ public class EnvironmentalSelection {
         return Math.sqrt(d);
     }
 
-    // 为种群中的每一个个体关联参考点
+    /**
+     * 为种群中的每一个个体关联参考点
+     * @param population
+     */
     public void associate(SolutionSet population) {
 
         for (int t = 0; t < fronts.size(); t++) {
@@ -222,9 +223,7 @@ public class EnvironmentalSelection {
                 }
             }
         }
-
     }
-
 
     int FindNicheReferencePoint() {
         // find the minimal cluster size
@@ -235,7 +234,6 @@ public class EnvironmentalSelection {
 
         // find the reference points with the minimal cluster size Jmin
         List<Integer> min_rps = new ArrayList<>();
-
 
         for (int r = 0; r < this.referencePoints.size(); r += 1) {
             if (this.referencePoints.get(r).MemberSize() == min_size) {
@@ -257,8 +255,7 @@ public class EnvironmentalSelection {
     Solution SelectClusterMember(ReferencePoint rp) {
         Solution chosen = null;
         if (rp.HasPotentialMember()) {
-            if (rp.MemberSize() == 0) // currently has no member
-            {
+            if (rp.MemberSize() == 0) {
                 chosen = rp.FindClosestMember();
             } else {
                 chosen = rp.RandomMember();

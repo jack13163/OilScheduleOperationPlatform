@@ -94,11 +94,8 @@ public class C_MOEAD extends Algorithm {
         lambda_ = new double[populationSize_][problem_.getNumberOfObjectives()];
         Operator crossover_ = operators_.get("crossover"); // default: DE crossover
         Operator mutation_ = operators_.get("mutation");  // default: polynomial mutation
-
-
-        //Create database and save the results
-        String dbName = dataDirectory_ + problem_.getName();
-        String tableName = "C_MOEAD_" + runningTime;
+        String dbName = dataDirectory_;
+        String tableName = problem_.getName() + "_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 
         // STEP 1. Initialization

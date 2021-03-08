@@ -84,8 +84,8 @@ public class MOEAD_SR extends Algorithm {
         Operator mutation_ = operators_.get("mutation");  // default: polynomial mutation
 
         //creat database
-        String dbName = dataDirectory_ + problem_.getName();
-        String tableName =  "MOEAD_SR_" + runningTime;
+        String dbName = dataDirectory_;
+        String tableName = problem_.getName() + "_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 
         // STEP 1. Initialization

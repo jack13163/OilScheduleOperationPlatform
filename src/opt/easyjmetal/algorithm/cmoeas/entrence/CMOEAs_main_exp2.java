@@ -27,8 +27,8 @@ public class CMOEAs_main_exp2 {
                 "config3"
         };
         String[] algorithms = new String[]{
-                "NSGAII_CDP",
-                "ISDEPLUS_CDP",
+                //"NSGAII_CDP",
+                //"ISDEPLUS_CDP",
                 "NSGAIII_CDP",
                 "MOEAD_CDP",
                 "MOEAD_IEpsilon",
@@ -45,20 +45,20 @@ public class CMOEAs_main_exp2 {
     private static void batchRun(String configName, String[] algorithmSet, int crossMethod) throws Exception {
 
         // 输出运行时间
-        String basePath = "result/easyjmetal/" + configName;
+        String basePath = "result/easyjmetal/" + configName + "/";
         File dir = new File(basePath);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
         //true = append file
-        FileWriter fileWritter = new FileWriter(basePath + "/runtimes.txt", false);
+        FileWriter fileWritter = new FileWriter(basePath + "runtimes.txt", false);
         StringBuilder stringBuilder = new StringBuilder();
 
         for (int i = 0; i < algorithmSet.length; i++) {
             System.out.println("The tested algorithm: " + algorithmSet[i]);
             System.out.println("The process: " + String.format("%.2f", (100.0 * i / algorithmSet.length)) + "%");
-            stringBuilder.append(singleRun(configName, algorithmSet[i], crossMethod));
+            stringBuilder.append(singleRun(basePath, configName, algorithmSet[i], crossMethod));
         }
 
         fileWritter.write(stringBuilder.toString());
@@ -66,7 +66,7 @@ public class CMOEAs_main_exp2 {
         fileWritter.close();
     }
 
-    private static String singleRun(String configName, String algorithmName, int crossMethod) throws Exception {
+    private static String singleRun(String basePath, String configName, String algorithmName, int crossMethod) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
 
         Problem problem;                // The problem to solve
@@ -76,35 +76,26 @@ public class CMOEAs_main_exp2 {
         Operator selection;            // Selection operator
         HashMap parameters;           // Operator parameters
 
-/////////////////////////////////////////// parameter setting //////////////////////////////////
-
         int popSize = 100;
         int neighborSize = (int) (0.1 * popSize);
-        int maxFES = 50000;
+        int maxFES = 10000;
         int updateNumber = 2;
         double deDelta = 0.9;
         double DeCrossRate = 1.0;
         double DeFactor = 0.5;
-
         double tao = 0.1;
         double alpha = 0.9;
         double threshold = 1e-3;
-
-        // IDEA parameter
         float infeasibleRatio = 0.1f;
-
         String AlgorithmName = algorithmName;
-
-        String weightPath = "resources/MOEAD_Weights";// 权重文件路径
-        int runtime = 10;// 独立运行次数
+        String weightPath = "resources/MOEAD_Weights/";
+        int runtime = 10;
         Boolean isDisplay = false;
-        int plotFlag = 0; // 0 for the working population; 1 for the external archive
-
-        // MOEAD_SR parameters
+        int plotFlag = 0;
         double srFactor = 0.05;
 
-        String resultFile = "result/easyjmetal/" + configName + "/" + AlgorithmName + ".db";
-        FileUtils.deleteFile(resultFile);
+        String dbFile =  basePath + AlgorithmName + ".db";
+        FileUtils.deleteFile(dbFile);
 
         // 通过反射创建问题对象【"EDFPS", "EDFTSS"】，并传入两个参数【"Real", "config.xml"】
         Object[] params = {"Real", "data/configs/" + configName + ".xml"};
@@ -120,12 +111,14 @@ public class CMOEAs_main_exp2 {
             algorithm = AlgorithmFactory.getAlgorithm(AlgorithmName, algorithmParams);
 
             //define pareto file path
-            String paretoPath = "result/easyjmetal/" + configName + problemStrings[i] + ".pf";
+            String paretoPath = basePath + problemStrings[i] + ".pf";
             // Algorithm parameters
-            algorithm.setInputParameter("DBName", "result/easyjmetal/" + configName + "/" + AlgorithmName);
+            algorithm.setInputParameter("DBName", basePath + AlgorithmName);
             algorithm.setInputParameter("populationSize", popSize);
             algorithm.setInputParameter("maxEvaluations", maxFES);
             algorithm.setInputParameter("dataDirectory", weightPath);
+            algorithm.setInputParameter("dataDirectory", basePath + AlgorithmName);
+            algorithm.setInputParameter("weightDirectory", weightPath);
             algorithm.setInputParameter("T", neighborSize);
             algorithm.setInputParameter("delta", deDelta);
             algorithm.setInputParameter("nr", updateNumber);
@@ -139,13 +132,13 @@ public class CMOEAs_main_exp2 {
             algorithm.setInputParameter("infeasibleRatio", infeasibleRatio);
 
             // Crossover operator
-            if (crossMethod == 0) {                      // DE operator
+            if (crossMethod == 0) {
                 parameters = new HashMap();
                 parameters.put("CR", DeCrossRate);
                 parameters.put("F", DeFactor);
                 crossover = CrossoverFactory.getCrossoverOperator("DifferentialEvolutionCrossover", parameters);
                 algorithm.addOperator("crossover", crossover);
-            } else if (crossMethod == 1) {                // SBX operator
+            } else if (crossMethod == 1) {
                 parameters = new HashMap();
                 parameters.put("probability", 1.0);
                 parameters.put("distributionIndex", 20.0);
@@ -155,14 +148,14 @@ public class CMOEAs_main_exp2 {
 
             // Mutation operator
             parameters = new HashMap();
-            parameters.put("probability", 1.0 / problem.getNumberOfVariables());// 变异概率
+            parameters.put("probability", 1.0 / problem.getNumberOfVariables());
             parameters.put("distributionIndex", 20.0);
             mutation = MutationFactory.getMutationOperator("PolynomialMutation", parameters);
             algorithm.addOperator("mutation", mutation);
 
             // Selection Operator
             parameters = null;
-            selection = SelectionFactory.getSelectionOperator("BinaryTournament2", parameters);// 选择算子
+            selection = SelectionFactory.getSelectionOperator("BinaryTournament2", parameters);
             algorithm.addOperator("selection", selection);
             // each problem runs runtime times
             for (int j = 0; j < runtime; j++) {

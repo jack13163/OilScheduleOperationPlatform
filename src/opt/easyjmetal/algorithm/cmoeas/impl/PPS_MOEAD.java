@@ -103,8 +103,8 @@ public class PPS_MOEAD extends Algorithm {
         nazirPoints_ = new double[maxGen][problem_.getNumberOfObjectives()];
 
         //creat database
-        String dbName = dataDirectory_ + problem_.getName();
-        String tableName = "PPS_MOEAD_" + runningTime;
+        String dbName = dataDirectory_;
+        String tableName = problem_.getName() + "_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 
         // STEP 1. Initialization

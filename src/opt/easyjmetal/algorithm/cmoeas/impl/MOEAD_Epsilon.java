@@ -86,8 +86,8 @@ public class MOEAD_Epsilon extends Algorithm {
         Operator mutation_ = operators_.get("mutation");  // default: polynomial mutation
 
         //creat database
-        String dbName = dataDirectory_ + problem_.getName();
-        String problemName = "MOEAD_Epsilon_" + runningTime;
+        String dbName = dataDirectory_;
+        String problemName = problem_.getName() + "_" + runningTime;
         SqlUtils.CreateTable(problemName, dbName);
 
         // STEP 1. Initialization

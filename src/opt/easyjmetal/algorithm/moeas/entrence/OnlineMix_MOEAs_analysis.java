@@ -11,9 +11,9 @@ public class OnlineMix_MOEAs_analysis {
     public static void main(String[] args) {
         try {
             String[] algorithmNames = {
+                    "ISDEPlus", "IBEA",
                     "MOEAD", "NSGAII",
                     "MOFA", "MOPSO",
-                    "ISDEPlus", "IBEA",
                     "SPEA2", "NSGAIII"};
             String[] problemNames = {"OnlineMixOIL"};
             String[] indicatorNames = {"HV", "IGD"};
@@ -43,7 +43,7 @@ public class OnlineMix_MOEAs_analysis {
             wilcoxonSignedRankTest.run();
 
             // 计算不同策略C指标
-            CMetrics cMetrics = new CMetrics(problemNames, algorithmNames,runtimes, basePath);
+            CMetrics cMetrics = new CMetrics(problemNames, algorithmNames, runtimes, basePath);
             cMetrics.run();
         } catch (JMException e) {
             e.printStackTrace();

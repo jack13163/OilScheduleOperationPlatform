@@ -74,12 +74,12 @@ public class MOEAD_CDP extends Algorithm {
         String paratoFilePath_ = this.getInputParameter("paretoPath").toString();
         z_ = new double[problem_.getNumberOfObjectives()];
         lambda_ = new double[populationSize_][problem_.getNumberOfObjectives()];
-        Operator crossover_ = operators_.get("crossover"); // default: DE crossover
-        Operator mutation_ = operators_.get("mutation");  // default: polynomial mutation
+        Operator crossover_ = operators_.get("crossover");
+        Operator mutation_ = operators_.get("mutation");
 
         //creat database
-        String dbName = dataDirectory_ + problem_.getName();
-        String tableName = "MOEAD_CDP_" + runningTime;
+        String dbName = dataDirectory_;
+        String tableName = problem_.getName() + "_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 
         // STEP 1. Initialization
