@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ChartHelper {
     /**
-     * åˆ›å»ºchartå¹¶æ˜¾ç¤º
+     * ´´½¨chart²¢ÏÔÊ¾
      *
      * @param problems
      * @param algorithms
@@ -30,7 +30,7 @@ public class ChartHelper {
      */
     public static JFrame createLineChart(String problems, String algorithms, String metrics, int runId) {
 
-        // 1.åˆ¤æ–­è¾“å…¥æ˜¯å¦åˆæ³•
+        // 1.ÅĞ¶ÏÊäÈëÊÇ·ñºÏ·¨
         List<String> problemList = Arrays.asList(problems.split(","));
         List<String> algorithmList = Arrays.asList(algorithms.split(","));
         List<String> metricList = Arrays.asList(metrics.split(","));
@@ -41,22 +41,22 @@ public class ChartHelper {
             return null;
         }
 
-        // 2.å‡†å¤‡æ•°æ®é›†
+        // 2.×¼±¸Êı¾İ¼¯
         XYDataset dataset = null;
         String title = "";
-        String xlabel = "è¿­ä»£æ¬¡æ•°";
+        String xlabel = "µü´ú´ÎÊı";
         String ylabel = metricList.get(0);
         if (problemList.size() == 1) {
-            title = "é‡‡ç”¨" + problemList.get(0) + "ç­–ç•¥çš„æƒ…å†µä¸‹çš„ç®—æ³•å¯¹æ¯”";
+            title = "²ÉÓÃ" + problemList.get(0) + "²ßÂÔµÄÇé¿öÏÂµÄËã·¨¶Ô±È";
             dataset = DataSetHelper.createAlgorithmsCompareDataset(problemList.get(0), algorithmList, metricList.get(0),
                     runId);
         } else if (algorithmList.size() == 1) {
-            title = "é‡‡ç”¨" + algorithmList.get(0) + "ç®—æ³•çš„æƒ…å†µä¸‹çš„ç­–ç•¥å¯¹æ¯”";
+            title = "²ÉÓÃ" + algorithmList.get(0) + "Ëã·¨µÄÇé¿öÏÂµÄ²ßÂÔ¶Ô±È";
             dataset = DataSetHelper.createProblemsCompareDataset(problemList, algorithmList.get(0), metricList.get(0),
                     runId);
         }
 
-        // 3.åˆ›å»ºçª—å£
+        // 3.´´½¨´°¿Ú
         JFrame frame = new JFrame();
         frame.setSize(800, 500);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -72,7 +72,7 @@ public class ChartHelper {
     }
 
     /**
-     * æ ¹æ®XYDatasetåˆ›å»ºJFreeChartå¯¹è±¡
+     * ¸ù¾İXYDataset´´½¨JFreeChart¶ÔÏó
      *
      * @param title
      * @param xlabel
@@ -81,63 +81,63 @@ public class ChartHelper {
      * @return
      */
     public static JFreeChart createChart(String title, String xlabel, String ylabel, XYDataset dataset) {
-        Font titleFont = new Font("å®‹ä½“", Font.BOLD, 20);
+        Font titleFont = new Font("ËÎÌå", Font.BOLD, 20);
         Font numFont = new Font("Times New Roman", 10, 16);
-        Font labelFont = new Font("å®‹ä½“", 10, 16); // è®¾å®šå­—ä½“ã€ç±»å‹ã€å­—å·
+        Font labelFont = new Font("ËÎÌå", 10, 16); // Éè¶¨×ÖÌå¡¢ÀàĞÍ¡¢×ÖºÅ
 
-        // åˆ›å»ºJFreeChartå¯¹è±¡
+        // ´´½¨JFreeChart¶ÔÏó
         JFreeChart jfreechart = ChartFactory.createXYLineChart(title, xlabel, ylabel, dataset, PlotOrientation.VERTICAL,
                 true, true, false);
 
-        // è®¾ç½®èƒŒæ™¯è‰²ä¸ºç™½è‰²
+        // ÉèÖÃ±³¾°É«Îª°×É«
         jfreechart.setBackgroundPaint(Color.white);
 
-        // è®¾ç½®æ ‡é¢˜å­—ä½“
+        // ÉèÖÃ±êÌâ×ÖÌå
         jfreechart.getTitle().setFont(titleFont);
 
-        // è®¾ç½®æ•°æ®é›†
+        // ÉèÖÃÊı¾İ¼¯
         XYPlot plot = (XYPlot) jfreechart.getPlot();
         plot.setDataset(dataset);
 
-        // è®¾ç½®èƒŒæ™¯è‰²å’ŒèƒŒæ™¯è‰²çš„é€æ˜åº¦
+        // ÉèÖÃ±³¾°É«ºÍ±³¾°É«µÄÍ¸Ã÷¶È
         plot.setBackgroundAlpha(0f);
         plot.setForegroundAlpha(0.5f);
 
-        // è®¾ç½®å¤–è¾¹æ¡†æ˜¯å¦å¯è§
+        // ÉèÖÃÍâ±ß¿òÊÇ·ñ¿É¼û
         plot.setOutlineVisible(false);
 
-        // è®¾ç½®æ¨ªè½´å±æ€§
+        // ÉèÖÃºáÖáÊôĞÔ
         ValueAxis categoryAxis = plot.getDomainAxis();
-        categoryAxis.setPositiveArrowVisible(true);// å¢åŠ æ¨ªè½´çš„ç®­å¤´
+        categoryAxis.setPositiveArrowVisible(true);// Ôö¼ÓºáÖáµÄ¼ıÍ·
         categoryAxis.setTickLabelFont(numFont);
         categoryAxis.setLabelFont(labelFont);
 
-        // è®¾ç½®çºµè½´å±æ€§
+        // ÉèÖÃ×İÖáÊôĞÔ
         ValueAxis rangeAxis = plot.getRangeAxis();
-        rangeAxis.setPositiveArrowVisible(true);// å¢åŠ çºµè½´çš„ç®­å¤´
+        rangeAxis.setPositiveArrowVisible(true);// Ôö¼Ó×İÖáµÄ¼ıÍ·
         rangeAxis.setTickLabelFont(numFont);
         rangeAxis.setLabelFont(labelFont);
 
-        // è®¾ç½®ç½‘æ ¼çº¿
-        plot.setDomainGridlinePaint(Color.gray);  // è®¾ç½®æ¨ªå‘ç½‘æ ¼çº¿ç°è‰²
-        plot.setDomainGridlinesVisible(true);     // è®¾ç½®æ˜¾ç¤ºæ¨ªå‘ç½‘æ ¼çº¿
-        plot.setRangeGridlinePaint(Color.gray);   // è®¾ç½®çºµå‘ç½‘æ ¼çº¿ç°è‰²
-        plot.setRangeGridlinesVisible(true);      // è®¾ç½®æ˜¾ç¤ºçºµå‘ç½‘æ ¼çº¿
+        // ÉèÖÃÍø¸ñÏß
+        plot.setDomainGridlinePaint(Color.gray);  // ÉèÖÃºáÏòÍø¸ñÏß»ÒÉ«
+        plot.setDomainGridlinesVisible(true);     // ÉèÖÃÏÔÊ¾ºáÏòÍø¸ñÏß
+        plot.setRangeGridlinePaint(Color.gray);   // ÉèÖÃ×İÏòÍø¸ñÏß»ÒÉ«
+        plot.setRangeGridlinesVisible(true);      // ÉèÖÃÏÔÊ¾×İÏòÍø¸ñÏß
 
-        // è®¾ç½®å›¾ä¾‹å±æ€§
+        // ÉèÖÃÍ¼ÀıÊôĞÔ
         LegendTitle legendTitle = jfreechart.getLegend();
         legendTitle.setItemFont(labelFont);
         legendTitle.setPosition(RectangleEdge.BOTTOM);
 
-        // è®¾ç½®æ¯ä¸€ä¸ªåºåˆ—çº¿å’Œæ•°æ®ç‚¹
+        // ÉèÖÃÃ¿Ò»¸öĞòÁĞÏßºÍÊı¾İµã
         XYItemRenderer r = plot.getRenderer();
         if (r instanceof XYLineAndShapeRenderer) {
             XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;
-            // æ•°æ®ç‚¹æ ·å¼è®¾ç½®
-            renderer.setBaseShapesVisible(true);    // æ•°æ®ç‚¹æ˜¾ç¤ºå¤–æ¡†
-            renderer.setBaseShapesFilled(true);     // æ•°æ®ç‚¹å¤–æ¡†å†…æ˜¯å¦å¡«å……
-            renderer.setUseFillPaint(true); // å¦‚æœè¦åœ¨æ•°æ®ç‚¹å¤–æ¡†å†…å¡«å……è‡ªå®šä¹‰çš„é¢œè‰²ï¼Œè¿™ä¸ªæ ‡å¿—ä½å¿…é¡»ä¸ºçœŸ
-            renderer.setLegendItemToolTipGenerator(new StandardXYSeriesLabelGenerator("{0}"));// é¼ æ ‡ç§»åˆ°åºåˆ—çº¿ä¸Šæç¤ºä¿¡æ¯ä¸ºâ€œåºåˆ—çº¿çš„åå­—â€
+            // Êı¾İµãÑùÊ½ÉèÖÃ
+            renderer.setBaseShapesVisible(true);    // Êı¾İµãÏÔÊ¾Íâ¿ò
+            renderer.setBaseShapesFilled(true);     // Êı¾İµãÍâ¿òÄÚÊÇ·ñÌî³ä
+            renderer.setUseFillPaint(true); // Èç¹ûÒªÔÚÊı¾İµãÍâ¿òÄÚÌî³ä×Ô¶¨ÒåµÄÑÕÉ«£¬Õâ¸ö±êÖ¾Î»±ØĞëÎªÕæ
+            renderer.setLegendItemToolTipGenerator(new StandardXYSeriesLabelGenerator("{0}"));// Êó±êÒÆµ½ĞòÁĞÏßÉÏÌáÊ¾ĞÅÏ¢Îª¡°ĞòÁĞÏßµÄÃû×Ö¡±
 
             Color[] colors = new Color[]{
                     Color.RED,
@@ -149,11 +149,11 @@ public class ChartHelper {
             };
 
             for (int i = 0; i < colors.length; i++) {
-                // è®¾ç½®æŠ˜çº¿åŠ ç²—
+                // ÉèÖÃÕÛÏß¼Ó´Ö
                 renderer.setSeriesStroke(i, new BasicStroke(1.5F));
-                // è®¾ç½®æ•°æ®ç‚¹å¡«å……é¢œè‰²
-                renderer.setSeriesFillPaint(i, Color.WHITE);    // ç¬¬äºŒæ¡åºåˆ—çº¿ä¸Šæ•°æ®ç‚¹å¤–æ¡†å†…å¡«å……é¢œè‰²ä¸ºç™½è‰²
-                // è®¾ç½®åºåˆ—çº¿é¢œè‰²
+                // ÉèÖÃÊı¾İµãÌî³äÑÕÉ«
+                renderer.setSeriesFillPaint(i, Color.WHITE);    // µÚ¶şÌõĞòÁĞÏßÉÏÊı¾İµãÍâ¿òÄÚÌî³äÑÕÉ«Îª°×É«
+                // ÉèÖÃĞòÁĞÏßÑÕÉ«
                 renderer.setSeriesPaint(i, colors[i]);
             }
         }

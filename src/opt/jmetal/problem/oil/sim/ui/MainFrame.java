@@ -46,11 +46,16 @@ public class MainFrame extends JFrame {
     private static Logger logger = LogManager.getLogger(MainFrame.class.getName());
 
     // UI皮肤
-    private static final String[] themes = {"com.jtattoo.plaf.smart.SmartLookAndFeel",
-            "com.jtattoo.plaf.mcwin.McWinLookAndFeel", "com.jtattoo.plaf.luna.LunaLookAndFeel",
-            "com.jtattoo.plaf.aluminium.AluminiumLookAndFeel", "com.jtattoo.plaf.bernstein.BernsteinLookAndFeel",
-            "com.jtattoo.plaf.hifi.HiFiLookAndFeel", "com.jtattoo.plaf.mint.MintLookAndFeel",
-            "com.jtattoo.plaf.aero.AeroLookAndFeel", "com.jtattoo.plaf.fast.FastLookAndFeel",
+    private static final String[] themes = {
+            "com.jtattoo.plaf.smart.SmartLookAndFeel",
+            "com.jtattoo.plaf.mcwin.McWinLookAndFeel",
+            "com.jtattoo.plaf.luna.LunaLookAndFeel",
+            "com.jtattoo.plaf.aluminium.AluminiumLookAndFeel",
+            "com.jtattoo.plaf.bernstein.BernsteinLookAndFeel",
+            "com.jtattoo.plaf.hifi.HiFiLookAndFeel",
+            "com.jtattoo.plaf.mint.MintLookAndFeel",
+            "com.jtattoo.plaf.aero.AeroLookAndFeel",
+            "com.jtattoo.plaf.fast.FastLookAndFeel",
             "com.jtattoo.plaf.acryl.AcrylLookAndFeel"};
 
     // UI界面的构成模块
@@ -223,10 +228,10 @@ public class MainFrame extends JFrame {
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setBackground(Color.WHITE);
         VMainPanel.add(tabbedPane);
-        tabbedPane.addTab("运行模式", createRunUI());
-        tabbedPane.addTab("实验模式", createExperimentUI());
-        tabbedPane.addTab("在线模式", createOnlineOperationUI());
-        tabbedPane.addTab("测试模式", createTestUI());
+        tabbedPane.addTab("运行模块", createRunUI());
+        tabbedPane.addTab("实验模块", createExperimentUI());
+        tabbedPane.addTab("在线模块", createOnlineOperationUI());
+        tabbedPane.addTab("测试模块", createTestUI());
         tabbedPane.setSelectedIndex(UIComponent.SINGRUN.ordinal());// 设置默认选中的选项卡
 
         Box HBox12 = Box.createHorizontalBox();
@@ -383,6 +388,7 @@ public class MainFrame extends JFrame {
 
         btnLastStep.setEnabled(false);
         btnLastStep.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 btnLastStep.setEnabled(false);
                 try {
@@ -434,6 +440,7 @@ public class MainFrame extends JFrame {
         });
 
         btnReset.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 // 开始在线优化
                 onlineOperation.start();
@@ -466,6 +473,7 @@ public class MainFrame extends JFrame {
 
         btnNextStep.setEnabled(false);
         btnNextStep.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 btnNextStep.setEnabled(false);
                 Fragment fragment = new Fragment();
@@ -531,6 +539,7 @@ public class MainFrame extends JFrame {
         HBox11.add(lblPath);
         JButton btnSelectFile = new JButton("请选择要执行的指令序列文件[txt]");
         btnSelectFile.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) { // 按钮点击事件
                 JFileChooser chooser = new JFileChooser(); // 设置选择器
                 chooser.setCurrentDirectory(new File("data")); // 默认打开data
@@ -579,6 +588,7 @@ public class MainFrame extends JFrame {
         btnStartFragmentList = new JButton("运行指令序列");
         btnStartFragmentList.setEnabled(false);
         btnStartFragmentList.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) { // 按钮点击事件
                 Fragment fragment = null;
                 try {
@@ -625,6 +635,7 @@ public class MainFrame extends JFrame {
         btnRunAllFragment = new JButton("一次性运行");
         btnRunAllFragment.setEnabled(false);
         btnRunAllFragment.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) { // 按钮点击事件
                 Thread thread = new Thread(() -> {
                     while (!fragmentList.isEmpty()) {
@@ -678,7 +689,7 @@ public class MainFrame extends JFrame {
         Box box = Box.createVerticalBox();
 
         Box HBox1 = Box.createHorizontalBox();
-        JLabel lblIndex = new JLabel("问题：        ");
+        JLabel lblIndex = new JLabel("启发策略：");
         HBox1.add(lblIndex);
         String problemNames[] = {"EDF_PS", "EDF_TSS", "BT"};
         cbProblemForRun = new JComboBox<String>(problemNames);
@@ -714,6 +725,7 @@ public class MainFrame extends JFrame {
         Box HBox7 = Box.createHorizontalBox();
         cbShowDetail = new JCheckBox("显示可行的详细调度");
         cbShowDetail.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 Config.ShowDetail = cbShowDetail.isSelected();
             }
@@ -845,13 +857,14 @@ public class MainFrame extends JFrame {
         btnSaveSingleRunResult = new JButton("导出到excel");
         btnSaveSingleRunResult.setEnabled(false);
         btnSaveSingleRunResult.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     ExcelHelper.exportTable(resultTable, new File("data/singlerun.csv"));
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-                tool.show("通知", "已经写入到: data\\singlerun.csv");
+                tool.show("通知", "已经写入到: data/singlerun.csv");
             }
         });
         HBox10.add(btnSaveSingleRunResult);
@@ -868,7 +881,7 @@ public class MainFrame extends JFrame {
         Box box = Box.createVerticalBox();
 
         Box HBox5 = Box.createHorizontalBox();
-        JLabel lblIndex = new JLabel("研究问题：");
+        JLabel lblIndex = new JLabel("启发策略：");
         HBox5.add(lblIndex);
         List<KeyValuePair> problemList = new LinkedList<>();
         problemList.add(new KeyValuePair("EDF_PS", "EDF_PS"));
@@ -940,6 +953,7 @@ public class MainFrame extends JFrame {
         Box HBox10 = Box.createHorizontalBox();
         btnStartForExperiment = new JButton("开始实验");
         btnStartForExperiment.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
 
                 // 如果存在实验数据，提示用户是否覆盖
@@ -1015,6 +1029,7 @@ public class MainFrame extends JFrame {
         btnAnalysisExperimentResult = new JButton("结果分析");
         btnAnalysisExperimentResult.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     // 获取用户输入
@@ -1035,7 +1050,6 @@ public class MainFrame extends JFrame {
                     if (!new File(experimentBaseDirectory + summaryFileName).exists() ||
                             JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(null, "确认要覆盖已有的分析结果吗?", "确认", JOptionPane.YES_NO_CANCEL_OPTION,
                                     JOptionPane.INFORMATION_MESSAGE)) {
-                        ;
                         // 1.生成pareto参考前沿
                         new ExperimentGenerateReferenceParetoSetAndFrontFromDoubleSolutions(null).runAnalysis(outputDirectoryName, experimentBaseDirectory,
                                 outputParetoFrontFileName, outputParetoSetFileName, problemNames, algorithmNames, runs);

@@ -314,9 +314,11 @@ public class Oilschdule {
         List<Integer> ET = new ArrayList<>();
 
         int length = backTrace.getTKS().length;
+        // 逐个判断供油罐是否可用
         for (int i = 0; i < length; i++) {
             int tk = i + 1;
             List<List<Double>> ops = new ArrayList<>();
+            // 找到和供油罐tk相关的所有调度操作
             for (int j = 0; j < backTrace.getSchedulePlan().size(); j++) {
                 List<Double> op = backTrace.getSchedulePlan().get(j);
                 if (op.get(1) == tk || (op.size() > 5 && op.get(5) == tk)) {
