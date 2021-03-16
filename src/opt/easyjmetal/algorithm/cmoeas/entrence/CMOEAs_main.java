@@ -1,6 +1,7 @@
 package opt.easyjmetal.algorithm.cmoeas.entrence;
 
 import opt.easyjmetal.algorithm.AlgorithmFactory;
+import opt.easyjmetal.algorithm.common.MatlabUtilityFunctionsWrapper;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Operator;
 import opt.easyjmetal.core.Problem;
@@ -19,19 +20,11 @@ public class CMOEAs_main {
     public static void main(String[] args) throws Exception {
         // 0 represents for DE, 1 represents for SBX
         int crossoverMethod = 1;
-        // "NSGAII_CDP",
-        // "ISDEPLUS_CDP",
-        // "NSGAIII_CDP",
-        // "MOEAD_CDP",
-        // "MOEAD_IEpsilon",
-        // "MOEAD_Epsilon",
-        // "MOEAD_SR",
-        // "C_MOEAD",
-        // "PPS_MOEAD"
+        MatlabUtilityFunctionsWrapper.setup();
         batchRun(new String[]{
-                "NSGAII_CDP",
-                "CMMO",
                 "C_TAEA",
+                "CMMO",
+                "NSGAII_CDP",
                 "ISDEPLUS_CDP",
                 "NSGAIII_CDP",
                 "MOEAD_CDP",
