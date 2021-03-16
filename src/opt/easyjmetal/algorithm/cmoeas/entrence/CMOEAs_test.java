@@ -62,7 +62,7 @@ public class CMOEAs_test {
         HashMap parameters;
 
         int popSize = 100;
-        int maxFES = 50000;
+        int maxFES = 500;
         int updateNumber = 2;
         int neighborSize = (int) (0.1 * popSize);
         double deDelta = 0.9;
@@ -104,7 +104,7 @@ public class CMOEAs_test {
             algorithm.setInputParameter("populationSize", popSize);
             algorithm.setInputParameter("maxEvaluations", maxFES);
             // 实验数据存放的路径
-            algorithm.setInputParameter("dataDirectory", basePath);
+            algorithm.setInputParameter("dataDirectory", basePath + AlgorithmName);
             // 权重文件存放的路径
             algorithm.setInputParameter("weightDirectory", weightPath);
             algorithm.setInputParameter("T", neighborSize);

@@ -71,12 +71,12 @@ public class C_TAEA extends Algorithm {
         int gen = 0;
         while (evaluations_ < maxEvaluations_) {
             // calculate the ratio of non-dominated solutions of CA and DA in Hm
-            double[][] probabilities = C_TAEA_UtilityFunctionsWrapper.probability(external_archive_ca.writeObjectivesToMatrix(), external_archive_da.writeObjectivesToMatrix());
-            double Pc = probabilities[0][0];
-            double Pd = probabilities[1][0];
-            double PC = probabilities[2][0];
-            SolutionSet q = new SolutionSet();
-            for (int i = 0; i < populationSize_; i++) {
+            double[] probabilities = C_TAEA_UtilityFunctionsWrapper.probability(external_archive_ca.writeObjectivesToMatrix(), external_archive_da.writeObjectivesToMatrix());
+            double Pc = probabilities[0];
+            double Pd = probabilities[1];
+            double PC = probabilities[2];
+            SolutionSet q = new SolutionSet(populationSize_);
+            for (int i = 0; i < (int)(populationSize_ / 2); i++) {
                 Solution[] offSpring = new Solution[2];
                 SolutionSet P1, P2;
                 if (Pc > Pd) {

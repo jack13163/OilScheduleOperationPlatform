@@ -48,8 +48,8 @@ public class TwoArchiveUpdate {
                         pop.add(solutions.get(i));
                     }
                 }
-                rankingIndex++;
                 candidateSolutions += ranking.getSubfront(rankingIndex).size();
+                rankingIndex++;
                 fronts.add(solutions);
             }
 
@@ -90,8 +90,8 @@ public class TwoArchiveUpdate {
                 }
 
                 if (s.size() > popSize) {
-                    s.clear();
-                    for (int i = 0; i < last - 1; i++) {
+                    s = sc;
+                    for (int i = 0; i < last; i++) {
                         s = s.union(ranking.getSubfront(i));
                     }
                     SolutionSet F_last = ranking.getSubfront(last);
