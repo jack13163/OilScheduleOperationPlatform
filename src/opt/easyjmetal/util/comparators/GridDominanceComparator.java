@@ -15,27 +15,22 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package opt.easyjmetal.util.comparators;
 
 import opt.easyjmetal.core.Solution;
-
 import java.util.Comparator;
 
 /**
  * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> objects) based on a constraint violation test + 
+ * <code>Solution</code> objects) based on a constraint violation test +
  * dominance checking, as in NSGA-II.
  */
 public class GridDominanceComparator implements Comparator {
 
-
-    /**
-     * Constructor
-     */
     private double[] ub_;
 
     private double[] lb_;
@@ -48,11 +43,6 @@ public class GridDominanceComparator implements Comparator {
         divide_ = divide;
     }
 
-
-
-
-
-
     /**
      * Compares two solutions.
      * @param object1 Object representing the first <code>Solution</code>.
@@ -60,12 +50,13 @@ public class GridDominanceComparator implements Comparator {
      * @return -1, or 0, or 1 if solution1 dominates solution2, both are
      * non-dominated, or solution1  is dominated by solution22, respectively.
      */
-
+    @Override
     public int compare(Object object1, Object object2) {
-        if (object1==null)
+        if (object1==null) {
             return 1;
-        else if (object2 == null)
+        } else if (object2 == null) {
             return -1;
+        }
 
         Solution a = (Solution)object1;
         Solution b = (Solution)object2;
@@ -102,5 +93,4 @@ public class GridDominanceComparator implements Comparator {
             }
         }
     }
-
-} // DominanceComparator
+}

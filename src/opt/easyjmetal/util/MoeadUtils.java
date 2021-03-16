@@ -21,11 +21,20 @@
 
 package opt.easyjmetal.util;
 
+import opt.easyjmetal.algorithm.cmoeas.impl.c_taea.C_TAEA_UtilityFunctionsWrapper;
+import opt.easyjmetal.algorithm.cmoeas.impl.c_taea.Ranking_CV_ASSO;
+import opt.easyjmetal.algorithm.cmoeas.impl.nsgaiii_cdp.EnvironmentalSelection;
+import opt.easyjmetal.algorithm.common.ReferencePoint;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.core.Variable;
 import opt.easyjmetal.util.comparators.CrowdingComparator;
+import opt.easyjmetal.util.comparators.FitnessComparator;
+import opt.easyjmetal.util.comparators.OverallConstraintViolationComparator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utilities methods to used by MOEA/D

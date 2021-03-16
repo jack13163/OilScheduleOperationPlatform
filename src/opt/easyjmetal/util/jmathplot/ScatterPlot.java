@@ -67,10 +67,9 @@ public class ScatterPlot {
     synchronized public void displayPop(SolutionSet pop) {
         autoCount++;
         // display feasible solution and infeasible solution separately
-        SolutionSet feasiblePop = pop.GetFeasible();
-        SolutionSet infeasiblePop = pop.GetInfeasible();
+        SolutionSet feasiblePop = pop.getFeasible();
+        SolutionSet infeasiblePop = pop.getInfeasible();
         int objNumber = pop.get(0).getNumberOfObjectives();
-
 
         // get the feasible points
         int feasibleSize = feasiblePop.size();

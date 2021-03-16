@@ -1,35 +1,10 @@
-//  SolutionSet.Java
-//
-//  Author:
-//       Antonio J. Nebro <antonio@lcc.uma.es>
-//       Juan J. Durillo <durillo@lcc.uma.es>
-//
-//  Copyright (c) 2011 Antonio J. Nebro, Juan J. Durillo
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU Lesser General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU Lesser General Public License for more details.
-//
-//  You should have received a copy of the GNU Lesser General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 package opt.easyjmetal.core;
-
 
 import opt.easyjmetal.util.Configuration;
 
 import java.io.*;
 import java.util.*;
 
-/**
- * 解集
- */
 public class SolutionSet implements Serializable {
 
     protected final List<Solution> solutionsList_;
@@ -84,7 +59,6 @@ public class SolutionSet implements Serializable {
         }
 
         return worstKnown.getOverallConstraintViolation();
-
     }
 
     public Solution get(int i) {
@@ -114,7 +88,7 @@ public class SolutionSet implements Serializable {
      * @return The index of the best Solution attending to the comparator or
      * <code>-1<code> if the SolutionSet is empty
      */
-    int indexBest(Comparator comparator) {
+    public int indexBest(Comparator comparator) {
         if ((solutionsList_ == null) || (this.solutionsList_.isEmpty())) {
             return -1;
         }
@@ -149,7 +123,6 @@ public class SolutionSet implements Serializable {
         } else {
             return solutionsList_.get(indexBest);
         }
-
     }
 
     /**
@@ -164,7 +137,6 @@ public class SolutionSet implements Serializable {
         if ((solutionsList_ == null) || (this.solutionsList_.isEmpty())) {
             return -1;
         }
-
         int index = 0;
         Solution worstKnown = solutionsList_.get(0), candidateSolution;
         int flag;
@@ -176,9 +148,7 @@ public class SolutionSet implements Serializable {
                 worstKnown = candidateSolution;
             }
         }
-
         return index;
-
     }
 
     /**
@@ -190,14 +160,12 @@ public class SolutionSet implements Serializable {
      * if the SolutionSet is empty
      */
     public Solution worst(Comparator comparator) {
-
         int index = indexWorst(comparator);
         if (index < 0) {
             return null;
         } else {
             return solutionsList_.get(index);
         }
-
     }
 
     /**
@@ -223,13 +191,10 @@ public class SolutionSet implements Serializable {
             BufferedWriter bw = new BufferedWriter(osw);
 
             for (Solution aSolutionsList_ : solutionsList_) {
-                //if (this.vector[i].getFitness()<1.0) {
                 bw.write(aSolutionsList_.toString());
                 bw.newLine();
-                //}
             }
 
-            /* Close the file */
             bw.close();
         } catch (IOException e) {
             Configuration.logger_.severe("Error acceding to the file");
@@ -304,8 +269,9 @@ public class SolutionSet implements Serializable {
                 int numberOfVariables = solutionsList_.get(0).getDecisionVariables().length;
                 for (Solution aSolutionsList_ : solutionsList_) {
                     if (aSolutionsList_.getOverallConstraintViolation() == 0.0) {
-                        for (int j = 0; j < numberOfVariables; j++)
+                        for (int j = 0; j < numberOfVariables; j++) {
                             bw.write(aSolutionsList_.getDecisionVariables()[j].toString() + " ");
+                        }
                         bw.newLine();
                     }
                 }
@@ -322,7 +288,7 @@ public class SolutionSet implements Serializable {
      */
     public void clear() {
         solutionsList_.clear();
-    } // clear
+    }
 
     /**
      * Deletes the <code>Solution</code> at position i in the set.
@@ -332,7 +298,7 @@ public class SolutionSet implements Serializable {
     public void remove(int i) {
         if (i > solutionsList_.size() - 1) {
             Configuration.logger_.severe("Size is: " + this.size());
-        } // if
+        }
         solutionsList_.remove(i);
     }
 
@@ -344,14 +310,12 @@ public class SolutionSet implements Serializable {
      */
     public Iterator<Solution> iterator() {
         return solutionsList_.iterator();
-    } // iterator
+    }
 
     /**
-     * Returns a new <code>SolutionSet</code> which is the result of the union
-     * between the current solution set and the one passed as a parameter.
-     *
-     * @param solutionSet SolutionSet to join with the current solutionSet.
-     * @return The result of the union operation.
+     * 合并两个种群
+     * @param solutionSet 要合并的另一个种群
+     * @return
      */
     public SolutionSet union(SolutionSet solutionSet) {
         //Check the correct size. In development
@@ -364,11 +328,11 @@ public class SolutionSet implements Serializable {
         SolutionSet union = new SolutionSet(newSize);
         for (int i = 0; i < this.size(); i++) {
             union.add(this.get(i));
-        } // for
+        }
 
         for (int i = this.size(); i < (this.size() + solutionSet.size()); i++) {
             union.add(solutionSet.get(i - this.size()));
-        } // for
+        }
 
         return union;
     }
@@ -382,10 +346,10 @@ public class SolutionSet implements Serializable {
     public void replace(int position, Solution solution) {
         if (position > this.solutionsList_.size()) {
             solutionsList_.add(solution);
-        } // if
+        }
         solutionsList_.remove(position);
         solutionsList_.add(position, solution);
-    } // replace
+    }
 
     /**
      * Copies the objectives of the solution set to a matrix
@@ -404,7 +368,7 @@ public class SolutionSet implements Serializable {
             }
         }
         return objectives;
-    } // writeObjectivesMatrix
+    }
 
     public void printObjectives() {
         for (int i = 0; i < solutionsList_.size(); i++) {
@@ -420,7 +384,11 @@ public class SolutionSet implements Serializable {
         return capacity_;
     }
 
-    public SolutionSet GetFeasible() {
+    /**
+     * 获取可行解集
+     * @return
+     */
+    public SolutionSet getFeasible() {
         SolutionSet result = new SolutionSet(solutionsList_.size());
         for (Solution aSolutionsList_ : solutionsList_) {
             if (aSolutionsList_.getOverallConstraintViolation() >= 0) {
@@ -440,7 +408,11 @@ public class SolutionSet implements Serializable {
         return result;
     }
 
-    public SolutionSet GetInfeasible() {
+    /**
+     * 获取不可行解集
+     * @return
+     */
+    public SolutionSet getInfeasible() {
         SolutionSet result = new SolutionSet(solutionsList_.size());
         for (Solution aSolutionsList_ : solutionsList_) {
             if (aSolutionsList_.getOverallConstraintViolation() < 0) {

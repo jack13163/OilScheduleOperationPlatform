@@ -64,6 +64,19 @@ public class ReferencePoint {
         generateRecursive(referencePoints, refPoint, numberOfObjectives, numberOfDivisions.get(0), numberOfDivisions.get(0), 0);
     }
 
+    /**
+     * 生成参考点
+     * @param lambda_
+     * @return
+     */
+    public static List<ReferencePoint> generateReferencePoints(double[][] lambda_) {
+        List<ReferencePoint> copy = new ArrayList<>();
+        for (int i = 0; i < lambda_.length; i++) {
+            copy.add(new ReferencePoint(lambda_[i]));
+        }
+        return copy;
+    }
+
     private void generateRecursive(
             List<ReferencePoint> referencePoints,
             ReferencePoint refPoint,

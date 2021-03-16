@@ -24,6 +24,8 @@ public class AlgorithmFactory {
             base += "cmoeas.impl.spea2_cdp.";
         } else if (name.equalsIgnoreCase("ISDEPLUS_CDP")) {
             base += "cmoeas.impl.isdeplus_cdp.";
+        } else if (name.equalsIgnoreCase("C_TAEA")) {
+            base += "cmoeas.impl.c_taea.";
         } else if (name.equalsIgnoreCase("C_MOEAD")
                 || name.equalsIgnoreCase("MOEAD_CDP")
                 || name.equalsIgnoreCase("MOEAD_Epsilon")

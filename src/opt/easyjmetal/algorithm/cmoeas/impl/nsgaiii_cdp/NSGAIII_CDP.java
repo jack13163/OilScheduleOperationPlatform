@@ -4,19 +4,16 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.nsgaiii_cdp;
 
 import opt.easyjmetal.algorithm.common.ReferencePoint;
-import opt.easyjmetal.util.MoeadUtils;
+import opt.easyjmetal.algorithm.common.UtilityFunctions;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
+import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.util.Ranking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 public class NSGAIII_CDP extends Algorithm {
@@ -69,8 +66,7 @@ public class NSGAIII_CDP extends Algorithm {
 
 
         // STEP 1. Initialization
-        // STEP 1.1. Compute euclidean distances between weight vectors and find T
-        initUniformWeight();
+        UtilityFunctions.initUniformWeight(weightDirectory_, lambda_);
 
         // Create the initial solutionSet
         Solution newSolution;
@@ -96,11 +92,9 @@ public class NSGAIII_CDP extends Algorithm {
         int gen = 0;
         // Generations
         while (evaluations_ < maxEvaluations_) {
-
-            // Create the offSpring solutionSet
             SolutionSet offspringPopulation_ = new SolutionSet(populationSize_);
             for (int i = 0; i < (populationSize_ / 2); i++) {
-                //obtain parents
+                // obtain parents
                 Solution[] offSpring = new Solution[2];
                 // Apply Crossover for Real codification
                 if (crossoverOperator_.getClass().getSimpleName().equalsIgnoreCase("SBXCrossover")) {
@@ -130,7 +124,7 @@ public class NSGAIII_CDP extends Algorithm {
                 offspringPopulation_.add(offSpring[0]);
                 offspringPopulation_.add(offSpring[1]);
                 evaluations_ += 2;
-            } // for
+            }
 
             // 环境选择
             population_ = replacement(population_, offspringPopulation_);
@@ -147,49 +141,6 @@ public class NSGAIII_CDP extends Algorithm {
 
         return external_archive_;
     }
-
-
-    // Generate the reference points and random population
-    private void initUniformWeight() {
-        if ((problem_.getNumberOfObjectives() == 2) && (populationSize_ <= 300)) {
-            for (int n = 0; n < populationSize_; n++) {
-                double a = 1.0 * n / (populationSize_ - 1);
-                lambda_[n][0] = a;
-                lambda_[n][1] = 1 - a;
-            }
-        }
-        else {
-            String dataFileName;
-            dataFileName = "W" + problem_.getNumberOfObjectives() + "D_" + populationSize_ + ".dat";
-
-            try {
-                // 读取权重文件
-                String filepath = weightDirectory_ + dataFileName;
-                FileInputStream fis = new FileInputStream(filepath);
-                InputStreamReader isr = new InputStreamReader(fis);
-                BufferedReader br = new BufferedReader(isr);
-                int i = 0;
-                int j;
-                String aux = br.readLine();
-                while (aux != null) {
-                    StringTokenizer st = new StringTokenizer(aux);
-                    j = 0;
-                    while (st.hasMoreTokens()) {
-                        double value = new Double(st.nextToken());
-                        lambda_[i][j] = value;
-                        //System.out.println("lambda["+i+","+j+"] = " + value) ;
-                        j++;
-                    }
-                    aux = br.readLine();
-                    i++;
-                }
-                br.close();
-            } catch (Exception e) {
-                System.out.println("initUniformWeight: failed when reading for file: " + weightDirectory_ + dataFileName);
-                e.printStackTrace();
-            }
-        }
-    } // initUniformWeight
 
     // 环境选择
     protected SolutionSet replacement(SolutionSet population, SolutionSet offspringPopulation) throws JMException {
@@ -220,23 +171,16 @@ public class NSGAIII_CDP extends Algorithm {
             rankingIndex++;
         }
 
-        // Environmental selection
-        // A copy of the reference list should be used as parameter of the environmental selection
+        // 环境选择
         EnvironmentalSelection selection =
-                new EnvironmentalSelection(fronts, populationSize_, getReferencePointsCopy(), problem_.getNumberOfObjectives());
-
+                new EnvironmentalSelection(
+                        fronts,
+                        populationSize_,
+                        ReferencePoint.generateReferencePoints(lambda_),
+                        problem_.getNumberOfObjectives());
         pop = selection.execute(pop);
 
         return pop;
-    }
-
-
-    private List<ReferencePoint> getReferencePointsCopy() {
-        List<ReferencePoint> copy = new ArrayList<>();
-        for (int i = 0; i < lambda_.length; i++) {
-            copy.add(new ReferencePoint(lambda_[i]));
-        }
-        return copy;
     }
 }
 

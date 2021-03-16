@@ -266,16 +266,13 @@ public class EnvironmentalSelection {
 
     /* This method performs the environmental Selection indicated in the paper describing NSGAIII*/
     public SolutionSet execute(SolutionSet source) throws JMException {
-        // The comments show the C++ code
 
         // ---------- Steps 9-10 in Algorithm 1 ----------
         if (source.size() == this.solutionsToSelect) {
             return source;
         }
 
-
         // ---------- Step 14 / Algorithm 2 ----------
-        //vector<double> ideal_point = TranslateObjectives(&cur, fronts);
         List<Double> ideal_point = translateObjectives(source);
         SolutionSet extreme_points = findExtremePoints(source);
         List<Double> intercepts = constructHyperplane(source, extreme_points);
@@ -289,8 +286,7 @@ public class EnvironmentalSelection {
             int min_rp = FindNicheReferencePoint();
 
             Solution chosen = SelectClusterMember(this.referencePoints.get(min_rp));
-            if (chosen == null) // no potential member in Fl, disregard this reference point
-            {
+            if (chosen == null) {
                 this.referencePoints.remove(min_rp);
             } else {
                 this.referencePoints.get(min_rp).AddMember();

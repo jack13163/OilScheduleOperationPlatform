@@ -1,29 +1,7 @@
-//  Ranking.java
-//
-//  Author:
-//       Antonio J. Nebro <antonio@lcc.uma.es>
-//       Juan J. Durillo <durillo@lcc.uma.es>
-//
-//  Copyright (c) 2011 Antonio J. Nebro, Juan J. Durillo
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU Lesser General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU Lesser General Public License for more details.
-//
-//  You should have received a copy of the GNU Lesser General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-package opt.easyjmetal.util;
+package opt.easyjmetal.algorithm.cmoeas.impl.c_taea;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.DominanceComparator;
-import opt.easyjmetal.util.comparators.OverallConstraintViolationComparator;
+import opt.easyjmetal.util.comparators.DominanceComparator_CV_ASSO;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -31,31 +9,20 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * This class implements some facilities for ranking solutions. Given a
- * <code>SolutionSet</code> object, their solutions are ranked according to
- * scheme proposed in NSGA-II; as a result, a set of subsets are obtained. The
- * subsets are numbered starting from 0 (in NSGA-II, the numbering starts from
- * 1); thus, subset 0 contains the non-dominated solutions, subset 1 contains
- * the non-dominated solutions after removing those belonging to subset 0, and
- * so on.
+ * 按照CV值和基于参考点的拥挤度度量来进行非支配排序
  */
-public class Ranking {
+public class Ranking_CV_ASSO {
 
 	private SolutionSet solutionSet_;
 	private SolutionSet[] ranking_;
-
-	private static final Comparator dominance_ = new DominanceComparator();
-	private static final Comparator constraint_ = new OverallConstraintViolationComparator();
-
-	//private static final Comparator constraint_ = new DiversityComparator();
+	private static final Comparator dominance_ = new DominanceComparator_CV_ASSO();
 
 	/**
-	 * Constructor.
-	 *
+	 * 计算拥挤距离，并根据它和约束违背值进行非支配排序
 	 * @param solutionSet
-	 *            The <code>SolutionSet</code> to be ranked.
+	 * @param w
 	 */
-	public Ranking(SolutionSet solutionSet) {
+	public Ranking_CV_ASSO(SolutionSet solutionSet, double[][] w) {
 		solutionSet_ = solutionSet;
 
 		// dominateMe[i] contains the number of solutions dominating i
@@ -83,12 +50,7 @@ public class Ranking {
 		for (int p = 0; p < (solutionSet_.size() - 1); p++) {
 			// For all q individuals , calculate if p dominates q or vice versa
 			for (int q = p + 1; q < solutionSet_.size(); q++) {
-				flagDominate = constraint_.compare(solutionSet.get(p),
-						solutionSet.get(q));
-				if (flagDominate == 0) {
-					flagDominate = dominance_.compare(solutionSet.get(p),
-							solutionSet.get(q));
-				}
+				flagDominate = dominance_.compare(solutionSet.get(p), solutionSet.get(q));
 				if (flagDominate == -1) {
 					iDominate[p].add(q);
 					dominateMe[q]++;
@@ -137,21 +99,19 @@ public class Ranking {
 	}
 
 	/**
-	 * Returns a <code>SolutionSet</code> containing the solutions of a given
-	 * rank.
-	 *
+	 * 获取某一水平的个体集合
 	 * @param rank
-	 *            The rank
-	 * @return Object representing the <code>SolutionSet</code>.
+	 * @return
 	 */
 	public SolutionSet getSubfront(int rank) {
 		return ranking_[rank];
-	} // getSubFront
+	}
 
 	/**
-	 * Returns the total number of subFronts founds.
+	 * 获取水平数
+	 * @return
 	 */
 	public int getNumberOfSubfronts() {
 		return ranking_.length;
-	} // getNumberOfSubfronts
+	}
 }
