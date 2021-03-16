@@ -120,7 +120,7 @@ public class CMOEAs_main {
             algorithm.setInputParameter("populationSize", popSize);
             algorithm.setInputParameter("maxEvaluations", maxFES);
             // 实验数据存放的路径
-            algorithm.setInputParameter("dataDirectory", basePath);
+            algorithm.setInputParameter("dataDirectory", basePath + problem.getName());
             // 权重文件存放的路径
             algorithm.setInputParameter("weightDirectory", weightPath);
             algorithm.setInputParameter("T", neighborSize);
