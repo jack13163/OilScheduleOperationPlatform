@@ -104,7 +104,7 @@ public class PPS_MOEAD extends Algorithm {
 
         //creat database
         String dbName = dataDirectory_;
-        String tableName = problem_.getName() + "_" + runningTime;
+        String tableName = "PPS_MOEAD_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 
         // STEP 1. Initialization

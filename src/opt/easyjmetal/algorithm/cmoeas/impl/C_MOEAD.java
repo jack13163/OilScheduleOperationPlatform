@@ -95,7 +95,7 @@ public class C_MOEAD extends Algorithm {
         Operator crossover_ = operators_.get("crossover"); // default: DE crossover
         Operator mutation_ = operators_.get("mutation");  // default: polynomial mutation
         String dbName = dataDirectory_;
-        String tableName = problem_.getName() + "_" + runningTime;
+        String tableName = "C_MOEAD_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 
         // STEP 1. Initialization

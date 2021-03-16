@@ -64,7 +64,7 @@ public class SPEA2_CDP extends Algorithm {
 
         //creat database
         String dbName = dataDirectory_;
-        String tableName = problem_.getName() + "_" + runningTime;
+        String tableName = "SPEA2_CDP_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 
         int gen = 0;

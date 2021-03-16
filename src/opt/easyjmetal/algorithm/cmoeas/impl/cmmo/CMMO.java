@@ -1,8 +1,6 @@
 // SPEA2: Improving the Strength Pareto Evolutionary Algorithm For Multiobjective Optimization.
 package opt.easyjmetal.algorithm.cmoeas.impl.cmmo;
 
-import opt.easyjmetal.algorithm.cmoeas.impl.spea2_cdp.EnvironmentalSelection;
-import opt.easyjmetal.algorithm.common.StrengthRawFitness;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
@@ -21,11 +19,6 @@ public class CMMO extends Algorithm {
     private String dataDirectory_;
 
     Distance distance;
-
-    private SolutionSet archive;// 档案集
-    private StrengthRawFitness strenghtRawFitness = new StrengthRawFitness();
-    private EnvironmentalSelection environmentalSelection;
-    private int k;
 
     @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
@@ -65,7 +58,7 @@ public class CMMO extends Algorithm {
 
         //creat database
         String dbName = dataDirectory_;
-        String tableName = problem_.getName() + "_" + runningTime;
+        String tableName = "CMMO_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 
         int gen = 0;

@@ -87,7 +87,7 @@ public class MOEAD_Epsilon extends Algorithm {
 
         //creat database
         String dbName = dataDirectory_;
-        String problemName = problem_.getName() + "_" + runningTime;
+        String problemName = "MOEAD_Epsilon_" + runningTime;
         SqlUtils.CreateTable(problemName, dbName);
 
         // STEP 1. Initialization

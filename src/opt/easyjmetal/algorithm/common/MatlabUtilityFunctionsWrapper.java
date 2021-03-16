@@ -119,6 +119,32 @@ public class MatlabUtilityFunctionsWrapper {
     }
 
     /**
+     * 计算CMMO算法中Di指标的值
+     *
+     * @param objs
+     * @return
+     */
+    public static double[] di(double[][] objs) {
+        double[][][] ret = null;
+        try {
+            ret = callMatlabMethod(new MatlabFunction() {
+                @Override
+                public Object[] invoke(int numberOfOutputs, MWNumericArray... args) throws MWException {
+                    return matlabutilityfunctionsInstance.di(numberOfOutputs, args);
+                }
+            }, 1, (Object)objs);
+            double[] results = new double[objs.length];
+            for (int i = 0; i < objs.length; i++) {
+                results[i] = ret[0][i][0];
+            }
+            return results;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * 计算概率
      *
      * @param ca

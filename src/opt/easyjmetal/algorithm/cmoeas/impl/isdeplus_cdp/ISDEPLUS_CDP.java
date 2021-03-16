@@ -72,7 +72,7 @@ public class ISDEPLUS_CDP extends Algorithm {
         MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         //creat database
-        String tableName =  problem_.getName() + "_" + runningTime;
+        String tableName =  "ISDEPLUS_CDP_" + runningTime;
         String dbName = dataDirectory_;
         SqlUtils.CreateTable(tableName, dbName);
 

@@ -66,7 +66,7 @@ public class C_TAEA extends Algorithm {
 
         //creat database
         String dbName = dataDirectory_;
-        String tableName = problem_.getName() + "_" + runningTime;
+        String tableName = "C_TAEA_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 
         int gen = 0;

@@ -30,6 +30,8 @@ public class CMOEAs_main {
         // "PPS_MOEAD"
         batchRun(new String[]{
                 "NSGAII_CDP",
+                "CMMO",
+                "C_TAEA",
                 "ISDEPLUS_CDP",
                 "NSGAIII_CDP",
                 "MOEAD_CDP",

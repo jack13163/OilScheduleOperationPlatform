@@ -19,20 +19,20 @@ import java.util.List;
 /**
  * 该函数只是测试相关的约束多目标优化算法，可以随意修改
  */
-public class CMOEAs_test {
+public class CMOEAs_append {
 
     public static void main(String[] args) throws Exception {
         // 0 represents for DE, 1 represents for SBX
         int crossoverMethod = 1;
         MatlabUtilityFunctionsWrapper.setup();
-        batchRun(Arrays.asList("C_TAEA"), crossoverMethod);
+        batchRun(Arrays.asList("C_MOEAD"), crossoverMethod);
     }
 
     private static void batchRun(List<String> algorithmSet, int crossMethod) throws Exception {
         int algorithmNo = algorithmSet.size();
 
         // 输出运行时间
-        String basePath = "result/easyjmetal/test/";
+        String basePath = "result/easyjmetal/two/";
         File dir = new File(basePath);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -104,7 +104,7 @@ public class CMOEAs_test {
             algorithm.setInputParameter("populationSize", popSize);
             algorithm.setInputParameter("maxEvaluations", maxFES);
             // 实验数据存放的路径
-            algorithm.setInputParameter("dataDirectory", basePath + AlgorithmName);
+            algorithm.setInputParameter("dataDirectory", basePath + problem.getName());
             // 权重文件存放的路径
             algorithm.setInputParameter("weightDirectory", weightPath);
             algorithm.setInputParameter("T", neighborSize);

@@ -1,6 +1,5 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.cmmo;
 
-import opt.easyjmetal.algorithm.common.StrengthRawFitness;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.Distance;
@@ -15,8 +14,6 @@ import java.util.List;
 public class EnvironmentalSelection {
 
     private int solutionsToSelect;
-    private StrengthRawFitness strengthRawFitness;
-
     Distance _distance = new Distance();
 
     public EnvironmentalSelection(int solutionsToSelect) {
@@ -25,12 +22,11 @@ public class EnvironmentalSelection {
 
     public EnvironmentalSelection(int solutionsToSelect, int k) {
         this.solutionsToSelect = solutionsToSelect;
-        this.strengthRawFitness = new StrengthRawFitness(k);// k推荐为1
     }
 
     public SolutionSet execute(SolutionSet source2) {
         // 计算适应度值
-        this.strengthRawFitness.computeDensityEstimator(source2);
+        CMMO_Fitness.computeFitnessValue(source2);
 
         int size;
         List<Solution> source = new ArrayList<>(source2.size());
@@ -139,5 +135,4 @@ public class EnvironmentalSelection {
         }
         return aux;
     }
-
 }

@@ -1,7 +1,7 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.cmmo;
 
+import opt.easyjmetal.algorithm.common.MatlabUtilityFunctionsWrapper;
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.LinearNormalization;
 
 public class CMMO_Fitness {
 
@@ -32,6 +32,7 @@ public class CMMO_Fitness {
                 }
             }
         }
+
         // Calculate S(i)
         double[] S = new double[Dominate.length];
         for (int i = 0; i < Dominate.length; i++) {
@@ -52,35 +53,11 @@ public class CMMO_Fitness {
         }
 
         // Calculate D(i)
+        double[] D = MatlabUtilityFunctionsWrapper.di(solutionSet.writeObjectivesToMatrix());
 
-
-        double[][] distance = solutionSet.writeObjectivesToMatrix();
-        int numOfObjects = solutionSet.get(0).getNumberOfObjectives();
-
-        // 最大最小归一化
-        double[][] normalizedDistance = LinearNormalization.normalize4Scale(distance);
-
-        // 按照个体目标值的和的升序排序
-        double[] sumedDistance = LinearNormalization.sumByRow(normalizedDistance);
-        int[] indexs = LinearNormalization.sortArray(sumedDistance);
-
-        for (int i = 1; i < solutionSet.size(); i++) {
-
-            // 计算第i个个体与前i-1个个体的SDE距离
-            double[] betweenDistances = new double[i];
-            for (int j = 0; j < i - 1; j++) {
-                for (int k = 0; k < numOfObjects; k++) {
-                    // 只计算qi<pj时的值
-                    if (normalizedDistance[indexs[i]][k] < normalizedDistance[indexs[j]][k]) {
-                        betweenDistances[j] += (normalizedDistance[indexs[i]][k] - normalizedDistance[indexs[j]][k]) * (normalizedDistance[indexs[i]][k] - normalizedDistance[indexs[j]][k]);
-                    }
-                }
-            }
-
-            // 求个体j与种群中其他个体的欧式距离的最小值
-            double minDistance = LinearNormalization.minV(betweenDistances);
-            solutionSet.get(indexs[i]).setFitness(Math.exp(-minDistance));
+        // 计算适应度值
+        for (int i = 0; i < solutionSet.size(); i++) {
+            solutionSet.get(i).setFitness(R[i] + D[i]);
         }
     }
-
 }
