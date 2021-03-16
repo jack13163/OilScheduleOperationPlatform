@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.common;
+package opt.easyjmetal.algorithm.cmoeas.impl.spea2_cdp;
 
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.LinearNormalization;

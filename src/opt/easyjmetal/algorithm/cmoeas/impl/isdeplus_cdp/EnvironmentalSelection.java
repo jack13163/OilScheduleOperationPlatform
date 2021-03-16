@@ -1,6 +1,6 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.isdeplus_cdp;
 
-import opt.easyjmetal.algorithm.common.ISDEPlus_Fitness;
+import opt.easyjmetal.algorithm.cmoeas.impl.spea2_cdp.ISDEPlus_Fitness;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.comparators.FitnessComparator;

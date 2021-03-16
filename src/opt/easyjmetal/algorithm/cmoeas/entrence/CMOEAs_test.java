@@ -8,7 +8,7 @@ import opt.easyjmetal.operator.crossover.CrossoverFactory;
 import opt.easyjmetal.operator.mutation.MutationFactory;
 import opt.easyjmetal.operator.selection.SelectionFactory;
 import opt.easyjmetal.problem.ProblemFactory;
-import opt.easyjmetal.algorithm.cmoeas.impl.c_taea.C_TAEA_UtilityFunctionsWrapper;
+import opt.easyjmetal.algorithm.common.MatlabUtilityFunctionsWrapper;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -24,7 +24,7 @@ public class CMOEAs_test {
     public static void main(String[] args) throws Exception {
         // 0 represents for DE, 1 represents for SBX
         int crossoverMethod = 1;
-        C_TAEA_UtilityFunctionsWrapper.setup();
+        MatlabUtilityFunctionsWrapper.setup();
         batchRun(Arrays.asList("C_TAEA"), crossoverMethod);
     }
 

@@ -1,7 +1,7 @@
 // ISDE+ - An Indicator for Multi and Many-objective Optimization.
 package opt.easyjmetal.algorithm.moeas.impl;
 
-import opt.easyjmetal.algorithm.common.ISDEPlus_Fitness;
+import opt.easyjmetal.algorithm.cmoeas.impl.spea2_cdp.ISDEPlus_Fitness;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.*;
 import opt.easyjmetal.util.comparators.FitnessComparator;

@@ -1,6 +1,7 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.c_taea;
 
 import opt.easyjmetal.algorithm.cmoeas.impl.nsgaiii_cdp.EnvironmentalSelection;
+import opt.easyjmetal.algorithm.common.MatlabUtilityFunctionsWrapper;
 import opt.easyjmetal.algorithm.common.ReferencePoint;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
@@ -66,11 +67,11 @@ public class TwoArchiveUpdate {
             SolutionSet si = hc.getInfeasible();
             s = s.union(sc);
             try {
-                double[][] g_tch = C_TAEA_UtilityFunctionsWrapper.g_tch(si.writeObjectivesToMatrix(), lambda_);
+                double[] g_tch = MatlabUtilityFunctionsWrapper.g_tch(si.writeObjectivesToMatrix(), lambda_);
                 // 计算不可行解解集中每个个体的拥挤距离
                 for (int i = 0; i < si.size(); i++) {
                     Solution solution = si.get(i);
-                    double distance = g_tch[i][0];
+                    double distance = g_tch[i];
                     solution.setCrowdingDistance(distance);
                 }
 
@@ -123,8 +124,8 @@ public class TwoArchiveUpdate {
         SolutionSet s = new SolutionSet();
         SolutionSet hd = da.union(q);
 
-        int[][] Region_Hd = C_TAEA_UtilityFunctionsWrapper.associate(hd.writeObjectivesToMatrix(), w);
-        int[][] Region_CA = C_TAEA_UtilityFunctionsWrapper.associate(ca.writeObjectivesToMatrix(), w);
+        double[] Region_Hd = MatlabUtilityFunctionsWrapper.associate(hd.writeObjectivesToMatrix(), w);
+        double[] Region_CA = MatlabUtilityFunctionsWrapper.associate(ca.writeObjectivesToMatrix(), w);
         int itr = 1;
 
         while (s.size() < popSize) {
@@ -148,9 +149,9 @@ public class TwoArchiveUpdate {
                             Ranking ranking = new Ranking(o);
                             o = ranking.getSubfront(0);
 
-                            double[][] g_tch = C_TAEA_UtilityFunctionsWrapper.g_tch(o.writeObjectivesToMatrix(), w);
+                            double[] g_tch = MatlabUtilityFunctionsWrapper.g_tch(o.writeObjectivesToMatrix(), w);
                             for (int k = 0; k < o.size(); k++) {
-                                o.get(k).setFitness(g_tch[k][0]);
+                                o.get(k).setFitness(g_tch[k]);
                             }
                             int x_best_index = o.indexBest(new FitnessComparator());
                             Solution x_best = o.get(x_best_index);
@@ -161,7 +162,7 @@ public class TwoArchiveUpdate {
                             if (hd.size() == 0) {
                                 Region_Hd = null;
                             }else{
-                                Region_Hd = C_TAEA_UtilityFunctionsWrapper.associate(hd.writeObjectivesToMatrix(), w);
+                                Region_Hd = MatlabUtilityFunctionsWrapper.associate(hd.writeObjectivesToMatrix(), w);
                             }
 
                             if(s.size() < popSize) {
@@ -182,13 +183,13 @@ public class TwoArchiveUpdate {
         return s;
     }
 
-    private static List<Integer> findIndexs(int[][] data, int l) {
+    private static List<Integer> findIndexs(double[] data, int l) {
         if (data == null || data.length == 0) {
             return null;
         }
         List<Integer> current_c = new ArrayList<>();
         for (int j = 0; j < data.length; j++) {
-            if (data[j][0] == l) {
+            if (data[j] == l) {
                 current_c.add(j);
             }
         }

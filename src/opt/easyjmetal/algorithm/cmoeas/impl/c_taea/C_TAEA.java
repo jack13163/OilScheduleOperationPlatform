@@ -1,5 +1,6 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.c_taea;
 
+import opt.easyjmetal.algorithm.common.MatlabUtilityFunctionsWrapper;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.sqlite.SqlUtils;
@@ -44,7 +45,7 @@ public class C_TAEA extends Algorithm {
         int evaluations_ = 0;
 
         // Generate the weight vectors
-        lambda_ = C_TAEA_UtilityFunctionsWrapper.initUniformWeight(populationSize_, problem_.getNumberOfObjectives());
+        lambda_ = MatlabUtilityFunctionsWrapper.initUniformWeight(populationSize_, problem_.getNumberOfObjectives());
 
         // Generate random population
         population_ = new SolutionSet(populationSize_);
@@ -71,7 +72,7 @@ public class C_TAEA extends Algorithm {
         int gen = 0;
         while (evaluations_ < maxEvaluations_) {
             // calculate the ratio of non-dominated solutions of CA and DA in Hm
-            double[] probabilities = C_TAEA_UtilityFunctionsWrapper.probability(external_archive_ca.writeObjectivesToMatrix(), external_archive_da.writeObjectivesToMatrix());
+            double[] probabilities = MatlabUtilityFunctionsWrapper.probability(external_archive_ca.writeObjectivesToMatrix(), external_archive_da.writeObjectivesToMatrix());
             double Pc = probabilities[0];
             double Pd = probabilities[1];
             double PC = probabilities[2];
