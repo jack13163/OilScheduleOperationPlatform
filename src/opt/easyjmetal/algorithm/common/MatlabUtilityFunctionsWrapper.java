@@ -87,7 +87,6 @@ public class MatlabUtilityFunctionsWrapper {
             for (int i = 0; i < matrix.length; i++) {
                 MWArray.disposeArray(matrix[i]);
             }
-            MWArray.disposeArray(results);
         }
     }
 

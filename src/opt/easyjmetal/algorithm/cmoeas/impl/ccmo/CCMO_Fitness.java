@@ -1,27 +1,31 @@
-package opt.easyjmetal.algorithm.cmoeas.impl.cmmo;
+package opt.easyjmetal.algorithm.cmoeas.impl.ccmo;
 
 import opt.easyjmetal.algorithm.common.MatlabUtilityFunctionsWrapper;
 import opt.easyjmetal.core.SolutionSet;
 
-public class CMMO_Fitness {
+public class CCMO_Fitness {
 
     /**
      * 计算解集的适应度值
-     *
-     * @param solutionSet
+     * @param solutionSet       解集
+     * @param ignoreConstraints 判断是否忽略约束
      */
-    public static void computeFitnessValue(SolutionSet solutionSet) {
+    public static void computeFitnessValue(SolutionSet solutionSet, boolean ignoreConstraints) {
         // FunctionValue为目标函数值 ，N为种群规模，M为目标函数的数量
         int N = solutionSet.size();
-        double CV = 0;
+        double[] CV = new double[solutionSet.size()];
+        if(!ignoreConstraints){
+            for (int i = 0; i < CV.length; i++) {
+                CV[i] = Math.max(-solutionSet.get(i).getOverallConstraintViolation(), 0);
+            }
+        }
+
         int[][] Dominate = new int[N][N];
         for (int i = 0; i < N - 1; i++) {
             for (int j = i + 1; j < N; j++) {
-                if (Math.max(0, -solutionSet.get(i).getOverallConstraintViolation())
-                        < Math.max(0, -solutionSet.get(j).getOverallConstraintViolation())) {
+                if (CV[i] < CV[j]) {
                     Dominate[i][j] = 1;
-                } else if (Math.max(0, -solutionSet.get(i).getOverallConstraintViolation())
-                        > Math.max(0, -solutionSet.get(j).getOverallConstraintViolation())) {
+                } else if (CV[i] > CV[j]) {
                     Dominate[j][i] = 1;
                 } else {
                     if (solutionSet.get(i).isDominated(solutionSet.get(j)) > 0) {

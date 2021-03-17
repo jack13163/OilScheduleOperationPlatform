@@ -22,8 +22,8 @@ public class CMOEAs_main {
         int crossoverMethod = 1;
         MatlabUtilityFunctionsWrapper.setup();
         batchRun(new String[]{
-                "C_TAEA",
-                "CMMO",
+                //"C_TAEA",
+                "CCMO",
                 "NSGAII_CDP",
                 "ISDEPLUS_CDP",
                 "NSGAIII_CDP",

@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.cmoeas.impl.cmmo;
+package opt.easyjmetal.algorithm.cmoeas.impl.ccmo;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
@@ -24,16 +24,22 @@ public class EnvironmentalSelection {
         this.solutionsToSelect = solutionsToSelect;
     }
 
-    public SolutionSet execute(SolutionSet source2) {
+    /**
+     * 根据适应度进行选择
+     * @param solutionSet
+     * @param ignoreConstraints  计算适应度时是否忽略约束
+     * @return
+     */
+    public SolutionSet execute(SolutionSet solutionSet, boolean ignoreConstraints) {
         // 计算适应度值
-        CMMO_Fitness.computeFitnessValue(source2);
+        CCMO_Fitness.computeFitnessValue(solutionSet, ignoreConstraints);
 
         int size;
-        List<Solution> source = new ArrayList<>(source2.size());
-        for (int i = 0; i < source2.size(); i++) {
-            source.add(source2.get(i));
+        List<Solution> source = new ArrayList<>(solutionSet.size());
+        for (int i = 0; i < solutionSet.size(); i++) {
+            source.add(solutionSet.get(i));
         }
-        if (source2.size() < this.solutionsToSelect) {
+        if (solutionSet.size() < this.solutionsToSelect) {
             size = source.size();
         } else {
             size = this.solutionsToSelect;
