@@ -47,7 +47,7 @@ public class Hypervolume {
         }
 
         return ((i >= noObjectives) && (betterInAnyObjective > 0));
-    } //Dominates
+    }
 
     void swap(double[][] front, int i, int j) {
         double[] temp;
@@ -89,7 +89,7 @@ public class Hypervolume {
             i++;
         }
         return n;
-    } // FilterNondominatedSet
+    }
 
 
     /* calculate next value regarding dimension 'objective'; consider
@@ -130,7 +130,7 @@ public class Hypervolume {
         }
 
         return n;
-    } // ReduceNondominatedSet
+    }
 
     public double calculateHypervolume(double[][] front, int noPoints, int noObjectives) {
         int n;
@@ -179,13 +179,15 @@ public class Hypervolume {
         /* copy points */
         noPoints = 0;
         for (i = 0; i < sizeFront1; i++) {
-            for (j = 0; j < noObjectives; j++)
+            for (j = 0; j < noObjectives; j++) {
                 frontPtr[noPoints][j] = front1[i][j];
+            }
             noPoints++;
         }
         for (i = 0; i < sizeFront2; i++) {
-            for (j = 0; j < noObjectives; j++)
+            for (j = 0; j < noObjectives; j++) {
                 frontPtr[noPoints][j] = front2[i][j];
+            }
             noPoints++;
         }
 
@@ -203,16 +205,15 @@ public class Hypervolume {
                               double[][] paretoTrueFront,
                               int numberOfObjectives) {
 
-        double[] maximumValues;
-        double[] minimumValues;
-        double[][] normalizedFront;
-        double[][] invertedFront;
+        // 计算pareto前沿上的最值
+        double[] maximumValues = utils_.getMaximumValues(paretoTrueFront, numberOfObjectives);
+        double[] minimumValues = utils_.getMinimumValues(paretoTrueFront, numberOfObjectives);
 
-        // 读取properties配置文件中的最大值和最小值
-        double[] customMaximumValues = new double[numberOfObjectives];
-        double[] customMinimumValues = new double[numberOfObjectives];
-        Properties properties = new Properties();
         try {
+            // 读取properties配置文件中的最大值和最小值
+            double[] customMaximumValues = new double[numberOfObjectives];
+            double[] customMinimumValues = new double[numberOfObjectives];
+            Properties properties = new Properties();
             InputStream inputStream = new FileInputStream(new File("data/min_max_objective.properties"));
             properties.load(inputStream);
             // 读取以下几个目标的最大值和最小值：energyCost, pipeMixingCost, tankMixingCost, numberOfChange, numberOfTankUsed
@@ -227,25 +228,21 @@ public class Hypervolume {
             customMaximumValues[2] = Double.parseDouble(properties.get("tankMixingCost").toString().split(",")[1]);
             customMaximumValues[3] = Double.parseDouble(properties.get("numberOfChange").toString().split(",")[1]);
             customMaximumValues[4] = Double.parseDouble(properties.get("numberOfTankUsed").toString().split(",")[1]);
+
+            // 1.将用户配置的最值和运行得到的最值进行合并，得到最终的最值
+            for (int i = 0; i < numberOfObjectives; i++) {
+                maximumValues[i] = Math.max(customMaximumValues[i], maximumValues[i]);
+                minimumValues[i] = Math.min(customMinimumValues[i], minimumValues[i]);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // 计算pareto前沿上的最值
-        maximumValues = utils_.getMaximumValues(paretoTrueFront, numberOfObjectives);
-        minimumValues = utils_.getMinimumValues(paretoTrueFront, numberOfObjectives);
-
-        // 1.将用户配置的最值和运行得到的最值进行合并，得到最终的最值
-        for (int i = 0; i < numberOfObjectives; i++) {
-            maximumValues[i] = Math.max(customMaximumValues[i], maximumValues[i]);
-            minimumValues[i] = Math.min(customMinimumValues[i], minimumValues[i]);
-        }
-
         // 2.标准化
-        normalizedFront = utils_.getNormalizedFront(paretoFront, maximumValues, minimumValues);
+        double[][] normalizedFront = utils_.getNormalizedFront(paretoFront, maximumValues, minimumValues);
 
         // 3.转换为最小化问题
-        invertedFront = utils_.invertedFront(normalizedFront);
+        double[][] invertedFront = utils_.invertedFront(normalizedFront);
 
         // 4.计算hv
         return this.calculateHypervolume(invertedFront, invertedFront.length, numberOfObjectives);
