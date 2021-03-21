@@ -1,27 +1,12 @@
-//  Hypervolume.java
-//
-//  Author:
-//       Antonio J. Nebro <antonio@lcc.uma.es>
-//       Juan J. Durillo <durillo@lcc.uma.es>
-//
-//  Copyright (c) 2011 Antonio J. Nebro, Juan J. Durillo
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU Lesser General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU Lesser General Public License for more details.
-// 
-//  You should have received a copy of the GNU Lesser General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 package opt.easyjmetal.qualityindicator;
 
 import opt.easyjmetal.qualityindicator.util.MetricsUtil;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 /**
  * This class implements the hypervolume indicator. The code is the a Java version
@@ -55,9 +40,11 @@ public class Hypervolume {
         int betterInAnyObjective;
 
         betterInAnyObjective = 0;
-        for (i = 0; i < noObjectives && point1[i] >= point2[i]; i++)
-            if (point1[i] > point2[i])
+        for (i = 0; i < noObjectives && point1[i] >= point2[i]; i++) {
+            if (point1[i] > point2[i]) {
                 betterInAnyObjective = 1;
+            }
+        }
 
         return ((i >= noObjectives) && (betterInAnyObjective > 0));
     } //Dominates
@@ -95,8 +82,9 @@ public class Hypervolume {
                     swap(front, i, n);
                     i--;
                     break;
-                } else
+                } else {
                     j++;
+                }
             }
             i++;
         }
@@ -110,14 +98,16 @@ public class Hypervolume {
         int i;
         double minValue, value;
 
-        if (noPoints < 1)
+        if (noPoints < 1) {
             System.err.println("run-time error");
+        }
 
         minValue = front[0][objective];
         for (i = 1; i < noPoints; i++) {
             value = front[i][objective];
-            if (value < minValue)
+            if (value < minValue) {
                 minValue = value;
+            }
         }
         return minValue;
     } // SurfaceUnchangedTo
@@ -132,11 +122,12 @@ public class Hypervolume {
         int i;
 
         n = noPoints;
-        for (i = 0; i < n; i++)
+        for (i = 0; i < n; i++) {
             if (front[i][objective] <= threshold) {
                 n--;
                 swap(front, i, n);
             }
+        }
 
         return n;
     } // ReduceNondominatedSet
@@ -155,14 +146,16 @@ public class Hypervolume {
             noNondominatedPoints = filterNondominatedSet(front, n, noObjectives - 1);
             //noNondominatedPoints = front.length;
             if (noObjectives < 3) {
-                if (noNondominatedPoints < 1)
+                if (noNondominatedPoints < 1) {
                     System.err.println("run-time error");
+                }
 
                 tempVolume = front[0][0];
-            } else
+            } else {
                 tempVolume = calculateHypervolume(front,
                         noNondominatedPoints,
                         noObjectives - 1);
+            }
 
             tempDistance = surfaceUnchangedTo(front, n, noObjectives - 1);
             volume += tempVolume * (tempDistance - distance);
@@ -200,8 +193,7 @@ public class Hypervolume {
     } // MergeFronts
 
     /**
-     * Returns the hypevolume value of the paretoFront. This method call to the
-     * calculate hipervolume one
+     * 计算超体积
      *
      * @param paretoFront        The pareto front
      * @param paretoTrueFront    The true pareto front
@@ -211,40 +203,53 @@ public class Hypervolume {
                               double[][] paretoTrueFront,
                               int numberOfObjectives) {
 
-        /**
-         * Stores the maximum values of true pareto front.
-         */
         double[] maximumValues;
-
-        /**
-         * Stores the minimum values of the true pareto front.
-         */
         double[] minimumValues;
-
-        /**
-         * Stores the normalized front.
-         */
         double[][] normalizedFront;
-
-        /**
-         * Stores the inverted front. Needed for minimization problems
-         */
         double[][] invertedFront;
 
-        // STEP 1. Obtain the maximum and minimum values of the Pareto front
+        // 读取properties配置文件中的最大值和最小值
+        double[] customMaximumValues = new double[numberOfObjectives];
+        double[] customMinimumValues = new double[numberOfObjectives];
+        Properties properties = new Properties();
+        try {
+            InputStream inputStream = new FileInputStream(new File("data/min_max_objective.properties"));
+            properties.load(inputStream);
+            // 读取以下几个目标的最大值和最小值：energyCost, pipeMixingCost, tankMixingCost, numberOfChange, numberOfTankUsed
+            customMinimumValues[0] = Double.parseDouble(properties.get("energyCost").toString().split(",")[0]);
+            customMinimumValues[1] = Double.parseDouble(properties.get("pipeMixingCost").toString().split(",")[0]);
+            customMinimumValues[2] = Double.parseDouble(properties.get("tankMixingCost").toString().split(",")[0]);
+            customMinimumValues[3] = Double.parseDouble(properties.get("numberOfChange").toString().split(",")[0]);
+            customMinimumValues[4] = Double.parseDouble(properties.get("numberOfTankUsed").toString().split(",")[0]);
+
+            customMaximumValues[0] = Double.parseDouble(properties.get("energyCost").toString().split(",")[1]);
+            customMaximumValues[1] = Double.parseDouble(properties.get("pipeMixingCost").toString().split(",")[1]);
+            customMaximumValues[2] = Double.parseDouble(properties.get("tankMixingCost").toString().split(",")[1]);
+            customMaximumValues[3] = Double.parseDouble(properties.get("numberOfChange").toString().split(",")[1]);
+            customMaximumValues[4] = Double.parseDouble(properties.get("numberOfTankUsed").toString().split(",")[1]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // 计算pareto前沿上的最值
         maximumValues = utils_.getMaximumValues(paretoTrueFront, numberOfObjectives);
         minimumValues = utils_.getMinimumValues(paretoTrueFront, numberOfObjectives);
 
-        // STEP 2. Get the normalized front
+        // 1.将用户配置的最值和运行得到的最值进行合并，得到最终的最值
+        for (int i = 0; i < numberOfObjectives; i++) {
+            maximumValues[i] = Math.max(customMaximumValues[i], maximumValues[i]);
+            minimumValues[i] = Math.min(customMinimumValues[i], minimumValues[i]);
+        }
+
+        // 2.标准化
         normalizedFront = utils_.getNormalizedFront(paretoFront, maximumValues, minimumValues);
 
-        // STEP 3. Inverse the pareto front. This is needed because of the original
-        //metric by Zitzler is for maximization problems
+        // 3.转换为最小化问题
         invertedFront = utils_.invertedFront(normalizedFront);
 
-        // STEP4. The hypervolumen (control is passed to java version of Zitzler code)
+        // 4.计算hv
         return this.calculateHypervolume(invertedFront, invertedFront.length, numberOfObjectives);
-    }// hypervolume
+    }
 
     /**
      * This class can be invoqued from the command line. Three params are required:

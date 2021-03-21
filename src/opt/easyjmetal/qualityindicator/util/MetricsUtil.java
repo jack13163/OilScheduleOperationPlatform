@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -38,7 +38,7 @@ public class MetricsUtil {
 
 	/**
 	 * This method reads a Pareto Front for a file.
-	 * 
+	 *
 	 * @param path
 	 *            The path to the file that contains the pareto front
 	 * @return double [][] whit the pareto front
@@ -85,7 +85,7 @@ public class MetricsUtil {
 
 	/**
 	 * Gets the maximum values for each objectives in a given pareto front
-	 * 
+	 *
 	 * @param front
 	 *            The pareto front
 	 * @param noObjectives
@@ -95,13 +95,15 @@ public class MetricsUtil {
 	 **/
 	public double[] getMaximumValues(double[][] front, int noObjectives) {
 		double[] maximumValue = new double[noObjectives];
-		for (int i = 0; i < noObjectives; i++)
+		for (int i = 0; i < noObjectives; i++) {
 			maximumValue[i] = Double.NEGATIVE_INFINITY;
+		}
 
 		for (double[] aFront : front) {
 			for (int j = 0; j < aFront.length; j++) {
-				if (aFront[j] > maximumValue[j])
+				if (aFront[j] > maximumValue[j]) {
 					maximumValue[j] = aFront[j];
+				}
 			}
 		}
 
@@ -110,7 +112,7 @@ public class MetricsUtil {
 
 	/**
 	 * Gets the minimum values for each objectives in a given pareto front
-	 * 
+	 *
 	 * @param front
 	 *            The pareto front
 	 * @param noObjectives
@@ -120,13 +122,15 @@ public class MetricsUtil {
 	 **/
 	public double[] getMinimumValues(double[][] front, int noObjectives) {
 		double[] minimumValue = new double[noObjectives];
-		for (int i = 0; i < noObjectives; i++)
+		for (int i = 0; i < noObjectives; i++) {
 			minimumValue[i] = Double.MAX_VALUE;
+		}
 
 		for (double[] aFront : front) {
 			for (int j = 0; j < aFront.length; j++) {
-				if (aFront[j] < minimumValue[j])
+				if (aFront[j] < minimumValue[j]) {
 					minimumValue[j] = aFront[j];
+				}
 			}
 		}
 		return minimumValue;
@@ -135,7 +139,7 @@ public class MetricsUtil {
 	/**
 	 * This method returns the distance (taken the euclidean distance) between
 	 * two points given as <code>double []</code>
-	 * 
+	 *
 	 * @param a
 	 *            A point
 	 * @param b
@@ -154,7 +158,7 @@ public class MetricsUtil {
 	/**
 	 * Gets the distance between a point and the nearest one in a given front
 	 * (the front is given as <code>double [][]</code>)
-	 * 
+	 *
 	 * @param point
 	 *            The point
 	 * @param front
@@ -178,7 +182,7 @@ public class MetricsUtil {
 	/**
 	 * Gets the distance between a point and the nearest one in a given front,
 	 * and this distance is greater than 0.0
-	 * 
+	 *
 	 * @param point
 	 *            The point
 	 * @param front
@@ -204,7 +208,7 @@ public class MetricsUtil {
 	 * This method receives a pareto front and two points, one whit maximum
 	 * values and the other with minimum values allowed, and returns a the
 	 * normalized Pareto front.
-	 * 
+	 *
 	 * @param front
 	 *            A pareto front.
 	 * @param maximumValue
@@ -231,7 +235,7 @@ public class MetricsUtil {
 	/**
 	 * This method receives a normalized pareto front and return the inverted
 	 * one. This operation needed for minimization problems
-	 * 
+	 *
 	 * @param front
 	 *            The pareto front to inverse
 	 * @return The inverted pareto front
@@ -256,7 +260,7 @@ public class MetricsUtil {
 
 	/**
 	 * Reads a set of non dominated solutions from a file
-	 * 
+	 *
 	 * @param path
 	 *            The path of the file containing the data
 	 * @return A solution set
@@ -297,7 +301,7 @@ public class MetricsUtil {
 
 	/**
 	 * Reads a set of non dominated solutions from a file
-	 * 
+	 *
 	 * @param path
 	 *            The path of the file containing the data
 	 * @return A solution set
@@ -338,7 +342,7 @@ public class MetricsUtil {
 	/**
 	 * Reads a set of non dominated solutions from a file and store it in a
 	 * existing non dominated solution set
-	 * 
+	 *
 	 * @param path
 	 *            The path of the file containing the data
 	 * @return A solution set
@@ -378,7 +382,7 @@ public class MetricsUtil {
 	 * Calculates how much hypervolume each point dominates exclusively. The
 	 * points have to be transformed beforehand, to accommodate the assumptions
 	 * of Zitzler's hypervolume code.
-	 * 
+	 *
 	 * @param front
 	 *            transformed objective values
 	 * @return HV contributions
@@ -412,7 +416,7 @@ public class MetricsUtil {
 	 * Calculates the hv contribution of different populations. Receives an
 	 * array of populations and computes the contribution to HV of the
 	 * population consisting in the union of all of them
-	 * 
+	 *
 	 * @param populations
 	 *            , consisting in all the populatoins
 	 * @return HV contributions of each population
@@ -437,16 +441,19 @@ public class MetricsUtil {
 		double offset_ = 0.0;
 
 		// determining the global size of the population
-		for (SolutionSet population1 : populations)
+		for (SolutionSet population1 : populations) {
 			size += population1.size();
+		}
 
 		// allocating space for the union
 		union = new SolutionSet(size);
 
 		// filling union
-		for (SolutionSet population : populations)
-			for (int j = 0; j < population.size(); j++)
+		for (SolutionSet population : populations) {
+			for (int j = 0; j < population.size(); j++) {
 				union.add(population.get(j));
+			}
+		}
 
 		// determining the number of objectives
 		int numberOfObjectives = union.get(0).getNumberOfObjectives();
@@ -508,9 +515,9 @@ public class MetricsUtil {
 		Hypervolume hypervolume = new Hypervolume();
 
 		for (int i = 0; i < populations.length; i++) {
-			if (invertedFront[i + 1].length == 0)
+			if (invertedFront[i + 1].length == 0) {
 				contribution[i] = 0;
-			else {
+			} else {
 				if (invertedFront[i + 1].length != invertedFront[0].length) {
 					double[][] aux = new double[invertedFront[0].length
 							- invertedFront[i + 1].length][];
@@ -533,8 +540,7 @@ public class MetricsUtil {
 					contribution[i] = hypervolume.calculateHypervolume(
 							invertedFront[0], invertedFront[0].length,
 							numberOfObjectives)
-							- hypervolume.calculateHypervolume(aux, aux.length,
-									numberOfObjectives);
+							- hypervolume.calculateHypervolume(aux, aux.length, numberOfObjectives);
 				} else {
 					contribution[i] = hypervolume.calculateHypervolume(
 							invertedFront[0], invertedFront[0].length,
@@ -554,7 +560,7 @@ public class MetricsUtil {
 	 * Calculates the hv contribution of different populations. Receives an
 	 * array of populations and computes the contribution to HV of the
 	 * population consisting in the union of all of them
-	 * 
+	 *
 	 * @param populations
 	 *            , consisting in all the populatoins
 	 * @return HV contributions of each population
@@ -567,8 +573,9 @@ public class MetricsUtil {
 		double offset_ = 0.0;
 
 		// determining the global size of the population
-		for (SolutionSet population : populations)
+		for (SolutionSet population : populations) {
 			size += population.size();
+		}
 
 		// allocating space for the union
 		union = archive;
@@ -633,18 +640,18 @@ public class MetricsUtil {
 		Hypervolume hypervolume = new Hypervolume();
 
 		for (int i = 0; i < populations.length; i++) {
-			if (invertedFront[i + 1].length == 0)
+			if (invertedFront[i + 1].length == 0) {
 				contribution[i] = 0;
-			else {
+			} else {
 
 				int auxSize = 0;
 				for (int j = 0; j < populations.length; j++) {
-					if (j != i)
+					if (j != i) {
 						auxSize += invertedFront[j + 1].length;
+					}
 				}
 
 				if (size == archive.size()) { // the contribution is the maximum
-												// hv
 					contribution[i] = hypervolume.calculateHypervolume(
 							invertedFront[0], invertedFront[0].length,
 							numberOfObjectives);
@@ -653,36 +660,37 @@ public class MetricsUtil {
 					int index = 0;
 					double[][] aux = new double[auxSize][];
 					for (int j = 0; j < populations.length; j++) {
-						if (j != i)
-							for (int k = 0; k < populations[j].size(); k++)
+						if (j != i) {
+							for (int k = 0; k < populations[j].size(); k++) {
 								aux[index++] = invertedFront[j + 1][k];
+							}
+						}
 					}
 					contribution[i] = hypervolume.calculateHypervolume(
 							invertedFront[0], invertedFront[0].length,
 							numberOfObjectives)
-							- hypervolume.calculateHypervolume(aux, aux.length,
-									numberOfObjectives);
+							- hypervolume.calculateHypervolume(aux, aux.length, numberOfObjectives);
 				}
 
 				/*
 				 * int size2 = 0; for (int j = 0; j < populations.length; j++)
 				 * size2+=invertedFront[j+1].length;
-				 * 
-				 * 
+				 *
+				 *
 				 * double [][] aux = new double[size2 -
 				 * invertedFront[i+1].length][]; int index = 0; for (int j = 0;
 				 * j < populations.length; j++) { if (j!=i) { for (int k = 0; k
 				 * < invertedFront[j+1].length; k++) aux[index++] =
 				 * invertedFront[j+1][k]; } }
-				 * 
+				 *
 				 * System.out.println(hypervolume.calculateHypervolume(invertedFront
 				 * [0], invertedFront[0].length, getNumberOfObjectives));
 				 * System.out.println(index+" "+aux.length);
 				 * System.out.println(hypervolume.calculateHypervolume(aux,
 				 * aux.length, getNumberOfObjectives));
-				 * 
-				 * 
-				 * 
+				 *
+				 *
+				 *
 				 * contribution[i] =
 				 * hypervolume.calculateHypervolume(invertedFront[0],
 				 * invertedFront[0].length, getNumberOfObjectives) -
