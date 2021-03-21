@@ -8,7 +8,19 @@ public class CMOEAs_analysis {
     public static void main(String[] args) {
         try {
             // "NSGAII_CDP", "ISDEPLUS_CDP", "NSGAIII_CDP", "SPEA2_CDP", "MOEAD_CDP", "MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "C_MOEAD", "PPS_MOEAD"
-            String[] algorithmNames = {"NSGAII_CDP", "ISDEPLUS_CDP", "NSGAIII_CDP", "MOEAD_CDP", "MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "C_MOEAD", "PPS_MOEAD"};
+            String[] algorithmNames = {
+                    "NSGAII_CDP",
+                    "ISDEPLUS_CDP",
+                    "NSGAIII_CDP",
+                    "MOEAD_CDP",
+                    "MOEAD_IEpsilon",
+                    "MOEAD_Epsilon",
+                    "MOEAD_SR",
+                    "C_MOEAD",
+                    "PPS_MOEAD",
+                    "C_TAEA",
+                    "CCMO"
+            };
             String[] problemNames = {"EDF_PS", "EDF_TSS"};
             String[] indicatorNames = {"HV", "IGD"};
             int runtimes = 10;
@@ -36,7 +48,7 @@ public class CMOEAs_analysis {
             wilcoxonSignedRankTest.run();
 
             // 计算不同策略C指标
-            CMetrics cMetrics = new CMetrics(problemNames, algorithmNames,runtimes, basePath);
+            CMetrics cMetrics = new CMetrics(problemNames, algorithmNames, runtimes, basePath);
             cMetrics.run();
         } catch (JMException e) {
             e.printStackTrace();

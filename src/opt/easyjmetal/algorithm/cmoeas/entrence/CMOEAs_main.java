@@ -18,12 +18,9 @@ import java.util.HashMap;
 public class CMOEAs_main {
 
     public static void main(String[] args) throws Exception {
-        // 0 represents for DE, 1 represents for SBX
         int crossoverMethod = 1;
         MatlabUtilityFunctionsWrapper.setup();
         batchRun(new String[]{
-                //"C_TAEA",
-                "CCMO",
                 "NSGAII_CDP",
                 "ISDEPLUS_CDP",
                 "NSGAIII_CDP",
@@ -32,8 +29,11 @@ public class CMOEAs_main {
                 "MOEAD_Epsilon",
                 "MOEAD_SR",
                 "C_MOEAD",
-                "PPS_MOEAD"
+                "PPS_MOEAD",
+                "C_TAEA",
+                "CCMO"
         }, crossoverMethod);
+        MatlabUtilityFunctionsWrapper.stop();
     }
 
     private static void batchRun(String[] methods, int crossMethod) throws Exception {

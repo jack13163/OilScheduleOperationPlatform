@@ -22,6 +22,12 @@ public class MatlabUtilityFunctionsWrapper {
         matlabutilityfunctionsInstance = new C_TAEA_UtilityFunctions();
     }
 
+    public static void stop() {
+        if(matlabutilityfunctionsInstance != null) {
+            matlabutilityfunctionsInstance.dispose();
+        }
+    }
+
     public interface MatlabFunction {
         Object[] invoke(int numberOfOutputs, MWNumericArray... args) throws MWException;
     }
