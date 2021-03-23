@@ -7,6 +7,7 @@ import opt.easyjmetal.algorithm.cmoeas.impl.nsgaiii_cdp.EnvironmentalSelection;
 import opt.easyjmetal.algorithm.common.ReferencePoint;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.*;
+import opt.easyjmetal.util.ranking.Ranking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.io.BufferedReader;

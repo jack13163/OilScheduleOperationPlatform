@@ -3,6 +3,7 @@ package opt.easyjmetal.algorithm.moeas.impl;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.*;
 import opt.easyjmetal.util.comparators.CrowdingComparator;
+import opt.easyjmetal.util.ranking.Ranking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 public class NSGAII extends Algorithm {

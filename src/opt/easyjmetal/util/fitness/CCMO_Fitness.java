@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.cmoeas.impl.ccmo;
+package opt.easyjmetal.util.fitness;
 
 import opt.easyjmetal.algorithm.common.MatlabUtilityFunctionsWrapper;
 import opt.easyjmetal.core.SolutionSet;

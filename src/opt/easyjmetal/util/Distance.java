@@ -33,13 +33,9 @@ import opt.easyjmetal.util.wrapper.XReal;
  */
 public class Distance {
 
-    /**
-     * Constructor.
-     */
     public Distance() {
-        //do nothing.
-    } // Distance
 
+    }
 
     /**
      * Returns a matrix with distances between solutions in a
@@ -190,7 +186,7 @@ public class Distance {
     }
 
     /**
-     * Assigns crowding distances to all solutions in a <code>SolutionSet</code>.
+     * ”µº∑æ‡¿Îº∆À„
      *
      * @param solutionSet The <code>SolutionSet</code>.
      * @param nObjs       Number of objectives.
@@ -205,14 +201,13 @@ public class Distance {
             solutionSet.get(0).setCrowdingDistance(Double.POSITIVE_INFINITY);
             return;
         }
-
         if (size == 2) {
             solutionSet.get(0).setCrowdingDistance(Double.POSITIVE_INFINITY);
             solutionSet.get(1).setCrowdingDistance(Double.POSITIVE_INFINITY);
             return;
         }
 
-        //Use a new SolutionSet to evite alter original solutionSet
+        // Use a new SolutionSet to evite alter original solutionSet
         SolutionSet front = new SolutionSet(size);
         for (int i = 0; i < size; i++) {
             front.add(solutionSet.get(i));
@@ -261,13 +256,11 @@ public class Distance {
             return;
         }
 
-        //Use a new SolutionSet to evite alter original solutionSet
+        // Use a new SolutionSet to evite alter original solutionSet
         SolutionSet front = new SolutionSet(size);
         for (int i = 0; i < size; i++) {
             front.add(solutionSet.get(i));
         }
-        //SolutionSet front = solutionSet;
-
         for (int i = 0; i < size; i++) {
             front.get(i).setCrowdingDistance(0.0);
         }
@@ -282,7 +275,7 @@ public class Distance {
             objetiveMinn = front.get(0).getObjective(i);
             objetiveMaxn = front.get(front.size() - 1).getObjective(i);
 
-            //Set de crowding distance
+            // Set de crowding distance
             front.get(0).setCrowdingDistance(Double.POSITIVE_INFINITY);
             front.get(size - 1).setCrowdingDistance(Double.POSITIVE_INFINITY);
 
@@ -339,8 +332,6 @@ public class Distance {
         for (int i = 0; i < size; i++) {
             front.add(solutionSet.get(i));
         }
-        //SolutionSet front = solutionSet;
-
         for (int i = 0; i < size; i++) {
             front.get(i).setCrowdingDistance(0.0);
         }

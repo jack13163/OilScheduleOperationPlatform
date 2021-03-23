@@ -6,7 +6,7 @@ import opt.easyjmetal.algorithm.common.ReferencePoint;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.Ranking;
+import opt.easyjmetal.util.ranking.Ranking;
 import opt.easyjmetal.util.comparators.FitnessComparator;
 import opt.easyjmetal.util.comparators.OverallConstraintViolationComparator;
 

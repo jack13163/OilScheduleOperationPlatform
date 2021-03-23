@@ -22,9 +22,9 @@ public class CMOEAs_analysis {
 //                    "C_TAEA",
 //                    "CCMO"
             };
-            String[] problemNames = {"EDF_PS", "EDF_TSS"};
+            String[] problemNames = {"EDF_PS"};//, "EDF_TSS"
             String[] indicatorNames = {"HV", "IGD"};
-            int runtimes = 3;
+            int runtimes = 2;
             String basePath = "result/easyjmetal/twopipeline/";
 
             // 生成pareto前沿面

@@ -6,6 +6,7 @@ import opt.easyjmetal.qualityindicator.Epsilon;
 import opt.easyjmetal.qualityindicator.Hypervolume;
 import opt.easyjmetal.qualityindicator.InvertedGenerationalDistance;
 import opt.easyjmetal.qualityindicator.Spread;
+import opt.easyjmetal.util.ranking.Ranking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 import org.apache.commons.io.FileUtils;
 

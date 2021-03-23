@@ -1,4 +1,4 @@
-package opt.easyjmetal.algorithm.cmoeas.impl.spea2_cdp;
+package opt.easyjmetal.util.fitness;
 
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.LinearNormalization;
@@ -39,4 +39,5 @@ public class ISDEPlus_Fitness {
             solutionSet.get(indexs[i]).setFitness(Math.exp(-minDistance));
         }
     }
+
 }

@@ -1,4 +1,4 @@
-package opt.easyjmetal.util;
+package opt.easyjmetal.util.ranking;
 
 /**
  * Created by lwj
@@ -16,22 +16,10 @@ import java.util.List;
 
 public class ENS_SS_Ranking {
 
-    /**
-     * The <code>SolutionSet</code> to rank
-     */
     private int[] rank_ ;
-
-    /**
-     * An array containing all the fronts found during the search
-     */
     private List<Integer>[] F_  ;
-
-
     private SolutionSet population_;
 
-    /**
-     * default constructor.
-     */
     public ENS_SS_Ranking(){
 
     }

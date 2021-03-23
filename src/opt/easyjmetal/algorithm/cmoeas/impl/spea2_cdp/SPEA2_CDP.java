@@ -1,11 +1,9 @@
 // SPEA2: Improving the Strength Pareto Evolutionary Algorithm For Multiobjective Optimization.
 package opt.easyjmetal.algorithm.cmoeas.impl.spea2_cdp;
 
-import opt.easyjmetal.algorithm.common.StrengthRawFitness;
-import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.*;
-import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
+import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 public class SPEA2_CDP extends Algorithm {
@@ -19,17 +17,8 @@ public class SPEA2_CDP extends Algorithm {
     private int maxEvaluations_;
     private String dataDirectory_;
 
-    Distance distance;
-
-    private SolutionSet archive;// 档案集
-    private StrengthRawFitness strenghtRawFitness = new StrengthRawFitness();
-    private EnvironmentalSelection environmentalSelection;
-    private int k;
-
     @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
-
-        distance = new Distance();// 计算距离
         int runningTime = (Integer) getInputParameter("runningTime") + 1;
 
         //Read the parameters

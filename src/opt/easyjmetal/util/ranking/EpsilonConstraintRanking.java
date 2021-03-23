@@ -15,14 +15,15 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util;
+package opt.easyjmetal.util.ranking;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.GridDominanceComparator;
+import opt.easyjmetal.util.comparators.EpsilonConstraintViolationComparator;
+import opt.easyjmetal.util.comparators.ObjectiveDominanceComparator;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -30,25 +31,20 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * This class implements some facilities for ranking solutions.
+ * This class implements some facilities for ranking solutions. Given a
+ * <code>SolutionSet</code> object, their solutions are ranked according to
+ * scheme proposed in NSGA-II; as a result, a set of subsets are obtained. The
+ * subsets are numbered starting from 0 (in NSGA-II, the numbering starts from
+ * 1); thus, subset 0 contains the non-dominated solutions, subset 1 contains
+ * the non-dominated solutions after removing those belonging to subset 0, and
+ * so on.
  */
-public class GridRanking {
+public class EpsilonConstraintRanking {
 
-	/**
-	 * The <code>SolutionSet</code> to rank
-	 */
 	private SolutionSet solutionSet_;
-
-	/**
-	 * An array containing all the fronts found during the search
-	 */
 	private SolutionSet[] ranking_;
-
-	/**
-	 * stores a <code>Comparator</code> for dominance checking
-	 */
-	private  Comparator dominance_ ;
-
+	private static final Comparator dominance_ = new ObjectiveDominanceComparator();
+	private Comparator constraint_;
 
 	/**
 	 * Constructor.
@@ -56,11 +52,9 @@ public class GridRanking {
 	 * @param solutionSet
 	 *            The <code>SolutionSet</code> to be ranked.
 	 */
-	public GridRanking(SolutionSet solutionSet, double[] ub, double[] lb, double divide) {
-        dominance_ = new GridDominanceComparator(ub,lb,divide);
-
-
+	public EpsilonConstraintRanking(SolutionSet solutionSet, double epsilon) {
 		solutionSet_ = solutionSet;
+		constraint_ = new EpsilonConstraintViolationComparator(epsilon);
 
 		// dominateMe[i] contains the number of solutions dominating i
 		int[] dominateMe = new int[solutionSet_.size()];
@@ -88,10 +82,10 @@ public class GridRanking {
 		 * =constraint_.compare(solutionSet.get(p),solutionSet.get(q)); if
 		 * (flagDominate == 0) { flagDominate
 		 * =dominance_.compare(solutionSet.get(p),solutionSet.get(q)); }
-		 * 
+		 *
 		 * if (flagDominate == -1) { iDominate[p].add(new Integer(q)); } else if
 		 * (flagDominate == 1) { dominateMe[p]++; } }
-		 * 
+		 *
 		 * // If nobody dominates p, p belongs to the first front if
 		 * (dominateMe[p] == 0) { front[0].add(new Integer(p));
 		 * solutionSet.get(p).setRank(0); } }
@@ -108,7 +102,8 @@ public class GridRanking {
 		for (int p = 0; p < (solutionSet_.size() - 1); p++) {
 			// For all q individuals , calculate if p dominates q or vice versa
 			for (int q = p + 1; q < solutionSet_.size(); q++) {
-				flagDominate = 0;
+				flagDominate = constraint_.compare(solutionSet.get(p),
+						solutionSet.get(q));
 				if (flagDominate == 0) {
 					flagDominate = dominance_.compare(solutionSet.get(p),
 							solutionSet.get(q));
@@ -165,7 +160,7 @@ public class GridRanking {
 	/**
 	 * Returns a <code>SolutionSet</code> containing the solutions of a given
 	 * rank.
-	 * 
+	 *
 	 * @param rank
 	 *            The rank
 	 * @return Object representing the <code>SolutionSet</code>.

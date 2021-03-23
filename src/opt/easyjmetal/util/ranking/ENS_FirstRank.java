@@ -1,4 +1,4 @@
-package opt.easyjmetal.util;
+package opt.easyjmetal.util.ranking;
 
 /**
  * Created by lwj

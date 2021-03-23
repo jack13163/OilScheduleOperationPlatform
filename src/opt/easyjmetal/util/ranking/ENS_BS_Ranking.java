@@ -1,4 +1,4 @@
-package opt.easyjmetal.util;
+package opt.easyjmetal.util.ranking;
 
 /**
  * Created by lwj
@@ -16,24 +16,11 @@ import java.util.List;
 
 public class ENS_BS_Ranking {
 
-    /**
-     * The <code>SolutionSet</code> to rank
-     */
     private int[] rank_ ;
-
-    /**
-     * An array containing all the fronts found during the search
-     */
     private List<Integer>[] F_  ;
-
-
     private SolutionSet population_;
 
-    /**
-     * default constructor.
-     */
     public ENS_BS_Ranking(){
-
     }
 
     public ENS_BS_Ranking(SolutionSet pop) {
@@ -108,7 +95,7 @@ public class ENS_BS_Ranking {
             result.add(new Solution(population_.get(F_[rank].get(i))));
         }
         return result;
-    } // getSubfront
+    }
 
     private int[] sort_rows(SolutionSet Population){
 
@@ -141,17 +128,16 @@ public class ENS_BS_Ranking {
     }
 
     private int compare_solutions(Solution s1, Solution s2, int ind){
-        if(ind >= s1.getNumberOfObjectives())
+        if(ind >= s1.getNumberOfObjectives()) {
             return 0;
-        else{
-            if(s1.getObjective(ind) > s2.getObjective(ind))
+        } else{
+            if(s1.getObjective(ind) > s2.getObjective(ind)) {
                 return -1;
-            else if (s1.getObjective(ind) < s2.getObjective(ind))
+            } else if (s1.getObjective(ind) < s2.getObjective(ind)) {
                 return 1;
-            else return compare_solutions(s1,s2,ind + 1);
+            } else {
+                return compare_solutions(s1,s2,ind + 1);
+            }
         }
     }
-
-
-
 }

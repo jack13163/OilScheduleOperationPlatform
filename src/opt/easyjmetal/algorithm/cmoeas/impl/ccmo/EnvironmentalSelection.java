@@ -4,6 +4,7 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.comparators.FitnessComparator;
+import opt.easyjmetal.util.fitness.CCMO_Fitness;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;

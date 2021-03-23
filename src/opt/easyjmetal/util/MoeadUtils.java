@@ -26,6 +26,8 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.core.Variable;
 import opt.easyjmetal.util.comparators.CrowdingComparator;
+import opt.easyjmetal.util.ranking.ENS_FirstRank;
+import opt.easyjmetal.util.ranking.Ranking;
 
 /**
  * Utilities methods to used by MOEA/D

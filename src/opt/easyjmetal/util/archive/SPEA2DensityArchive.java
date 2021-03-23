@@ -22,7 +22,7 @@
 package opt.easyjmetal.util.archive;
 
 import opt.easyjmetal.core.Solution;
-import opt.easyjmetal.util.Spea2Fitness;
+import opt.easyjmetal.util.fitness.Spea2Fitness;
 import opt.easyjmetal.util.comparators.DominanceComparator;
 import opt.easyjmetal.util.comparators.EqualSolutionsComparator;
 import opt.easyjmetal.util.comparators.FitnessComparator;

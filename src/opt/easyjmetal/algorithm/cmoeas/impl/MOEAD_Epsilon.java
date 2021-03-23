@@ -22,31 +22,11 @@ import java.util.Vector;
 public class MOEAD_Epsilon extends Algorithm {
 
     private int populationSize_;
-    /**
-     * Stores the population
-     */
     private SolutionSet population_;
-    /**
-     * Z vector (ideal point)
-     */
     private double[] z_;
-    /**
-     * Lambda vectors
-     */
-    //Vector<Vector<Double>> lambda_ ;
     private double[][] lambda_;
-    /**
-     * T: neighbour size
-     */
     private int T_;
-    /**
-     * Neighborhood
-     */
     private int[][] neighborhood_;
-
-    /**
-     * nr: maximal number of solutions replaced by each child solution
-     */
     private int nr_;
     private String functionType_;
     private int evaluations_;
@@ -143,19 +123,17 @@ public class MOEAD_Epsilon extends Algorithm {
             MoeadUtils.randomPermutation(permutation, populationSize_);
 
             for (int i = 0; i < populationSize_; i++) {
-                int n = permutation[i]; // or int n = i;
-                //int n = i ; // or int n = i;
+                int n = permutation[i];
                 int type;
                 double rnd = PseudoRandom.randDouble();
 
                 // STEP 2.1. Mating selection based on probability
-                if (rnd < delta_) // if (rnd < realb)
-                {
-                    type = 1;   // neighborhood
+                if (rnd < delta_) {
+                    type = 1;
                 } else {
-                    type = 2;   // whole population
+                    type = 2;
                 }
-                Vector<Integer> p = new Vector<Integer>();
+                Vector<Integer> p = new Vector<>();
                 matingSelection(p, n, 2, type);
 
                 // STEP 2.2. Reproduction
@@ -187,15 +165,12 @@ public class MOEAD_Epsilon extends Algorithm {
                 problem_.evaluateConstraints(child);
                 evaluations_++;
 
-                // STEP 2.3. Repair. Not necessary
-
                 // STEP 2.4. Update z_
                 updateReference(child);
 
                 // STEP 2.5. Update of solutions
                 updateProblem(child, n, type);
-                //updateProblem_new(child, n, type);
-            } // for
+            }
 
             // Update the external archive
             MoeadUtils.updateExternalArchive(population_, populationSize_, external_archive_);
@@ -237,13 +212,10 @@ public class MOEAD_Epsilon extends Algorithm {
                 double a = 1.0 * n / (populationSize_ - 1);
                 lambda_[n][0] = a;
                 lambda_[n][1] = 1 - a;
-            } // for
-        } // if
-        else {
+            }
+        } else {
             String dataFileName;
-            dataFileName = "W" + problem_.getNumberOfObjectives() + "D_" +
-                    populationSize_ + ".dat";
-
+            dataFileName = "W" + problem_.getNumberOfObjectives() + "D_" + populationSize_ + ".dat";
             try {
                 // Open the file
                 FileInputStream fis = new FileInputStream(weightDirectory_ + dataFileName);
@@ -258,7 +230,6 @@ public class MOEAD_Epsilon extends Algorithm {
                     while (st.hasMoreTokens()) {
                         double value = new Double(st.nextToken());
                         lambda_[i][j] = value;
-                        //System.out.println("lambda["+i+","+j+"] = " + value) ;
                         j++;
                     }
                     aux = br.readLine();
@@ -272,9 +243,6 @@ public class MOEAD_Epsilon extends Algorithm {
         }
     }
 
-    /**
-     *
-     */
     private void initNeighborhood() {
         double[] x = new double[populationSize_];
         int[] idx = new int[populationSize_];
@@ -284,17 +252,14 @@ public class MOEAD_Epsilon extends Algorithm {
             for (int j = 0; j < populationSize_; j++) {
                 x[j] = MoeadUtils.distVector(lambda_[i], lambda_[j]);
                 idx[j] = j;
-            } // for
+            }
 
             // find 'niche' nearest neighboring subproblems
             MoeadUtils.minFastSort(x, idx, populationSize_, T_);
             System.arraycopy(idx, 0, neighborhood_[i], 0, T_);
-        } // for
-    } // initNeighborhood
+        }
+    }
 
-    /**
-     *
-     */
     private void initPopulation() throws JMException, ClassNotFoundException {
         for (int i = 0; i < populationSize_; i++) {
             Solution newSolution = new Solution(problem_);
@@ -302,21 +267,18 @@ public class MOEAD_Epsilon extends Algorithm {
             problem_.evaluateConstraints(newSolution);
             evaluations_++;
             population_.add(newSolution);
-        } // for
-    } // initPopulation
+        }
+    }
 
-    /**
-     *
-     */
     private void initIdealPoint() throws JMException, ClassNotFoundException {
         for (int i = 0; i < problem_.getNumberOfObjectives(); i++) {
             z_[i] = 1.0e+30;
-        } // for
+        }
 
         for (int i = 0; i < populationSize_; i++) {
             updateReference(population_.get(i));
-        } // for
-    } // initIdealPoint
+        }
+    }
 
     private void matingSelection(Vector<Integer> list, int cid, int size, int type) {
         // list : the set of the indexes of selected mating parents
@@ -332,25 +294,22 @@ public class MOEAD_Epsilon extends Algorithm {
             if (type == 1) {
                 r = PseudoRandom.randInt(0, ss - 1);
                 p = neighborhood_[cid][r];
-                //p = population[cid].table[r];
             } else {
                 p = PseudoRandom.randInt(0, populationSize_ - 1);
             }
             boolean flag = true;
             for (Integer aList : list) {
-                if (aList == p) // p is in the list
-                {
+                if (aList == p) {
                     flag = false;
                     break;
                 }
             }
 
-            //if (flag) list.push_back(p);
             if (flag) {
                 list.addElement(p);
             }
         }
-    } // matingSelection
+    }
 
     private void updateReference(Solution individual) {
         for (int n = 0; n < problem_.getNumberOfObjectives(); n++) {
@@ -358,7 +317,7 @@ public class MOEAD_Epsilon extends Algorithm {
                 z_[n] = individual.getObjective(n);
             }
         }
-    } // updateReference
+    }
 
     private void updateProblem(Solution indiv, int id, int type) {
         // indiv: child solution
@@ -412,7 +371,7 @@ public class MOEAD_Epsilon extends Algorithm {
             }
 
         }
-    } // updateProblem
+    }
 
     // ¼ÆËãÊÊÓ¦¶È
     private double fitnessFunction(Solution individual, double[] lambda) {
@@ -434,7 +393,7 @@ public class MOEAD_Epsilon extends Algorithm {
                 if (feval > maxFun) {
                     maxFun = feval;
                 }
-            } // for
+            }
 
             fitness = maxFun;
         } else if (functionType_.equals("_TCHE2")) {
@@ -452,16 +411,17 @@ public class MOEAD_Epsilon extends Algorithm {
                 if (feval > maxFun) {
                     maxFun = feval;
                 }
-            } // for
+            }
             fitness = maxFun;
         } else if (functionType_.equals("_PBI")) {
-            double theta; // penalty parameter
+            double theta;
             theta = 5.0;
 
             // normalize the weight vector (line segment)
             double nd = MoeadUtils.norm_vector(lambda, problem_.getNumberOfObjectives());
-            for (int i = 0; i < problem_.getNumberOfObjectives(); i++)
+            for (int i = 0; i < problem_.getNumberOfObjectives(); i++) {
                 lambda[i] = lambda[i] / nd;
+            }
 
             double[] realA = new double[problem_.getNumberOfObjectives()];
             double[] realB = new double[problem_.getNumberOfObjectives()];
@@ -484,5 +444,5 @@ public class MOEAD_Epsilon extends Algorithm {
             System.exit(-1);
         }
         return fitness;
-    } // fitnessEvaluation
+    }
 }

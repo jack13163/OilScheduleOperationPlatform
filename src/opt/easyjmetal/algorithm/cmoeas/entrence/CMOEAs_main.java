@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.HashMap;
 
-
 public class CMOEAs_main {
 
     public static void main(String[] args) throws Exception {
@@ -22,7 +21,7 @@ public class CMOEAs_main {
         MatlabUtilityFunctionsWrapper.setup();
         batchRun(new String[]{
                 "NSGAII_CDP_ISDEPlus",
-//                "NSGAII_CDP",
+                "NSGAII_CDP",
 //                "ISDEPLUS_CDP",
 //                "NSGAIII_CDP",
 //                "MOEAD_CDP",
@@ -72,7 +71,7 @@ public class CMOEAs_main {
         HashMap parameters;
 
         int popSize = 100;
-        int maxFES = 50000;
+        int maxFES = 10000;
         int updateNumber = 2;
         int neighborSize = (int) (0.1 * popSize);
         double deDelta = 0.9;
@@ -86,7 +85,7 @@ public class CMOEAs_main {
         // 权重文件路径
         String weightPath = "resources/MOEAD_Weights/";
         // 迭代次数
-        int runtime = 3;
+        int runtime = 2;
         // 是否显示详细调度
         Boolean isDisplay = false;
         // 0: population; 1: external archive
@@ -96,7 +95,7 @@ public class CMOEAs_main {
 
         // 算法需要传入两个参数，一个是编码方式，另一个是xml配置文件所在的路径
         Object[] params = {"Real", "data/configs/config1.xml"};
-        String[] problemStrings = {"EDFPS", "EDFTSS"};
+        String[] problemStrings = {"EDFPS"};//, "EDFTSS"
 
         for (int i = 0; i < problemStrings.length; i++) {
             // 问题

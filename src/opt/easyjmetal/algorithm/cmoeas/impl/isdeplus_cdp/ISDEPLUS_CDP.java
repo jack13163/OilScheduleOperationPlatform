@@ -5,7 +5,7 @@ import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.Ranking;
+import opt.easyjmetal.util.ranking.Ranking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.util.ArrayList;

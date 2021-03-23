@@ -15,11 +15,11 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util;
+package opt.easyjmetal.util.ranking;
 
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.comparators.DominanceComparator_M_Add_One;
@@ -39,19 +39,8 @@ import java.util.List;
  */
 public class Ranking_M_Add_One {
 
-    /**
-     * The <code>SolutionSet</code> to rank
-     */
     private SolutionSet solutionSet_;
-
-    /**
-     * An array containing all the fronts found during the search
-     */
     private SolutionSet[] ranking_;
-
-    /**
-     * stores a <code>Comparator</code> for dominance checking
-     */
     private static final Comparator dominance_ = new DominanceComparator_M_Add_One();
 
     /**
@@ -62,8 +51,6 @@ public class Ranking_M_Add_One {
     public  Ranking_M_Add_One(SolutionSet solutionSet) {
         solutionSet_ = solutionSet;
     }
-
-
 
     public List<Integer> GetNondominatedIndexes() {
 
@@ -90,10 +77,10 @@ public class Ranking_M_Add_One {
 		 * =constraint_.compare(solutionSet.get(p),solutionSet.get(q)); if
 		 * (flagDominate == 0) { flagDominate
 		 * =dominance_.compare(solutionSet.get(p),solutionSet.get(q)); }
-		 * 
+		 *
 		 * if (flagDominate == -1) { iDominate[p].add(new Integer(q)); } else if
 		 * (flagDominate == 1) { dominateMe[p]++; } }
-		 * 
+		 *
 		 * // If nobody dominates p, p belongs to the first front if
 		 * (dominateMe[p] == 0) { front[0].add(new Integer(p));
 		 * solutionSet.get(p).setRank(0); } }
