@@ -9,21 +9,22 @@ public class CMOEAs_analysis {
         try {
             // "NSGAII_CDP", "ISDEPLUS_CDP", "NSGAIII_CDP", "SPEA2_CDP", "MOEAD_CDP", "MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "C_MOEAD", "PPS_MOEAD"
             String[] algorithmNames = {
+                    "NSGAII_CDP_ISDEPlus",
                     "NSGAII_CDP",
-                    "ISDEPLUS_CDP",
-                    "NSGAIII_CDP",
-                    "MOEAD_CDP",
-                    "MOEAD_IEpsilon",
-                    "MOEAD_Epsilon",
-                    "MOEAD_SR",
-                    "C_MOEAD",
-                    "PPS_MOEAD",
-                    "C_TAEA",
-                    "CCMO"
+//                    "ISDEPLUS_CDP",
+//                    "NSGAIII_CDP",
+//                    "MOEAD_CDP",
+//                    "MOEAD_IEpsilon",
+//                    "MOEAD_Epsilon",
+//                    "MOEAD_SR",
+//                    "C_MOEAD",
+//                    "PPS_MOEAD",
+//                    "C_TAEA",
+//                    "CCMO"
             };
             String[] problemNames = {"EDF_PS", "EDF_TSS"};
             String[] indicatorNames = {"HV", "IGD"};
-            int runtimes = 10;
+            int runtimes = 3;
             String basePath = "result/easyjmetal/twopipeline/";
 
             // 生成pareto前沿面

@@ -2,14 +2,14 @@
 //  multiobjective genetic algorithm: NSGA-II,¡± IEEE Transactions on
 //  Evolutionary Computation, vol. 6, no. 2, pp. 182¨C197, Apr 2002.
 
-package opt.easyjmetal.algorithm.cmoeas.impl;
+package opt.easyjmetal.algorithm.cmoeas.impl.modefy;
 
-import opt.easyjmetal.util.MoeadUtils;
+import opt.easyjmetal.algorithm.cmoeas.impl.spea2_cdp.ISDEPlus_Fitness;
 import opt.easyjmetal.core.*;
-import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
+import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.util.Ranking;
-import opt.easyjmetal.util.comparators.CrowdingComparator;
+import opt.easyjmetal.util.comparators.FitnessComparator;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 
@@ -23,9 +23,9 @@ import opt.easyjmetal.util.sqlite.SqlUtils;
  * To be presented in: PPSN'08. Dortmund. September 2008.
  */
 
-public class NSGAII_CDP extends Algorithm {
+public class NSGAII_CDP_ISDEPlus extends Algorithm {
 
-    public NSGAII_CDP(Problem problem) {
+    public NSGAII_CDP_ISDEPlus(Problem problem) {
         super(problem);
     }
     private SolutionSet population_;
@@ -43,18 +43,11 @@ public class NSGAII_CDP extends Algorithm {
     public SolutionSet execute() throws JMException, ClassNotFoundException {
 
         int runningTime = (Integer) getInputParameter("runningTime") + 1;
-        Distance distance = new Distance();
-
-        //Read the parameters
         int populationSize_ = (Integer) getInputParameter("populationSize");
         int maxEvaluations_ = (Integer) getInputParameter("maxEvaluations");
         dataDirectory_ = getInputParameter("dataDirectory").toString();
-
-        //Initialize the variables
         population_ = new SolutionSet(populationSize_);
         int evaluations_ = 0;
-
-        //Read the operators
         Operator mutationOperator_ = operators_.get("mutation");
         Operator crossoverOperator_ = operators_.get("crossover");
         Operator selectionOperator_ = operators_.get("selection");
@@ -68,7 +61,6 @@ public class NSGAII_CDP extends Algorithm {
             evaluations_++;
             population_.add(newSolution);
         }
-
         SolutionSet allPop = population_;
 
         // Initialize the external archive
@@ -77,13 +69,11 @@ public class NSGAII_CDP extends Algorithm {
 
         //creat database
         String dbName = dataDirectory_;
-        String tableName = "NSGAII_CDP_" + runningTime;
+        String tableName = "NSGAII_CDP_ISDEPlus_" + runningTime;
         SqlUtils.CreateTable(tableName, dbName);
 
         int gen = 0;
-        // Generations
         while (evaluations_ < maxEvaluations_) {
-
             // Create the offSpring solutionSet
             SolutionSet offspringPopulation_ = new SolutionSet(populationSize_);
             for (int i = 0; i < (populationSize_ / 2); i++) {
@@ -106,7 +96,6 @@ public class NSGAII_CDP extends Algorithm {
                     offSpring[1] = (Solution) crossoverOperator_.execute(new Object[]{parents[1], parents});
                 } else {
                     System.out.println("unknown crossover");
-
                 }
                 mutationOperator_.execute(offSpring[0]);
                 mutationOperator_.execute(offSpring[1]);
@@ -119,10 +108,8 @@ public class NSGAII_CDP extends Algorithm {
                 evaluations_ += 2;
             }
 
-            // Create the solutionSet union of solutionSet and offSpring
-            SolutionSet union_ = population_.union(offspringPopulation_);
-
             // Ranking the union
+            SolutionSet union_ = population_.union(offspringPopulation_);
             Ranking ranking = new Ranking(union_);
 
             int remain = populationSize_;
@@ -132,19 +119,15 @@ public class NSGAII_CDP extends Algorithm {
 
             // Obtain the next front
             front = ranking.getSubfront(index);
-
             while ((remain > 0) && (remain >= front.size())) {
-                // Assign crowding distance to individuals
-                distance.crowdingDistanceAssignment(front, problem_.getNumberOfObjectives());
+                ISDEPlus_Fitness.computeFitnessValue(front);
+                front.sort(new FitnessComparator());
                 // Add the individuals of this front
                 for (int k = 0; k < front.size(); k++) {
                     population_.add(front.get(k));
                 }
 
-                // Decrement remain
                 remain = remain - front.size();
-
-                // Obtain the next front
                 index++;
                 if (remain > 0) {
                     front = ranking.getSubfront(index);
@@ -153,8 +136,8 @@ public class NSGAII_CDP extends Algorithm {
 
             // Remain is less than front(index).size, insert only the best one
             if (remain > 0) {
-                distance.crowdingDistanceAssignment(front, problem_.getNumberOfObjectives());
-                front.sort(new CrowdingComparator());
+                ISDEPlus_Fitness.computeFitnessValue(front);
+                front.sort(new FitnessComparator());
                 for (int k = 0; k < remain; k++) {
                     population_.add(front.get(k));
                 }

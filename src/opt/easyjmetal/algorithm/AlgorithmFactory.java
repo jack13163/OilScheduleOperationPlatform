@@ -45,6 +45,9 @@ public class AlgorithmFactory {
                 || name.equalsIgnoreCase("SPEA2")
                 || name.equalsIgnoreCase("NSGAIII")) {
             base += "moeas.impl.";
+        } else if (name.startsWith("NSGAII_CDP_")){
+            // 改进算法所在的位置
+            base += "cmoeas.impl.modefy.";
         }
 
         try {

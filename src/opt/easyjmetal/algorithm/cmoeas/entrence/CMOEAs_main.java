@@ -21,17 +21,18 @@ public class CMOEAs_main {
         int crossoverMethod = 1;
         MatlabUtilityFunctionsWrapper.setup();
         batchRun(new String[]{
-                "NSGAII_CDP",
-                "ISDEPLUS_CDP",
-                "NSGAIII_CDP",
-                "MOEAD_CDP",
-                "MOEAD_IEpsilon",
-                "MOEAD_Epsilon",
-                "MOEAD_SR",
-                "C_MOEAD",
-                "PPS_MOEAD",
-                "C_TAEA",
-                "CCMO"
+                "NSGAII_CDP_ISDEPlus",
+//                "NSGAII_CDP",
+//                "ISDEPLUS_CDP",
+//                "NSGAIII_CDP",
+//                "MOEAD_CDP",
+//                "MOEAD_IEpsilon",
+//                "MOEAD_Epsilon",
+//                "MOEAD_SR",
+//                "C_MOEAD",
+//                "PPS_MOEAD",
+//                "C_TAEA",
+//                "CCMO"
         }, crossoverMethod);
         MatlabUtilityFunctionsWrapper.stop();
     }
@@ -85,7 +86,7 @@ public class CMOEAs_main {
         // 权重文件路径
         String weightPath = "resources/MOEAD_Weights/";
         // 迭代次数
-        int runtime = 10;
+        int runtime = 3;
         // 是否显示详细调度
         Boolean isDisplay = false;
         // 0: population; 1: external archive
