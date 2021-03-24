@@ -5,7 +5,7 @@ import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.*;
 import opt.easyjmetal.util.comparators.one.FitnessComparator;
 import opt.easyjmetal.util.fitness.ISDEPlus_Fitness;
-import opt.easyjmetal.util.ranking.Ranking;
+import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.util.ArrayList;
@@ -131,7 +131,7 @@ public class ISDEPlus extends Algorithm {
         SolutionSet jointPopulation = population.union(offspringPopulation);
 
         // 非支配排序
-        Ranking ranking = new Ranking(jointPopulation);
+        CDPRanking ranking = new CDPRanking(jointPopulation);
 
         // 逐层选择
         SolutionSet pop = new SolutionSet(populationSize_);

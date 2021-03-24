@@ -7,7 +7,7 @@ import opt.easyjmetal.algorithm.cmoeas.impl.nsgaiii_cdp.EnvironmentalSelection;
 import opt.easyjmetal.algorithm.common.ReferencePoint;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.*;
-import opt.easyjmetal.util.ranking.Ranking;
+import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.io.BufferedReader;
@@ -183,8 +183,8 @@ public class NSGAIII extends Algorithm {
         // Create the solutionSet union of solutionSet and offSpring
         SolutionSet jointPopulation = population_.union(offspringPopulation);
 
-        // Ranking the union
-        Ranking ranking = new Ranking(jointPopulation);
+        // CDPRanking the union
+        CDPRanking ranking = new CDPRanking(jointPopulation);
 
         // List<Solution> pop = crowdingDistanceSelection(ranking);
         SolutionSet pop = new SolutionSet(populationSize_);

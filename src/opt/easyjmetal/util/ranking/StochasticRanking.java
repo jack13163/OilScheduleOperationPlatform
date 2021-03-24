@@ -1,4 +1,4 @@
-//  Ranking.java
+//  CDPRanking.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>

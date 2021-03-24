@@ -1,4 +1,4 @@
-//  Ranking.java
+//  CDPRanking.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,12 +19,15 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.ranking;
+package opt.easyjmetal.util.ranking.impl;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.two.DominanceComparator_M_Add_One;
+import opt.easyjmetal.util.comparators.one.EpsilonConstraintViolationComparator;
+import opt.easyjmetal.util.comparators.one.ObjectiveDominanceComparator;
+import opt.easyjmetal.util.ranking.AbstractRanking;
 
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,23 +40,25 @@ import java.util.List;
  * the non-dominated solutions after removing those belonging to subset 0, and
  * so on.
  */
-public class Ranking_M_Add_One {
+public class EpsilonConstraintRanking extends AbstractRanking {
 
-    private SolutionSet solutionSet_;
-    private SolutionSet[] ranking_;
-    private static final Comparator dominance_ = new DominanceComparator_M_Add_One();
+    private double epsilon;
+    private Comparator constraint_;
 
     /**
      * Constructor.
      *
      * @param solutionSet The <code>SolutionSet</code> to be ranked.
      */
-    public  Ranking_M_Add_One(SolutionSet solutionSet) {
-        solutionSet_ = solutionSet;
+    public EpsilonConstraintRanking(SolutionSet solutionSet, double epsilon) {
+        super(solutionSet);
+        this.epsilon = epsilon;
+        dominance_ = new ObjectiveDominanceComparator();
+        constraint_ = new EpsilonConstraintViolationComparator(epsilon);
     }
 
-    public List<Integer> GetNondominatedIndexes() {
-
+    @Override
+    public void ranking() {
         // dominateMe[i] contains the number of solutions dominating i
         int[] dominateMe = new int[solutionSet_.size()];
 
@@ -61,29 +66,14 @@ public class Ranking_M_Add_One {
         List<Integer>[] iDominate = new List[solutionSet_.size()];
 
         // front[i] contains the list of individuals belonging to the front i
-        List<Integer> firstFront = new LinkedList<Integer>();
+        List<Integer>[] front = new List[solutionSet_.size() + 1];
 
         // flagDominate is an auxiliar encodings.variable
         int flagDominate;
 
-        /*
-         * //-> Fast non dominated sorting algorithm for (int p = 0; p <
-		 * solutionSet_.size(); p++) { // Initialice the list of individuals
-		 * that i dominate and the number // of individuals that dominate me
-		 * iDominate[p] = new LinkedList<Integer>(); dominateMe[p] = 0; // For
-		 * all q individuals , calculate if p dominates q or vice versa for (int
-		 * q = 0; q < solutionSet_.size(); q++) { flagDominate
-		 * =constraint_.compare(solutionSet.get(p),solutionSet.get(q)); if
-		 * (flagDominate == 0) { flagDominate
-		 * =dominance_.compare(solutionSet.get(p),solutionSet.get(q)); }
-		 *
-		 * if (flagDominate == -1) { iDominate[p].add(new Integer(q)); } else if
-		 * (flagDominate == 1) { dominateMe[p]++; } }
-		 *
-		 * // If nobody dominates p, p belongs to the first front if
-		 * (dominateMe[p] == 0) { front[0].add(new Integer(p));
-		 * solutionSet.get(p).setRank(0); } }
-		 */
+        // Initialize the fronts
+        for (int i = 0; i < front.length; i++)
+            front[i] = new LinkedList<Integer>();
 
         // -> Fast non dominated sorting algorithm
         // Contribution of Guillaume Jacquenot
@@ -96,10 +86,12 @@ public class Ranking_M_Add_One {
         for (int p = 0; p < (solutionSet_.size() - 1); p++) {
             // For all q individuals , calculate if p dominates q or vice versa
             for (int q = p + 1; q < solutionSet_.size(); q++) {
-
-                flagDominate = dominance_.compare(solutionSet_.get(p),
+                flagDominate = constraint_.compare(solutionSet_.get(p),
                         solutionSet_.get(q));
-
+                if (flagDominate == 0) {
+                    flagDominate = dominance_.compare(solutionSet_.get(p),
+                            solutionSet_.get(q));
+                }
                 if (flagDominate == -1) {
                     iDominate[p].add(q);
                     dominateMe[q]++;
@@ -108,16 +100,41 @@ public class Ranking_M_Add_One {
                     dominateMe[p]++;
                 }
             }
-            // If nobody dominates p, p belongs to the first front
         }
         for (int p = 0; p < solutionSet_.size(); p++) {
             if (dominateMe[p] == 0) {
-                firstFront.add(p);
+                front[0].add(p);
+                solutionSet_.get(p).setRank(0);
             }
         }
 
-        return firstFront;
+        // Obtain the rest of fronts
+        int i = 0;
+        Iterator<Integer> it1, it2; // Iterators
+        while (front[i].size() != 0) {
+            i++;
+            it1 = front[i - 1].iterator();
+            while (it1.hasNext()) {
+                it2 = iDominate[it1.next()].iterator();
+                while (it2.hasNext()) {
+                    int index = it2.next();
+                    dominateMe[index]--;
+                    if (dominateMe[index] == 0) {
+                        front[i].add(index);
+                        solutionSet_.get(index).setRank(i);
+                    }
+                }
+            }
+        }
 
-    } // Ranking
-
-} // Ranking
+        ranking_ = new SolutionSet[i];
+        // 0,1,2,....,i-1 are front, then i fronts
+        for (int j = 0; j < i; j++) {
+            ranking_[j] = new SolutionSet(front[j].size());
+            it1 = front[j].iterator();
+            while (it1.hasNext()) {
+                ranking_[j].add(solutionSet_.get(it1.next()));
+            }
+        }
+    }
+}

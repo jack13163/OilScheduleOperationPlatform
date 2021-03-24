@@ -6,7 +6,7 @@ import opt.easyjmetal.qualityindicator.Epsilon;
 import opt.easyjmetal.qualityindicator.Hypervolume;
 import opt.easyjmetal.qualityindicator.InvertedGenerationalDistance;
 import opt.easyjmetal.qualityindicator.Spread;
-import opt.easyjmetal.util.ranking.Ranking;
+import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 import org.apache.commons.io.FileUtils;
 
@@ -260,7 +260,7 @@ public class ParetoFrontUtil {
             solutionSet.add(solutionList.get(i));
         }
         // 进行非支配排序，并返回第一层结果
-        Ranking ranking = new Ranking(solutionSet);
+        CDPRanking ranking = new CDPRanking(solutionSet);
         SolutionSet nondominatedSolutionSet = ranking.getSubfront(0);
         return nondominatedSolutionSet;
     }

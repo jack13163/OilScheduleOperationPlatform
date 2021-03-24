@@ -6,7 +6,7 @@ import opt.easyjmetal.algorithm.common.ReferencePoint;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.ranking.Ranking;
+import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.comparators.one.FitnessComparator;
 import opt.easyjmetal.util.comparators.one.OverallConstraintViolationComparator;
 
@@ -35,7 +35,7 @@ public class TwoArchiveUpdate {
             s = sc;
         } else if (sc.size() > popSize) {
             // 非支配排序
-            Ranking ranking = new Ranking(sc);
+            CDPRanking ranking = new CDPRanking(sc);
 
             // 按层合并
             int rankingIndex = 0;
@@ -146,7 +146,7 @@ public class TwoArchiveUpdate {
                             }
 
                             // 非支配排序
-                            Ranking ranking = new Ranking(o);
+                            CDPRanking ranking = new CDPRanking(o);
                             o = ranking.getSubfront(0);
 
                             double[] g_tch = MatlabUtilityFunctionsWrapper.g_tch(o.writeObjectivesToMatrix(), w);

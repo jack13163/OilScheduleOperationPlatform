@@ -19,9 +19,11 @@ public class CMOEAs_main {
 
     public static void main(String[] args) throws Exception {
         int crossoverMethod = 1;
+
         MatlabUtilityFunctionsWrapper.setup();
         batchRun(new String[]{
-                "NSGAII_CDP_ISDEPlus",
+//                "NSGAII_CDP_ISDEPlus",
+//                "NSGAII_CDP_ManyAddOne",
                 "NSGAII_CDP",
 //                "ISDEPLUS_CDP",
 //                "NSGAIII_CDP",

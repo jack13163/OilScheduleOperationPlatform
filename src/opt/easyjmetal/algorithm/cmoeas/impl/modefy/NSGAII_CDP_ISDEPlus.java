@@ -9,7 +9,7 @@ import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
 import opt.easyjmetal.util.comparators.one.DistanceComparator;
 import opt.easyjmetal.util.comparators.one.FitnessComparator;
 import opt.easyjmetal.util.fitness.CCMO_Fitness;
-import opt.easyjmetal.util.ranking.Ranking;
+import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.ranking.StochasticRanking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
@@ -118,7 +118,7 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
                 }
             } else {
                 // ∑«÷ß≈‰≈≈–Ú
-                Ranking ranking = new Ranking(union_);
+                CDPRanking ranking = new CDPRanking(union_);
 
                 int remain = populationSize_;
                 int index = 0;

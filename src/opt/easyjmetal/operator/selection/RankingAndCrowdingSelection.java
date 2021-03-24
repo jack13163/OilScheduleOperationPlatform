@@ -26,7 +26,7 @@ import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.ranking.Ranking;
+import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.comparators.one.CrowdingComparator;
 
 import java.util.Comparator;
@@ -95,8 +95,8 @@ public class RankingAndCrowdingSelection extends Selection {
     int populationSize     = (Integer)parameters_.get("populationSize");
     SolutionSet result     = new SolutionSet(populationSize);
 
-    //->Ranking the union
-    Ranking ranking = new Ranking(population);
+    //->CDPRanking the union
+    CDPRanking ranking = new CDPRanking(population);
 
     int remain = populationSize;
     int index  = 0;

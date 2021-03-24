@@ -70,7 +70,6 @@ public class ENS_SS_Ranking {
 
                 }
             }
-
         }
     }
 

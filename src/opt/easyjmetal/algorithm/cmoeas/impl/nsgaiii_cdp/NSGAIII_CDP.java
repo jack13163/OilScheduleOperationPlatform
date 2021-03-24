@@ -9,7 +9,7 @@ import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.MoeadUtils;
-import opt.easyjmetal.util.ranking.Ranking;
+import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.util.ArrayList;
@@ -148,8 +148,8 @@ public class NSGAIII_CDP extends Algorithm {
         // Create the solutionSet union of solutionSet and offSpring
         SolutionSet jointPopulation = population_.union(offspringPopulation);
 
-        // Ranking the union
-        Ranking ranking = new Ranking(jointPopulation);
+        // CDPRanking the union
+        CDPRanking ranking = new CDPRanking(jointPopulation);
 
         // List<Solution> pop = crowdingDistanceSelection(ranking);
         SolutionSet pop = new SolutionSet(populationSize_);

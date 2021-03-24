@@ -26,8 +26,8 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.core.Variable;
 import opt.easyjmetal.util.comparators.one.CrowdingComparator;
+import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.ranking.ENS_FirstRank;
-import opt.easyjmetal.util.ranking.Ranking;
 
 /**
  * Utilities methods to used by MOEA/D
@@ -269,7 +269,8 @@ public class MoeadUtils {
 
         if (feasible_solutions.size() > 0) {
             // 执行非支配排序获取非支配解集
-            Ranking ranking = new Ranking(feasible_solutions);
+            CDPRanking ranking = new CDPRanking(feasible_solutions);
+            ranking.ranking();
             externalArchive = externalArchive.union(ranking.getSubfront(0));
         }
         return externalArchive;

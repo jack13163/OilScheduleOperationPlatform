@@ -31,7 +31,6 @@ import java.util.Comparator;
 public class DominanceComparator_M_Add_One implements Comparator {
 
     public DominanceComparator_M_Add_One() {
-
     }
 
     /**

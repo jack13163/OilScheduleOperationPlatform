@@ -8,7 +8,7 @@ import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.ranking.Ranking;
+import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.comparators.one.CrowdingComparator;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
@@ -122,8 +122,8 @@ public class NSGAII_CDP extends Algorithm {
             // Create the solutionSet union of solutionSet and offSpring
             SolutionSet union_ = population_.union(offspringPopulation_);
 
-            // Ranking the union
-            Ranking ranking = new Ranking(union_);
+            // CDPRanking the union
+            CDPRanking ranking = new CDPRanking(union_);
 
             int remain = populationSize_;
             int index = 0;

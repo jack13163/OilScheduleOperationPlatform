@@ -274,7 +274,7 @@ public class GenerateFriedmanTestTables<Result extends List<? extends Solution<?
                 "\\centering\n" +
                 "\\caption{Average ranking of the algorithms}\n" +
                 "\\begin{tabular}{c|c}\n" +
-                "Algorithm&Ranking\\\\\n\\hline");
+                "Algorithm&CDPRanking\\\\\n\\hline");
     }
 
     private String printDocumentFooter(String fileContents, double[] averageRanking) {

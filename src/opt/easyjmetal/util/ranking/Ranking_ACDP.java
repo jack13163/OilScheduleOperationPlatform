@@ -1,4 +1,4 @@
-//  Ranking.java
+//  CDPRanking.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -204,7 +204,7 @@ public class Ranking_ACDP {
 			}
 		}
 
-	} // Ranking
+	} // CDPRanking
 
 
 	private double[] normalization(Solution individual){
@@ -238,4 +238,4 @@ public class Ranking_ACDP {
 	public int getNumberOfSubfronts() {
 		return ranking_.length;
 	} // getNumberOfSubfronts
-} // Ranking
+} // CDPRanking

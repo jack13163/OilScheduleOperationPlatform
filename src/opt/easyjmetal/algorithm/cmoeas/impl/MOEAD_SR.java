@@ -32,7 +32,6 @@ public class MOEAD_SR extends Algorithm {
     /**
      * Lambda vectors
      */
-    //Vector<Vector<Double>> lambda_ ;
     private double[][] lambda_;
     /**
      * T: neighbour size
