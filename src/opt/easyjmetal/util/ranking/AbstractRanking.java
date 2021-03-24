@@ -8,21 +8,23 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 分层函数
+ * 分层函数：通过Ranking可以实现多个比较器的组合
  */
 public abstract class AbstractRanking {
     protected SolutionSet solutionSet_;
     protected SolutionSet[] ranking_;
     protected Comparator dominance_;
+    protected SolutionSet result;
 
     public AbstractRanking(SolutionSet solutionSet) {
         this.solutionSet_ = solutionSet;
+        this.result = new SolutionSet();
     }
 
     /**
      * 排序
      */
-    public void ranking() {
+    protected void ranking() {
         // dominateMe[i] contains the number of solutions dominating i
         int[] dominateMe = new int[solutionSet_.size()];
 
@@ -89,7 +91,6 @@ public abstract class AbstractRanking {
                 }
             }
         }
-        // <-
 
         ranking_ = new SolutionSet[i];
         // 0,1,2,....,i-1 are front, then i fronts
@@ -110,9 +111,6 @@ public abstract class AbstractRanking {
      * @return Object representing the <code>SolutionSet</code>.
      */
     public SolutionSet getSubfront(int rank) {
-        if(ranking_ == null){
-            ranking();
-        }
         return ranking_[rank];
     }
 
@@ -124,5 +122,14 @@ public abstract class AbstractRanking {
             ranking();
         }
         return ranking_.length;
+    }
+
+
+    /**
+     * Returns the results
+     * @return
+     */
+    public SolutionSet getResult() {
+        return result;
     }
 }

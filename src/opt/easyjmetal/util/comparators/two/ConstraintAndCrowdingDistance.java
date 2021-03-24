@@ -31,9 +31,9 @@ import java.util.Comparator;
  *    1.”µº∑æ‡¿Î£ª
  *    2.‘º ¯Œ•±≥÷µ°£
  */
-public class DominanceComparator_CV_ASSO implements Comparator {
+public class ConstraintAndCrowdingDistance implements Comparator {
 
-    public DominanceComparator_CV_ASSO() {
+    public ConstraintAndCrowdingDistance() {
     }
 
     /**

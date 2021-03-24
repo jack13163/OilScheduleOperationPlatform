@@ -1,4 +1,4 @@
-//  CDPRanking.java
+//  RankingByCDP.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -40,18 +40,19 @@ import java.util.List;
  * the non-dominated solutions after removing those belonging to subset 0, and
  * so on.
  */
-public class CDPRanking extends AbstractRanking {
+public class RankingByCDP extends AbstractRanking {
 
 	private Comparator constraint_;
 
-	public CDPRanking(SolutionSet solutionSet) {
+	public RankingByCDP(SolutionSet solutionSet) {
 		super(solutionSet);
 		dominance_ = new DominanceComparator();
 		constraint_ = new OverallConstraintViolationComparator();
+		ranking();
 	}
 
 	@Override
-	public void ranking() {
+	protected void ranking() {
 		// dominateMe[i] contains the number of solutions dominating i
 		int[] dominateMe = new int[solutionSet_.size()];
 

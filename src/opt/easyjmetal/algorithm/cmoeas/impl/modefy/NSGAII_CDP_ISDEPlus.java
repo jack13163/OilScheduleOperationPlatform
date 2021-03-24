@@ -2,14 +2,12 @@ package opt.easyjmetal.algorithm.cmoeas.impl.modefy;
 
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.qualityindicator.util.MetricsUtil;
-import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
-import opt.easyjmetal.util.comparators.one.FitnessComparator;
-import opt.easyjmetal.util.fitness.CCMO_Fitness;
-import opt.easyjmetal.util.ranking.impl.CDPRanking;
-import opt.easyjmetal.util.ranking.StochasticRanking;
+import opt.easyjmetal.util.distance.Distance;
+import opt.easyjmetal.util.ranking.impl.RankingByCDP;
+import opt.easyjmetal.util.ranking.impl.RankingByObjectives;
+import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 /**
@@ -105,19 +103,12 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
 
             // 根据比例进行非支配排序
             if (Math.random() < iterationRate) {
-                System.out.println("Iteration: " + evaluations_ / populationSize_ + ", SRA");
-
-                try {
-                    CCMO_Fitness.computeFitnessValue(union_, false);
-                    new Distance().crowdingDistanceAssignment(union_, problem_.getNumberOfObjectives());
-                    StochasticRanking stochasticRanking = new StochasticRanking(new CrowdingDistanceComparator(), new FitnessComparator());
-                    population_ = stochasticRanking.ranking(union_, populationSize_);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                System.out.println("Iteration: " + evaluations_ / populationSize_ + ", OBJs");
+                RankingByObjectives stochasticRanking = new RankingByObjectives(union_, problem_.getNumberOfObjectives(), populationSize_);
+                population_ = stochasticRanking.getResult();
             } else {
                 // 非支配排序
-                CDPRanking ranking = new CDPRanking(union_);
+                RankingByCDP ranking = new RankingByCDP(union_);
 
                 int remain = populationSize_;
                 int index = 0;

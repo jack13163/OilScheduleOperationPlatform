@@ -1,4 +1,4 @@
-//  CDPRanking.java
+//  RankingByCDP.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -55,6 +55,7 @@ public class EpsilonConstraintRanking extends AbstractRanking {
         this.epsilon = epsilon;
         dominance_ = new ObjectivesComparator();
         constraint_ = new EpsilonConstraintViolationComparator(epsilon);
+        ranking();
     }
 
     @Override

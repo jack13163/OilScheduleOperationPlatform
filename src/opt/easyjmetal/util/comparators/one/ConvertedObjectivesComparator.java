@@ -25,25 +25,11 @@ import opt.easyjmetal.core.Solution;
 
 import java.util.Comparator;
 
-/**
- * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> objects) based on a constraint violation test +
- * dominance checking, as in NSGA-II.
- */
 public class ConvertedObjectivesComparator implements Comparator {
 
     public ConvertedObjectivesComparator() {
     }
 
-
-    /**
-     * Compares two solutions.
-     *
-     * @param object1 Object representing the first <code>Solution</code>.
-     * @param object2 Object representing the second <code>Solution</code>.
-     * @return -1, or 0, or 1 if solution1 dominates solution2, both are
-     * non-dominated, or solution1  is dominated by solution22, respectively.
-     */
     @Override
     public int compare(Object object1, Object object2) {
         if (object1 == null) {
@@ -62,8 +48,7 @@ public class ConvertedObjectivesComparator implements Comparator {
         dominate1 = 0;
         dominate2 = 0;
 
-        int flag; //stores the result of the comparison
-
+        int flag;
 
         // Equal number of violated constraints. Applying a dominance Test then
         double value1, value2;

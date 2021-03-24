@@ -1,4 +1,4 @@
-//  CDPRanking.java
+//  RankingByCDP.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -34,10 +34,11 @@ import opt.easyjmetal.util.ranking.AbstractRanking;
  * the non-dominated solutions after removing those belonging to subset 0, and
  * so on.
  */
-public class ATMRanking extends AbstractRanking {
+public class RankingByConvertedObjectives extends AbstractRanking {
 
-    public ATMRanking(SolutionSet solutionSet) {
+    public RankingByConvertedObjectives(SolutionSet solutionSet) {
         super(solutionSet);
         dominance_ = new ConvertedObjectivesComparator();
+        ranking();
     }
 }

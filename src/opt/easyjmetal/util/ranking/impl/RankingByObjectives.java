@@ -1,4 +1,4 @@
-//  CDPRanking.java
+//  RankingByCDP.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,10 +19,12 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.ranking;
+package opt.easyjmetal.util.ranking.impl;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
+import opt.easyjmetal.util.comparators.one.ObjectiveComparator;
+import opt.easyjmetal.util.ranking.AbstractRanking;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,47 +36,50 @@ import java.util.List;
  * A study of two penalty-parameterless constraint handling techniques in the framework of MOEA/D.
  * Applied Soft Computing, 13(1), 128–148. doi:10.1016/j.asoc.2012.07.027
  */
-public class StochasticRanking {
+public class RankingByObjectives extends AbstractRanking {
 
     private final List<Comparator> comparatorList = new ArrayList<>();
+    private int numberOfObjectives_;
+    private int numberToSelect_;
 
-    public StochasticRanking(Comparator... comparators) throws Exception {
-        if (comparators.length < 1) {
-            throw new Exception("请至少输入一种比较器");
+    public RankingByObjectives(SolutionSet solutionSet,
+                               int numberOfObjectives,
+                               int numberToSelect) {
+        super(solutionSet);
+        this.numberOfObjectives_ = numberOfObjectives;
+        this.numberToSelect_ = numberToSelect;
+        for (int i = 0; i < numberOfObjectives; i++) {
+            comparatorList.add(new ObjectiveComparator(i));
         }
-        for (int i = 0; i < comparators.length; i++) {
-            comparatorList.add(comparators[i]);
-        }
+        ranking();
     }
 
     /**
-     * Stochastic ranking
+     * 按照各个目标随机排序
      *
-     * @param numberOfSolution
      * @return
      */
-    public SolutionSet ranking(SolutionSet solutionSet, int numberOfSolution) throws Exception {
-        SolutionSet result = new SolutionSet();
-        for (int i = 0; i < Math.ceil(1.0 * numberOfSolution / 2); i++) {
-            for (int j = 0; j < numberOfSolution - 1; j++) {
+    @Override
+    public void ranking() {
+        for (int i = 0; i < Math.ceil(1.0 * numberToSelect_ / 2); i++) {
+            for (int j = 0; j < numberToSelect_ - 1; j++) {
                 // 随机从比较器中选择一个
-                int indexOfComparator = generateRandomInteger(0, comparatorList.size() - 1, Math.random());
-                Solution solution1 = solutionSet.get(j);
-                Solution solution2 = solutionSet.get(j + 1);
+                int indexOfComparator = generateRandomInteger(0, this.numberOfObjectives_ - 1, Math.random());
+                Solution solution1 = solutionSet_.get(j);
+                Solution solution2 = solutionSet_.get(j + 1);
                 Comparator comparator = this.comparatorList.get(indexOfComparator);
 
                 int res = comparator.compare(solution1, solution2);
                 // 比较前后两个解的优劣
                 if (res < 0) {
-                    solutionSet.swap(j, j + 1);
+                    solutionSet_.swap(j, j + 1);
                 }
             }
         }
-        for (int i = 0; i < numberOfSolution; i++) {
-            Solution copySolution = new Solution(solutionSet.get(i));
+        for (int i = 0; i < numberToSelect_; i++) {
+            Solution copySolution = new Solution(solutionSet_.get(i));
             result.add(copySolution);
         }
-        return result;
     }
 
     /**

@@ -190,7 +190,7 @@ public class Friedman {
                 "\\centering\n" +
                 "\\caption{Average Rankings of the algorithms\n}" +// for "+ exp_.problemList_[prob] +" problem\n}" +
                 "\\begin{tabular}{c|c}\n" +
-                "Algorithm&CDPRanking\\\\\n\\hline");
+                "Algorithm&RankingByCDP\\\\\n\\hline");
 
         for (int i = 0; i < algoritmos.size(); i++) {
             Output.append("\n" + algoritmos.elementAt(i) + "&" + Rj[i] + "\\\\");

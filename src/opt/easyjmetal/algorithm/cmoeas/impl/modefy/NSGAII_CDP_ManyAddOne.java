@@ -1,14 +1,14 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.modefy;
 
 import opt.easyjmetal.core.*;
-import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.solution.MoeadUtils;
+import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
+import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.ranking.AbstractRanking;
-import opt.easyjmetal.util.ranking.impl.CDPRanking;
-import opt.easyjmetal.util.ranking.impl.Ranking_M_Add_One;
+import opt.easyjmetal.util.ranking.impl.RankingByCDP;
+import opt.easyjmetal.util.ranking.impl.RankingByConstraintAndObjectives;
+import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.util.sqlite.SqlUtils;
-import opt.jmetal.util.comparator.CrowdingDistanceComparator;
 
 public class NSGAII_CDP_ManyAddOne extends Algorithm {
 
@@ -50,7 +50,7 @@ public class NSGAII_CDP_ManyAddOne extends Algorithm {
 
         // creat database
         String dbName = dataDirectory_;
-        String tableName = "NSGAII_CDP_ISDEPlus_" + runningTime;
+        String tableName = "NSGAII_CDP_ManyAddOne_" + runningTime;
         SqlUtils.createTable(tableName, dbName);
         SqlUtils.clearTable(tableName, dbName);
 
@@ -102,12 +102,11 @@ public class NSGAII_CDP_ManyAddOne extends Algorithm {
             // 根据比例进行非支配排序
             if (Math.random() < iterationRate) {
                 System.out.println("Iteration: " + evaluations_ / populationSize_ + ", ManyAddOne");
-                ranking = new CDPRanking(union_);
+                ranking = new RankingByConstraintAndObjectives(union_);
             } else {
                 System.out.println("Iteration: " + evaluations_ / populationSize_ + ", CDP");
-                ranking = new Ranking_M_Add_One(union_);
+                ranking = new RankingByCDP(union_);
             }
-            ranking.ranking();
 
             int remain = populationSize_;
             int index = 0;

@@ -6,9 +6,10 @@ import opt.easyjmetal.algorithm.common.ReferencePoint;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.ranking.impl.CDPRanking;
+import opt.easyjmetal.util.ranking.impl.RankingByCDP;
 import opt.easyjmetal.util.comparators.one.FitnessComparator;
 import opt.easyjmetal.util.comparators.one.OverallConstraintViolationComparator;
+import opt.easyjmetal.util.ranking.impl.RankingByConstraintAndCrowdingDistance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class TwoArchiveUpdate {
             s = sc;
         } else if (sc.size() > popSize) {
             // 非支配排序
-            CDPRanking ranking = new CDPRanking(sc);
+            RankingByCDP ranking = new RankingByCDP(sc);
 
             // 按层合并
             int rankingIndex = 0;
@@ -76,7 +77,7 @@ public class TwoArchiveUpdate {
                 }
 
                 // 按照CV值和基于参考点的拥挤度度量来进行非支配排序
-                Ranking_CV_ASSO ranking = new Ranking_CV_ASSO(si, lambda_);
+                RankingByConstraintAndCrowdingDistance ranking = new RankingByConstraintAndCrowdingDistance(si, lambda_);
 
                 int maxNo = ranking.getNumberOfSubfronts();
                 int last = 0;
@@ -146,7 +147,7 @@ public class TwoArchiveUpdate {
                             }
 
                             // 非支配排序
-                            CDPRanking ranking = new CDPRanking(o);
+                            RankingByCDP ranking = new RankingByCDP(o);
                             o = ranking.getSubfront(0);
 
                             double[] g_tch = MatlabUtilityFunctionsWrapper.g_tch(o.writeObjectivesToMatrix(), w);

@@ -1,4 +1,4 @@
-//  CDPRanking.java
+//  RankingByCDP.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -22,7 +22,7 @@
 package opt.easyjmetal.util.ranking.impl;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.two.IdeaDominanceComparator;
+import opt.easyjmetal.util.comparators.two.FitnessAndObjectivesComparator;
 import opt.easyjmetal.util.ranking.AbstractRanking;
 
 /**
@@ -43,6 +43,7 @@ public class IdeaRanking extends AbstractRanking {
      */
     public IdeaRanking(SolutionSet solutionSet) {
         super(solutionSet);
-        dominance_ = new IdeaDominanceComparator();
+        dominance_ = new FitnessAndObjectivesComparator();
+        ranking();
     }
 }

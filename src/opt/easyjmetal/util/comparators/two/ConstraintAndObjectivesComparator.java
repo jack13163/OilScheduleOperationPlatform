@@ -28,9 +28,9 @@ import java.util.Comparator;
 /**
  * 目标值+约束值
  */
-public class DominanceComparator_M_Add_One implements Comparator {
+public class ConstraintAndObjectivesComparator implements Comparator {
 
-    public DominanceComparator_M_Add_One() {
+    public ConstraintAndObjectivesComparator() {
     }
 
     /**

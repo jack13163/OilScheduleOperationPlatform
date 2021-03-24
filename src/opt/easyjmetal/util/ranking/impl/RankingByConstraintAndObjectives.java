@@ -1,4 +1,4 @@
-//  CDPRanking.java
+//  RankingByCDP.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -22,7 +22,7 @@
 package opt.easyjmetal.util.ranking.impl;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.two.DominanceComparator_M_Add_One;
+import opt.easyjmetal.util.comparators.two.ConstraintAndObjectivesComparator;
 import opt.easyjmetal.util.ranking.AbstractRanking;
 
 /**
@@ -34,10 +34,11 @@ import opt.easyjmetal.util.ranking.AbstractRanking;
  * the non-dominated solutions after removing those belonging to subset 0, and
  * so on.
  */
-public class Ranking_M_Add_One extends AbstractRanking {
+public class RankingByConstraintAndObjectives extends AbstractRanking {
 
-    public Ranking_M_Add_One(SolutionSet solutionSet) {
+    public RankingByConstraintAndObjectives(SolutionSet solutionSet) {
         super(solutionSet);
-        dominance_ = new DominanceComparator_M_Add_One();
+        dominance_ = new ConstraintAndObjectivesComparator();
+        ranking();
     }
 }

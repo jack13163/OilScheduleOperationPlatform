@@ -5,7 +5,7 @@ import opt.easyjmetal.util.*;
 import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
 import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.plot.PlotObjectives;
-import opt.easyjmetal.util.ranking.impl.CDPRanking;
+import opt.easyjmetal.util.ranking.impl.RankingByCDP;
 import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
@@ -90,7 +90,7 @@ public class NSGAII extends Algorithm {
             SolutionSet union_ = population_.union(offspringPopulation_);
 
             // 将合并后的种群进行快速非支配排序
-            CDPRanking ranking = new CDPRanking(union_);
+            RankingByCDP ranking = new RankingByCDP(union_);
 
             int remain = populationSize_;
             int index = 0;

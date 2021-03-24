@@ -29,7 +29,7 @@ import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
 import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.permutation.PseudoRandom;
-import opt.easyjmetal.util.ranking.impl.CDPRanking;
+import opt.easyjmetal.util.ranking.impl.RankingByCDP;
 import opt.easyjmetal.util.ranking.ENS_FirstRank;
 
 /**
@@ -279,7 +279,7 @@ public class MoeadUtils {
 
         if (feasible_solutions.size() > 0) {
             // 执行非支配排序获取非支配解集
-            CDPRanking ranking = new CDPRanking(feasible_solutions);
+            RankingByCDP ranking = new RankingByCDP(feasible_solutions);
             ranking.ranking();
             externalArchive = externalArchive.union(ranking.getSubfront(0));
         }

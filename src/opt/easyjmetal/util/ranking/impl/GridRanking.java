@@ -1,4 +1,4 @@
-//  CDPRanking.java
+//  RankingByCDP.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -22,7 +22,7 @@
 package opt.easyjmetal.util.ranking.impl;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.two.GridDominanceComparator;
+import opt.easyjmetal.util.comparators.one.GridDominanceComparator;
 import opt.easyjmetal.util.ranking.AbstractRanking;
 
 import java.util.Comparator;
@@ -37,5 +37,6 @@ public class GridRanking extends AbstractRanking {
     public GridRanking(SolutionSet solutionSet, double[] ub, double[] lb, double divide) {
         super(solutionSet);
         dominance_ = new GridDominanceComparator(ub, lb, divide);
+        ranking();
     }
 }

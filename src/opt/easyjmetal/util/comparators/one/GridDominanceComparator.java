@@ -19,7 +19,7 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators.two;
+package opt.easyjmetal.util.comparators.one;
 
 import opt.easyjmetal.core.Solution;
 import java.util.Comparator;
