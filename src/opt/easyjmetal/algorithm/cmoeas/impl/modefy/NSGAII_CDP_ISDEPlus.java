@@ -132,10 +132,8 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
                 // 根据比例进行非支配排序
                 if (Math.random() < iterationRate) {
                     System.out.println("Iteration: " + evaluations_ / populationSize_ + ", ignored: true   " + remain + "<----" + remainSolutions.size());
-//                    CCMO_Fitness.computeFitnessValue(remainSolutions, false);
-//                    remainSolutions.sort(new FitnessComparator());
-
                     actualiseHVContribution(remainSolutions, problem_.getNumberOfObjectives());
+                    remainSolutions.sort(new DistanceComparator());
 
                     // 将剩下的解添加到种群中
                     for (int k = 0; k < remain; k++) {
