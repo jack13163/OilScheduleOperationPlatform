@@ -64,7 +64,7 @@ public class MOEAD extends Algorithm {
         // 创建数据表
         String dbName = dataDirectory_ + problem_.getName();
         String tableName = "MOEAD_" + runningTime;
-        SqlUtils.CreateTable(tableName, dbName);
+        SqlUtils.createTable(tableName, dbName);
 
         // STEP 1. Initialization
         // STEP 1.1. Compute euclidean distances between weight vectors and find T
@@ -165,7 +165,7 @@ public class MOEAD extends Algorithm {
 
         } while (evaluations_ < maxEvaluations_);
 
-        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
+        SqlUtils.insertSolutionSet(dbName, tableName, external_archive_);
         return external_archive_;
     }
 

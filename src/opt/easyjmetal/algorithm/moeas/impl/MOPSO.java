@@ -281,7 +281,7 @@ public class MOPSO extends Algorithm {
         // 创建数据表，方便后面保存结果
         String dbName = dataDirectory_ + problem_.getName();
         String tableName = "MOPSO_" + runningTime;
-        SqlUtils.CreateTable(tableName, dbName);
+        SqlUtils.createTable(tableName, dbName);
         boolean isDisplay_ = (Boolean) getInputParameter("isDisplay");
 
         swarm = createInitialSwarm();
@@ -310,7 +310,7 @@ public class MOPSO extends Algorithm {
             solutionSet.add(swarm.get(i));
         }
         // 插入到数据库中
-        SqlUtils.InsertSolutionSet(dbName, tableName, epsilonArchive);
+        SqlUtils.insertSolutionSet(dbName, tableName, epsilonArchive);
 
         return solutionSet;
     }

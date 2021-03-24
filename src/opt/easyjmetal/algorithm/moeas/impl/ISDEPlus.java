@@ -54,7 +54,7 @@ public class ISDEPlus extends Algorithm {
         // 创建数据表，方便后面保存结果
         String dbName = dataDirectory_ + problem_.getName();
         String tableName = "ISDEPlus_" + runningTime;
-        SqlUtils.CreateTable(tableName, dbName);
+        SqlUtils.createTable(tableName, dbName);
 
         // 创建初始种群
         for (int i = 0; i < populationSize_; i++) {
@@ -113,7 +113,7 @@ public class ISDEPlus extends Algorithm {
             }
         }
 
-        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
+        SqlUtils.insertSolutionSet(dbName, tableName, external_archive_);
         return external_archive_;
     }
 

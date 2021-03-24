@@ -78,7 +78,7 @@ public class NSGAII_CDP extends Algorithm {
         //creat database
         String dbName = dataDirectory_;
         String tableName = "NSGAII_CDP_" + runningTime;
-        SqlUtils.CreateTable(tableName, dbName);
+        SqlUtils.createTable(tableName, dbName);
 
         int gen = 0;
         // Generations
@@ -168,7 +168,7 @@ public class NSGAII_CDP extends Algorithm {
             gen++;
         }
 
-        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
+        SqlUtils.insertSolutionSet(dbName, tableName, external_archive_);
 
         return external_archive_;
     }

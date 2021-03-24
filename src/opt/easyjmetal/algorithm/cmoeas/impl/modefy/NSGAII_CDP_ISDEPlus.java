@@ -50,10 +50,11 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
         external_archive_ = new SolutionSet(populationSize_);
         MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
-        //creat database
+        // creat database
         String dbName = dataDirectory_;
         String tableName = "NSGAII_CDP_ISDEPlus_" + runningTime;
-        SqlUtils.CreateTable(tableName, dbName);
+        SqlUtils.createTable(tableName, dbName);
+        SqlUtils.clearTable(tableName, dbName);
 
         int gen = 0;
         while (evaluations_ < maxEvaluations_) {
@@ -159,7 +160,7 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
             gen++;
         }
 
-        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
+        SqlUtils.insertSolutionSet(dbName, tableName, external_archive_);
         return external_archive_;
     }
 

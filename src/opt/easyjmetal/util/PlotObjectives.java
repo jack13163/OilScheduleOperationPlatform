@@ -347,7 +347,7 @@ public class PlotObjectives {
         OnlineMixOIL problem = new OnlineMixOIL("Real");
         String dbName = problem.getName();
         String tableName = "MOEAD_1";
-        SolutionSet solutionSet = SqlUtils.SelectData(dbName, tableName);
+        SolutionSet solutionSet = SqlUtils.selectData(dbName, tableName);
         plotSolutions("MOEAD", solutionSet);
     }
 

@@ -68,7 +68,7 @@ public class MOFA extends Algorithm {
         // 创建数据表，方便后面保存结果
         String dbName = dataDirectory_ + problem_.getName();
         String tableName = "MOFA_" + runningTime;
-        SqlUtils.CreateTable(tableName, dbName);
+        SqlUtils.createTable(tableName, dbName);
 
         // 初始化种群
         initPopulation();
@@ -126,7 +126,7 @@ public class MOFA extends Algorithm {
             }
         } while (evaluations_ < maxEvaluations_);
 
-        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
+        SqlUtils.insertSolutionSet(dbName, tableName, external_archive_);
 
         return external_archive_;
     }

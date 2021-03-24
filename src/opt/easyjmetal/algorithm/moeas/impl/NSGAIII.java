@@ -81,7 +81,7 @@ public class NSGAIII extends Algorithm {
         // 创建数据库记录数据
         String dbName = dataDirectory_ + problem_.getName();
         String tableName = "NSGAIII_" + runningTime;
-        SqlUtils.CreateTable(tableName, dbName);
+        SqlUtils.createTable(tableName, dbName);
 
         while (evaluations_ < maxEvaluations_) {
             // Create the offSpring solutionSet
@@ -129,7 +129,7 @@ public class NSGAIII extends Algorithm {
             }
         }
 
-        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
+        SqlUtils.insertSolutionSet(dbName, tableName, external_archive_);
 
         return external_archive_;
     } // execute

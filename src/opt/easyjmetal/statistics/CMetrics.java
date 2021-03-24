@@ -64,7 +64,7 @@ public class CMetrics {
                     try {
                         String dbName = resultBaseDirectory_ + problemList_.get(problem);
                         String tableName = algorithmList_.get(algorithm) + "_" + (run + 1);
-                        SolutionSet solutionSet = SqlUtils.SelectData(dbName, tableName);
+                        SolutionSet solutionSet = SqlUtils.selectData(dbName, tableName);
                         double[][] objectives = solutionSet.writeObjectivesToMatrix();
 
                         for (int i = 0; i < objectives.length; i++) {

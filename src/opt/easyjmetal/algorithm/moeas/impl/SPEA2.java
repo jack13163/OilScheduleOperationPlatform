@@ -69,7 +69,7 @@ public class SPEA2 extends Algorithm {
         // 创建数据表记录数据
         String dbName = dataDirectory_ + problem_.getName();
         String tableName = "SPEA2_" + runningTime;
-        SqlUtils.CreateTable(tableName, dbName);
+        SqlUtils.createTable(tableName, dbName);
 
         while (evaluations_ < maxEvaluations_) {
 
@@ -115,7 +115,7 @@ public class SPEA2 extends Algorithm {
             }
         }
 
-        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
+        SqlUtils.insertSolutionSet(dbName, tableName, external_archive_);
 
         return external_archive_;
     }

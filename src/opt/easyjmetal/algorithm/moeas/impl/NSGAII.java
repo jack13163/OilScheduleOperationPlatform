@@ -48,7 +48,7 @@ public class NSGAII extends Algorithm {
         // 创建数据表，用来保存结果
         String dbName = dataDirectory_ + problem_.getName();
         String tableName = "NSGAII_" + runningTime;
-        SqlUtils.CreateTable(tableName, dbName);
+        SqlUtils.createTable(tableName, dbName);
 
         while (evaluations_ < maxEvaluations_) {
             // 生成子代个体
@@ -133,7 +133,7 @@ public class NSGAII extends Algorithm {
             }
         }
 
-        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
+        SqlUtils.insertSolutionSet(dbName, tableName, external_archive_);
 
         return external_archive_;
     }

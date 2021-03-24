@@ -51,7 +51,7 @@ public class ParetoFrontUtil {
                 for (int numRun = 0; numRun < independentRuns_; numRun++) {
                     String dbName = basePath_ + problemName;
                     String tableName = algorithmName + "_" + (numRun + 1);
-                    SolutionSet tmp = SqlUtils.SelectData(dbName, tableName);
+                    SolutionSet tmp = SqlUtils.selectData(dbName, tableName);
                     for (int i = 0; i < tmp.size(); i++) {
                         solutionList.add(tmp.get(i));
                         solutionList2.add(tmp.get(i));
@@ -99,7 +99,7 @@ public class ParetoFrontUtil {
                         String tableName = problemName + "_" + (numRun + 1);
                         // 查询数据
                         String dbPath = paretoFrontDirPath_ + "/" + config + "/" + algorithmName;
-                        SolutionSet tmp = SqlUtils.SelectData(dbPath, tableName);
+                        SolutionSet tmp = SqlUtils.selectData(dbPath, tableName);
                         for (int i = 0; i < tmp.size(); i++) {
                             solutionList.add(tmp.get(i));
                             solutionList2.add(tmp.get(i));
@@ -144,7 +144,7 @@ public class ParetoFrontUtil {
             for (String algorithmName : algorithmNameList_) {
                 for (int numRun = 0; numRun < independentRuns_; numRun++) {
                     String tableName = problemName + "_" + (numRun + 1);
-                    SolutionSet solutionSet = SqlUtils.SelectData(algorithmName, tableName);
+                    SolutionSet solutionSet = SqlUtils.selectData(algorithmName, tableName);
 
                     for (int i = 0; i < solutionSet.size(); i++) {
                         solutionList.add(solutionSet.get(i));
@@ -200,7 +200,7 @@ public class ParetoFrontUtil {
                         }
                         String dbName = basePath_ + problemName;
                         String tableName = algorithmName + "_" + (numRun + 1);
-                        SolutionSet tmp = SqlUtils.SelectData(dbName, tableName);
+                        SolutionSet tmp = SqlUtils.selectData(dbName, tableName);
                         for (int i = 0; i < tmp.size() && !flag; i++) {
                             flag = true;
                             Solution solution = tmp.get(i);
@@ -287,7 +287,7 @@ public class ParetoFrontUtil {
         // 加载算法运行得到的非支配解集
         String dbName = basePath + problemName;
         String tableName = algorithmName + "_" + runId;
-        double[][] solutionFront = SqlUtils.SelectData(dbName, tableName).writeObjectivesToMatrix();
+        double[][] solutionFront = SqlUtils.selectData(dbName, tableName).writeObjectivesToMatrix();
         // 计算并返回指标值
         return calculateIndicatorValue(indicatorName, trueFront, solutionFront);
     }

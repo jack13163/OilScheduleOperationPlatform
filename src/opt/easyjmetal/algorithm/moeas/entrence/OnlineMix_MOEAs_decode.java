@@ -20,7 +20,7 @@ public class OnlineMix_MOEAs_decode {
         String dbName = problem.getName();
         String tableName = "MOEAD_1";
 
-        SolutionSet solutionSet = SqlUtils.SelectData(dbName, tableName);
+        SolutionSet solutionSet = SqlUtils.selectData(dbName, tableName);
         int count = 0;
         for (int i = 0; i < solutionSet.size(); i++) {
             boolean flag = evaluate(solutionSet.get(i));

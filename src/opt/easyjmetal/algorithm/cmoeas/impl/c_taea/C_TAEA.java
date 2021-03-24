@@ -67,7 +67,7 @@ public class C_TAEA extends Algorithm {
         //creat database
         String dbName = dataDirectory_;
         String tableName = "C_TAEA_" + runningTime;
-        SqlUtils.CreateTable(tableName, dbName);
+        SqlUtils.createTable(tableName, dbName);
 
         int gen = 0;
         while (evaluations_ < maxEvaluations_) {
@@ -131,7 +131,7 @@ public class C_TAEA extends Algorithm {
             external_archive_da = TwoArchiveUpdate.updateDA(external_archive_ca, external_archive_da, q, lambda_);
         }
 
-        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_ca);
+        SqlUtils.insertSolutionSet(dbName, tableName, external_archive_ca);
 
         return external_archive_ca;
     }

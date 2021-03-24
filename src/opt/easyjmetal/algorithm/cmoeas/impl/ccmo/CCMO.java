@@ -57,7 +57,7 @@ public class CCMO extends Algorithm {
         // 创建数据库和数据表
         String dbName = dataDirectory_;
         String tableName = "CCMO_" + runningTime;
-        SqlUtils.CreateTable(tableName, dbName);
+        SqlUtils.createTable(tableName, dbName);
 
         int gen = 0;
         while (evaluations_ < maxEvaluations_) {
@@ -108,7 +108,7 @@ public class CCMO extends Algorithm {
             gen++;
         }
 
-        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
+        SqlUtils.insertSolutionSet(dbName, tableName, external_archive_);
 
         return external_archive_;
     }

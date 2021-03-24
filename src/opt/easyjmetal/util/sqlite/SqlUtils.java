@@ -11,9 +11,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Administrator on 2015-06-09.
- */
 public class SqlUtils {
 
     static String fileName_;
@@ -46,7 +43,7 @@ public class SqlUtils {
         System.out.println("Table clearred successfully");
     }
 
-    public static void CreateTable(String tableName, String fileName_) {
+    public static void createTable(String tableName, String fileName_) {
         Connection con;
         Statement stmt;
         try {
@@ -69,7 +66,7 @@ public class SqlUtils {
         System.out.println("Table created successfully");
     }
 
-    public static void CreateTable(String problemName, int objNumber, int decNumber, int ConNumber) {
+    public static void createTable(String problemName, int objNumber, int decNumber, int ConNumber) {
         Connection con;
         Statement stmt;
         try {
@@ -116,7 +113,7 @@ public class SqlUtils {
         System.out.println("Table created successfully");
     }
 
-    public static void InsertData(String TableName, double[] record) {
+    public static void insertData(String TableName, double[] record) {
 
         Connection con;
         Statement stmt;
@@ -141,7 +138,7 @@ public class SqlUtils {
 
     }
 
-    public static void InsertSolutionSet(String DataBaseName, String TableName, SolutionSet pop) throws JMException {
+    public static void insertSolutionSet(String DataBaseName, String TableName, SolutionSet pop) throws JMException {
         int recordNumber = pop.size();
 
         Connection conn;
@@ -218,7 +215,7 @@ public class SqlUtils {
         }
     }
 
-    public static void InsertData(String TableName, SolutionSet pop) throws JMException {
+    public static void insertData(String TableName, SolutionSet pop) throws JMException {
 
         int objNumber = pop.get(0).getNumberOfObjectives();
         int decNumber = pop.get(0).numberOfVariables();
@@ -269,7 +266,7 @@ public class SqlUtils {
      * @return
      * @throws JMException
      */
-    public static SolutionSet SelectData(String DataBaseName, String TableName) throws JMException {
+    public static SolutionSet selectData(String DataBaseName, String TableName) throws JMException {
 
         List<Solution> dataSet = new ArrayList<>();
         Connection con;
@@ -340,7 +337,7 @@ public class SqlUtils {
      * @return
      * @throws JMException
      */
-    public static SolutionSet UpdateObjectivesAndConstraint(String DataBaseName, String TableName) throws JMException {
+    public static SolutionSet updateObjectivesAndConstraint(String DataBaseName, String TableName) throws JMException {
 
         List<Solution> dataSet = new ArrayList<>();
         Connection con;

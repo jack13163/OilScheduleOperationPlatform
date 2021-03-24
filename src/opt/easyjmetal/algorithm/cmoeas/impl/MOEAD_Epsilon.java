@@ -68,7 +68,7 @@ public class MOEAD_Epsilon extends Algorithm {
         //creat database
         String dbName = dataDirectory_;
         String problemName = "MOEAD_Epsilon_" + runningTime;
-        SqlUtils.CreateTable(problemName, dbName);
+        SqlUtils.createTable(problemName, dbName);
 
         // STEP 1. Initialization
         // STEP 1.1. Compute euclidean distances between weight vectors and find T
@@ -184,7 +184,7 @@ public class MOEAD_Epsilon extends Algorithm {
 
         } while (evaluations_ < maxEvaluations_);
 
-        SqlUtils.InsertSolutionSet(dbName, problemName, external_archive_);
+        SqlUtils.insertSolutionSet(dbName, problemName, external_archive_);
         return external_archive_;
     }
 

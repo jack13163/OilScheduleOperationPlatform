@@ -48,7 +48,7 @@ public class IBEA extends Algorithm {
         // 创建数据表，方便后面保存结果
         String dbName = dataDirectory_ + problem_.getName();
         String tableName = "IBEA_" + runningTime;
-        SqlUtils.CreateTable(tableName, dbName);
+        SqlUtils.createTable(tableName, dbName);
 
         // 初始化种群和储备集
         population_ = new SolutionSet(populationSize_);
@@ -109,7 +109,7 @@ public class IBEA extends Algorithm {
             }
         }
 
-        SqlUtils.InsertSolutionSet(dbName, tableName, archive_);
+        SqlUtils.insertSolutionSet(dbName, tableName, archive_);
 
         return population_;
     }

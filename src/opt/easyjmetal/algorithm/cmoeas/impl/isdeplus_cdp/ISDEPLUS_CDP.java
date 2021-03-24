@@ -74,7 +74,7 @@ public class ISDEPLUS_CDP extends Algorithm {
         //creat database
         String tableName =  "ISDEPLUS_CDP_" + runningTime;
         String dbName = dataDirectory_;
-        SqlUtils.CreateTable(tableName, dbName);
+        SqlUtils.createTable(tableName, dbName);
 
         int gen = 0;
         // Generations
@@ -125,7 +125,7 @@ public class ISDEPLUS_CDP extends Algorithm {
             gen++;
         } // while
 
-        SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
+        SqlUtils.insertSolutionSet(dbName, tableName, external_archive_);
 
         return external_archive_;
     } // execute
