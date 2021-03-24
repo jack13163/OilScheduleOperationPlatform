@@ -32,7 +32,7 @@ import opt.easyjmetal.qualityindicator.InvertedGenerationalDistance;
 import opt.easyjmetal.qualityindicator.Spread;
 import opt.easyjmetal.qualityindicator.util.MetricsUtil;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.NonDominatedSolutionList;
+import opt.easyjmetal.util.solution.NonDominatedSolutionList;
 
 import java.io.*;
 import java.util.*;

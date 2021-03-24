@@ -2,8 +2,8 @@ package opt.easyjmetal.algorithm.moeas.impl;
 
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.MoeadUtils;
-import opt.easyjmetal.util.PlotObjectives;
+import opt.easyjmetal.util.solution.MoeadUtils;
+import opt.easyjmetal.util.plot.PlotObjectives;
 import opt.easyjmetal.util.permutation.PseudoRandom;
 import opt.easyjmetal.util.jmathplot.ScatterPlot;
 import opt.easyjmetal.util.sqlite.SqlUtils;

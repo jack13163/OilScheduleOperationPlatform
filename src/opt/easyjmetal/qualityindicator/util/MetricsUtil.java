@@ -24,7 +24,7 @@ package opt.easyjmetal.qualityindicator.util;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.qualityindicator.Hypervolume;
-import opt.easyjmetal.util.NonDominatedSolutionList;
+import opt.easyjmetal.util.solution.NonDominatedSolutionList;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

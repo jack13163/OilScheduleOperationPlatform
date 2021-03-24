@@ -1,9 +1,10 @@
-package opt.easyjmetal.util;
+package opt.easyjmetal.util.plot;
 
 import lombok.SneakyThrows;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.problem.onlinemix.OnlineMixOIL;
+import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 import org.jfree.chart.*;
 import org.jfree.chart.axis.ValueAxis;

@@ -1,4 +1,4 @@
-package opt.easyjmetal.util;
+package opt.easyjmetal.util.solution;
 
 import opt.easyjmetal.util.permutation.IRandomGenerator;
 

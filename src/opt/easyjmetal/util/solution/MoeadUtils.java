@@ -19,12 +19,13 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util;
+package opt.easyjmetal.util.solution;
 
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.core.Variable;
+import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.comparators.one.CrowdingComparator;
 import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.permutation.PseudoRandom;
@@ -43,7 +44,7 @@ public class MoeadUtils {
             sum += (vector1[n] - vector2[n]) * (vector1[n] - vector2[n]);
         }
         return Math.sqrt(sum);
-    } // distVector
+    }
 
     public static void minFastSort(double x[], int idx[], int n, int m) {
         for (int i = 0; i < m; i++) {
@@ -110,7 +111,14 @@ public class MoeadUtils {
 
     }
 
-    static void QuickSort(double[] array, int[] idx, int from, int to) {
+    /**
+     * 快速排序
+     * @param array
+     * @param idx
+     * @param from
+     * @param to
+     */
+    public static void quickSort(double[] array, int[] idx, int from, int to) {
         if (from < to) {
             double temp = array[to];
             int tempIdx = idx[to];
@@ -130,8 +138,8 @@ public class MoeadUtils {
             array[i + 1] = temp;
             idx[to] = idx[i + 1];
             idx[i + 1] = tempIdx;
-            QuickSort(array, idx, from, i);
-            QuickSort(array, idx, i + 1, to);
+            quickSort(array, idx, from, i);
+            quickSort(array, idx, i + 1, to);
         }
     }
 

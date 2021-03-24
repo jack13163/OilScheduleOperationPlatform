@@ -3,7 +3,7 @@ package opt.easyjmetal.algorithm.cmoeas.impl.modefy;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.MoeadUtils;
+import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.util.comparators.one.DistanceComparator;
 import opt.easyjmetal.util.ranking.AbstractRanking;
 import opt.easyjmetal.util.ranking.impl.CDPRanking;

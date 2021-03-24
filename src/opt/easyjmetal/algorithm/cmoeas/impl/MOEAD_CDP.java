@@ -1,7 +1,7 @@
 // This class implements a constrained version of the MOEAD algorithm based on the CDP method.
 package opt.easyjmetal.algorithm.cmoeas.impl;
 
-import opt.easyjmetal.util.MoeadUtils;
+import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.permutation.PseudoRandom;

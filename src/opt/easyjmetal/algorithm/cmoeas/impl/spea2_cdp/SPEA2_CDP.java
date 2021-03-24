@@ -3,7 +3,7 @@ package opt.easyjmetal.algorithm.cmoeas.impl.spea2_cdp;
 
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.MoeadUtils;
+import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 public class SPEA2_CDP extends Algorithm {

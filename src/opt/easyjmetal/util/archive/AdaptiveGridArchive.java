@@ -22,7 +22,7 @@
 package opt.easyjmetal.util.archive;
 
 import opt.easyjmetal.core.Solution;
-import opt.easyjmetal.util.AdaptiveGrid;
+import opt.easyjmetal.util.solution.AdaptiveGrid;
 import opt.easyjmetal.util.comparators.one.DominanceComparator;
 
 import java.util.Comparator;

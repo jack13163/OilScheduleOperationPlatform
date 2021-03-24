@@ -4,7 +4,7 @@ import opt.easyjmetal.core.*;
 import opt.easyjmetal.qualityindicator.util.MetricsUtil;
 import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.MoeadUtils;
+import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
 import opt.easyjmetal.util.comparators.one.DistanceComparator;
 import opt.easyjmetal.util.comparators.one.FitnessComparator;

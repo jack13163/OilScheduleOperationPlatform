@@ -7,7 +7,7 @@ import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.operator.mutation.NonUniformMutation;
 import opt.easyjmetal.operator.mutation.UniformMutation;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PlotObjectives;
+import opt.easyjmetal.util.plot.PlotObjectives;
 import opt.easyjmetal.util.archive.CrowdingArchive;
 import opt.easyjmetal.util.archive.NonDominatedArchive;
 import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;

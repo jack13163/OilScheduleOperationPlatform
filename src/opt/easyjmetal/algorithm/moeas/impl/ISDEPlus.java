@@ -6,7 +6,9 @@ import opt.easyjmetal.util.*;
 import opt.easyjmetal.util.comparators.one.FitnessComparator;
 import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.fitness.ISDEPlus_Fitness;
+import opt.easyjmetal.util.plot.PlotObjectives;
 import opt.easyjmetal.util.ranking.impl.CDPRanking;
+import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.util.ArrayList;
