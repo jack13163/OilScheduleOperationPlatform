@@ -1,4 +1,4 @@
-//  DominanceComparator.java
+//  ConstraintDominanceComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,17 +19,28 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators.one;
+package opt.easyjmetal.util.comparators.parallel;
 
 import opt.easyjmetal.core.Solution;
 
 import java.util.Comparator;
 
-public class ConvertedObjectivesComparator implements Comparator {
+/**
+ * 目标值+约束值
+ */
+public class ConstraintAndObjectivesComparator implements Comparator {
 
-    public ConvertedObjectivesComparator() {
+    public ConstraintAndObjectivesComparator() {
     }
 
+    /**
+     * Compares two solutions.
+     *
+     * @param object1 Object representing the first <code>Solution</code>.
+     * @param object2 Object representing the second <code>Solution</code>.
+     * @return -1, or 0, or 1 if solution1 dominates solution2, both are
+     * non-dominated, or solution1  is dominated by solution22, respectively.
+     */
     @Override
     public int compare(Object object1, Object object2) {
         if (object1 == null) {
@@ -40,21 +51,32 @@ public class ConvertedObjectivesComparator implements Comparator {
 
         Solution solution1 = (Solution) object1;
         Solution solution2 = (Solution) object2;
-        // dominate1 indicates if some objective of solution1 dominates the same objective in solution2.
-        int dominate1;
-        // dominate2 is the complementary of dominate1.
-        int dominate2;
+
+        int dominate1; // dominate1 indicates if some objective of solution1
+        // dominates the same objective in solution2. dominate2
+        int dominate2; // is the complementary of dominate1.
 
         dominate1 = 0;
         dominate2 = 0;
 
-        int flag;
+        int flag; //stores the result of the comparison
 
-        // Equal number of violated constraints. Applying a dominance Test then
+        int m = solution1.getNumberOfObjectives();
+
+        double[] convertedSolution1 = new double[m + 1];
+        double[] convertedSolution2 = new double[m + 1];
+
+        for (int i = 0; i < m; i++) {
+            convertedSolution1[i] = solution1.getObjective(i);
+            convertedSolution2[i] = solution2.getObjective(i);
+        }
+        convertedSolution1[m] = Math.abs(solution1.getOverallConstraintViolation());
+        convertedSolution2[m] = Math.abs(solution2.getOverallConstraintViolation());
+
         double value1, value2;
-        for (int i = 0; i < solution1.getNumberOfObjectives(); i++) {
-            value1 = solution1.getConvertedObjective(i);
-            value2 = solution2.getConvertedObjective(i);
+        for (int i = 0; i < m + 1; i++) {
+            value1 = convertedSolution1[i];
+            value2 = convertedSolution2[i];
             if (value1 < value2) {
                 flag = -1;
             } else if (value1 > value2) {
@@ -73,7 +95,7 @@ public class ConvertedObjectivesComparator implements Comparator {
         }
 
         if (dominate1 == dominate2) {
-            //No one dominate the other
+            // No one dominate the other
             return 0;
         }
         if (dominate1 == 1) {

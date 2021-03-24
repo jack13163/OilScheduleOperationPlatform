@@ -1,4 +1,4 @@
-package opt.easyjmetal.util.comparators.one;
+package opt.easyjmetal.util.comparators.line;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.comparators.IConstraintViolationComparator;
@@ -8,14 +8,14 @@ import java.util.Comparator;
 /**
  * CDP±È½ÏÆ÷
  */
-public class DominanceComparator implements Comparator {
+public class ConstraintDominanceComparator implements Comparator {
     IConstraintViolationComparator violationConstraintComparator_;
 
-    public DominanceComparator() {
+    public ConstraintDominanceComparator() {
         violationConstraintComparator_ = new OverallConstraintViolationComparator();
     }
 
-    public DominanceComparator(IConstraintViolationComparator comparator) {
+    public ConstraintDominanceComparator(IConstraintViolationComparator comparator) {
         violationConstraintComparator_ = comparator;
     }
 

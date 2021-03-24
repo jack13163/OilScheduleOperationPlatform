@@ -27,7 +27,7 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.operator.mutation.Mutation;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.comparators.one.DominanceComparator;
+import opt.easyjmetal.util.comparators.line.ConstraintDominanceComparator;
 import opt.jmetal.util.comparator.impl.OverallConstraintViolationComparator;
 
 import java.util.Comparator;
@@ -87,7 +87,7 @@ public class MutationLocalSearch extends LocalSearch {
 
     evaluations_          = 0      ;
     archive_              = null;
-    dominanceComparator_  = new DominanceComparator();
+    dominanceComparator_  = new ConstraintDominanceComparator();
     constraintComparator_ = new OverallConstraintViolationComparator();
   } //Mutation improvement
 
@@ -102,7 +102,7 @@ public class MutationLocalSearch extends LocalSearch {
   //  evaluations_ = 0 ;
   //  problem_ = problem;
   //  mutationOperator_ = mutationOperator;
-  //  dominanceComparator_ = new DominanceComparator();
+  //  dominanceComparator_ = new ConstraintDominanceComparator();
   //  constraintComparator_ = new OverallConstraintViolationComparator();
   //} // MutationLocalSearch
 

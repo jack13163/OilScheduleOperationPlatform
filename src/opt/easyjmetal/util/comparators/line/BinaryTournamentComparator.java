@@ -19,7 +19,7 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators.one;
+package opt.easyjmetal.util.comparators.line;
 
 import opt.easyjmetal.core.Solution;
 
@@ -30,7 +30,7 @@ import java.util.Comparator;
  */
 public class BinaryTournamentComparator implements Comparator {
 
-    private static final Comparator dominance_ = new DominanceComparator();
+    private static final Comparator dominance_ = new ConstraintDominanceComparator();
 
     /**
      * Compares two solutions.

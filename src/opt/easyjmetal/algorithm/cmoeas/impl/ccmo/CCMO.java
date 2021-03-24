@@ -1,6 +1,7 @@
 // SPEA2: Improving the Strength Pareto Evolutionary Algorithm For Multiobjective Optimization.
 package opt.easyjmetal.algorithm.cmoeas.impl.ccmo;
 
+import opt.easyjmetal.algorithm.common.UtilityFunctions;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
@@ -64,35 +65,24 @@ public class CCMO extends Algorithm {
             SolutionSet offspringPopulation1 = new SolutionSet(populationSize_ / 2);
             SolutionSet offspringPopulation2 = new SolutionSet(populationSize_ / 2);
             for (int i = 0; i < (populationSize_ / 2); i++) {
-                Solution[] offSpring = new Solution[2];
-                // 交叉变异
-                if (crossoverOperator_.getClass().getSimpleName().equalsIgnoreCase("SBXCrossover")) {
-                    Solution[] parents = new Solution[2];
-                    parents[0] = (Solution) selectionOperator_.execute(population1);
-                    parents[1] = (Solution) selectionOperator_.execute(population2);
-                    offSpring = ((Solution[]) crossoverOperator_.execute(parents));
-                } else if (crossoverOperator_.getClass().getSimpleName().equalsIgnoreCase("DifferentialEvolutionCrossover")) {
-                    Solution[] parents = new Solution[3];
-                    parents[0] = (Solution) selectionOperator_.execute(population1);
-                    parents[1] = (Solution) selectionOperator_.execute(population2);
-                    parents[2] = parents[0];
-                    offSpring[0] = (Solution) crossoverOperator_.execute(new Object[]{parents[0], parents});
-                    offSpring[1] = (Solution) crossoverOperator_.execute(new Object[]{parents[1], parents});
-                } else {
-                    System.out.println("unknown crossover");
-
-                }
-                mutationOperator_.execute(offSpring[0]);
-                mutationOperator_.execute(offSpring[1]);
-                problem_.evaluate(offSpring[0]);
-                problem_.evaluateConstraints(offSpring[0]);
-                problem_.evaluate(offSpring[1]);
-                problem_.evaluateConstraints(offSpring[1]);
+                Solution[] offSpring = UtilityFunctions.generateOffsprings(population1, population2, mutationOperator_, crossoverOperator_, selectionOperator_);
 
                 // 两个种群独立进行更新
                 offspringPopulation1.add(offSpring[0]);
                 offspringPopulation2.add(offSpring[1]);
                 evaluations_ += 2;
+            }
+
+            // 重新评价适应度
+            for (int i = 0; i < offspringPopulation1.size(); i++) {
+                Solution solution = offspringPopulation1.get(i);
+                problem_.evaluate(solution);
+                problem_.evaluateConstraints(solution);
+            }
+            for (int i = 0; i < offspringPopulation2.size(); i++) {
+                Solution solution = offspringPopulation2.get(i);
+                problem_.evaluate(solution);
+                problem_.evaluateConstraints(solution);
             }
 
             // 环境选择

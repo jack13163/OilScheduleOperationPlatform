@@ -22,7 +22,7 @@
 package opt.easyjmetal.util.ranking.impl;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.two.ConstraintAndObjectivesComparator;
+import opt.easyjmetal.util.comparators.parallel.ConstraintAndObjectivesComparator;
 import opt.easyjmetal.util.ranking.AbstractRanking;
 
 /**

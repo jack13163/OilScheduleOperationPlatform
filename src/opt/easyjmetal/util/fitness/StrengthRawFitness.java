@@ -1,14 +1,14 @@
 package opt.easyjmetal.util.fitness;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.one.DominanceComparator;
+import opt.easyjmetal.util.comparators.line.ConstraintDominanceComparator;
 
 import java.util.Arrays;
 import java.util.Comparator;
 
 public class StrengthRawFitness {
 
-    private static final Comparator DOMINANCE_COMPARATOR = new DominanceComparator();
+    private static final Comparator DOMINANCE_COMPARATOR = new ConstraintDominanceComparator();
     // k-th individual
     private int k;
 

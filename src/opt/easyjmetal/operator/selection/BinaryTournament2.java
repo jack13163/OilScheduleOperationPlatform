@@ -23,9 +23,9 @@ package opt.easyjmetal.operator.selection;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
+import opt.easyjmetal.util.comparators.line.ConstraintDominanceComparator;
 import opt.easyjmetal.util.permutation.PermutationUtility;
 import opt.easyjmetal.util.permutation.PseudoRandom;
-import opt.easyjmetal.util.comparators.one.DominanceComparator;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -57,7 +57,7 @@ public class BinaryTournament2 extends Selection {
      */
     public BinaryTournament2(HashMap<String, Object> parameters) {
         super(parameters);
-        dominance_ = new DominanceComparator();
+        dominance_ = new ConstraintDominanceComparator();
     }
 
     /**

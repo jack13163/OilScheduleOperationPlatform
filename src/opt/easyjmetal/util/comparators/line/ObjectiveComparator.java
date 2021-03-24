@@ -1,4 +1,4 @@
-//  NumberOfViolatedConstraintComparator.java
+//  PointComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,16 +19,29 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators.one;
+package opt.easyjmetal.util.comparators.line;
 
 import opt.easyjmetal.core.Solution;
-import opt.easyjmetal.util.comparators.IConstraintViolationComparator;
+
+import java.util.Comparator;
 
 /**
  * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> objects) based on the number of violated constraints.
+ * <code>Solution</code> objects) based on a objective values.
  */
-public class NumberOfViolatedConstraintComparator implements IConstraintViolationComparator {
+public class ObjectiveComparator implements Comparator {
+    private int nObj;
+    private boolean ascendingOrder_;
+
+    public ObjectiveComparator(int nObj) {
+        this.nObj = nObj;
+        ascendingOrder_ = true;
+    }
+
+    public ObjectiveComparator(int nObj, boolean descendingOrder) {
+        this.nObj = nObj;
+        ascendingOrder_ = !descendingOrder;
+    }
 
     /**
      * Compares two solutions.
@@ -40,30 +53,30 @@ public class NumberOfViolatedConstraintComparator implements IConstraintViolatio
      */
     @Override
     public int compare(Object o1, Object o2) {
-        Solution solution1 = (Solution) o1;
-        Solution solution2 = (Solution) o2;
-
-        if (solution1.getNumberOfViolatedConstraint() <
-                solution2.getNumberOfViolatedConstraint()) {
-            return -1;
-        } else if (solution2.getNumberOfViolatedConstraint() <
-                solution1.getNumberOfViolatedConstraint()) {
+        if (o1 == null) {
             return 1;
+        } else if (o2 == null) {
+            return -1;
         }
 
-        return 0;
-    }
-
-    /**
-     * Returns true if solutions s1 and/or s2 violates a
-     * number n > 0 of constraints
-     */
-    @Override
-    public boolean needToCompare(Solution s1, Solution s2) {
-        boolean needToCompare;
-        needToCompare = (s1.getNumberOfViolatedConstraint() > 0) ||
-                (s2.getNumberOfViolatedConstraint() > 0);
-
-        return needToCompare;
+        double objetive1 = ((Solution) o1).getObjective(this.nObj);
+        double objetive2 = ((Solution) o2).getObjective(this.nObj);
+        if (ascendingOrder_) {
+            if (objetive1 < objetive2) {
+                return -1;
+            } else if (objetive1 > objetive2) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            if (objetive1 < objetive2) {
+                return 1;
+            } else if (objetive1 > objetive2) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
     }
 }

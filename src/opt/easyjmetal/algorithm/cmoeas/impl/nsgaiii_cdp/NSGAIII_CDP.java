@@ -151,7 +151,6 @@ public class NSGAIII_CDP extends Algorithm {
         // RankingByCDP the union
         RankingByCDP ranking = new RankingByCDP(jointPopulation);
 
-        // List<Solution> pop = crowdingDistanceSelection(ranking);
         SolutionSet pop = new SolutionSet(populationSize_);
         List<SolutionSet> fronts = new ArrayList<>();
         int rankingIndex = 0;

@@ -22,9 +22,9 @@ package opt.easyjmetal.qualityindicator.fastHypervolume;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.archive.Archive;
-import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
-import opt.easyjmetal.util.comparators.one.DominanceComparator;
-import opt.easyjmetal.util.comparators.one.EqualSolutionsComparator;
+import opt.easyjmetal.util.comparators.line.CrowdingDistanceComparator;
+import opt.easyjmetal.util.comparators.line.ConstraintDominanceComparator;
+import opt.easyjmetal.util.comparators.line.EqualSolutionsComparator;
 
 import java.util.Comparator;
 
@@ -68,7 +68,7 @@ public class FastHypervolumeArchive extends Archive {
         super(maxSize);
         maxSize_ = maxSize;
         objectives_ = numberOfObjectives;
-        dominance_ = new DominanceComparator();
+        dominance_ = new ConstraintDominanceComparator();
         equals_ = new EqualSolutionsComparator();
         referencePoint_ = new Solution(objectives_);
         for (int i = 0; i < objectives_; i++) {

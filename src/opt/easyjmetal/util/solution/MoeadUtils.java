@@ -26,7 +26,7 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.core.Variable;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
+import opt.easyjmetal.util.comparators.line.CrowdingDistanceComparator;
 import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.permutation.PseudoRandom;
 import opt.easyjmetal.util.ranking.impl.RankingByCDP;
@@ -228,7 +228,6 @@ public class MoeadUtils {
     public static void updateExternalArchive(SolutionSet pop, int popSize, SolutionSet externalArchive) {
         SolutionSet feasible_solutions = new SolutionSet(popSize);
         int objectiveNo = pop.get(0).getNumberOfObjectives();
-        Distance distance = new Distance();
         for (int i = 0; i < popSize; i++) {
             if (pop.get(i).getOverallConstraintViolation() == 0.0) {
                 feasible_solutions.add(new Solution(pop.get(i)));
@@ -248,7 +247,7 @@ public class MoeadUtils {
             } else {
                 // delete the element of the set until N <= popSize
                 while (firstRankSolutions.size() > popSize) {
-                    distance.crowdingDistanceAssignment(firstRankSolutions, objectiveNo);
+                    Distance.crowdingDistanceAssignment(firstRankSolutions, objectiveNo);
                     firstRankSolutions.sort(new CrowdingDistanceComparator());
                     firstRankSolutions.remove(firstRankSolutions.size() - 1);
                 }

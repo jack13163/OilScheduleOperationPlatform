@@ -23,8 +23,8 @@ package opt.easyjmetal.util.ranking.impl;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.one.DominanceComparator;
-import opt.easyjmetal.util.comparators.one.OverallConstraintViolationComparator;
+import opt.easyjmetal.util.comparators.line.ConstraintDominanceComparator;
+import opt.easyjmetal.util.comparators.line.OverallConstraintViolationComparator;
 import opt.easyjmetal.util.ranking.AbstractRanking;
 
 import java.util.Comparator;
@@ -47,7 +47,7 @@ public class RankingByACDP extends AbstractRanking {
 
 	public RankingByACDP(SolutionSet solutionSet) {
 		super(solutionSet);
-		dominance_ = new DominanceComparator();
+		dominance_ = new ConstraintDominanceComparator();
 		constraint_ = new OverallConstraintViolationComparator();
 		ranking();
 	}

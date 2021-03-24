@@ -3,7 +3,7 @@ package opt.easyjmetal.algorithm.cmoeas.impl.ccmo;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.distance.Distance;
-import opt.easyjmetal.util.comparators.one.FitnessComparator;
+import opt.easyjmetal.util.comparators.line.FitnessComparator;
 import opt.easyjmetal.util.fitness.CCMO_Fitness;
 import org.apache.commons.lang3.tuple.Pair;
 

@@ -23,7 +23,8 @@ package opt.easyjmetal.util.ranking.impl;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.one.ObjectiveComparator;
+import opt.easyjmetal.util.comparators.line.ObjectiveComparator;
+import opt.easyjmetal.util.permutation.RandomGenerator;
 import opt.easyjmetal.util.ranking.AbstractRanking;
 
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class RankingByObjectives extends AbstractRanking {
         for (int i = 0; i < Math.ceil(1.0 * numberToSelect_ / 2); i++) {
             for (int j = 0; j < numberToSelect_ - 1; j++) {
                 // 随机从比较器中选择一个
-                int indexOfComparator = generateRandomInteger(0, this.numberOfObjectives_ - 1, Math.random());
+                int indexOfComparator = RandomGenerator.generateRandomInteger(0, this.numberOfObjectives_ - 1, Math.random());
                 Solution solution1 = solutionSet_.get(j);
                 Solution solution2 = solutionSet_.get(j + 1);
                 Comparator comparator = this.comparatorList.get(indexOfComparator);
@@ -80,20 +81,5 @@ public class RankingByObjectives extends AbstractRanking {
             Solution copySolution = new Solution(solutionSet_.get(i));
             result.add(copySolution);
         }
-    }
-
-    /**
-     * 生成一个指定范围内的整数，输入为0~1之间的数
-     *
-     * @param min
-     * @param max
-     * @param feasibleRate
-     * @return
-     */
-    private int generateRandomInteger(int min, int max, double feasibleRate) {
-        if (feasibleRate == 1) {
-            return max;
-        }
-        return (int) (feasibleRate * (max - min + 1) + min);
     }
 }

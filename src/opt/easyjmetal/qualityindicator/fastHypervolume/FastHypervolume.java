@@ -26,7 +26,7 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.qualityindicator.fastHypervolume.wfg.Front;
 import opt.easyjmetal.qualityindicator.fastHypervolume.wfg.WFGHV;
-import opt.easyjmetal.util.comparators.one.ObjectiveComparator;
+import opt.easyjmetal.util.comparators.line.ObjectiveComparator;
 
 /**
  * Created with IntelliJ IDEA. User: Antonio J. Nebro Date: 26/08/13 Time: 10:20

@@ -33,71 +33,26 @@ import java.io.Serializable;
  * Class representing a solution for a problem.
  */
 public class Solution implements Serializable {
-    /**
-     * Stores the problem
-     */
+
     private Problem problem_;
-
-    /**
-     * Stores the type of the encodings.variable
-     */
     private SolutionType type_;
-
-    /**
-     * Stores the decision variables of the solution.
-     */
     private Variable[] variable_;
-
-    /**
-     * Stores the objectives values of the solution.
-     */
     private final double[] objective_;
-
-    /**
-     * Stores the objectives values of the solution.
-     */
     private final double[] convertedObjective_;
-
-    /**
-     * Stores the constraint values of the solution.
-     */
     private final double[] constraint_;
-
-    /**
-     * Stores the number of objective values of the solution
-     */
     private int numberOfObjectives_;
-
-
     private int numberOfConstraints_;
-
-    /**
-     * Stores the so called fitness value. Used in some meta-heuristics
-     */
     private double fitness_;
+    private double contribution_;
 
     /**
      * Used in algorithm AbYSS, this field is intended to be used to know when a
      * <code>Solution</code> is marked.
      */
     private boolean marked_;
-
-    /**
-     * Stores the so called rank of the solution. Used in NSGA-II
-     */
     private int rank_;
-
-    /**
-     * Stores the overall constraint violation of the solution.
-     */
     private double overallConstraintViolation_;
-
-
     private double normalizedConstraintViolation_;
-
-    /**
-     * Stores the number of constraints violated by the solution.
-     */
     private int numberOfViolatedConstraints_;
 
     /**
@@ -105,9 +60,7 @@ public class Solution implements Serializable {
      * a <code>SolutionSet</code>. Used in MOCell
      */
     private int location_;
-
     private double diversity_;
-
     private double associateDist_;
 
     /**
@@ -133,9 +86,6 @@ public class Solution implements Serializable {
      * Used in AbySS.
      */
     private double distanceToSolutionSet_;
-//
-//    // 用于随机权重
-//    private final double[] stochastic = new double[10];
 
     /**
      * Constructor.
@@ -195,6 +145,7 @@ public class Solution implements Serializable {
         convertedObjective_ = new double[numberOfObjectives_];
 
         fitness_ = 0.0;
+        contribution_ = 0.0;
         kDistance_ = 0.0;
         crowdingDistance_ = 0.0;
         distanceToSolutionSet_ = Double.POSITIVE_INFINITY;
@@ -224,6 +175,7 @@ public class Solution implements Serializable {
         constraint_ = new double[numberOfConstraints_];
 
         fitness_ = 0.0;
+        contribution_ = 0.0;
         kDistance_ = 0.0;
         crowdingDistance_ = 0.0;
         distanceToSolutionSet_ = Double.POSITIVE_INFINITY;
@@ -265,96 +217,51 @@ public class Solution implements Serializable {
         crowdingDistance_ = solution.getCrowdingDistance();
         kDistance_ = solution.getKDistance();
         fitness_ = solution.getFitness();
+        contribution_ = solution.getContribution();
         marked_ = solution.isMarked();
         rank_ = solution.getRank();
         location_ = solution.getLocation();
     }
 
-    /**
-     * Sets the distance between this solution and a <code>SolutionSet</code>.
-     * The value is stored in <code>distanceToSolutionSet_</code>.
-     *
-     * @param distance The distance to a solutionSet.
-     */
     public void setDistanceToSolutionSet(double distance) {
         distanceToSolutionSet_ = distance;
-    } // SetDistanceToSolutionSet
+    }
 
-    /**
-     * Gets the distance from the solution to a <code>SolutionSet</code>. <b>
-     * REQUIRE </b>: this method has to be invoked after calling
-     * <code>setDistanceToPopulation</code>.
-     *
-     * @return the distance to a specific solutionSet.
-     */
     public double getDistanceToSolutionSet() {
         return distanceToSolutionSet_;
     } // getDistanceToSolutionSet
 
-    /**
-     * Sets the distance between the solution and its k-nearest neighbor in a
-     * <code>SolutionSet</code>. The value is stored in <code>kDistance_</code>.
-     *
-     * @param distance The distance to the k-nearest neighbor.
-     */
     public void setKDistance(double distance) {
         kDistance_ = distance;
     } // setKDistance
 
-    /**
-     * Gets the distance from the solution to his k-nearest nighbor in a
-     * <code>SolutionSet</code>. Returns the value stored in
-     * <code>kDistance_</code>. <b> REQUIRE </b>: this method has to be invoked
-     * after calling <code>setKDistance</code>.
-     *
-     * @return the distance to k-nearest neighbor.
-     */
     public double getKDistance() {
         return kDistance_;
     } // getKDistance
 
-    /**
-     * Sets the crowding distance of a solution in a <code>SolutionSet</code>.
-     * The value is stored in <code>crowdingDistance_</code>.
-     *
-     * @param distance The crowding distance of the solution.
-     */
     public void setCrowdingDistance(double distance) {
         crowdingDistance_ = distance;
     } // setCrowdingDistance
 
-    /**
-     * Gets the crowding distance of the solution into a
-     * <code>SolutionSet</code>. Returns the value stored in
-     * <code>crowdingDistance_</code>. <b> REQUIRE </b>: this method has to be
-     * invoked after calling <code>setCrowdingDistance</code>.
-     *
-     * @return the distance crowding distance of the solution.
-     */
     public double getCrowdingDistance() {
         return crowdingDistance_;
     }
 
-    /**
-     * Sets the fitness of a solution. The value is stored in
-     * <code>fitness_</code>.
-     *
-     * @param fitness The fitness of the solution.
-     */
     public void setFitness(double fitness) {
         fitness_ = fitness;
-    } // setFitness
+    }
 
-    /**
-     * Gets the fitness of the solution. Returns the value of stored in the
-     * encodings.variable <code>fitness_</code>. <b> REQUIRE </b>: This method
-     * has to be invoked after calling <code>setFitness()</code>.
-     *
-     * @return the fitness.
-     */
     public double getFitness() {
         return fitness_;
-    } // getFitness
+    }
+
+    public double getContribution() {
+        return contribution_;
+    }
+
+    public void setContribution(double contribution) {
+        this.contribution_ = contribution;
+    }
 
     /**
      * Sets the value of the i-th objective.

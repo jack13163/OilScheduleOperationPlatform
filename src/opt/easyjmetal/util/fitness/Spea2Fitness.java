@@ -22,11 +22,11 @@
 package opt.easyjmetal.util.fitness;
 
 import opt.easyjmetal.core.SolutionSet;
+import opt.easyjmetal.util.comparators.line.ConstraintDominanceComparator;
 import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.distance.DistanceNode;
 import opt.easyjmetal.util.distance.DistanceNodeComparator;
-import opt.easyjmetal.util.comparators.one.DominanceComparator;
-import opt.easyjmetal.util.comparators.one.FitnessComparator;
+import opt.easyjmetal.util.comparators.line.FitnessComparator;
 
 import java.util.*;
 
@@ -39,7 +39,7 @@ public class Spea2Fitness {
     private SolutionSet solutionSet_ = null;
     private static final Distance distance_ = new Distance();
     private static final Comparator distanceNodeComparator = new DistanceNodeComparator();
-    private static final Comparator dominance_ = new DominanceComparator();
+    private static final Comparator dominance_ = new ConstraintDominanceComparator();
 
     public Spea2Fitness(SolutionSet solutionSet) {
         distance = distance_.distanceMatrix(solutionSet);

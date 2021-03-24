@@ -4,7 +4,7 @@
 
 package opt.easyjmetal.algorithm.cmoeas.impl;
 
-import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
+import opt.easyjmetal.util.comparators.line.CrowdingDistanceComparator;
 import opt.easyjmetal.util.ranking.impl.RankingByCDP;
 import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.core.*;

@@ -7,7 +7,7 @@ import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.util.plot.PlotObjectives;
-import opt.easyjmetal.util.comparators.one.FitnessComparator;
+import opt.easyjmetal.util.comparators.line.FitnessComparator;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 import org.apache.commons.lang3.tuple.Pair;
 

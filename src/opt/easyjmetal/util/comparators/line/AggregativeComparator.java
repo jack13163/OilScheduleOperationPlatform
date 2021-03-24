@@ -1,4 +1,4 @@
-//  EpsilonObjectiveComparator.java
+//  AggregativeComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,7 +19,7 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators.one;
+package opt.easyjmetal.util.comparators.line;
 
 import opt.easyjmetal.core.Solution;
 
@@ -27,31 +27,10 @@ import java.util.Comparator;
 
 /**
  * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> objects) based on epsilon dominance over a given
- * objective function.
+ * <code>Solution</code> objects) based on the aggregative sum of the objective
+ * values.
  */
-public class EpsilonObjectiveComparator implements Comparator {
-
-    /**
-     * Stores the objective index to compare
-     */
-    private int objective_;
-
-    /**
-     * Stores the eta value for epsilon-dominance
-     */
-    private double eta_;
-
-    /**
-     * Constructor.
-     *
-     * @param nObj Index of the objective to compare.
-     * @param eta  Value for epsilon-dominance.
-     */
-    public EpsilonObjectiveComparator(int nObj, double eta) {
-        objective_ = nObj;
-        eta_ = eta;
-    }
+public class AggregativeComparator implements Comparator {
 
     /**
      * Compares two solutions.
@@ -69,13 +48,15 @@ public class EpsilonObjectiveComparator implements Comparator {
             return -1;
         }
 
-        double objetive1 = ((Solution) o1).getObjective(objective_);
-        double objetive2 = ((Solution) o2).getObjective(objective_);
+        double value1, value2;
+        Solution solution1 = (Solution) o1;
+        Solution solution2 = (Solution) o2;
 
-        // Objetive implements comparable!!!
-        if (objetive1 / (1 + eta_) < objetive2) {
+        value1 = solution1.getAggregativeValue();
+        value2 = solution2.getAggregativeValue();
+        if (value1 < value2) {
             return -1;
-        } else if (objetive1 / (1 + eta_) > objetive2) {
+        } else if (value2 < value1) {
             return 1;
         } else {
             return 0;

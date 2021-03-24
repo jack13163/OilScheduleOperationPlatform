@@ -25,10 +25,10 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.qualityindicator.fastHypervolume.wfg.Point;
 import opt.easyjmetal.qualityindicator.fastHypervolume.wfg.WFGHV;
 import opt.easyjmetal.qualityindicator.util.MetricsUtil;
+import opt.easyjmetal.util.comparators.line.ConstraintDominanceComparator;
 import opt.easyjmetal.util.distance.Distance;
-import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
-import opt.easyjmetal.util.comparators.one.DominanceComparator;
-import opt.easyjmetal.util.comparators.one.EqualSolutionsComparator;
+import opt.easyjmetal.util.comparators.line.CrowdingDistanceComparator;
+import opt.easyjmetal.util.comparators.line.EqualSolutionsComparator;
 
 import java.util.Comparator;
 
@@ -79,7 +79,7 @@ public class WFGHypervolumeArchive extends Archive {
     super(maxSize);
     maxSize_          = maxSize;
     objectives_       = numberOfObjectives;
-    dominance_        = new DominanceComparator();
+    dominance_        = new ConstraintDominanceComparator();
     equals_           = new EqualSolutionsComparator();
     distance_         = new Distance();
     utils_            = new MetricsUtil() ;

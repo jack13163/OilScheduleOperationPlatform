@@ -3,8 +3,8 @@ package opt.easyjmetal.util.archive;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.comparators.one.DominanceComparator;
-import opt.easyjmetal.util.comparators.one.EqualSolutionsComparator;
+import opt.easyjmetal.util.comparators.line.ConstraintDominanceComparator;
+import opt.easyjmetal.util.comparators.line.EqualSolutionsComparator;
 import opt.jmetal.util.pseudorandom.JMetalRandom;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class NonDominatedArchive extends Archive {
     private Comparator<Solution> equalSolutions = new EqualSolutionsComparator();
 
     public NonDominatedArchive() {
-        dominanceComparator = new DominanceComparator();
+        dominanceComparator = new ConstraintDominanceComparator();
         solutionList = new ArrayList<>();
     }
 

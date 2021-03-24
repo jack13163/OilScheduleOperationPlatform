@@ -1,5 +1,10 @@
 package opt.easyjmetal.algorithm.common;
 
+import opt.easyjmetal.core.Operator;
+import opt.easyjmetal.core.Solution;
+import opt.easyjmetal.core.SolutionSet;
+import opt.easyjmetal.util.JMException;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -7,6 +12,45 @@ import java.util.StringTokenizer;
 
 public class UtilityFunctions {
 
+
+    /**
+     * 生成下一代种群
+     * @param solutionSet1       种群1
+     * @param solutionSet2       种群2
+     * @param mutationOperator_  变异算子
+     * @param crossoverOperator_ 交叉算子
+     * @param selectionOperator_ 选择算子
+     * @return
+     * @throws JMException
+     */
+    public static Solution[] generateOffsprings(SolutionSet solutionSet1,
+                                                SolutionSet solutionSet2,
+                                                Operator mutationOperator_,
+                                                Operator crossoverOperator_,
+                                                Operator selectionOperator_) throws JMException {
+        Solution[] offSpring = new Solution[2];
+        // Apply Crossover for Real codification
+        if (crossoverOperator_.getClass().getSimpleName().equalsIgnoreCase("SBXCrossover")) {
+            Solution[] parents = new Solution[2];
+            parents[0] = (Solution) selectionOperator_.execute(solutionSet1);
+            parents[1] = (Solution) selectionOperator_.execute(solutionSet2);
+            offSpring = ((Solution[]) crossoverOperator_.execute(parents));
+        }
+        // Apply DE crossover
+        else if (crossoverOperator_.getClass().getSimpleName().equalsIgnoreCase("DifferentialEvolutionCrossover")) {
+            Solution[] parents = new Solution[3];
+            parents[0] = (Solution) selectionOperator_.execute(solutionSet1);
+            parents[1] = (Solution) selectionOperator_.execute(solutionSet2);
+            parents[2] = parents[0];
+            offSpring[0] = (Solution) crossoverOperator_.execute(new Object[]{parents[0], parents});
+            offSpring[1] = (Solution) crossoverOperator_.execute(new Object[]{parents[1], parents});
+        } else {
+            System.out.println("unknown crossover");
+        }
+        mutationOperator_.execute(offSpring[0]);
+        mutationOperator_.execute(offSpring[1]);
+        return offSpring;
+    }
 
     /**
      * 读取指定路径下的权重文件，生成参考点

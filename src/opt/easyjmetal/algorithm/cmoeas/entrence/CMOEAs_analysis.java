@@ -9,8 +9,10 @@ public class CMOEAs_analysis {
         try {
             // "NSGAII_CDP", "ISDEPLUS_CDP", "NSGAIII_CDP", "SPEA2_CDP", "MOEAD_CDP", "MOEAD_IEpsilon", "MOEAD_Epsilon", "MOEAD_SR", "C_MOEAD", "PPS_MOEAD"
             String[] algorithmNames = {
+                    "NSGAII_CDP_Contribution",
+                    "NSGAII_CDP_Contribution",
 //                    "NSGAII_CDP_ISDEPlus",
-                    "NSGAII_CDP_ManyAddOne",
+//                    "NSGAII_CDP_ManyAddOne",
                     "NSGAII_CDP",
 //                    "ISDEPLUS_CDP",
 //                    "NSGAIII_CDP",

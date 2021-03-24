@@ -1,4 +1,4 @@
-//  PointComparator.java
+//  CrowdingDistanceComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,23 +19,17 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators.one;
+package opt.easyjmetal.util.comparators.line;
 
 import opt.easyjmetal.core.Solution;
 
 import java.util.Comparator;
 
-public class FitnessComparator implements Comparator {
-
-    private boolean ascendingOrder_;
-
-    public FitnessComparator() {
-        ascendingOrder_ = true;
-    }
-
-    public FitnessComparator(boolean descendingOrder) {
-        ascendingOrder_ = !descendingOrder;
-    }
+/**
+ * This class implements a <code>Comparator</code> (a method for comparing
+ * <code>Solution</code> objects) based on the crowding distance, as in NSGA-II.
+ */
+public class CrowdingDistanceComparator implements Comparator {
 
     /**
      * Compares two solutions.
@@ -53,24 +47,15 @@ public class FitnessComparator implements Comparator {
             return -1;
         }
 
-        double objetive1 = ((Solution) o1).getFitness();
-        double objetive2 = ((Solution) o2).getFitness();
-        if (ascendingOrder_) {
-            if (objetive1 < objetive2) {
-                return -1;
-            } else if (objetive1 > objetive2) {
-                return 1;
-            } else {
-                return 0;
-            }
-        } else {
-            if (objetive1 < objetive2) {
-                return 1;
-            } else if (objetive1 > objetive2) {
-                return -1;
-            } else {
-                return 0;
-            }
+        double distance1 = ((Solution) o1).getCrowdingDistance();
+        double distance2 = ((Solution) o2).getCrowdingDistance();
+        if (distance1 > distance2) {
+            return -1;
         }
+        if (distance1 < distance2) {
+            return 1;
+        }
+        return 0;
     }
 }
+

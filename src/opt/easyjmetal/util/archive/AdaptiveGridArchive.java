@@ -22,8 +22,8 @@
 package opt.easyjmetal.util.archive;
 
 import opt.easyjmetal.core.Solution;
+import opt.easyjmetal.util.comparators.line.ConstraintDominanceComparator;
 import opt.easyjmetal.util.solution.AdaptiveGrid;
-import opt.easyjmetal.util.comparators.one.DominanceComparator;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -48,7 +48,7 @@ public class AdaptiveGridArchive extends Archive {
     public AdaptiveGridArchive(int maxSize, int bisections, int objectives) {
         super(maxSize);
         maxSize_ = maxSize;
-        dominance_ = new DominanceComparator();
+        dominance_ = new ConstraintDominanceComparator();
         grid_ = new AdaptiveGrid(bisections, objectives);
     }
 

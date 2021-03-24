@@ -4,25 +4,25 @@ import opt.easyjmetal.algorithm.common.UtilityFunctions;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.comparators.line.CrowdingDistanceComparator;
+import opt.easyjmetal.util.comparators.line.FitnessComparator;
 import opt.easyjmetal.util.distance.Distance;
+import opt.easyjmetal.util.fitness.CCMO_Fitness;
+import opt.easyjmetal.util.fitness.ISDEPlus_Fitness;
+import opt.easyjmetal.util.permutation.RandomGenerator;
 import opt.easyjmetal.util.ranking.AbstractRanking;
 import opt.easyjmetal.util.ranking.impl.RankingByCDP;
-import opt.easyjmetal.util.ranking.impl.RankingByObjectives;
 import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
-/**
- * ¸Ä½ø´«Í³µÄNSGA-II
- */
-public class NSGAII_CDP_ISDEPlus extends Algorithm {
-
-    public NSGAII_CDP_ISDEPlus(Problem problem) {
-        super(problem);
-    }
+public class NSGAII_CDP_Fitness extends Algorithm {
 
     private SolutionSet population_;
     private SolutionSet external_archive_;
     private String dataDirectory_;
+
+    public NSGAII_CDP_Fitness(Problem problem) {
+        super(problem);
+    }
 
     @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
@@ -50,17 +50,16 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
 
         // Initialize the external archive
         external_archive_ = new SolutionSet(populationSize_);
-        MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
+        external_archive_ = MoeadUtils.initializeExternalArchive(population_, populationSize_, external_archive_);
 
         // creat database
         String dbName = dataDirectory_;
-        String tableName = "NSGAII_CDP_ISDEPlus_" + runningTime;
+        String tableName = "NSGAII_CDP_Fitness_" + runningTime;
         SqlUtils.createTable(tableName, dbName);
         SqlUtils.clearTable(tableName, dbName);
 
         int gen = 0;
         while (evaluations_ < maxEvaluations_) {
-            // Create the offSpring solutionSet
             SolutionSet offspringPopulation_ = new SolutionSet(populationSize_);
             for (int i = 0; i < (populationSize_ / 2); i++) {
                 Solution[] offSpring = UtilityFunctions.generateOffsprings(population_, population_, mutationOperator_, crossoverOperator_, selectionOperator_);
@@ -69,62 +68,63 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
                 evaluations_ += 2;
             }
 
-            // ÖØÐÂÆÀ¼ÛÊÊÓ¦¶È
-            for (int i = 0; i < populationSize_; i++) {
+            // é‡æ–°è¯„ä»·é€‚åº”åº¦
+            for (int i = 0; i < offspringPopulation_.size(); i++) {
                 Solution solution = offspringPopulation_.get(i);
                 problem_.evaluate(solution);
                 problem_.evaluateConstraints(solution);
             }
 
-            // ºÏ²¢ÖÖÈº
+            // åˆå¹¶ç§ç¾¤
             SolutionSet union_ = population_.union(offspringPopulation_);
             population_.clear();
 
-            // ¼ÆËãÍË»ð±ÈÀý£¨ÏÂ½µ£©1-exp(-8*x)
-            double lamb = 8.0;
-            double iterationRate = 1.0 - Math.exp(-1.0 * lamb * evaluations_ / maxEvaluations_);
+            AbstractRanking ranking = new RankingByCDP(union_);
+            int remain = populationSize_;
+            int index = 0;
+            SolutionSet front = ranking.getSubfront(index);
+            while ((remain > 0) && (remain >= front.size())) {
+                ISDEPlus_Fitness.computeFitnessValue(front);
+                front.sort(new FitnessComparator());
+                // Add the individuals of this front
+                for (int k = 0; k < front.size(); k++) {
+                    population_.add(front.get(k));
+                }
 
-            // ¸ù¾Ý±ÈÀý½øÐÐ·ÇÖ§ÅäÅÅÐò
-            AbstractRanking ranking = null;
-            if (Math.random() < iterationRate) {
-                System.out.println("Iteration: " + evaluations_ / populationSize_ + ", OBJs");
-                if (Math.random() < 0.5) {
-                    ranking = new RankingByObjectives(union_, problem_.getNumberOfObjectives(), populationSize_);
-                    population_ = ranking.getResult();
+                remain = remain - front.size();
+                index++;
+                if (remain > 0) {
+                    front = ranking.getSubfront(index);
                 }
             }
 
-            if (population_.size() == 0) {
-                // ·ÇÖ§ÅäÅÅÐò
-                ranking = new RankingByCDP(union_);
+            // Remain is less than front(index).size, insert only the best one
+            if (remain > 0) {
+                SolutionSet remainSolutions = new SolutionSet();
+                // è®¡ç®—é€€ç«æ¯”ä¾‹ï¼ˆä¸‹é™ï¼‰1-exp(-8*x)
+                double lamb = 8.0;
+                double iterationRate = 1.0 - Math.exp(-1.0 * lamb * evaluations_ / maxEvaluations_);
 
-                int remain = populationSize_;
-                int index = 0;
-                // Obtain the next front
-                SolutionSet front = ranking.getSubfront(index);
-                while ((remain > 0) && (remain >= front.size())) {
-                    // Add the individuals of this front
-                    for (int k = 0; k < front.size(); k++) {
-                        population_.add(front.get(k));
-                    }
-
-                    remain = remain - front.size();
-                    index++;
-                    if (remain > 0) {
-                        front = ranking.getSubfront(index);
-                    }
+                int maxIndex = RandomGenerator.generateRandomInteger(index, ranking.getNumberOfSubfronts() - 1, iterationRate);
+                int maxFrontsToBeSelected = Math.min(index, maxIndex);
+                for (int i = index; i <= maxFrontsToBeSelected; i++) {
+                    remainSolutions = remainSolutions.union(ranking.getSubfront(i));
                 }
 
-                // Remain is less than front(index).size, insert only the best one
-                if (remain > 0) {
-                    System.out.println("Iteration: " + evaluations_ / populationSize_ + ", ignored: false  " + remain + "<----" + front.size());
-                    Distance.crowdingDistanceAssignment(front, problem_.getNumberOfObjectives());
-                    front.sort(new CrowdingDistanceComparator());
+                // æ ¹æ®æ¯”ä¾‹è¿›è¡Œéžæ”¯é…æŽ’åº
+                if (Math.random() < iterationRate) {
+                    System.out.println("Iteration: " + evaluations_ / populationSize_ + ", CCMO,  depth: " + (maxIndex - index + 1) + ", " + remain + "<----" + remainSolutions.size());
+                    CCMO_Fitness.computeFitnessValue(remainSolutions, true);
+                    remainSolutions.sort(new FitnessComparator());
+                } else {
+                    System.out.println("Iteration: " + evaluations_ / populationSize_ + ", CD,  depth: " + (maxIndex - index + 1) + ", " + remain + "<----" + remainSolutions.size());
+                    Distance.crowdingDistanceAssignment(remainSolutions, problem_.getNumberOfObjectives());
+                    remainSolutions.sort(new CrowdingDistanceComparator());
+                }
 
-                    // ½«Ê£ÏÂµÄ½âÌí¼Óµ½ÖÖÈºÖÐ
-                    for (int k = 0; k < remain; k++) {
-                        population_.add(front.get(k));
-                    }
+                // å°†å‰©ä¸‹çš„è§£æ·»åŠ åˆ°ç§ç¾¤ä¸­
+                for (int k = 0; k < remain; k++) {
+                    population_.add(remainSolutions.get(k));
                 }
             }
 

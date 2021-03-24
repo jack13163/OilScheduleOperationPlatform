@@ -353,9 +353,7 @@ public class MetricsUtil {
             }
             br.close();
         } catch (Exception e) {
-            System.out
-                    .println("jmetal.qualityIndicator.util.readNonDominatedSolutionSet: "
-                            + path);
+            System.out.println("jmetal.qualityIndicator.util.readNonDominatedSolutionSet: " + path);
             e.printStackTrace();
         }
     }

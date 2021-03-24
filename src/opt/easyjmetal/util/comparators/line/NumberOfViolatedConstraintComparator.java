@@ -1,4 +1,4 @@
-//  CrowdingDistanceComparator.java
+//  NumberOfViolatedConstraintComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,17 +19,16 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators.one;
+package opt.easyjmetal.util.comparators.line;
 
 import opt.easyjmetal.core.Solution;
-
-import java.util.Comparator;
+import opt.easyjmetal.util.comparators.IConstraintViolationComparator;
 
 /**
  * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> objects) based on the crowding distance, as in NSGA-II.
+ * <code>Solution</code> objects) based on the number of violated constraints.
  */
-public class CrowdingDistanceComparator implements Comparator {
+public class NumberOfViolatedConstraintComparator implements IConstraintViolationComparator {
 
     /**
      * Compares two solutions.
@@ -41,21 +40,30 @@ public class CrowdingDistanceComparator implements Comparator {
      */
     @Override
     public int compare(Object o1, Object o2) {
-        if (o1 == null) {
-            return 1;
-        } else if (o2 == null) {
+        Solution solution1 = (Solution) o1;
+        Solution solution2 = (Solution) o2;
+
+        if (solution1.getNumberOfViolatedConstraint() <
+                solution2.getNumberOfViolatedConstraint()) {
             return -1;
+        } else if (solution2.getNumberOfViolatedConstraint() <
+                solution1.getNumberOfViolatedConstraint()) {
+            return 1;
         }
 
-        double distance1 = ((Solution) o1).getCrowdingDistance();
-        double distance2 = ((Solution) o2).getCrowdingDistance();
-        if (distance1 > distance2) {
-            return -1;
-        }
-        if (distance1 < distance2) {
-            return 1;
-        }
         return 0;
     }
-}
 
+    /**
+     * Returns true if solutions s1 and/or s2 violates a
+     * number n > 0 of constraints
+     */
+    @Override
+    public boolean needToCompare(Solution s1, Solution s2) {
+        boolean needToCompare;
+        needToCompare = (s1.getNumberOfViolatedConstraint() > 0) ||
+                (s2.getNumberOfViolatedConstraint() > 0);
+
+        return needToCompare;
+    }
+}

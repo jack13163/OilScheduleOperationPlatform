@@ -1,4 +1,4 @@
-//  DistanceToPopulationComparator.java
+//  PointComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,7 +19,7 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators.one;
+package opt.easyjmetal.util.comparators.line;
 
 import opt.easyjmetal.core.Solution;
 
@@ -27,11 +27,27 @@ import java.util.Comparator;
 
 /**
  * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> objects) based on the euclidean distance to a
- * solution set. This distances are obtained through the method
- * <code>getDistanceToPopulation<code>.
+ * <code>Solution</code> objects) based on a objective values.
  */
-public class DistanceToPopulationComparator implements Comparator {
+public class ConvertedObjectiveComparator implements Comparator {
+
+    private int nObj;
+    private boolean ascendingOrder_;
+
+    /**
+     * Constructor.
+     *
+     * @param nObj The index of the objective to compare
+     */
+    public ConvertedObjectiveComparator(int nObj) {
+        this.nObj = nObj;
+        ascendingOrder_ = true;
+    }
+
+    public ConvertedObjectiveComparator(int nObj, boolean descendingOrder) {
+        this.nObj = nObj;
+        ascendingOrder_ = !descendingOrder;
+    }
 
     /**
      * Compares two solutions.
@@ -49,14 +65,24 @@ public class DistanceToPopulationComparator implements Comparator {
             return -1;
         }
 
-        double distance1 = ((Solution) o1).getDistanceToSolutionSet();
-        double distance2 = ((Solution) o2).getDistanceToSolutionSet();
-        if (distance1 < distance2) {
-            return -1;
-        } else if (distance1 > distance2) {
-            return 1;
+        double objetive1 = ((Solution) o1).getConvertedObjective(this.nObj);
+        double objetive2 = ((Solution) o2).getConvertedObjective(this.nObj);
+        if (ascendingOrder_) {
+            if (objetive1 < objetive2) {
+                return -1;
+            } else if (objetive1 > objetive2) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            if (objetive1 < objetive2) {
+                return 1;
+            } else if (objetive1 > objetive2) {
+                return -1;
+            } else {
+                return 0;
+            }
         }
-
-        return 0;
     }
 }

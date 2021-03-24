@@ -3,7 +3,7 @@ package opt.easyjmetal.algorithm.moeas.impl;
 
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.*;
-import opt.easyjmetal.util.comparators.one.FitnessComparator;
+import opt.easyjmetal.util.comparators.line.FitnessComparator;
 import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.fitness.ISDEPlus_Fitness;
 import opt.easyjmetal.util.plot.PlotObjectives;

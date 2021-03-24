@@ -1,6 +1,7 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.c_taea;
 
 import opt.easyjmetal.algorithm.common.MatlabUtilityFunctionsWrapper;
+import opt.easyjmetal.algorithm.common.UtilityFunctions;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.sqlite.SqlUtils;
@@ -78,7 +79,6 @@ public class C_TAEA extends Algorithm {
             double PC = probabilities[2];
             SolutionSet q = new SolutionSet(populationSize_);
             for (int i = 0; i < (int)(populationSize_ / 2); i++) {
-                Solution[] offSpring = new Solution[2];
                 SolutionSet P1, P2;
                 if (Pc > Pd) {
                     P1 = external_archive_ca;
@@ -92,34 +92,18 @@ public class C_TAEA extends Algorithm {
                     P2 = external_archive_da;
                 }
                 // 选择两个个体进行交叉操作
-                if (crossoverOperator_.getClass().getSimpleName().equalsIgnoreCase("SBXCrossover")) {
-                    Solution[] parents = new Solution[2];
-                    parents[0] = (Solution) selectionOperator_.execute(P1);
-                    parents[1] = (Solution) selectionOperator_.execute(P2);
-                    offSpring = ((Solution[]) crossoverOperator_.execute(parents));
-                } else if (crossoverOperator_.getClass().getSimpleName().equalsIgnoreCase("DifferentialEvolutionCrossover")) {
-                    Solution[] parents = new Solution[3];
-                    parents[0] = (Solution) selectionOperator_.execute(P1);
-                    parents[1] = (Solution) selectionOperator_.execute(P2);
-                    parents[2] = parents[0];
-                    offSpring[0] = (Solution) crossoverOperator_.execute(new Object[]{parents[0], parents});
-                    offSpring[1] = (Solution) crossoverOperator_.execute(new Object[]{parents[1], parents});
-                } else {
-                    System.out.println("unknown crossover");
-                }
-
-                mutationOperator_.execute(offSpring[0]);
-                mutationOperator_.execute(offSpring[1]);
-                problem_.evaluate(offSpring[0]);
-                problem_.evaluateConstraints(offSpring[0]);
-                problem_.evaluate(offSpring[1]);
-                problem_.evaluateConstraints(offSpring[1]);
+                Solution[] offSpring = UtilityFunctions.generateOffsprings(P1, P2, mutationOperator_, crossoverOperator_, selectionOperator_);
                 q.add(offSpring[0]);
                 q.add(offSpring[1]);
                 evaluations_ += 2;
             }
 
-            // 环境选择
+            // 重新计算适应度值
+            for (int i = 0; i < populationSize_; i++) {
+                Solution solution = q.get(i);
+                problem_.evaluate(solution);
+                problem_.evaluateConstraints(solution);
+            }
 
             if (gen % 50 == 0) {
                 allPop = allPop.union(population_);

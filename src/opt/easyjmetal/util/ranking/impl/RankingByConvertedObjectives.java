@@ -22,7 +22,7 @@
 package opt.easyjmetal.util.ranking.impl;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.one.ConvertedObjectivesComparator;
+import opt.easyjmetal.util.comparators.line.ConvertedObjectivesComparator;
 import opt.easyjmetal.util.ranking.AbstractRanking;
 
 /**

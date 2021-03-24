@@ -1,4 +1,4 @@
-//  RankComparator.java
+//  EpsilonObjectiveComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,7 +19,7 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators.one;
+package opt.easyjmetal.util.comparators.line;
 
 import opt.easyjmetal.core.Solution;
 
@@ -27,9 +27,32 @@ import java.util.Comparator;
 
 /**
  * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> objects) based on the rank of the solutions.
+ * <code>Solution</code> objects) based on epsilon dominance over a given
+ * objective function.
  */
-public class RankComparator implements Comparator {
+public class EpsilonObjectiveComparator implements Comparator {
+
+    /**
+     * Stores the objective index to compare
+     */
+    private int objective_;
+
+    /**
+     * Stores the eta value for epsilon-dominance
+     */
+    private double eta_;
+
+    /**
+     * Constructor.
+     *
+     * @param nObj Index of the objective to compare.
+     * @param eta  Value for epsilon-dominance.
+     */
+    public EpsilonObjectiveComparator(int nObj, double eta) {
+        objective_ = nObj;
+        eta_ = eta;
+    }
+
     /**
      * Compares two solutions.
      *
@@ -40,23 +63,22 @@ public class RankComparator implements Comparator {
      */
     @Override
     public int compare(Object o1, Object o2) {
-
         if (o1 == null) {
             return 1;
         } else if (o2 == null) {
             return -1;
         }
 
-        Solution solution1 = (Solution) o1;
-        Solution solution2 = (Solution) o2;
-        if (solution1.getRank() < solution2.getRank()) {
+        double objetive1 = ((Solution) o1).getObjective(objective_);
+        double objetive2 = ((Solution) o2).getObjective(objective_);
+
+        // Objetive implements comparable!!!
+        if (objetive1 / (1 + eta_) < objetive2) {
             return -1;
-        }
-
-        if (solution1.getRank() > solution2.getRank()) {
+        } else if (objetive1 / (1 + eta_) > objetive2) {
             return 1;
+        } else {
+            return 0;
         }
-
-        return 0;
     }
 }

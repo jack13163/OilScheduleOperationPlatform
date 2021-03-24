@@ -8,22 +8,9 @@ import java.nio.charset.Charset;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-/**
- * This class provides some facilities to manage loggers. One might use the
- * static logger of this class or use its own, custom logger. Also, we provide
- * the static method {@link #configureLoggers(File)} for configuring the loggers
- * easily. This method is automatically called before any use of the static
- * logger, but if you want it to apply on other loggers it is preferable to call
- * it explicitly at the beginning of your main() method.
- * 
- * @author Antonio J. Nebro <antonio@lcc.uma.es>
- * @author Matthieu Vergne <matthieu.vergne@gmail.com>
- */
-@SuppressWarnings("serial")
 public class JMetalLogger implements Serializable {
 
-	public static final Logger logger = Logger.getLogger(JMetalLogger.class
-			.getName());
+	public static final Logger logger = Logger.getLogger(JMetalLogger.class.getName());
 
 	static {
 		/*
@@ -51,7 +38,7 @@ public class JMetalLogger implements Serializable {
 	 * custom file might be provided as an argument of this method, otherwise we
 	 * look for a file named "jMetal.log.ini". If no custom file is provided,
 	 * then only the default configuration is considered.
-	 * 
+	 *
 	 * @param propertyFile
 	 *            the property file to use for custom configuration,
 	 *            <code>null</code> to use only the default configuration

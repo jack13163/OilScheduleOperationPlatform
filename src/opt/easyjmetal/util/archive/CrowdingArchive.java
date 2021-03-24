@@ -22,10 +22,10 @@
 package opt.easyjmetal.util.archive;
 
 import opt.easyjmetal.core.Solution;
+import opt.easyjmetal.util.comparators.line.ConstraintDominanceComparator;
 import opt.easyjmetal.util.distance.Distance;
-import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
-import opt.easyjmetal.util.comparators.one.DominanceComparator;
-import opt.easyjmetal.util.comparators.one.EqualSolutionsComparator;
+import opt.easyjmetal.util.comparators.line.CrowdingDistanceComparator;
+import opt.easyjmetal.util.comparators.line.EqualSolutionsComparator;
 
 import java.util.Comparator;
 
@@ -56,7 +56,7 @@ public class CrowdingArchive extends Archive {
         super(maxSize);
         maxSize_ = maxSize;
         objectives_ = numberOfObjectives;
-        dominance_ = new DominanceComparator();
+        dominance_ = new ConstraintDominanceComparator();
         equals_ = new EqualSolutionsComparator();
         crowdingDistance_ = new CrowdingDistanceComparator();
         distance_ = new Distance();

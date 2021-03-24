@@ -22,8 +22,8 @@
 package opt.easyjmetal.util.ranking.impl;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.one.EpsilonConstraintViolationComparator;
-import opt.easyjmetal.util.comparators.one.ObjectivesComparator;
+import opt.easyjmetal.util.comparators.line.EpsilonConstraintViolationComparator;
+import opt.easyjmetal.util.comparators.line.ObjectivesComparator;
 import opt.easyjmetal.util.ranking.AbstractRanking;
 
 import java.util.Comparator;
@@ -73,8 +73,9 @@ public class EpsilonConstraintRanking extends AbstractRanking {
         int flagDominate;
 
         // Initialize the fronts
-        for (int i = 0; i < front.length; i++)
+        for (int i = 0; i < front.length; i++) {
             front[i] = new LinkedList<Integer>();
+        }
 
         // -> Fast non dominated sorting algorithm
         // Contribution of Guillaume Jacquenot

@@ -23,8 +23,8 @@ package opt.easyjmetal.util.solution;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.one.DominanceComparator;
-import opt.easyjmetal.util.comparators.one.SolutionComparator;
+import opt.easyjmetal.util.comparators.line.ConstraintDominanceComparator;
+import opt.easyjmetal.util.comparators.line.SolutionComparator;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -37,7 +37,7 @@ public class NonDominatedSolutionList2 extends SolutionSet {
     /**
      * Stores a <code>Comparator</code> for dominance checking
      */
-    private Comparator dominance_ = new DominanceComparator();
+    private Comparator dominance_ = new ConstraintDominanceComparator();
     private int solutionCounter_;
 
     /**

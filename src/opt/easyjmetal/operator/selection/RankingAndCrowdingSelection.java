@@ -25,7 +25,7 @@ import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
+import opt.easyjmetal.util.comparators.line.CrowdingDistanceComparator;
 import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.ranking.impl.RankingByCDP;
 

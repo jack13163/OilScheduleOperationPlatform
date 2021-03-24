@@ -3,7 +3,7 @@ package opt.easyjmetal.algorithm.moeas.impl;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.plot.PlotObjectives;
-import opt.easyjmetal.util.comparators.one.DominanceComparator;
+import opt.easyjmetal.util.comparators.line.ConstraintDominanceComparator;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.util.ArrayList;
@@ -174,7 +174,7 @@ public class IBEA extends Algorithm {
                 B = new ArrayList<>(1);
                 B.add(solution);
 
-                int flag = (new DominanceComparator()).compare(A.get(0), B.get(0));
+                int flag = (new ConstraintDominanceComparator()).compare(A.get(0), B.get(0));
 
                 double value;
                 if (flag == -1) {
