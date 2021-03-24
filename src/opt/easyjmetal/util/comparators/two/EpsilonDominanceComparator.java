@@ -1,4 +1,4 @@
-//  DominanceComparator.java
+//  EpsilonDominanceComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,29 +19,46 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators;
+package opt.easyjmetal.util.comparators.two;
 
 import opt.easyjmetal.core.Solution;
+import opt.easyjmetal.util.comparators.one.OverallConstraintViolationComparator;
 
 import java.util.Comparator;
 
 /**
- * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> with m + 1 objects, the constraints are converted to a objective)
+ * epsilon dominance
+ *
  */
-public class DominanceComparator_M_Add_One implements Comparator {
+public class EpsilonDominanceComparator implements Comparator {
 
-    public DominanceComparator_M_Add_One() {
+    /**
+     * Stores the value of eta, needed for epsilon-dominance.
+     */
+    private double eta_;
 
+    /**
+     * stores a comparator for check the OverallConstraintComparator
+     */
+    private static final Comparator overallConstraintViolationComparator_ =
+            new OverallConstraintViolationComparator();
+
+    /**
+     * Constructor.
+     *
+     * @param eta Value for epsilon-dominance.
+     */
+    public EpsilonDominanceComparator(double eta) {
+        eta_ = eta;
     }
 
     /**
      * Compares two solutions.
      *
-     * @param object1 Object representing the first <code>Solution</code>.
-     * @param object2 Object representing the second <code>Solution</code>.
+     * @param solution1 Object representing the first <code>Solution</code>.
+     * @param solution2 Object representing the second <code>Solution</code>.
      * @return -1, or 0, or 1 if solution1 dominates solution2, both are
-     * non-dominated, or solution1  is dominated by solution22, respectively.
+     * non-dominated, or solution1 is dominated by solution2, respectively.
      */
     @Override
     public int compare(Object object1, Object object2) {
@@ -51,9 +68,6 @@ public class DominanceComparator_M_Add_One implements Comparator {
             return -1;
         }
 
-        Solution solution1 = (Solution) object1;
-        Solution solution2 = (Solution) object2;
-
         int dominate1; // dominate1 indicates if some objective of solution1
         // dominates the same objective in solution2. dominate2
         int dominate2; // is the complementary of dominate1.
@@ -61,27 +75,27 @@ public class DominanceComparator_M_Add_One implements Comparator {
         dominate1 = 0;
         dominate2 = 0;
 
-        int flag; //stores the result of the comparison
+        Solution solution1 = (Solution) object1;
+        Solution solution2 = (Solution) object2;
 
-        int m = solution1.getNumberOfObjectives();
+        int flag;
+        Comparator constraint = new OverallConstraintViolationComparator();
+        flag = constraint.compare(solution1, solution2);
 
-        double[] convertedSolution1 = new double[m + 1];
-        double[] convertedSolution2 = new double[m + 1];
-
-        for (int i = 0; i < m; i++) {
-            convertedSolution1[i] = solution1.getObjective(i);
-            convertedSolution2[i] = solution2.getObjective(i);
+        if (flag != 0) {
+            return flag;
         }
-        convertedSolution1[m] = Math.abs(solution1.getOverallConstraintViolation());
-        convertedSolution2[m] = Math.abs(solution2.getOverallConstraintViolation());
 
         double value1, value2;
-        for (int i = 0; i < m + 1; i++) {
-            value1 = convertedSolution1[i];
-            value2 = convertedSolution2[i];
-            if (value1 < value2) {
+        // Idem number of violated constraint. Apply a dominance Test
+        for (int i = 0; i < solution1.getNumberOfObjectives(); i++) {
+            value1 = solution1.getObjective(i);
+            value2 = solution2.getObjective(i);
+
+            //Objetive implements comparable!!!
+            if (value1 / (1 + eta_) < value2) {
                 flag = -1;
-            } else if (value1 > value2) {
+            } else if (value1 / (1 + eta_) > value2) {
                 flag = 1;
             } else {
                 flag = 0;
@@ -97,11 +111,13 @@ public class DominanceComparator_M_Add_One implements Comparator {
         }
 
         if (dominate1 == dominate2) {
-            return 0; //No one dominate the other
+            return 0; // No one dominates the other
         }
+
         if (dominate1 == 1) {
-            return -1; // solution1 dominate
+            return -1; // solution1 dominates
         }
-        return 1;    // solution2 dominate
+
+        return 1;    // solution2 dominates
     }
 }

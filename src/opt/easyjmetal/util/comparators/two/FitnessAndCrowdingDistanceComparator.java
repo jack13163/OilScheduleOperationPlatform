@@ -19,7 +19,10 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators;
+package opt.easyjmetal.util.comparators.two;
+
+import opt.easyjmetal.util.comparators.one.FitnessComparator;
+import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
 
 import java.util.Comparator;
 

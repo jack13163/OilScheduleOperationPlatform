@@ -23,7 +23,7 @@ package opt.easyjmetal.util.fitness;
 
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.DominanceComparator;
+import opt.easyjmetal.util.comparators.one.DominanceComparator;
 
 import java.util.Comparator;
 

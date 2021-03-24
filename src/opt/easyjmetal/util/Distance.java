@@ -23,9 +23,9 @@ package opt.easyjmetal.util;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.AtmObjectiveComparator;
-import opt.easyjmetal.util.comparators.IdeaObjectiveComparator;
-import opt.easyjmetal.util.comparators.ObjectiveComparator;
+import opt.easyjmetal.util.comparators.one.AtmObjectiveComparator;
+import opt.easyjmetal.util.comparators.one.IdeaObjectiveComparator;
+import opt.easyjmetal.util.comparators.one.ObjectiveComparator;
 import opt.easyjmetal.util.wrapper.XReal;
 
 /**

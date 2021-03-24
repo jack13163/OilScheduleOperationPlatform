@@ -3,7 +3,7 @@ package opt.easyjmetal.algorithm.moeas.impl;
 
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.*;
-import opt.easyjmetal.util.comparators.FitnessComparator;
+import opt.easyjmetal.util.comparators.one.FitnessComparator;
 import opt.easyjmetal.util.fitness.ISDEPlus_Fitness;
 import opt.easyjmetal.util.ranking.Ranking;
 import opt.easyjmetal.util.sqlite.SqlUtils;

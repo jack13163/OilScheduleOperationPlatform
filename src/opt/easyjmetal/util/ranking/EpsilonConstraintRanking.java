@@ -22,8 +22,8 @@
 package opt.easyjmetal.util.ranking;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.EpsilonConstraintViolationComparator;
-import opt.easyjmetal.util.comparators.ObjectiveDominanceComparator;
+import opt.easyjmetal.util.comparators.one.EpsilonConstraintViolationComparator;
+import opt.easyjmetal.util.comparators.one.ObjectiveDominanceComparator;
 
 import java.util.Comparator;
 import java.util.Iterator;

@@ -9,7 +9,7 @@ import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.ranking.Ranking;
-import opt.easyjmetal.util.comparators.CrowdingComparator;
+import opt.easyjmetal.util.comparators.one.CrowdingComparator;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 

@@ -3,8 +3,8 @@ package opt.easyjmetal.util.archive;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.comparators.DominanceComparator;
-import opt.easyjmetal.util.comparators.EqualSolutionsComparator;
+import opt.easyjmetal.util.comparators.one.DominanceComparator;
+import opt.easyjmetal.util.comparators.one.EqualSolutionsComparator;
 import opt.easyjmetal.util.pseudorandom.JMetalRandom;
 
 import java.util.ArrayList;

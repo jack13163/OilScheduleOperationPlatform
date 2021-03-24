@@ -25,8 +25,8 @@ import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.DistanceNode;
 import opt.easyjmetal.util.DistanceNodeComparator;
-import opt.easyjmetal.util.comparators.DominanceComparator;
-import opt.easyjmetal.util.comparators.FitnessComparator;
+import opt.easyjmetal.util.comparators.one.DominanceComparator;
+import opt.easyjmetal.util.comparators.one.FitnessComparator;
 
 import java.util.*;
 

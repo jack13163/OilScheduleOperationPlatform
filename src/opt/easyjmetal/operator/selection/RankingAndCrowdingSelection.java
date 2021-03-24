@@ -27,7 +27,7 @@ import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.ranking.Ranking;
-import opt.easyjmetal.util.comparators.CrowdingComparator;
+import opt.easyjmetal.util.comparators.one.CrowdingComparator;
 
 import java.util.Comparator;
 import java.util.HashMap;

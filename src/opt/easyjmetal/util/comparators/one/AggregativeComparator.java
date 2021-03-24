@@ -1,4 +1,4 @@
-//  SolutionComparator.java
+//  AggregativeComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,52 +19,47 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators;
+package opt.easyjmetal.util.comparators.one;
 
 import opt.easyjmetal.core.Solution;
-import opt.easyjmetal.util.Configuration;
-import opt.easyjmetal.util.Distance;
-import opt.easyjmetal.util.JMException;
 
 import java.util.Comparator;
 
 /**
  * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> objects) based on the values of the variables.
+ * <code>Solution</code> objects) based on the aggregative sum of the objective
+ * values.
  */
-public class SolutionComparator implements Comparator {
-
-    private static final double EPSILON = 1e-10;
+public class AggregativeComparator implements Comparator {
 
     /**
      * Compares two solutions.
      *
      * @param o1 Object representing the first <code>Solution</code>.
      * @param o2 Object representing the second <code>Solution</code>.
-     * @return 0, if both solutions are equals with a certain dissimilarity, -1
-     * otherwise.
-     * @throws JMException
-     * @throws JMException
+     * @return -1, or 0, or 1 if o1 is less than, equal, or greater than o2,
+     * respectively.
      */
     @Override
     public int compare(Object o1, Object o2) {
-        Solution solution1, solution2;
-        solution1 = (Solution) o1;
-        solution2 = (Solution) o2;
-
-        if ((solution1.getDecisionVariables() != null) && (solution2.getDecisionVariables() != null)) {
-            if (solution1.numberOfVariables() != solution2.numberOfVariables()) {
-                return -1;
-            }
+        if (o1 == null) {
+            return 1;
+        } else if (o2 == null) {
+            return -1;
         }
 
-        try {
-            if ((new Distance()).distanceBetweenSolutions(solution1, solution2) < EPSILON) {
-                return 0;
-            }
-        } catch (JMException e) {
-            Configuration.logger_.severe("SolutionComparator.compare: JMException ");
+        double value1, value2;
+        Solution solution1 = (Solution) o1;
+        Solution solution2 = (Solution) o2;
+
+        value1 = solution1.getAggregativeValue();
+        value2 = solution2.getAggregativeValue();
+        if (value1 < value2) {
+            return -1;
+        } else if (value2 < value1) {
+            return 1;
+        } else {
+            return 0;
         }
-        return -1;
     }
 }

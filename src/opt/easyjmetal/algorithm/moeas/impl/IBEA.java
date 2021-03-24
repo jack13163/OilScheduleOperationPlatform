@@ -3,7 +3,7 @@ package opt.easyjmetal.algorithm.moeas.impl;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.PlotObjectives;
-import opt.easyjmetal.util.comparators.DominanceComparator;
+import opt.easyjmetal.util.comparators.one.DominanceComparator;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-//  BinaryTournamentComparator.java
+//  CrowdingDistanceComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,49 +19,43 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators;
+package opt.easyjmetal.util.comparators.one;
 
 import opt.easyjmetal.core.Solution;
 
 import java.util.Comparator;
 
 /**
- * This class implements a <code>Comparator</code> for <code>Solution</code>
+ * This class implements a <code>Comparator</code> (a method for comparing
+ * <code>Solution</code> objects) based on the crowding distance, as in NSGA-II.
  */
-public class BinaryTournamentComparator implements Comparator {
-
-    /**
-     * stores a dominance comparator
-     */
-    private static final Comparator dominance_ = new DominanceComparator();
+public class CrowdingDistanceComparator implements Comparator {
 
     /**
      * Compares two solutions.
-     * A <code>Solution</code> a is less than b for this <code>Comparator</code>.
-     * if the crowding distance of a if greater than the crowding distance of b.
      *
-     * @param o1 Object representing a <code>Solution</code>.
-     * @param o2 Object representing a <code>Solution</code>.
-     * @return -1, or 0, or 1 if o1 is less than, equals, or greater than o2,
+     * @param o1 Object representing the first <code>Solution</code>.
+     * @param o2 Object representing the second <code>Solution</code>.
+     * @return -1, or 0, or 1 if o1 is less than, equal, or greater than o2,
      * respectively.
      */
     @Override
     public int compare(Object o1, Object o2) {
-        int flag = dominance_.compare(o1, o2);
-        if (flag != 0) {
-            return flag;
-        }
-
-        double crowding1, crowding2;
-        crowding1 = ((Solution) o1).getCrowdingDistance();
-        crowding2 = ((Solution) o2).getCrowdingDistance();
-
-        if (crowding1 > crowding2) {
-            return -1;
-        } else if (crowding2 > crowding1) {
+        if (o1 == null) {
             return 1;
-        } else {
-            return 0;
+        } else if (o2 == null) {
+            return -1;
         }
+
+        double distance1 = ((Solution) o1).getCrowdingDistance();
+        double distance2 = ((Solution) o2).getCrowdingDistance();
+        if (distance1 > distance2) {
+            return -1;
+        }
+        if (distance1 < distance2) {
+            return 1;
+        }
+        return 0;
     }
 }
+

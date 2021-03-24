@@ -24,9 +24,9 @@ package opt.easyjmetal.util.archive;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.qualityindicator.R2;
 import opt.easyjmetal.util.PseudoRandom;
-import opt.easyjmetal.util.comparators.CrowdingDistanceComparator;
-import opt.easyjmetal.util.comparators.DominanceComparator;
-import opt.easyjmetal.util.comparators.EqualSolutionsComparator;
+import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
+import opt.easyjmetal.util.comparators.one.DominanceComparator;
+import opt.easyjmetal.util.comparators.one.EqualSolutionsComparator;
 
 import java.util.Comparator;
 

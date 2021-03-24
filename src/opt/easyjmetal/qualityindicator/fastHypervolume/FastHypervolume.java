@@ -26,7 +26,7 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.qualityindicator.fastHypervolume.wfg.Front;
 import opt.easyjmetal.qualityindicator.fastHypervolume.wfg.WFGHV;
-import opt.easyjmetal.util.comparators.ObjectiveComparator;
+import opt.easyjmetal.util.comparators.one.ObjectiveComparator;
 
 /**
  * Created with IntelliJ IDEA. User: Antonio J. Nebro Date: 26/08/13 Time: 10:20
@@ -116,7 +116,7 @@ public class FastHypervolume {
 	 * Computes the HV of a solution set. REQUIRES: The problem is bi-objective
 	 * REQUIRES: The archive is ordered in descending order by the second
 	 * objective
-	 * 
+	 *
 	 * @return
 	 */
 	public double get2DHV(SolutionSet solutionSet) {
@@ -141,7 +141,7 @@ public class FastHypervolume {
 
 	/**
 	 * Computes the HV contribution of the solutions
-	 * 
+	 *
 	 * @return
 	 */
 	public void computeHVContributions(SolutionSet solutionSet) {

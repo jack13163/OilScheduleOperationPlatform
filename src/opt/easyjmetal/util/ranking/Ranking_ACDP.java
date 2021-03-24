@@ -23,8 +23,8 @@ package opt.easyjmetal.util.ranking;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.DominanceComparator;
-import opt.easyjmetal.util.comparators.OverallConstraintViolationComparator;
+import opt.easyjmetal.util.comparators.one.DominanceComparator;
+import opt.easyjmetal.util.comparators.one.OverallConstraintViolationComparator;
 
 import java.util.Comparator;
 import java.util.Iterator;

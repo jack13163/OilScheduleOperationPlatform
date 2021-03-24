@@ -7,8 +7,8 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.ranking.Ranking;
-import opt.easyjmetal.util.comparators.FitnessComparator;
-import opt.easyjmetal.util.comparators.OverallConstraintViolationComparator;
+import opt.easyjmetal.util.comparators.one.FitnessComparator;
+import opt.easyjmetal.util.comparators.one.OverallConstraintViolationComparator;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package opt.easyjmetal.util.comparators;
+package opt.easyjmetal.util.comparators.one;
 
 import opt.easyjmetal.core.Solution;
 

@@ -23,9 +23,9 @@ package opt.easyjmetal.util.archive;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.fitness.Spea2Fitness;
-import opt.easyjmetal.util.comparators.DominanceComparator;
-import opt.easyjmetal.util.comparators.EqualSolutionsComparator;
-import opt.easyjmetal.util.comparators.FitnessComparator;
+import opt.easyjmetal.util.comparators.one.DominanceComparator;
+import opt.easyjmetal.util.comparators.one.EqualSolutionsComparator;
+import opt.easyjmetal.util.comparators.one.FitnessComparator;
 
 import java.util.Comparator;
 

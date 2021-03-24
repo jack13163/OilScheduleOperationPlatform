@@ -22,9 +22,9 @@ package opt.easyjmetal.qualityindicator.fastHypervolume;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.archive.Archive;
-import opt.easyjmetal.util.comparators.CrowdingComparator;
-import opt.easyjmetal.util.comparators.DominanceComparator;
-import opt.easyjmetal.util.comparators.EqualSolutionsComparator;
+import opt.easyjmetal.util.comparators.one.CrowdingComparator;
+import opt.easyjmetal.util.comparators.one.DominanceComparator;
+import opt.easyjmetal.util.comparators.one.EqualSolutionsComparator;
 
 import java.util.Comparator;
 

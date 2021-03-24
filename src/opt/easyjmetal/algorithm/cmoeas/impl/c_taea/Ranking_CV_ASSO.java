@@ -1,7 +1,7 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.c_taea;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.DominanceComparator_CV_ASSO;
+import opt.easyjmetal.util.comparators.two.DominanceComparator_CV_ASSO;
 
 import java.util.Comparator;
 import java.util.Iterator;

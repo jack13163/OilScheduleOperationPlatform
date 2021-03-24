@@ -1,4 +1,4 @@
-//  FPGAFitnessComparator.java
+//  PointComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,7 +19,7 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators;
+package opt.easyjmetal.util.comparators.one;
 
 import opt.easyjmetal.core.Solution;
 
@@ -27,9 +27,30 @@ import java.util.Comparator;
 
 /**
  * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> objects) based on the rank used in FPGA.
+ * <code>Solution</code> objects) based on a objective values.
  */
-public class FPGAFitnessComparator implements Comparator {
+public class ObjectiveComparator implements Comparator {
+
+    /**
+     * Stores the index of the objective to compare
+     */
+    private int nObj;
+    private boolean ascendingOrder_;
+
+    /**
+     * Constructor.
+     *
+     * @param nObj The index of the objective to compare
+     */
+    public ObjectiveComparator(int nObj) {
+        this.nObj = nObj;
+        ascendingOrder_ = true;
+    }
+
+    public ObjectiveComparator(int nObj, boolean descendingOrder) {
+        this.nObj = nObj;
+        ascendingOrder_ = !descendingOrder;
+    } // PointComparator
 
     /**
      * Compares two solutions.
@@ -41,19 +62,27 @@ public class FPGAFitnessComparator implements Comparator {
      */
     @Override
     public int compare(Object o1, Object o2) {
-        Solution solution1, solution2;
-        solution1 = (Solution) o1;
-        solution2 = (Solution) o2;
-
-        if (solution1.getRank() == 0 && solution2.getRank() > 0) {
-            return -1;
-        } else if (solution1.getRank() > 0 && solution2.getRank() == 0) {
+        if (o1 == null) {
             return 1;
-        } else {
-            if (solution1.getFitness() > solution2.getFitness()) {
+        } else if (o2 == null) {
+            return -1;
+        }
+
+        double objetive1 = ((Solution) o1).getObjective(this.nObj);
+        double objetive2 = ((Solution) o2).getObjective(this.nObj);
+        if (ascendingOrder_) {
+            if (objetive1 < objetive2) {
                 return -1;
-            } else if (solution1.getFitness() < solution2.getFitness()) {
+            } else if (objetive1 > objetive2) {
                 return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            if (objetive1 < objetive2) {
+                return 1;
+            } else if (objetive1 > objetive2) {
+                return -1;
             } else {
                 return 0;
             }

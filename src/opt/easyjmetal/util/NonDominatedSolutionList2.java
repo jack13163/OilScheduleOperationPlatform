@@ -23,8 +23,8 @@ package opt.easyjmetal.util;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.DominanceComparator;
-import opt.easyjmetal.util.comparators.SolutionComparator;
+import opt.easyjmetal.util.comparators.one.DominanceComparator;
+import opt.easyjmetal.util.comparators.one.SolutionComparator;
 
 import java.util.Comparator;
 import java.util.Iterator;

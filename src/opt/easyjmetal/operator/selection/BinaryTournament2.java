@@ -25,7 +25,7 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.PermutationUtility;
 import opt.easyjmetal.util.PseudoRandom;
-import opt.easyjmetal.util.comparators.DominanceComparator;
+import opt.easyjmetal.util.comparators.one.DominanceComparator;
 
 import java.util.Comparator;
 import java.util.HashMap;

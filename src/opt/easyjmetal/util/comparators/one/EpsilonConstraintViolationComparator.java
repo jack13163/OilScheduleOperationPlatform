@@ -1,4 +1,4 @@
-//  NumberOfViolatedConstraintComparator.java
+//  OverallConstraintViolationComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,16 +19,22 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators;
+package opt.easyjmetal.util.comparators.one;
 
 import opt.easyjmetal.core.Solution;
+import opt.easyjmetal.util.comparators.IConstraintViolationComparator;
 
 /**
- * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> objects) based on the number of violated constraints.
+ * 总体约束阈值
  */
-public class NumberOfViolatedConstraintComparator
+public class EpsilonConstraintViolationComparator
         implements IConstraintViolationComparator {
+
+    private double epsilonLevel_;
+
+    public EpsilonConstraintViolationComparator(double epsilon) {
+        this.epsilonLevel_ = epsilon;
+    }
 
     /**
      * Compares two solutions.
@@ -40,30 +46,36 @@ public class NumberOfViolatedConstraintComparator
      */
     @Override
     public int compare(Object o1, Object o2) {
-        Solution solution1 = (Solution) o1;
-        Solution solution2 = (Solution) o2;
-
-        if (solution1.getNumberOfViolatedConstraint() <
-                solution2.getNumberOfViolatedConstraint()) {
-            return -1;
-        } else if (solution2.getNumberOfViolatedConstraint() <
-                solution1.getNumberOfViolatedConstraint()) {
+        double overall1, overall2;
+        overall1 = Math.abs(((Solution) o1).getOverallConstraintViolation());
+        overall2 = Math.abs(((Solution) o2).getOverallConstraintViolation());
+        if ((overall1 <= epsilonLevel_) && (overall2 <= epsilonLevel_)) {
+            return 0;
+        } else if ((overall1 > epsilonLevel_) && (overall2 <= epsilonLevel_)) {
             return 1;
+        } else if ((overall1 <= epsilonLevel_) && (overall2 > epsilonLevel_)) {
+            return -1;
+        } else {
+            if (overall1 > overall2) {
+                return 1;
+            } else if (overall1 < overall2) {
+                return -1;
+            } else {
+                return 0;
+            }
         }
-
-        return 0;
     }
 
     /**
-     * Returns true if solutions s1 and/or s2 violates a
-     * number n > 0 of constraints
+     * Returns true if solutions s1 and/or s2 have an overall constraint
+     * violation < 0
      */
     @Override
     public boolean needToCompare(Solution s1, Solution s2) {
         boolean needToCompare;
-        needToCompare = (s1.getNumberOfViolatedConstraint() > 0) ||
-                (s2.getNumberOfViolatedConstraint() > 0);
+        needToCompare = (Math.abs(s1.getOverallConstraintViolation()) > epsilonLevel_) ||
+                (Math.abs(s2.getOverallConstraintViolation()) > epsilonLevel_);
 
         return needToCompare;
     }
-} // NumberOfViolatedConstraintComparator
+}

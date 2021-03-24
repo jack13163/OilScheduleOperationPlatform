@@ -19,21 +19,20 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators;
+package opt.easyjmetal.util.comparators.one;
 
 import opt.easyjmetal.core.Solution;
 
 import java.util.Comparator;
 
 /**
- * 借鉴自DominanceComparator_M_Add_One。
- * 添加两个目标，并根据这两个目标进行解的支配关系比较。这两个目标分别为：
- *    1.拥挤距离；
- *    2.约束违背值。
+ * This class implements a <code>Comparator</code> (a method for comparing
+ * <code>Solution</code> objects) based on a constraint violation test +
+ * dominance checking, as in NSGA-II.
  */
-public class DominanceComparator_CV_ASSO implements Comparator {
+public class ObjectiveDominanceComparator implements Comparator {
 
-    public DominanceComparator_CV_ASSO() {
+    public ObjectiveDominanceComparator() {
     }
 
     /**
@@ -46,44 +45,41 @@ public class DominanceComparator_CV_ASSO implements Comparator {
      */
     @Override
     public int compare(Object object1, Object object2) {
-        if (object1 == null) {
+        if (object1 == null)
             return 1;
-        } else if (object2 == null) {
+        else if (object2 == null)
             return -1;
-        }
 
         Solution solution1 = (Solution) object1;
         Solution solution2 = (Solution) object2;
 
-        int dominate1 = 0;
-        int dominate2 = 0;
+        int dominate1; // dominate1 indicates if some objective of solution1
+        // dominates the same objective in solution2. dominate2
+        int dominate2; // is the complementary of dominate1.
 
-        int dominateCount;
-        double[] convertedSolution1 = new double[2];
-        double[] convertedSolution2 = new double[2];
+        dominate1 = 0;
+        dominate2 = 0;
 
-        convertedSolution1[0] = Math.abs(solution1.getOverallConstraintViolation());
-        convertedSolution2[0] = Math.abs(solution2.getOverallConstraintViolation());
-        convertedSolution1[1] = Math.abs(solution1.getCrowdingDistance());
-        convertedSolution2[1] = Math.abs(solution2.getCrowdingDistance());
+        int flag; //stores the result of the comparison
 
+        // Equal number of violated constraints. Applying a dominance Test then
         double value1, value2;
-        for (int i = 0; i < 2; i++) {
-            value1 = convertedSolution1[i];
-            value2 = convertedSolution2[i];
+        for (int i = 0; i < solution1.getNumberOfObjectives(); i++) {
+            value1 = solution1.getObjective(i);
+            value2 = solution2.getObjective(i);
             if (value1 < value2) {
-                dominateCount = -1;
+                flag = -1;
             } else if (value1 > value2) {
-                dominateCount = 1;
+                flag = 1;
             } else {
-                dominateCount = 0;
+                flag = 0;
             }
 
-            if (dominateCount == -1) {
+            if (flag == -1) {
                 dominate1 = 1;
             }
 
-            if (dominateCount == 1) {
+            if (flag == 1) {
                 dominate2 = 1;
             }
         }

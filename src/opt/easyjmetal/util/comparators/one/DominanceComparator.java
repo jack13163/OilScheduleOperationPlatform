@@ -1,19 +1,17 @@
-package opt.easyjmetal.util.comparators;
+package opt.easyjmetal.util.comparators.one;
 
 import opt.easyjmetal.core.Solution;
+import opt.easyjmetal.util.comparators.IConstraintViolationComparator;
 
 import java.util.Comparator;
 
 /**
- * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> objects) based on a constraint violation test +
- * dominance checking, as in NSGA-II.
+ * CDP±È½ÏÆ÷
  */
 public class DominanceComparator implements Comparator {
     IConstraintViolationComparator violationConstraintComparator_;
 
     public DominanceComparator() {
-        //violationConstraintComparator_ = new DiversityComparator();
         violationConstraintComparator_ = new OverallConstraintViolationComparator();
     }
 
@@ -29,6 +27,7 @@ public class DominanceComparator implements Comparator {
      * @return -1, or 0, or 1 if solution1 dominates solution2, both are
      * non-dominated, or solution1  is dominated by solution22, respectively.
      */
+    @Override
     public int compare(Object object1, Object object2) {
         if (object1 == null)
             return 1;
@@ -48,16 +47,9 @@ public class DominanceComparator implements Comparator {
         int flag; //stores the result of the comparison
 
         // Test to determine whether at least a solution violates some constraint
-        if (violationConstraintComparator_.needToCompare(solution1, solution2))
+        if (violationConstraintComparator_.needToCompare(solution1, solution2)) {
             return violationConstraintComparator_.compare(solution1, solution2);
-    /*
-    if (solution1.getOverallConstraintViolation()!= 
-        solution2.getOverallConstraintViolation() &&
-       (solution1.getOverallConstraintViolation() < 0) ||         
-       (solution2.getOverallConstraintViolation() < 0)){            
-      return (overallConstraintViolationComparator_.compare(solution1,solution2));
-    }
-   */
+        }
 
         // Equal number of violated constraints. Applying a dominance Test then
         double value1, value2;
@@ -82,11 +74,14 @@ public class DominanceComparator implements Comparator {
         }
 
         if (dominate1 == dominate2) {
-            return 0; //No one dominate the other
+            //No one dominate the other
+            return 0;
         }
         if (dominate1 == 1) {
-            return -1; // solution1 dominate
+            // solution1 dominate
+            return -1;
         }
-        return 1;    // solution2 dominate
+        // solution2 dominate
+        return 1;
     }
 }

@@ -1,4 +1,4 @@
-//  EqualSolutionsComparator.java
+//  DominanceComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -19,27 +19,28 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util.comparators;
+package opt.easyjmetal.util.comparators.two;
 
 import opt.easyjmetal.core.Solution;
+
 import java.util.Comparator;
 
 /**
- * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> objects) based whether all the objective values are
- * equal or not. A dominance test is applied to decide about what solution
- * is the best.
+ * 目标值+约束值
  */
-public class EqualSolutionsComparator implements Comparator {
+public class DominanceComparator_M_Add_One implements Comparator {
+
+    public DominanceComparator_M_Add_One() {
+
+    }
 
     /**
      * Compares two solutions.
      *
-     * @param solution1 Object representing the first <code>Solution</code>.
-     * @param solution2 Object representing the second <code>Solution</code>.
-     * @return -1, or 0, or 1, or 2 if solution1 is dominates solution2, solution1
-     * and solution2 are equals, or solution1 is greater than solution2,
-     * respectively.
+     * @param object1 Object representing the first <code>Solution</code>.
+     * @param object2 Object representing the second <code>Solution</code>.
+     * @return -1, or 0, or 1 if solution1 dominates solution2, both are
+     * non-dominated, or solution1  is dominated by solution22, respectively.
      */
     @Override
     public int compare(Object object1, Object object2) {
@@ -48,21 +49,35 @@ public class EqualSolutionsComparator implements Comparator {
         } else if (object2 == null) {
             return -1;
         }
-        // dominate1 indicates if some objective of solution1 dominates the same objective in solution2.
-        int dominate1 = 0;
-        //  dominate2 is the complementary of dominate1.
-        int dominate2 = 0;
 
         Solution solution1 = (Solution) object1;
         Solution solution2 = (Solution) object2;
 
-        int flag;
-        double value1, value2;
-        for (int i = 0; i < solution1.getNumberOfObjectives(); i++) {
-            flag = (new ObjectiveComparator(i)).compare(solution1, solution2);
-            value1 = solution1.getObjective(i);
-            value2 = solution2.getObjective(i);
+        int dominate1; // dominate1 indicates if some objective of solution1
+        // dominates the same objective in solution2. dominate2
+        int dominate2; // is the complementary of dominate1.
 
+        dominate1 = 0;
+        dominate2 = 0;
+
+        int flag; //stores the result of the comparison
+
+        int m = solution1.getNumberOfObjectives();
+
+        double[] convertedSolution1 = new double[m + 1];
+        double[] convertedSolution2 = new double[m + 1];
+
+        for (int i = 0; i < m; i++) {
+            convertedSolution1[i] = solution1.getObjective(i);
+            convertedSolution2[i] = solution2.getObjective(i);
+        }
+        convertedSolution1[m] = Math.abs(solution1.getOverallConstraintViolation());
+        convertedSolution2[m] = Math.abs(solution2.getOverallConstraintViolation());
+
+        double value1, value2;
+        for (int i = 0; i < m + 1; i++) {
+            value1 = convertedSolution1[i];
+            value2 = convertedSolution2[i];
             if (value1 < value2) {
                 flag = -1;
             } else if (value1 > value2) {
@@ -80,16 +95,15 @@ public class EqualSolutionsComparator implements Comparator {
             }
         }
 
-        if (dominate1 == 0 && dominate2 == 0) {
+        if (dominate1 == dominate2) {
             // No one dominate the other
             return 0;
         }
-
         if (dominate1 == 1) {
-            return -1; // solution1 dominate
-        } else if (dominate2 == 1) {
-            return 1;    // solution2 dominate
+            // solution1 dominate
+            return -1;
         }
-        return 2;
+        // solution2 dominate
+        return 1;
     }
 }

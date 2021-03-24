@@ -1,13 +1,13 @@
 // SPEA2: Improving the Strength Pareto Evolutionary Algorithm For Multiobjective Optimization.
 package opt.easyjmetal.algorithm.moeas.impl;
 
-import opt.easyjmetal.algorithm.common.StrengthRawFitness;
+import opt.easyjmetal.util.fitness.StrengthRawFitness;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.util.PlotObjectives;
-import opt.easyjmetal.util.comparators.FitnessComparator;
+import opt.easyjmetal.util.comparators.one.FitnessComparator;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 import org.apache.commons.lang3.tuple.Pair;
 

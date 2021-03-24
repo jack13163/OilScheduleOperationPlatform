@@ -1,7 +1,7 @@
 package opt.easyjmetal.util.distance.impl;
 
 import opt.easyjmetal.core.Solution;
-import opt.easyjmetal.util.comparators.ObjectiveComparator;
+import opt.easyjmetal.util.comparators.one.ObjectiveComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -22,7 +22,7 @@
 package opt.easyjmetal.util.ranking;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.GridDominanceComparator;
+import opt.easyjmetal.util.comparators.two.GridDominanceComparator;
 
 import java.util.Comparator;
 import java.util.Iterator;

@@ -22,7 +22,7 @@
 package opt.easyjmetal.util.ranking;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.DominanceComparator_M_Add_One;
+import opt.easyjmetal.util.comparators.two.DominanceComparator_M_Add_One;
 
 import java.util.Comparator;
 import java.util.LinkedList;

@@ -2,7 +2,7 @@ package opt.easyjmetal.algorithm.cmoeas.impl.isdeplus_cdp;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.FitnessComparator;
+import opt.easyjmetal.util.comparators.one.FitnessComparator;
 import opt.easyjmetal.util.fitness.ISDEPlus_Fitness;
 
 import java.util.ArrayList;
