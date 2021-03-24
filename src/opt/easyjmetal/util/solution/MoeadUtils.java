@@ -280,7 +280,6 @@ public class MoeadUtils {
         if (feasible_solutions.size() > 0) {
             // 执行非支配排序获取非支配解集
             RankingByCDP ranking = new RankingByCDP(feasible_solutions);
-            ranking.ranking();
             externalArchive = externalArchive.union(ranking.getSubfront(0));
         }
         return externalArchive;
