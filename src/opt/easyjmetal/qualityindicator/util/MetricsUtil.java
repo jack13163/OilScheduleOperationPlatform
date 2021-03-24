@@ -400,8 +400,7 @@ public class MetricsUtil {
 		for (int i = 0; i < front.length; i++) {
 			double[] evaluatedPoint = frontCopy.remove(i);
 			frontSubset = frontCopy.toArray(frontSubset);
-			// STEP4. The hypervolume (control is passed to java version of
-			// Zitzler code)
+			// STEP4. The hypervolume (control is passed to java version of Zitzler code)
 			double hv = hypervolume.calculateHypervolume(frontSubset,
 					frontSubset.length, numberOfObjectives);
 			double contribution = totalVolume - hv;

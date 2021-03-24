@@ -131,10 +131,10 @@ public class Spea2Fitness {
         }
 
         double[][] distance = distance_.distanceMatrix(aux);
-        List<List<DistanceNode>> distanceList = new LinkedList<List<DistanceNode>>();
+        List<List<DistanceNode>> distanceList = new LinkedList<>();
         for (int pos = 0; pos < aux.size(); pos++) {
             aux.get(pos).setLocation(pos);
-            List<DistanceNode> distanceNodeList = new ArrayList<DistanceNode>();
+            List<DistanceNode> distanceNodeList = new ArrayList<>();
             for (int ref = 0; ref < aux.size(); ref++) {
                 if (pos != ref) {
                     distanceNodeList.add(new DistanceNode(distance[pos][ref], ref));

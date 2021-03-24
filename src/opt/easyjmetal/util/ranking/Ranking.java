@@ -46,12 +46,6 @@ public class Ranking {
 	private static final Comparator dominance_ = new DominanceComparator();
 	private static final Comparator constraint_ = new OverallConstraintViolationComparator();
 
-	/**
-	 * Constructor.
-	 *
-	 * @param solutionSet
-	 *            The <code>SolutionSet</code> to be ranked.
-	 */
 	public Ranking(SolutionSet solutionSet) {
 		solutionSet_ = solutionSet;
 
@@ -130,21 +124,10 @@ public class Ranking {
 		}
 	}
 
-	/**
-	 * Returns a <code>SolutionSet</code> containing the solutions of a given
-	 * rank.
-	 *
-	 * @param rank
-	 *            The rank
-	 * @return Object representing the <code>SolutionSet</code>.
-	 */
 	public SolutionSet getSubfront(int rank) {
 		return ranking_[rank];
 	}
 
-	/**
-	 * Returns the total number of subFronts founds.
-	 */
 	public int getNumberOfSubfronts() {
 		return ranking_.length;
 	} // getNumberOfSubfronts

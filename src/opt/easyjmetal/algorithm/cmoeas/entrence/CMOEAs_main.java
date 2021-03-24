@@ -9,6 +9,7 @@ import opt.easyjmetal.operator.crossover.CrossoverFactory;
 import opt.easyjmetal.operator.mutation.MutationFactory;
 import opt.easyjmetal.operator.selection.SelectionFactory;
 import opt.easyjmetal.problem.ProblemFactory;
+import opt.rl4j.fly.BeepUtil;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -21,7 +22,7 @@ public class CMOEAs_main {
         MatlabUtilityFunctionsWrapper.setup();
         batchRun(new String[]{
                 "NSGAII_CDP_ISDEPlus",
-                "NSGAII_CDP",
+//                "NSGAII_CDP",
 //                "ISDEPLUS_CDP",
 //                "NSGAIII_CDP",
 //                "MOEAD_CDP",
@@ -34,6 +35,7 @@ public class CMOEAs_main {
 //                "CCMO"
         }, crossoverMethod);
         MatlabUtilityFunctionsWrapper.stop();
+        BeepUtil.playSound("sound/bombo.wav");
     }
 
     private static void batchRun(String[] methods, int crossMethod) throws Exception {
@@ -71,7 +73,7 @@ public class CMOEAs_main {
         HashMap parameters;
 
         int popSize = 100;
-        int maxFES = 10000;
+        int maxFES = 30000;
         int updateNumber = 2;
         int neighborSize = (int) (0.1 * popSize);
         double deDelta = 0.9;

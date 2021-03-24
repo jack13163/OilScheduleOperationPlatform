@@ -1,11 +1,11 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.modefy;
 
 import opt.easyjmetal.core.*;
+import opt.easyjmetal.qualityindicator.util.MetricsUtil;
+import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.MoeadUtils;
-import opt.easyjmetal.util.comparators.FitnessComparator;
-import opt.easyjmetal.util.fitness.CCMO_Fitness;
-import opt.easyjmetal.util.fitness.ISDEPlus_Fitness;
+import opt.easyjmetal.util.comparators.DistanceComparator;
 import opt.easyjmetal.util.ranking.Ranking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
@@ -118,39 +118,38 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
             // Remain is less than front(index).size, insert only the best one
             if (remain > 0) {
                 SolutionSet remainSolutions = new SolutionSet();
-                remainSolutions = remainSolutions.union(front);
-                // 计算可行解的比例
-                double feasibleRate = 1.0 * population_.getFeasible().size() / populationSize_;
-                if(population_.size() == 0){
-                    feasibleRate = 1.0 * front.getFeasible().size() / front.size();
-                }
+                // 计算退火比例（下降）1-exp(-8*x)
+                double lamb = 8.0;
+                double iterationRate = 1.0 - Math.exp(-1.0 * lamb * evaluations_ / maxEvaluations_);
 
                 // 获取当前层和下一层中的个体
-                try {
-                    int maxFrontsToBeSelected = generateRandomInteger(index, ranking.getNumberOfSubfronts(), feasibleRate);
-                    for (int i = index; i < maxFrontsToBeSelected; i++) {
-                        remainSolutions = remainSolutions.union(ranking.getSubfront(i));
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                // Math.min(index + 1, ranking.getNumberOfSubfronts() - 1);
+                int maxFrontsToBeSelected = index;
+                for (int i = index; i <= maxFrontsToBeSelected; i++) {
+                    remainSolutions = remainSolutions.union(ranking.getSubfront(i));
                 }
 
-                // 根据可行解的比例进行非支配排序
-                if (Math.random() < feasibleRate) {
-                    // 可行解很多，则需要
+                // 根据比例进行非支配排序
+                if (Math.random() < iterationRate) {
                     System.out.println("Iteration: " + evaluations_ / populationSize_ + ", ignored: true   " + remain + "<----" + remainSolutions.size());
-                    CCMO_Fitness.computeFitnessValue(remainSolutions, true);
-                    remainSolutions.sort(new FitnessComparator());
+//                    CCMO_Fitness.computeFitnessValue(remainSolutions, false);
+//                    remainSolutions.sort(new FitnessComparator());
+
+                    actualiseHVContribution(remainSolutions, problem_.getNumberOfObjectives());
+
+                    // 将剩下的解添加到种群中
+                    for (int k = 0; k < remain; k++) {
+                        population_.add(remainSolutions.get(k));
+                    }
                 } else {
                     System.out.println("Iteration: " + evaluations_ / populationSize_ + ", ignored: false  " + remain + "<----" + remainSolutions.size());
-                    //CCMO_Fitness.computeFitnessValue(remainSolutions, false);
-                    ISDEPlus_Fitness.computeFitnessValue(remainSolutions);
-                    remainSolutions.sort(new FitnessComparator());
-                }
+                    new Distance().crowdingDistanceAssignment(remainSolutions, problem_.getNumberOfObjectives());
+                    remainSolutions.sort(new DistanceComparator());
 
-                // 将剩下的解添加到种群中
-                for (int k = 0; k < remain; k++) {
-                    population_.add(remainSolutions.get(k));
+                    // 将剩下的解添加到种群中
+                    for (int k = 0; k < remain; k++) {
+                        population_.add(remainSolutions.get(k));
+                    }
                 }
             }
 
@@ -163,7 +162,6 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
         }
 
         SqlUtils.InsertSolutionSet(dbName, tableName, external_archive_);
-
         return external_archive_;
     }
 
@@ -176,9 +174,47 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
      * @return
      */
     private int generateRandomInteger(int min, int max, double feasibleRate) {
-        if(feasibleRate == 1){
+        if (feasibleRate == 1) {
             return max;
         }
         return (int) (feasibleRate * (max - min + 1) + min);
+    }
+
+
+    /**
+     * 计算解集集合中每个个体对HV指标的贡献
+     */
+    public void actualiseHVContribution(SolutionSet solutionSet, int numberOfObjectives) {
+        if (solutionSet.size() > 2) {
+            double offset_ = 100;
+            MetricsUtil utils_ = new MetricsUtil();
+            // The contribution can be updated
+            double[][] frontValues = solutionSet.writeObjectivesToMatrix();
+            // STEP 1. Obtain the maximum and minimum values of the Pareto front
+            double[] maximumValues = utils_.getMaximumValues(frontValues, numberOfObjectives);
+            double[] minimumValues = utils_.getMinimumValues(frontValues, numberOfObjectives);
+            // STEP 2. Get the normalized front
+            double[][] normalizedFront = utils_.getNormalizedFront(frontValues, maximumValues, minimumValues);
+            // compute offsets for reference point in normalized space
+            double[] offsets = new double[maximumValues.length];
+            for (int i = 0; i < maximumValues.length; i++) {
+                offsets[i] = offset_ / (maximumValues[i] - minimumValues[i]);
+            }
+            // STEP 3. Inverse the pareto front. This is needed because the original metric by Zitzler is for maximization problems
+            double[][] invertedFront = utils_.invertedFront(normalizedFront);
+            // shift away from origin, so that boundary points also get a contribution > 0
+            for (double[] point : invertedFront) {
+                for (int i = 0; i < point.length; i++) {
+                    point[i] += offsets[i];
+                }
+            }
+
+            // calculate contributions and sort
+            double[] contributions = utils_.hvContributions(numberOfObjectives, invertedFront);
+            for (int i = 0; i < contributions.length; i++) {
+                // contribution values are used analogously to crowding distance
+                solutionSet.get(i).setCrowdingDistance(contributions[i]);
+            }
+        }
     }
 }

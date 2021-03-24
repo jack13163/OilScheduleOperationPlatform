@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -71,6 +71,7 @@ public class EpsilonConstraintViolationComparator
      * Returns true if solutions s1 and/or s2 have an overall constraint
      * violation < 0
      */
+    @Override
     public boolean needToCompare(Solution s1, Solution s2) {
         boolean needToCompare ;
         needToCompare = (Math.abs(s1.getOverallConstraintViolation()) > epsilonLevel_ ) ||

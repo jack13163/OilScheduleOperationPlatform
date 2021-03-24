@@ -23,11 +23,6 @@ package opt.easyjmetal.util.comparators;
 
 import opt.easyjmetal.core.Solution;
 
-/**
- * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> objects) based on the overall constraint violation of
- * the solucions, as in NSGA-II.
- */
 public class OverallConstraintViolationComparator implements IConstraintViolationComparator {
 
     /**

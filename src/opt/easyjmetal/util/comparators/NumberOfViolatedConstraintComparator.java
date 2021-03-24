@@ -58,6 +58,7 @@ public class NumberOfViolatedConstraintComparator
      * Returns true if solutions s1 and/or s2 violates a
      * number n > 0 of constraints
      */
+    @Override
     public boolean needToCompare(Solution s1, Solution s2) {
         boolean needToCompare;
         needToCompare = (s1.getNumberOfViolatedConstraint() > 0) ||

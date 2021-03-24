@@ -39,5 +39,4 @@ public class ISDEPlus_Fitness {
             solutionSet.get(indexs[i]).setFitness(Math.exp(-minDistance));
         }
     }
-
 }

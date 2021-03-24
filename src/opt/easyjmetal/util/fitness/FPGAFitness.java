@@ -60,15 +60,9 @@ public class FPGAFitness {
         double[] strength = new double[solutionSet_.size()];
         double[] rawFitness = new double[solutionSet_.size()];
 
-        //Ranking  ranking  = new Ranking(solutionSet_);
-        //Distance distance = new Distance();
-        //distance.crowdingDistanceAsignament(ranking.getSubfront(0),
-        //                                    problem_.getNumberOfObjectives());
-
         for (int i = 0; i < solutionSet_.size(); i++) {
             if (solutionSet_.get(i).getRank() == 0) {
                 solutionSet_.get(i).setFitness(solutionSet_.get(i).getCrowdingDistance());
-                //System.out.println(solutionSet_.get(i).getCrowdingDistance());
             }
         }
 
@@ -89,13 +83,13 @@ public class FPGAFitness {
             double fitness = 0.0;
             for (int j = 0; j < solutionSet_.size(); j++) {
                 int flag = dominance_.compare(solutionSet_.get(i), solutionSet_.get(j));
-                if (flag == -1) { //i domiante j
+                if (flag == -1) {
+                    // i domiante j
                     fitness += strength[j];
                 } else if (flag == 1) {
                     fitness -= strength[j];
                 }
             }
         }
-
     }
 }
