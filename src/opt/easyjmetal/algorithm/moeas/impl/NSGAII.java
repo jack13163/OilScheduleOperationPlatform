@@ -2,7 +2,7 @@ package opt.easyjmetal.algorithm.moeas.impl;
 
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.*;
-import opt.easyjmetal.util.comparators.one.CrowdingComparator;
+import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
 import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.plot.PlotObjectives;
 import opt.easyjmetal.util.ranking.impl.CDPRanking;
@@ -122,7 +122,7 @@ public class NSGAII extends Algorithm {
             // Remain is less than front(index).size, insert only the best one
             if (remain > 0) {  // front contains individuals to insert
                 distance.crowdingDistanceAssignment(front, problem_.getNumberOfObjectives());
-                front.sort(new CrowdingComparator());
+                front.sort(new CrowdingDistanceComparator());
                 for (int k = 0; k < remain; k++) {
                     population_.add(front.get(k));
                 }

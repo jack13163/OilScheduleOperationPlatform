@@ -5,7 +5,7 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.comparators.one.DominanceComparator;
 import opt.easyjmetal.util.comparators.one.EqualSolutionsComparator;
-import opt.easyjmetal.util.pseudorandom.JMetalRandom;
+import opt.jmetal.util.pseudorandom.JMetalRandom;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -106,6 +106,7 @@ public class NonDominatedArchive extends Archive {
             }
         }
 
+        @Override
         public void evaluate(Solution solution) throws JMException {
             double[] f = new double[getNumberOfObjectives()];
 

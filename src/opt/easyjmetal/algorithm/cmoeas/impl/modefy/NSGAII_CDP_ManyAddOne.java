@@ -16,11 +16,6 @@ public class NSGAII_CDP_ManyAddOne extends Algorithm {
     private SolutionSet external_archive_;
     private String dataDirectory_;
 
-    /**
-     * Constructor
-     *
-     * @param problem The problem to be solved
-     */
     public NSGAII_CDP_ManyAddOne(Problem problem) {
         super(problem);
     }
@@ -100,17 +95,17 @@ public class NSGAII_CDP_ManyAddOne extends Algorithm {
             population_.clear();
 
             // 计算退火比例（下降）1-exp(-8*x)
-            double lamb = 8.0;
+            double lamb = 7.0;
             double iterationRate = 1.0 - Math.exp(-1.0 * lamb * evaluations_ / maxEvaluations_);
             AbstractRanking ranking = null;
 
             // 根据比例进行非支配排序
             if (Math.random() < iterationRate) {
                 System.out.println("Iteration: " + evaluations_ / populationSize_ + ", ManyAddOne");
-                ranking = new Ranking_M_Add_One(union_);
+                ranking = new CDPRanking(union_);
             } else {
                 System.out.println("Iteration: " + evaluations_ / populationSize_ + ", CDP");
-                ranking = new CDPRanking(union_);
+                ranking = new Ranking_M_Add_One(union_);
             }
             ranking.ranking();
 

@@ -24,10 +24,10 @@ package opt.easyjmetal.operator.selection;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.Configuration;
-import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
+import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
+import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.ranking.impl.CDPRanking;
-import opt.easyjmetal.util.comparators.one.CrowdingComparator;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -49,8 +49,7 @@ public class RankingAndCrowdingSelection extends Selection {
   /**
    * stores a <code>Comparator</code> for crowding comparator checking.
    */
-  private static final Comparator crowdingComparator_ =
-                                  new CrowdingComparator();
+  private static final Comparator crowdingComparator_ = new CrowdingDistanceComparator();
 
 
   /**

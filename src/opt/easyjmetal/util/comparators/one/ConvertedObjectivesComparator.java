@@ -46,17 +46,18 @@ public class ConvertedObjectivesComparator implements Comparator {
      */
     @Override
     public int compare(Object object1, Object object2) {
-        if (object1 == null)
+        if (object1 == null) {
             return 1;
-        else if (object2 == null)
+        } else if (object2 == null) {
             return -1;
+        }
 
         Solution solution1 = (Solution) object1;
         Solution solution2 = (Solution) object2;
-
-        int dominate1; // dominate1 indicates if some objective of solution1
-        // dominates the same objective in solution2. dominate2
-        int dominate2; // is the complementary of dominate1.
+        // dominate1 indicates if some objective of solution1 dominates the same objective in solution2.
+        int dominate1;
+        // dominate2 is the complementary of dominate1.
+        int dominate2;
 
         dominate1 = 0;
         dominate2 = 0;
