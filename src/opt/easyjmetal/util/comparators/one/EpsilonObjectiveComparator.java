@@ -51,7 +51,7 @@ public class EpsilonObjectiveComparator implements Comparator {
     public EpsilonObjectiveComparator(int nObj, double eta) {
         objective_ = nObj;
         eta_ = eta;
-    } // EObjectiveComparator
+    }
 
     /**
      * Compares two solutions.
@@ -72,7 +72,7 @@ public class EpsilonObjectiveComparator implements Comparator {
         double objetive1 = ((Solution) o1).getObjective(objective_);
         double objetive2 = ((Solution) o2).getObjective(objective_);
 
-        //Objetive implements comparable!!!
+        // Objetive implements comparable!!!
         if (objetive1 / (1 + eta_) < objetive2) {
             return -1;
         } else if (objetive1 / (1 + eta_) > objetive2) {

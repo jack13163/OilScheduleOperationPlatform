@@ -27,8 +27,7 @@ import opt.easyjmetal.util.comparators.IConstraintViolationComparator;
 /**
  * 总体约束阈值
  */
-public class EpsilonConstraintViolationComparator
-        implements IConstraintViolationComparator {
+public class EpsilonConstraintViolationComparator implements IConstraintViolationComparator {
 
     private double epsilonLevel_;
 

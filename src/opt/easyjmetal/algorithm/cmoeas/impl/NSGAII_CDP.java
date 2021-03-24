@@ -4,12 +4,12 @@
 
 package opt.easyjmetal.algorithm.cmoeas.impl;
 
+import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
 import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.ranking.impl.CDPRanking;
-import opt.easyjmetal.util.comparators.one.CrowdingComparator;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 
@@ -147,7 +147,7 @@ public class NSGAII_CDP extends Algorithm {
             // Remain is less than front(index).size, insert only the best one
             if (remain > 0) {
                 distance.crowdingDistanceAssignment(front, problem_.getNumberOfObjectives());
-                front.sort(new CrowdingComparator());
+                front.sort(new CrowdingDistanceComparator());
                 for (int k = 0; k < remain; k++) {
                     population_.add(front.get(k));
                 }

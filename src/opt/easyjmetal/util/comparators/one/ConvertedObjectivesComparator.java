@@ -30,10 +30,11 @@ import java.util.Comparator;
  * <code>Solution</code> objects) based on a constraint violation test +
  * dominance checking, as in NSGA-II.
  */
-public class ObjectiveDominanceComparator implements Comparator {
+public class ConvertedObjectivesComparator implements Comparator {
 
-    public ObjectiveDominanceComparator() {
+    public ConvertedObjectivesComparator() {
     }
+
 
     /**
      * Compares two solutions.
@@ -62,11 +63,12 @@ public class ObjectiveDominanceComparator implements Comparator {
 
         int flag; //stores the result of the comparison
 
+
         // Equal number of violated constraints. Applying a dominance Test then
         double value1, value2;
         for (int i = 0; i < solution1.getNumberOfObjectives(); i++) {
-            value1 = solution1.getObjective(i);
-            value2 = solution2.getObjective(i);
+            value1 = solution1.getConvertedObjective(i);
+            value2 = solution2.getConvertedObjective(i);
             if (value1 < value2) {
                 flag = -1;
             } else if (value1 > value2) {
@@ -85,11 +87,14 @@ public class ObjectiveDominanceComparator implements Comparator {
         }
 
         if (dominate1 == dominate2) {
-            return 0; //No one dominate the other
+            //No one dominate the other
+            return 0;
         }
         if (dominate1 == 1) {
-            return -1; // solution1 dominate
+            // solution1 dominate
+            return -1;
         }
-        return 1;    // solution2 dominate
+        // solution2 dominate
+        return 1;
     }
 }

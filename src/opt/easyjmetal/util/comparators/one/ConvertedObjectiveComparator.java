@@ -29,23 +29,25 @@ import java.util.Comparator;
  * This class implements a <code>Comparator</code> (a method for comparing
  * <code>Solution</code> objects) based on a objective values.
  */
-public class IdeaObjectiveComparator implements Comparator {
+public class ConvertedObjectiveComparator implements Comparator {
 
-    /**
-     * Stores the index of the objective to compare
-     */
+    private int nObj;
     private boolean ascendingOrder_;
 
     /**
      * Constructor.
+     *
+     * @param nObj The index of the objective to compare
      */
-    public IdeaObjectiveComparator() {
+    public ConvertedObjectiveComparator(int nObj) {
+        this.nObj = nObj;
         ascendingOrder_ = true;
-    } // PointComparator
+    }
 
-    public IdeaObjectiveComparator(boolean descendingOrder) {
+    public ConvertedObjectiveComparator(int nObj, boolean descendingOrder) {
+        this.nObj = nObj;
         ascendingOrder_ = !descendingOrder;
-    } // PointComparator
+    }
 
     /**
      * Compares two solutions.
@@ -63,8 +65,8 @@ public class IdeaObjectiveComparator implements Comparator {
             return -1;
         }
 
-        double objetive1 = ((Solution) o1).getFitness();
-        double objetive2 = ((Solution) o2).getFitness();
+        double objetive1 = ((Solution) o1).getConvertedObjective(this.nObj);
+        double objetive2 = ((Solution) o2).getConvertedObjective(this.nObj);
         if (ascendingOrder_) {
             if (objetive1 < objetive2) {
                 return -1;

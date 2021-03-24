@@ -24,8 +24,8 @@ package opt.easyjmetal.util.distance;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.comparators.one.AtmObjectiveComparator;
-import opt.easyjmetal.util.comparators.one.IdeaObjectiveComparator;
+import opt.easyjmetal.util.comparators.one.ConvertedObjectiveComparator;
+import opt.easyjmetal.util.comparators.one.FitnessComparator;
 import opt.easyjmetal.util.comparators.one.ObjectiveComparator;
 import opt.easyjmetal.util.wrapper.XReal;
 
@@ -288,7 +288,7 @@ public class Distance {
         }
 
         // Add another objective
-        front.sort(new IdeaObjectiveComparator());
+        front.sort(new FitnessComparator());
         objetiveMinn = front.get(0).getFitness();
         objetiveMaxn = front.get(front.size() - 1).getFitness();
         //Set de crowding distance
@@ -342,7 +342,7 @@ public class Distance {
 
         for (int i = 0; i < nObjs; i++) {
             // Sort the population by Obj n
-            front.sort(new AtmObjectiveComparator(i));
+            front.sort(new ConvertedObjectiveComparator(i));
             objetiveMinn = front.get(0).getConvertedObjective(i);
             objetiveMaxn = front.get(front.size() - 1).getConvertedObjective(i);
 

@@ -23,7 +23,7 @@ package opt.easyjmetal.util.ranking.impl;
 
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.comparators.one.EpsilonConstraintViolationComparator;
-import opt.easyjmetal.util.comparators.one.ObjectiveDominanceComparator;
+import opt.easyjmetal.util.comparators.one.ObjectivesComparator;
 import opt.easyjmetal.util.ranking.AbstractRanking;
 
 import java.util.Comparator;
@@ -53,7 +53,7 @@ public class EpsilonConstraintRanking extends AbstractRanking {
     public EpsilonConstraintRanking(SolutionSet solutionSet, double epsilon) {
         super(solutionSet);
         this.epsilon = epsilon;
-        dominance_ = new ObjectiveDominanceComparator();
+        dominance_ = new ObjectivesComparator();
         constraint_ = new EpsilonConstraintViolationComparator(epsilon);
     }
 

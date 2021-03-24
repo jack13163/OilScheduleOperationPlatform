@@ -30,18 +30,9 @@ import java.util.Comparator;
  * <code>Solution</code> objects) based on a objective values.
  */
 public class ObjectiveComparator implements Comparator {
-
-    /**
-     * Stores the index of the objective to compare
-     */
     private int nObj;
     private boolean ascendingOrder_;
 
-    /**
-     * Constructor.
-     *
-     * @param nObj The index of the objective to compare
-     */
     public ObjectiveComparator(int nObj) {
         this.nObj = nObj;
         ascendingOrder_ = true;
@@ -50,7 +41,7 @@ public class ObjectiveComparator implements Comparator {
     public ObjectiveComparator(int nObj, boolean descendingOrder) {
         this.nObj = nObj;
         ascendingOrder_ = !descendingOrder;
-    } // PointComparator
+    }
 
     /**
      * Compares two solutions.

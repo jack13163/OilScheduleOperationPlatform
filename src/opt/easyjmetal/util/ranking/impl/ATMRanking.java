@@ -22,7 +22,7 @@
 package opt.easyjmetal.util.ranking.impl;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.one.AtmDominanceComparator;
+import opt.easyjmetal.util.comparators.one.ConvertedObjectivesComparator;
 import opt.easyjmetal.util.ranking.AbstractRanking;
 
 /**
@@ -38,6 +38,6 @@ public class ATMRanking extends AbstractRanking {
 
     public ATMRanking(SolutionSet solutionSet) {
         super(solutionSet);
-        dominance_ = new AtmDominanceComparator();
+        dominance_ = new ConvertedObjectivesComparator();
     }
 }

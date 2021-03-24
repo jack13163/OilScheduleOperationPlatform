@@ -20,9 +20,6 @@ import java.util.Vector;
 public class PPS_MOEAD extends Algorithm {
 
     private int populationSize_;
-    /**
-     * Stores the population
-     */
     private SolutionSet population_;
     /**
      * Z vector (ideal point)

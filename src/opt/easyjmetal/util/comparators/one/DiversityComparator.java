@@ -29,8 +29,7 @@ import opt.easyjmetal.util.comparators.IConstraintViolationComparator;
  * <code>Solution</code> objects) based on the overall constraint violation of
  * the solucions, as in NSGA-II.
  */
-public class DiversityComparator
-        implements IConstraintViolationComparator {
+public class DiversityComparator implements IConstraintViolationComparator {
 
     /**
      * Compares two solutions.

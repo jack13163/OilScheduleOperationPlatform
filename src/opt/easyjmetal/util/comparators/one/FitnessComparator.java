@@ -1,4 +1,4 @@
-//  FitnessComparator.java
+//  PointComparator.java
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
@@ -25,13 +25,17 @@ import opt.easyjmetal.core.Solution;
 
 import java.util.Comparator;
 
+public class FitnessComparator implements Comparator {
 
-/**
- * This class implements a <code>Comparator</code> (a method for comparing
- * <code>Solution</code> objects) based on the fitness value returned by the
- * method <code>getFitness</code>.
- */
-public class FitnessComparator implements Comparator<Solution> {
+    private boolean ascendingOrder_;
+
+    public FitnessComparator() {
+        ascendingOrder_ = true;
+    }
+
+    public FitnessComparator(boolean descendingOrder) {
+        ascendingOrder_ = !descendingOrder;
+    }
 
     /**
      * Compares two solutions.
@@ -42,23 +46,31 @@ public class FitnessComparator implements Comparator<Solution> {
      * respectively.
      */
     @Override
-    public int compare(Solution o1, Solution o2) {
+    public int compare(Object o1, Object o2) {
         if (o1 == null) {
             return 1;
         } else if (o2 == null) {
             return -1;
         }
 
-        double fitness1 = o1.getFitness();
-        double fitness2 = o2.getFitness();
-        if (fitness1 < fitness2) {
-            return -1;
+        double objetive1 = ((Solution) o1).getFitness();
+        double objetive2 = ((Solution) o2).getFitness();
+        if (ascendingOrder_) {
+            if (objetive1 < objetive2) {
+                return -1;
+            } else if (objetive1 > objetive2) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            if (objetive1 < objetive2) {
+                return 1;
+            } else if (objetive1 > objetive2) {
+                return -1;
+            } else {
+                return 0;
+            }
         }
-
-        if (fitness1 > fitness2) {
-            return 1;
-        }
-
-        return 0;
     }
 }

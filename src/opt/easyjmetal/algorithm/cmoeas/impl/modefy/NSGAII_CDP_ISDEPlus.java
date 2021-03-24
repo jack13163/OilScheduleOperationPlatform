@@ -6,7 +6,6 @@ import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
-import opt.easyjmetal.util.comparators.one.DistanceComparator;
 import opt.easyjmetal.util.comparators.one.FitnessComparator;
 import opt.easyjmetal.util.fitness.CCMO_Fitness;
 import opt.easyjmetal.util.ranking.impl.CDPRanking;
@@ -141,7 +140,7 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
                 if (remain > 0) {
                     System.out.println("Iteration: " + evaluations_ / populationSize_ + ", ignored: false  " + remain + "<----" + front.size());
                     new Distance().crowdingDistanceAssignment(front, problem_.getNumberOfObjectives());
-                    front.sort(new DistanceComparator());
+                    front.sort(new CrowdingDistanceComparator());
 
                     // 将剩下的解添加到种群中
                     for (int k = 0; k < remain; k++) {

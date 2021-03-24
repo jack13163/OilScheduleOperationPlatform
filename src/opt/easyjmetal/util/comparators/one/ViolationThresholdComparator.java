@@ -27,9 +27,7 @@ import opt.easyjmetal.util.comparators.IConstraintViolationComparator;
 /**
  * 约束违背阈值比较器
  */
-public class ViolationThresholdComparator
-        implements IConstraintViolationComparator {
-
+public class ViolationThresholdComparator implements IConstraintViolationComparator {
 
     // threshold used for the comparations
     private double threshold_ = 0.0;

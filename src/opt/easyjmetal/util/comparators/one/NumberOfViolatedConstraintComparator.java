@@ -28,8 +28,7 @@ import opt.easyjmetal.util.comparators.IConstraintViolationComparator;
  * This class implements a <code>Comparator</code> (a method for comparing
  * <code>Solution</code> objects) based on the number of violated constraints.
  */
-public class NumberOfViolatedConstraintComparator
-        implements IConstraintViolationComparator {
+public class NumberOfViolatedConstraintComparator implements IConstraintViolationComparator {
 
     /**
      * Compares two solutions.

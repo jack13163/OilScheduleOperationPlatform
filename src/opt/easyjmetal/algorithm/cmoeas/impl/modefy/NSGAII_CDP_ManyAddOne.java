@@ -4,11 +4,11 @@ import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.solution.MoeadUtils;
-import opt.easyjmetal.util.comparators.one.DistanceComparator;
 import opt.easyjmetal.util.ranking.AbstractRanking;
 import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.ranking.impl.Ranking_M_Add_One;
 import opt.easyjmetal.util.sqlite.SqlUtils;
+import opt.jmetal.util.comparator.CrowdingDistanceComparator;
 
 public class NSGAII_CDP_ManyAddOne extends Algorithm {
 
@@ -134,7 +134,7 @@ public class NSGAII_CDP_ManyAddOne extends Algorithm {
             // Remain is less than front(index).size, insert only the best one
             if (remain > 0) {
                 new Distance().crowdingDistanceAssignment(front, problem_.getNumberOfObjectives());
-                front.sort(new DistanceComparator());
+                front.sort(new CrowdingDistanceComparator());
 
                 // 将剩下的解添加到种群中
                 for (int k = 0; k < remain; k++) {

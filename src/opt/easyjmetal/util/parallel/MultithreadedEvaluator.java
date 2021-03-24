@@ -14,7 +14,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -35,114 +35,118 @@ import java.util.concurrent.*;
  * Class for evaluating solutions in parallel using threads
  */
 public class MultithreadedEvaluator implements IParallelEvaluator {
-  private int numberOfThreads_ ;
-  private Problem problem_ ;
-  private ExecutorService executor_ ;
-  private Collection<Callable<Solution>> taskList_ ;
+    private int numberOfThreads_;
+    private Problem problem_;
+    private ExecutorService executor_;
+    private Collection<Callable<Solution>> taskList_;
 
-  /**
-   * @author Antonio J. Nebro
-   * Private class representing tasks to evaluate solutions. 
-   */
+    /**
+     * @author Antonio J. Nebro
+     * Private class representing tasks to evaluate solutions.
+     */
 
-  private class EvaluationTask implements Callable<Solution> {
-    private Problem problem_ ;
-    private Solution solution_ ;
+    private class EvaluationTask implements Callable<Solution> {
+        private Problem problem_;
+        private Solution solution_;
+
+        /**
+         * Constructor
+         *
+         * @param problem  Problem to solve
+         * @param solution Solution to evaluate
+         */
+        public EvaluationTask(Problem problem, Solution solution) {
+            problem_ = problem;
+            solution_ = solution;
+        }
+
+        public Solution call() throws Exception {
+            long initTime = System.currentTimeMillis();
+            problem_.evaluate(solution_);
+            problem_.evaluateConstraints(solution_);
+            //long estimatedTime = System.currentTimeMillis() - initTime;
+            //System.out.println("Time: "+ estimatedTime) ;
+            return solution_;
+        }
+    }
 
     /**
      * Constructor
-     * @param problem Problem to solve
-     * @param solution Solution to evaluate
+     *
+     * @param threads
      */
-    public EvaluationTask(Problem problem, Solution solution) {
-      problem_ = problem ;
-      solution_ = solution ;
+    public MultithreadedEvaluator(int threads) {
+        numberOfThreads_ = threads;
+        if (threads == 0)
+            numberOfThreads_ = Runtime.getRuntime().availableProcessors();
+        else if (threads < 0) {
+            Configuration.logger_.severe("MultithreadedEvaluator: the number of threads" +
+                    " cannot be negative number " + threads);
+        } else {
+            numberOfThreads_ = threads;
+        }
     }
 
-    public Solution call() throws Exception {
-      long initTime = System.currentTimeMillis();
-      problem_.evaluate(solution_) ;
-      problem_.evaluateConstraints(solution_) ;
-      //long estimatedTime = System.currentTimeMillis() - initTime;
-      //System.out.println("Time: "+ estimatedTime) ;
-      return solution_ ;
-    } 
-  }
-
-  /**
-   * Constructor
-   * @param threads 
-   */
-  public MultithreadedEvaluator(int threads) {
-    numberOfThreads_ = threads ;
-    if (threads == 0)
-      numberOfThreads_ = Runtime.getRuntime().availableProcessors() ;
-    else if (threads < 0) {
-      Configuration.logger_.severe("MultithreadedEvaluator: the number of threads" +
-          " cannot be negative number " + threads);
+    /**
+     * Constructor
+     *
+     * @param problem problem to solve
+     */
+    public void startEvaluator(Problem problem) {
+        executor_ = Executors.newFixedThreadPool(numberOfThreads_);
+        System.out.println("Cores: " + numberOfThreads_);
+        taskList_ = null;
+        problem_ = problem;
     }
-    else {
-      numberOfThreads_ = threads ;
+
+    /**
+     * Adds a solution to be evaluated to a list of tasks
+     *
+     * @param solution Solution to be evaluated
+     */
+    public void addSolutionForEvaluation(Solution solution) {
+        if (taskList_ == null)
+            taskList_ = new ArrayList<Callable<Solution>>();
+
+        taskList_.add(new EvaluationTask(problem_, solution));
     }
-  }
 
-  /**
-   * Constructor
-   * @param problem problem to solve
-   */
-  public void startEvaluator(Problem problem) {
-    executor_ = Executors.newFixedThreadPool(numberOfThreads_) ;
-    System.out.println("Cores: "+ numberOfThreads_) ;
-    taskList_ = null ; 
-    problem_ = problem ;
-  }
+    /**
+     * Evaluates a list of solutions
+     *
+     * @return A list with the evaluated solutions
+     */
+    public List<Solution> parallelEvaluation() {
+        List<Future<Solution>> future = null;
+        try {
+            future = executor_.invokeAll(taskList_);
+        } catch (InterruptedException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        List<Solution> solutionList = new Vector<Solution>();
 
-  /**
-   * Adds a solution to be evaluated to a list of tasks
-   * @param solution Solution to be evaluated
-   */
-  public void addSolutionForEvaluation(Solution solution) {
-    if (taskList_ == null)
-      taskList_ = new ArrayList<Callable<Solution>>();
-
-    taskList_.add(new EvaluationTask(problem_, solution)) ;			
-  }
-
-  /**
-   * Evaluates a list of solutions
-   * @return A list with the evaluated solutions
-   */
-  public List<Solution> parallelEvaluation() {
-    List<Future<Solution>> future = null ;
-    try {
-      future = executor_.invokeAll(taskList_);
-    } catch (InterruptedException e1) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
+        for (Future<Solution> result : future) {
+            Solution solution = null;
+            try {
+                solution = result.get();
+                solutionList.add(solution);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        taskList_ = null;
+        return solutionList;
     }
-    List<Solution> solutionList = new Vector<Solution>() ;
 
-    for(Future<Solution> result : future){
-      Solution solution = null ;
-      try {
-        solution = result.get();
-        solutionList.add(solution) ;
-      } catch (InterruptedException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      } catch (ExecutionException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
+    /**
+     * Shutdown the executor
+     */
+    public void stopEvaluator() {
+        executor_.shutdown();
     }
-    taskList_ = null ;
-    return solutionList ;
-  }
-
-  /**
-   * Shutdown the executor
-   */
-  public void stopEvaluator() {
-    executor_.shutdown() ;
-  }
 }
