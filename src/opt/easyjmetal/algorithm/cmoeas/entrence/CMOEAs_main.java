@@ -22,7 +22,7 @@ public class CMOEAs_main {
         MatlabUtilityFunctionsWrapper.setup();
         batchRun(new String[]{
                 "NSGAII_CDP_ISDEPlus",
-//                "NSGAII_CDP",
+                "NSGAII_CDP",
 //                "ISDEPLUS_CDP",
 //                "NSGAIII_CDP",
 //                "MOEAD_CDP",
