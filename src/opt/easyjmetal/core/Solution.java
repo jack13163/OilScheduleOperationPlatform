@@ -382,7 +382,7 @@ public class Solution implements Serializable {
      */
     public double getObjective(int i) {
         return objective_[i];
-    } // getObjective
+    }
 
     public double getConvertedObjective(int i) {
         return convertedObjective_[i];

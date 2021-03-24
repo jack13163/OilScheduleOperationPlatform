@@ -110,7 +110,7 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
 
                 try {
                     CCMO_Fitness.computeFitnessValue(union_, false);
-                    new Distance().crowdingDistanceAssignment(union_, populationSize_);
+                    new Distance().crowdingDistanceAssignment(union_, problem_.getNumberOfObjectives());
                     StochasticRanking stochasticRanking = new StochasticRanking(new CrowdingDistanceComparator(), new FitnessComparator());
                     population_ = stochasticRanking.ranking(union_, populationSize_);
                 } catch (Exception e) {
