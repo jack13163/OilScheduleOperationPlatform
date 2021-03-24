@@ -112,8 +112,6 @@ public class R2Archive extends Archive {
         // Insert the solution into the archive
         solutionsList_.add(solution);
         if (size() > maxSize_) {
-            // The archive is full
-            // Removing the one contributing the less
             int indexWorst = this.r2Indicator_.getWorst(this);
             remove(indexWorst);
         }
@@ -132,7 +130,8 @@ public class R2Archive extends Archive {
         double aux1 = this.r2Indicator_.R2Without(this, index1);
         double aux2 = this.r2Indicator_.R2Without(this, index2);
 
-        if (aux1 > aux2) { // means that index1 contributed less than index2
+        if (aux1 > aux2) {
+            // means that index1 contributed less than index2
             return this.get(index1);
         } else {
             return this.get(index2);

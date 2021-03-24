@@ -16,24 +16,11 @@ import java.util.List;
 
 public class ENS_FirstRank {
 
-    /**
-     * The <code>SolutionSet</code> to rank
-     */
     private int[] rank_ ;
-
-    /**
-     * An array containing all the fronts found during the search
-     */
     private List<Integer> F_  ;
-
-
     private SolutionSet population_;
 
-    /**
-     * default constructor.
-     */
     public ENS_FirstRank(){
-
     }
 
     public ENS_FirstRank(SolutionSet pop) {
@@ -80,7 +67,7 @@ public class ENS_FirstRank {
             result.add(new Solution(population_.get(F_.get(i))));
         }
         return result;
-    } // getFirstfront
+    }
 
     private int[] sort_rows(SolutionSet pop){
         SolutionSet tempSols = new SolutionSet(pop.size());

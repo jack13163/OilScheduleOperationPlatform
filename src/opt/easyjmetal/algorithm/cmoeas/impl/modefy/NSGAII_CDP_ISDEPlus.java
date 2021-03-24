@@ -92,62 +92,56 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
                 evaluations_ += 2;
             }
 
-            // Ranking the union
+            // 合并种群
             SolutionSet union_ = population_.union(offspringPopulation_);
-            Ranking ranking = new Ranking(union_);
 
-            int remain = populationSize_;
-            int index = 0;
-            SolutionSet front;
-            population_.clear();
+            // 计算退火比例（下降）1-exp(-8*x)
+            double lamb = 8.0;
+            double iterationRate = 1.0 - Math.exp(-1.0 * lamb * evaluations_ / maxEvaluations_);
 
-            // Obtain the next front
-            front = ranking.getSubfront(index);
-            while ((remain > 0) && (remain >= front.size())) {
-                // Add the individuals of this front
-                for (int k = 0; k < front.size(); k++) {
-                    population_.add(front.get(k));
+            // 根据比例进行非支配排序
+            if (Math.random() < iterationRate) {
+                System.out.println("Iteration: " + evaluations_ / populationSize_ + ", ignored: true   ");
+                actualiseHVContribution(union_, problem_.getNumberOfObjectives());
+                union_.sort(new DistanceComparator());
+
+                // 将剩下的解添加到种群中
+                for (int k = 0; k < populationSize_; k++) {
+                    population_.add(union_.get(k));
                 }
+            } else {
+                // 非支配排序
+                Ranking ranking = new Ranking(union_);
 
-                remain = remain - front.size();
-                index++;
-                if (remain > 0) {
-                    front = ranking.getSubfront(index);
-                }
-            }
+                int remain = populationSize_;
+                int index = 0;
+                SolutionSet front;
+                population_.clear();
 
-            // Remain is less than front(index).size, insert only the best one
-            if (remain > 0) {
-                SolutionSet remainSolutions = new SolutionSet();
-                // 计算退火比例（下降）1-exp(-8*x)
-                double lamb = 8.0;
-                double iterationRate = 1.0 - Math.exp(-1.0 * lamb * evaluations_ / maxEvaluations_);
-
-                // 获取当前层和下一层中的个体
-                // Math.min(index + 1, ranking.getNumberOfSubfronts() - 1);
-                int maxFrontsToBeSelected = index;
-                for (int i = index; i <= maxFrontsToBeSelected; i++) {
-                    remainSolutions = remainSolutions.union(ranking.getSubfront(i));
-                }
-
-                // 根据比例进行非支配排序
-                if (Math.random() < iterationRate) {
-                    System.out.println("Iteration: " + evaluations_ / populationSize_ + ", ignored: true   " + remain + "<----" + remainSolutions.size());
-                    actualiseHVContribution(remainSolutions, problem_.getNumberOfObjectives());
-                    remainSolutions.sort(new DistanceComparator());
-
-                    // 将剩下的解添加到种群中
-                    for (int k = 0; k < remain; k++) {
-                        population_.add(remainSolutions.get(k));
+                // Obtain the next front
+                front = ranking.getSubfront(index);
+                while ((remain > 0) && (remain >= front.size())) {
+                    // Add the individuals of this front
+                    for (int k = 0; k < front.size(); k++) {
+                        population_.add(front.get(k));
                     }
-                } else {
-                    System.out.println("Iteration: " + evaluations_ / populationSize_ + ", ignored: false  " + remain + "<----" + remainSolutions.size());
-                    new Distance().crowdingDistanceAssignment(remainSolutions, problem_.getNumberOfObjectives());
-                    remainSolutions.sort(new DistanceComparator());
+
+                    remain = remain - front.size();
+                    index++;
+                    if (remain > 0) {
+                        front = ranking.getSubfront(index);
+                    }
+                }
+
+                // Remain is less than front(index).size, insert only the best one
+                if (remain > 0) {
+                    System.out.println("Iteration: " + evaluations_ / populationSize_ + ", ignored: false  " + remain + "<----" + front.size());
+                    new Distance().crowdingDistanceAssignment(front, problem_.getNumberOfObjectives());
+                    front.sort(new DistanceComparator());
 
                     // 将剩下的解添加到种群中
                     for (int k = 0; k < remain; k++) {
-                        population_.add(remainSolutions.get(k));
+                        population_.add(front.get(k));
                     }
                 }
             }

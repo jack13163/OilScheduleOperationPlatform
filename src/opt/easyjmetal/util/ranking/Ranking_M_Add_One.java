@@ -66,8 +66,7 @@ public class Ranking_M_Add_One {
         // flagDominate is an auxiliar encodings.variable
         int flagDominate;
 
-
-		/*
+        /*
          * //-> Fast non dominated sorting algorithm for (int p = 0; p <
 		 * solutionSet_.size(); p++) { // Initialice the list of individuals
 		 * that i dominate and the number // of individuals that dominate me
