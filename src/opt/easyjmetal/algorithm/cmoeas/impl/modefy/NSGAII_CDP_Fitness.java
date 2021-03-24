@@ -105,7 +105,7 @@ public class NSGAII_CDP_Fitness extends Algorithm {
                 double lamb = 8.0;
                 double iterationRate = 1.0 - Math.exp(-1.0 * lamb * evaluations_ / maxEvaluations_);
 
-                int maxIndex = RandomGenerator.generateRandomInteger(index, ranking.getNumberOfSubfronts() - 1, iterationRate);
+                int maxIndex = RandomGenerator.generateRandomInteger(index, ranking.getNumberOfSubfronts() - 1, 1 - iterationRate);
                 int maxFrontsToBeSelected = Math.min(index, maxIndex);
                 for (int i = index; i <= maxFrontsToBeSelected; i++) {
                     remainSolutions = remainSolutions.union(ranking.getSubfront(i));
