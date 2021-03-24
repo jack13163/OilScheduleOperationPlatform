@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -30,31 +30,33 @@ import java.util.Comparator;
  * <code>Solution</code> objects) based on the rank used in FPGA.
  */
 public class FPGAFitnessComparator implements Comparator {
-  
- /**
-  * Compares two solutions.
-  * @param o1 Object representing the first <code>Solution</code>.
-  * @param o2 Object representing the second <code>Solution</code>.
-  * @return -1, or 0, or 1 if o1 is less than, equal, or greater than o2,
-  * respectively.
-  */
-  public int compare(Object o1, Object o2) {
-    Solution solution1, solution2;
-    solution1 = (Solution) o1;
-    solution2 = (Solution) o2;
-    
-    if (solution1.getRank()==0 && solution2.getRank()> 0) {
-      return -1;      
-    } else if (solution1.getRank() > 0 &&  solution2.getRank() == 0) {
-      return 1;
-    } else {
-      if (solution1.getFitness() > solution2.getFitness()) {
-        return -1;
-      } else if (solution1.getFitness() < solution2.getFitness()) {
-        return 1;      
-      } else {
-        return 0;
-      }
+
+    /**
+     * Compares two solutions.
+     *
+     * @param o1 Object representing the first <code>Solution</code>.
+     * @param o2 Object representing the second <code>Solution</code>.
+     * @return -1, or 0, or 1 if o1 is less than, equal, or greater than o2,
+     * respectively.
+     */
+    @Override
+    public int compare(Object o1, Object o2) {
+        Solution solution1, solution2;
+        solution1 = (Solution) o1;
+        solution2 = (Solution) o2;
+
+        if (solution1.getRank() == 0 && solution2.getRank() > 0) {
+            return -1;
+        } else if (solution1.getRank() > 0 && solution2.getRank() == 0) {
+            return 1;
+        } else {
+            if (solution1.getFitness() > solution2.getFitness()) {
+                return -1;
+            } else if (solution1.getFitness() < solution2.getFitness()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
     }
-  } // compare
-} // FPGAFitnessComparator
+}

@@ -5,8 +5,12 @@ import opt.easyjmetal.qualityindicator.util.MetricsUtil;
 import opt.easyjmetal.util.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.MoeadUtils;
+import opt.easyjmetal.util.comparators.CrowdingDistanceComparator;
 import opt.easyjmetal.util.comparators.DistanceComparator;
+import opt.easyjmetal.util.comparators.FitnessComparator;
+import opt.easyjmetal.util.fitness.CCMO_Fitness;
 import opt.easyjmetal.util.ranking.Ranking;
+import opt.easyjmetal.util.ranking.StochasticRanking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 /**
@@ -94,6 +98,7 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
 
             // 合并种群
             SolutionSet union_ = population_.union(offspringPopulation_);
+            population_.clear();
 
             // 计算退火比例（下降）1-exp(-8*x)
             double lamb = 8.0;
@@ -101,13 +106,15 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
 
             // 根据比例进行非支配排序
             if (Math.random() < iterationRate) {
-                System.out.println("Iteration: " + evaluations_ / populationSize_ + ", ignored: true   ");
-                actualiseHVContribution(union_, problem_.getNumberOfObjectives());
-                union_.sort(new DistanceComparator());
+                System.out.println("Iteration: " + evaluations_ / populationSize_ + ", SRA");
 
-                // 将剩下的解添加到种群中
-                for (int k = 0; k < populationSize_; k++) {
-                    population_.add(union_.get(k));
+                try {
+                    CCMO_Fitness.computeFitnessValue(union_, false);
+                    new Distance().crowdingDistanceAssignment(union_, populationSize_);
+                    StochasticRanking stochasticRanking = new StochasticRanking(new CrowdingDistanceComparator(), new FitnessComparator());
+                    population_ = stochasticRanking.ranking(union_, populationSize_);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             } else {
                 // 非支配排序
@@ -115,11 +122,8 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
 
                 int remain = populationSize_;
                 int index = 0;
-                SolutionSet front;
-                population_.clear();
-
                 // Obtain the next front
-                front = ranking.getSubfront(index);
+                SolutionSet front = ranking.getSubfront(index);
                 while ((remain > 0) && (remain >= front.size())) {
                     // Add the individuals of this front
                     for (int k = 0; k < front.size(); k++) {
@@ -156,21 +160,6 @@ public class NSGAII_CDP_ISDEPlus extends Algorithm {
 
         SqlUtils.insertSolutionSet(dbName, tableName, external_archive_);
         return external_archive_;
-    }
-
-    /**
-     * 生成一个指定范围内的整数，输入为0~1之间的数
-     *
-     * @param min
-     * @param max
-     * @param feasibleRate
-     * @return
-     */
-    private int generateRandomInteger(int min, int max, double feasibleRate) {
-        if (feasibleRate == 1) {
-            return max;
-        }
-        return (int) (feasibleRate * (max - min + 1) + min);
     }
 
 

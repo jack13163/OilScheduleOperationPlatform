@@ -133,6 +133,9 @@ public class Solution implements Serializable {
      * Used in AbySS.
      */
     private double distanceToSolutionSet_;
+//
+//    // 用于随机权重
+//    private final double[] stochastic = new double[10];
 
     /**
      * Constructor.

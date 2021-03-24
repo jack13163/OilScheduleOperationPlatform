@@ -32,9 +32,7 @@ import java.util.Comparator;
 public class GridDominanceComparator implements Comparator {
 
     private double[] ub_;
-
     private double[] lb_;
-
     private  double divide_;
 
     public GridDominanceComparator(double[] ub, double[] lb, double divide) {

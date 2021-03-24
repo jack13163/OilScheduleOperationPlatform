@@ -21,11 +21,12 @@
 
 package opt.easyjmetal.util.ranking;
 
+import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.comparators.DominanceComparator;
-import opt.easyjmetal.util.comparators.OverallConstraintViolationComparator;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * 随机分层排序算法
@@ -35,30 +36,59 @@ import java.util.Comparator;
  */
 public class StochasticRanking {
 
-	private SolutionSet solutionSet_;
-	private static final Comparator dominance_ = new DominanceComparator();
-	private static final Comparator constraint_ = new OverallConstraintViolationComparator();
+    private final List<Comparator> comparatorList = new ArrayList<>();
 
-	public StochasticRanking(SolutionSet solutionSet) {
-		solutionSet_ = solutionSet;
-	}
+    public StochasticRanking(Comparator... comparators) throws Exception {
+        if (comparators.length < 1) {
+            throw new Exception("请至少输入一种比较器");
+        }
+        for (int i = 0; i < comparators.length; i++) {
+            comparatorList.add(comparators[i]);
+        }
+    }
 
-	/**
-	 * Stochastic ranking
-	 * @param numberOfSolution
-	 * @return
-	 */
-	public SolutionSet ranking(int numberOfSolution) {
-		SolutionSet result = new SolutionSet();
-		double pc = 0.0;
-		for (int i = 0; i < Math.ceil(1.0 * numberOfSolution / 2); i++) {
-			boolean swapdone = false;
-			for (int j = 0; j < numberOfSolution - 1; j++) {
-				if(Math.random() < pc) {
+    /**
+     * Stochastic ranking
+     *
+     * @param numberOfSolution
+     * @return
+     */
+    public SolutionSet ranking(SolutionSet solutionSet, int numberOfSolution) throws Exception {
+        SolutionSet result = new SolutionSet();
+        for (int i = 0; i < Math.ceil(1.0 * numberOfSolution / 2); i++) {
+            for (int j = 0; j < numberOfSolution - 1; j++) {
+                // 随机从比较器中选择一个
+                int indexOfComparator = generateRandomInteger(0, comparatorList.size() - 1, Math.random());
+                Solution solution1 = solutionSet.get(j);
+                Solution solution2 = solutionSet.get(j + 1);
+                Comparator comparator = this.comparatorList.get(indexOfComparator);
 
-				}
-			}
-		}
-		return result;
-	}
+                int res = comparator.compare(solution1, solution2);
+                // 比较前后两个解的优劣
+                if (res < 0) {
+                    solutionSet.swap(j, j + 1);
+                }
+            }
+        }
+        for (int i = 0; i < numberOfSolution; i++) {
+            Solution copySolution = new Solution(solutionSet.get(i));
+            result.add(copySolution);
+        }
+        return result;
+    }
+
+    /**
+     * 生成一个指定范围内的整数，输入为0~1之间的数
+     *
+     * @param min
+     * @param max
+     * @param feasibleRate
+     * @return
+     */
+    private int generateRandomInteger(int min, int max, double feasibleRate) {
+        if (feasibleRate == 1) {
+            return max;
+        }
+        return (int) (feasibleRate * (max - min + 1) + min);
+    }
 }

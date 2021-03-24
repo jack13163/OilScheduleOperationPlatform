@@ -447,4 +447,15 @@ public class SolutionSet implements Serializable {
         solutionsList_.clear();
         solutionsList_.addAll(h);
     }
+
+    /**
+     * 交换两个解
+     * @param i
+     * @param j
+     */
+    public void swap(int i, int j) {
+        Solution tmp = this.get(i);
+        this.replace(i, this.get(j));
+        this.replace(j, tmp);
+    }
 }
