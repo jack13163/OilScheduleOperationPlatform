@@ -21,6 +21,31 @@ public class SqlUtils {
     public SqlUtils() {
     }
 
+    /**
+     * 清楚表中的数据
+     * @param tableName
+     * @param fileName_
+     */
+    public static void clearTable(String tableName, String fileName_){
+        Connection con;
+        Statement stmt;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            con = DriverManager.getConnection("jdbc:sqlite:" + fileName_ + ".db");
+            System.out.println("Opened database successfully");
+            stmt = con.createStatement();
+            String sql = "DELETE FROM " + tableName;
+            stmt.executeUpdate(sql);
+            stmt.close();
+            con.close();
+
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println("Table clearred successfully");
+    }
+
     public static void CreateTable(String tableName, String fileName_) {
         Connection con;
         Statement stmt;
