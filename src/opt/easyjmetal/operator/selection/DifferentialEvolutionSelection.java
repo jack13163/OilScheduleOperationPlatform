@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -24,7 +24,7 @@ package opt.easyjmetal.operator.selection;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 
 import java.util.HashMap;
 

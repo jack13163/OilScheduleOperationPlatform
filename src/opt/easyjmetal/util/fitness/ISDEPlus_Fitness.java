@@ -1,7 +1,7 @@
 package opt.easyjmetal.util.fitness;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.LinearNormalization;
+import opt.easyjmetal.util.normalization.LinearNormalization;
 
 public class ISDEPlus_Fitness {
 

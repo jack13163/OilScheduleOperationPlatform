@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -28,7 +28,7 @@ import opt.easyjmetal.encodings.solutiontype.IntSolutionType;
 import opt.easyjmetal.encodings.solutiontype.variable.Binary;
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,14 +41,14 @@ import java.util.List;
  */
 public class BitFlipMutation extends Mutation {
   /**
-   * Valid solution types to apply this operator 
+   * Valid solution types to apply this operator
    */
   private static final List VALID_TYPES = Arrays.asList(BinarySolutionType.class,
       BinaryRealSolutionType.class,
       IntSolutionType.class) ;
 
   private Double mutationProbability_ = null ;
-  
+
 	/**
 	 * Constructor
 	 * Creates a new instance of the Bit Flip mutation operator
@@ -56,7 +56,7 @@ public class BitFlipMutation extends Mutation {
 	public BitFlipMutation(HashMap<String, Object> parameters) {
 		super(parameters) ;
   	if (parameters.get("probability") != null)
-  		mutationProbability_ = (Double) parameters.get("probability") ;  		
+  		mutationProbability_ = (Double) parameters.get("probability") ;
 	} // BitFlipMutation
 
 	/**
@@ -116,7 +116,7 @@ public class BitFlipMutation extends Mutation {
 			Class cls = String.class;
 			String name = cls.getName();
 			throw new JMException("Exception in " + name + ".execute()");
-		} // if 
+		} // if
 
 		doMutation(mutationProbability_, solution);
 		return solution;

@@ -26,6 +26,8 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.core.Variable;
 import opt.easyjmetal.util.comparators.one.CrowdingComparator;
+import opt.easyjmetal.util.distance.Distance;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.ranking.ENS_FirstRank;
 

@@ -23,7 +23,7 @@ package opt.easyjmetal.util.comparators.one;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.Configuration;
-import opt.easyjmetal.util.Distance;
+import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
 
 import java.util.Comparator;

@@ -22,9 +22,9 @@
 package opt.easyjmetal.util.fitness;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.Distance;
-import opt.easyjmetal.util.DistanceNode;
-import opt.easyjmetal.util.DistanceNodeComparator;
+import opt.easyjmetal.util.distance.Distance;
+import opt.easyjmetal.util.distance.DistanceNode;
+import opt.easyjmetal.util.distance.DistanceNodeComparator;
 import opt.easyjmetal.util.comparators.one.DominanceComparator;
 import opt.easyjmetal.util.comparators.one.FitnessComparator;
 

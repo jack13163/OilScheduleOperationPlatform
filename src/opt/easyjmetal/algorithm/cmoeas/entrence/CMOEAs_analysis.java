@@ -2,7 +2,7 @@ package opt.easyjmetal.algorithm.cmoeas.entrence;
 
 import opt.easyjmetal.statistics.*;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.ParetoFrontUtil;
+import opt.easyjmetal.util.fileinput.ParetoFrontUtil;
 
 public class CMOEAs_analysis {
     public static void main(String[] args) {

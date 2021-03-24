@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -23,22 +23,22 @@ package opt.easyjmetal.operator.selection;
 
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 import opt.jmetal.solution.Solution;
 import opt.jmetal.util.archive.impl.AdaptiveGridArchive;
 
 import java.util.HashMap;
 
-/** 
- * This class implements a selection operator as the used in PESA-II 
+/**
+ * This class implements a selection operator as the used in PESA-II
  * algorithm
  */
-public class PESA2Selection extends Selection {      
-        
+public class PESA2Selection extends Selection {
+
 	public PESA2Selection(HashMap<String, Object> parameters) {
 		super(parameters) ;
 	}
-	
+
   /**
   * Performs the operation
   * @param object Object representing a SolutionSet. This solution set
@@ -49,19 +49,19 @@ public class PESA2Selection extends Selection {
   public Object execute(Object object) throws JMException {
     try {
       AdaptiveGridArchive archive = (AdaptiveGridArchive)object;
-      int selected;        
+      int selected;
       int hypercube1 = archive.getGrid().randomOccupiedHypercube();
-      int hypercube2 = archive.getGrid().randomOccupiedHypercube();                                        
-        
+      int hypercube2 = archive.getGrid().randomOccupiedHypercube();
+
       if (hypercube1 != hypercube2){
-        if (archive.getGrid().getLocationDensity(hypercube1) < 
+        if (archive.getGrid().getLocationDensity(hypercube1) <
             archive.getGrid().getLocationDensity(hypercube2)) {
-        
+
           selected = hypercube1;
-        
+
         } else if (archive.getGrid().getLocationDensity(hypercube2) <
                    archive.getGrid().getLocationDensity(hypercube1)) {
-        
+
           selected = hypercube2;
         } else {
           if (PseudoRandom.randDouble() < 0.5) {
@@ -70,25 +70,25 @@ public class PESA2Selection extends Selection {
             selected = hypercube1;
           }
         }
-      } else { 
+      } else {
         selected = hypercube1;
       }
       int base = PseudoRandom.randInt(0,archive.size()-1);
       int cnt = 0;
-      while (cnt < archive.size()){   
+      while (cnt < archive.size()){
         Solution individual = archive.get((base + cnt)% archive.size());
         if (archive.getGrid().location(individual) != selected){
-          cnt++;                
+          cnt++;
         } else {
           return individual;
         }
-      }        
+      }
       return archive.get((base + cnt) % archive.size());
     } catch (ClassCastException e) {
       Configuration.logger_.severe("PESA2Selection.execute: ClassCastException. " +
           "Found" + object.getClass() + "Expected: AdaptativeGridArchive") ;
       Class cls = String.class;
-      String name = cls.getName(); 
+      String name = cls.getName();
       throw new JMException("Exception in " + name + ".execute()") ;
     }
   } //execute

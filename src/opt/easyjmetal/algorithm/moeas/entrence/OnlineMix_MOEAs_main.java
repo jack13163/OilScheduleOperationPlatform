@@ -8,7 +8,7 @@ import opt.easyjmetal.operator.crossover.CrossoverFactory;
 import opt.easyjmetal.operator.mutation.MutationFactory;
 import opt.easyjmetal.operator.selection.SelectionFactory;
 import opt.easyjmetal.problem.ProblemFactory;
-import opt.easyjmetal.util.FileUtils;
+import opt.easyjmetal.util.fileinput.FileUtils;
 
 import java.io.File;
 import java.util.Arrays;

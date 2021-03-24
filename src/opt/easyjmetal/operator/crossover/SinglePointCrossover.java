@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -28,7 +28,7 @@ import opt.easyjmetal.encodings.solutiontype.IntSolutionType;
 import opt.easyjmetal.encodings.solutiontype.variable.Binary;
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ import java.util.List;
  */
 public class SinglePointCrossover extends Crossover {
   /**
-   * Valid solution types to apply this operator 
+   * Valid solution types to apply this operator
    */
   private static final List VALID_TYPES = Arrays.asList(BinarySolutionType.class,
   		                                            BinaryRealSolutionType.class,
@@ -55,7 +55,7 @@ public class SinglePointCrossover extends Crossover {
   public SinglePointCrossover(HashMap<String, Object> parameters) {
   	super(parameters) ;
   	if (parameters.get("probability") != null)
-  		crossoverProbability_ = (Double) parameters.get("probability") ;  		
+  		crossoverProbability_ = (Double) parameters.get("probability") ;
   } // SinglePointCrossover
 
 
@@ -71,7 +71,7 @@ public class SinglePointCrossover extends Crossover {
    * Perform the crossover operation.
    * @param probability Crossover probability
    * @param parent1 The first parent
-   * @param parent2 The second parent   
+   * @param parent2 The second parent
    * @return An array containig the two offsprings
    * @throws JMException
    */
@@ -195,8 +195,8 @@ public class SinglePointCrossover extends Crossover {
       Class cls = String.class;
       String name = cls.getName();
       throw new JMException("Exception in " + name + ".execute()");
-    } 
-    
+    }
+
     Solution[] offSpring;
     offSpring = doCrossover(crossoverProbability_,
             parents[0],

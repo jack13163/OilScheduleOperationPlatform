@@ -2,7 +2,7 @@ package opt.easyjmetal.algorithm.cmoeas.impl.modefy;
 
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.qualityindicator.util.MetricsUtil;
-import opt.easyjmetal.util.Distance;
+import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;

@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -24,7 +24,7 @@ package opt.easyjmetal.operator.crossover;
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.encodings.solutiontype.PermutationSolutionType;
 import opt.easyjmetal.encodings.solutiontype.variable.Permutation;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,13 +32,13 @@ import java.util.List;
 
 /**
  * This class allows to apply a two points crossover operator using two parent
- * solutions. 
+ * solutions.
  * NOTE: the type of the solutions must be Permutation..
  */
 public class TwoPointsCrossover extends Crossover {
 
   /**
-   * Valid solution types to apply this operator 
+   * Valid solution types to apply this operator
    */
   private static final List VALID_TYPES = Arrays.asList(PermutationSolutionType.class) ;
 
@@ -50,9 +50,9 @@ public class TwoPointsCrossover extends Crossover {
 	 */
 	public TwoPointsCrossover(HashMap<String, Object> parameters) {
 		super(parameters) ;
-		
+
   	if (parameters.get("probability") != null)
-  		crossoverProbability_ = (Double) parameters.get("probability") ;  		
+  		crossoverProbability_ = (Double) parameters.get("probability") ;
 	} // TwoPointsCrossover
 
 
@@ -95,7 +95,7 @@ public class TwoPointsCrossover extends Crossover {
 
 					permutationLength = ((Permutation)parent1.getDecisionVariables()[0]).getLength() ;
 					parent1Vector     = ((Permutation)parent1.getDecisionVariables()[0]).vector_ ;
-					parent2Vector    = ((Permutation)parent2.getDecisionVariables()[0]).vector_ ;    
+					parent2Vector    = ((Permutation)parent2.getDecisionVariables()[0]).vector_ ;
 					offspring1Vector = ((Permutation)offspring[0].getDecisionVariables()[0]).vector_ ;
 					offspring2Vector = ((Permutation)offspring[1].getDecisionVariables()[0]).vector_ ;
 
@@ -103,7 +103,7 @@ public class TwoPointsCrossover extends Crossover {
 					crosspoint1 = PseudoRandom.randInt(0,permutationLength-1) ;
 					crosspoint2 = PseudoRandom.randInt(0,permutationLength-1) ;
 
-					while (crosspoint2 == crosspoint1)  
+					while (crosspoint2 == crosspoint1)
 						crosspoint2 = PseudoRandom.randInt(0,permutationLength-1) ;
 
 					if (crosspoint1 > crosspoint2) {
@@ -148,24 +148,24 @@ public class TwoPointsCrossover extends Crossover {
 							offspring2Vector[m++] = temp;
 						} // if
 					} // for
-				} // if 
+				} // if
 			} // if
 			else
 			{
 				opt.easyjmetal.util.Configuration.logger_.severe("TwoPointsCrossover.doCrossover: invalid " +
-						"type" + 
+						"type" +
 						parent1.getDecisionVariables()[0].getVariableType());
 				Class cls = String.class;
-				String name = cls.getName(); 
+				String name = cls.getName();
 				throw new opt.easyjmetal.util.JMException("Exception in " + name + ".doCrossover()") ;
 			}
 
-		return offspring;                                                                                      
+		return offspring;
 	} // makeCrossover
 
 	/**
 	 * Executes the operation
-	 * @param object An object containing an array of two solutions 
+	 * @param object An object containing an array of two solutions
 	 * @return An object containing an array with the offSprings
 	 * @throws opt.easyjmetal.util.JMException
 	 */
@@ -178,9 +178,9 @@ public class TwoPointsCrossover extends Crossover {
 
 			opt.easyjmetal.util.Configuration.logger_.severe("TwoPointsCrossover.execute: the solutions " +
 					"are not of the right type. The type should be 'Permutation', but " +
-					parents[0].getType() + " and " + 
+					parents[0].getType() + " and " +
 					parents[1].getType() + " are obtained");
-		} // if 
+		} // if
 
 		crossoverProbability = (Double)getParameter("probability");
 
@@ -189,7 +189,7 @@ public class TwoPointsCrossover extends Crossover {
 			opt.easyjmetal.util.Configuration.logger_.severe("TwoPointsCrossover.execute: operator needs two " +
 			"parents");
 			Class cls = String.class;
-			String name = cls.getName(); 
+			String name = cls.getName();
 			throw new opt.easyjmetal.util.JMException("Exception in " + name + ".execute()") ;
 		}
 
@@ -197,7 +197,7 @@ public class TwoPointsCrossover extends Crossover {
 				parents[0],
 				parents[1]);
 
-		return offspring; 
+		return offspring;
 	} // execute
 
 } // TwoPointsCrossover

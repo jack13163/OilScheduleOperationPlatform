@@ -3,6 +3,7 @@ package opt.easyjmetal.algorithm.moeas.impl;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.*;
 import opt.easyjmetal.util.comparators.one.CrowdingComparator;
+import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 

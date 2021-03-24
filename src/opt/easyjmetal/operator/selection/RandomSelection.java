@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -23,7 +23,7 @@ package opt.easyjmetal.operator.selection;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 
 import java.util.HashMap;
 
@@ -35,7 +35,7 @@ public class RandomSelection extends Selection {
   public RandomSelection(HashMap<String, Object> parameters) {
   	super(parameters) ;
   }
-  
+
   /**
   * Performs the operation
   * @param object Object representing a SolutionSet.
@@ -49,11 +49,11 @@ public class RandomSelection extends Selection {
     while ((pos1 == pos2) && (population.size()>1)) {
       pos2 = PseudoRandom.randInt(0,population.size()-1);
     }
-    
+
     Solution[] parents = new Solution[2];
     parents[0] = population.get(pos1);
     parents[1] = population.get(pos2);
-    
+
     return parents;
-  } // Execute     
+  } // Execute
 } // RandomSelection

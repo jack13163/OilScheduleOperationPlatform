@@ -1,7 +1,7 @@
 package opt.easyjmetal.util.jmathplot;
 
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.FileUtils;
+import opt.easyjmetal.util.fileinput.FileUtils;
 import org.math.plot.Plot2DPanel;
 import org.math.plot.Plot3DPanel;
 import org.math.plot.PlotPanel;

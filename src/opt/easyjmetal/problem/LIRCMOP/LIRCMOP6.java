@@ -10,7 +10,6 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.Variable;
 import opt.easyjmetal.encodings.solutiontype.BinaryRealSolutionType;
 import opt.easyjmetal.encodings.solutiontype.RealSolutionType;
-import opt.easyjmetal.util.Permutation;
 import opt.easyjmetal.util.JMException;
 
 /**

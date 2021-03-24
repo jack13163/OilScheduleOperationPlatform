@@ -3,7 +3,7 @@
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
 //       Juan J. Durillo <durillo@lcc.uma.es>
-// 
+//
 //  Copyright (c) 2011 Antonio J. Nebro, Juan J. Durillo
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -15,14 +15,14 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package opt.easyjmetal.encodings.solutiontype.variable;
 
 import opt.easyjmetal.core.Variable;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 
 import java.util.BitSet;
 
@@ -30,68 +30,68 @@ import java.util.BitSet;
  * This class implements a generic binary string encodings.variable.It can be used as
  * a base class other binary string based classes (e.g., binary coded integer
  * or real variables).
- */ 
+ */
 public class Binary extends Variable {
-  
+
   /**
    * Stores the bits constituting the binary string. It is
    * implemented using a BitSet object
    */
   public BitSet bits_;
-  
+
   /**
    * Store the length of the binary string
    */
   protected int numberOfBits_;
-        
+
   /**
    * Default constructor.
    */
-  public Binary() {       
+  public Binary() {
   } //Binary
-  
+
   /**
    *  Constructor
    *  @param numberOfBits Length of the bit string
    */
-  public Binary(int numberOfBits){   
+  public Binary(int numberOfBits){
     numberOfBits_ = numberOfBits;
 
-    bits_ = new BitSet(numberOfBits_);      
+    bits_ = new BitSet(numberOfBits_);
     for (int i = 0; i < numberOfBits_; i++){
       if (PseudoRandom.randDouble() < 0.5) {
         bits_.set(i,true);
       } else {
-        bits_.set(i,false);                      
+        bits_.set(i,false);
       }
     }
   } //Binary
-  
+
   /**
    * Copy constructor.
    * @param variable The Binary encodings.variable to copy.
    */
   public Binary(Binary variable){
     numberOfBits_ = variable.numberOfBits_;
-        
+
     bits_ = new BitSet(numberOfBits_);
     for (int i = 0; i < numberOfBits_; i++) {
-      bits_.set(i,variable.bits_.get(i));      
+      bits_.set(i,variable.bits_.get(i));
     }
   } //Binary
 
   /**
-   * This method is intended to be used in subclass of <code>Binary</code>, 
-   * for examples the classes, <code>BinaryReal</code> and <code>BinaryInt<codes>. 
-   * In this classes, the method allows to decode the 
+   * This method is intended to be used in subclass of <code>Binary</code>,
+   * for examples the classes, <code>BinaryReal</code> and <code>BinaryInt<codes>.
+   * In this classes, the method allows to decode the
    * value enconded in the binary string. As generic variables do not encode any
-   * value, this method do noting 
+   * value, this method do noting
    */
   public void decode() {
     //do nothing
   } //decode
-  
-  /** 
+
+  /**
    * Creates an exact copy of a Binary object
    * @return An exact copy of the object.
    **/
@@ -106,7 +106,7 @@ public class Binary extends Variable {
   public int getNumberOfBits(){
     return numberOfBits_;
   } //getNumberOfBits
-  
+
   /**
    * Returns the value of the ith bit.
    * @param bit The bit to retrieve
@@ -124,7 +124,7 @@ public class Binary extends Variable {
     bits_.set(bit, value) ;
   } //getNumberOfBits
 
-  
+
  /**
   * Obtain the hamming distance between two binary strings
   * @param other The binary string to compare
@@ -143,18 +143,18 @@ public class Binary extends Variable {
   } // hammingDistance
 
  /**
-  *  
+  *
   */
   public String toString() {
     String result ;
-    
+
     result = "" ;
     for (int i = 0; i < numberOfBits_; i ++)
       if (bits_.get(i))
         result = result + "1" ;
       else
         result = result + "0" ;
-        
+
     return result ;
   } // toString
 } // Binary

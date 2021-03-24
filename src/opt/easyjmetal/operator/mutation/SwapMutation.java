@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -26,7 +26,7 @@ import opt.easyjmetal.encodings.solutiontype.PermutationSolutionType;
 import opt.easyjmetal.encodings.solutiontype.variable.Permutation;
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,20 +38,20 @@ import java.util.List;
  */
 public class SwapMutation extends Mutation{
   /**
-   * Valid solution types to apply this operator 
+   * Valid solution types to apply this operator
    */
   private static final List VALID_TYPES = Arrays.asList(PermutationSolutionType.class) ;
-  
+
   private Double mutationProbability_ = null ;
 
-  /** 
+  /**
    * Constructor
    */
-  public SwapMutation(HashMap<String, Object> parameters) {    
+  public SwapMutation(HashMap<String, Object> parameters) {
   	super(parameters) ;
-  	
+
   	if (parameters.get("probability") != null)
-  		mutationProbability_ = (Double) parameters.get("probability") ;  		
+  		mutationProbability_ = (Double) parameters.get("probability") ;
   } // Constructor
 
 
@@ -84,15 +84,15 @@ public class SwapMutation extends Mutation{
 	        pos2 = PseudoRandom.randInt(0,permutationLength-1) ;
 
 	        while (pos1 == pos2) {
-	          if (pos1 == (permutationLength - 1)) 
+	          if (pos1 == (permutationLength - 1))
 	            pos2 = PseudoRandom.randInt(0, permutationLength- 2);
-	          else 
+	          else
 	            pos2 = PseudoRandom.randInt(pos1, permutationLength- 1);
 	        } // while
 	        // swap
 	        int temp = permutation[pos1];
 	        permutation[pos1] = permutation[pos2];
-	        permutation[pos2] = temp;    
+	        permutation[pos2] = temp;
 	      } // if
 	    } // if
 	    else  {
@@ -100,7 +100,7 @@ public class SwapMutation extends Mutation{
 	          ""+ solution.getDecisionVariables()[0].getVariableType());
 
 	      Class cls = String.class;
-	      String name = cls.getName(); 
+	      String name = cls.getName();
 	      throw new JMException("Exception in " + name + ".doMutation()") ;
 	    }
   } // doMutation
@@ -113,7 +113,7 @@ public class SwapMutation extends Mutation{
    */
   public Object execute(Object object) throws JMException {
     Solution solution = (Solution)object;
-    
+
 		if (!VALID_TYPES.contains(solution.getType().getClass())) {
 			Configuration.logger_.severe("SwapMutation.execute: the solution " +
 					"is not of the right type. The type should be 'Binary', " +
@@ -122,10 +122,10 @@ public class SwapMutation extends Mutation{
 			Class cls = String.class;
 			String name = cls.getName();
 			throw new JMException("Exception in " + name + ".execute()");
-		} // if 
+		} // if
 
-    
+
     this.doMutation(mutationProbability_, solution);
     return solution;
-  } // execute  
+  } // execute
 } // SwapMutation

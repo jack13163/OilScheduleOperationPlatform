@@ -14,7 +14,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -25,7 +25,7 @@ import opt.easyjmetal.encodings.solutiontype.ArrayRealSolutionType;
 import opt.easyjmetal.encodings.solutiontype.RealSolutionType;
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 import opt.easyjmetal.util.wrapper.XReal;
 
 import java.util.Arrays;
@@ -46,12 +46,12 @@ public class BLXAlphaCrossover extends Crossover {
 	private Double crossoverProbability_ = null;
 
 	/**
-	 * Valid solution types to apply this operator 
+	 * Valid solution types to apply this operator
 	 */
 	private static final List VALID_TYPES = Arrays.asList(RealSolutionType.class,
 			ArrayRealSolutionType.class) ;
 
-	/** 
+	/**
 	 * Constructor
 	 * Create a new SBX crossover operator whit a default
 	 * index given by <code>DEFAULT_INDEX_CROSSOVER</code>
@@ -60,13 +60,13 @@ public class BLXAlphaCrossover extends Crossover {
 		super (parameters) ;
 
 		if (parameters.get("probability") != null)
-			crossoverProbability_ = (Double) parameters.get("probability") ;  		
+			crossoverProbability_ = (Double) parameters.get("probability") ;
 		if (parameters.get("alpha") != null)
-			alpha_  = (Double) parameters.get("alpha") ;  		
+			alpha_  = (Double) parameters.get("alpha") ;
 	} // SBXCrossover
 
 	/**
-	 * Perform the crossover operation. 
+	 * Perform the crossover operation.
 	 * @param probability Crossover probability
 	 * @param parent1 The first parent
 	 * @param parent2 The second parent
@@ -91,7 +91,7 @@ public class BLXAlphaCrossover extends Crossover {
 		double lowerValue ;
 
 		XReal x1 = new XReal(parent1) ;
-		XReal x2 = new XReal(parent2) ;		
+		XReal x2 = new XReal(parent2) ;
 		XReal offs1 = new XReal(offSpring[0]) ;
 		XReal offs2 = new XReal(offSpring[1]) ;
 
@@ -147,7 +147,7 @@ public class BLXAlphaCrossover extends Crossover {
 			} // if
 		} // if
 
-		return offSpring;                                                                                      
+		return offSpring;
 	} // doCrossover
 
 
@@ -157,13 +157,13 @@ public class BLXAlphaCrossover extends Crossover {
 	 * @return An object containing the offSprings
 	 */
 	public Object execute(Object object) throws JMException {
-		Solution [] parents = (Solution [])object;    	
+		Solution [] parents = (Solution [])object;
 
 		if (parents.length != 2) {
 			Configuration.logger_.severe("BLXAlphaCrossover.execute: operator needs two " +
 					"parents");
 			Class cls = String.class;
-			String name = cls.getName(); 
+			String name = cls.getName();
 			throw new JMException("Exception in " + name + ".execute()") ;
 		} // if
 
@@ -173,9 +173,9 @@ public class BLXAlphaCrossover extends Crossover {
 					"type " + parents[0].getType() + " is not allowed with this operator");
 
 			Class cls = String.class;
-			String name = cls.getName(); 
+			String name = cls.getName();
 			throw new JMException("Exception in " + name + ".execute()") ;
-		} // if 
+		} // if
 
 		Solution [] offSpring;
 		offSpring = doCrossover(crossoverProbability_,
@@ -183,5 +183,5 @@ public class BLXAlphaCrossover extends Crossover {
 				parents[1]);
 
 		return offSpring;
-	} // execute 
+	} // execute
 } // BLXAlphaCrossover

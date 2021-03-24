@@ -3,7 +3,7 @@
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
 //       Juan J. Durillo <durillo@lcc.uma.es>
-// 
+//
 //  Copyright (c) 2011 Antonio J. Nebro, Juan J. Durillo
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -24,13 +24,13 @@ package opt.easyjmetal.encodings.solutiontype.variable;
 import opt.easyjmetal.core.Variable;
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 
 /**
  * This class implements an integer decision encodings.variable
  */
 public class Int extends Variable {
-	
+
 	private int value_;       //Stores the value of the encodings.variable
 	private int lowerBound_;  //Stores the lower limit of the encodings.variable
 	private int upperBound_;  //Stores the upper limit of the encodings.variable
@@ -77,7 +77,7 @@ public class Int extends Variable {
 	public Int(Variable variable) throws JMException {
 		lowerBound_ = (int)variable.getLowerBound();
 		upperBound_ = (int)variable.getUpperBound();
-		value_ = (int)variable.getValue();        
+		value_ = (int)variable.getValue();
 	} // Int
 
 	/**
@@ -91,7 +91,7 @@ public class Int extends Variable {
 	/**
 	 * Assigns a value to the encodings.variable.
 	 * @param value The value.
-	 */ 
+	 */
 	public void setValue(double value) {
 		value_ = (int)value;
 	} // setValue
@@ -99,7 +99,7 @@ public class Int extends Variable {
 	/**
 	 * Creates an exact copy of the <code>Int</code> object.
 	 * @return the copy.
-	 */ 
+	 */
 	public Variable deepCopy(){
 		try {
 			return new Int(this);
@@ -112,7 +112,7 @@ public class Int extends Variable {
 	/**
 	 * Returns the lower bound of the encodings.variable.
 	 * @return the lower bound.
-	 */ 
+	 */
 	public double getLowerBound() {
 		return lowerBound_;
 	} // getLowerBound
@@ -120,7 +120,7 @@ public class Int extends Variable {
 	/**
 	 * Returns the upper bound of the encodings.variable.
 	 * @return the upper bound.
-	 */ 
+	 */
 	public double getUpperBound() {
 		return upperBound_;
 	} // getUpperBound
@@ -128,7 +128,7 @@ public class Int extends Variable {
 	/**
 	 * Sets the lower bound of the encodings.variable.
 	 * @param lowerBound The lower bound value.
-	 */	    
+	 */
 	public void setLowerBound(double lowerBound)  {
 		lowerBound_ = (int)lowerBound;
 	} // setLowerBound
@@ -136,7 +136,7 @@ public class Int extends Variable {
 	/**
 	 * Sets the upper bound of the encodings.variable.
 	 * @param upperBound The new upper bound value.
-	 */          
+	 */
 	public void setUpperBound(double upperBound) {
 		upperBound_ = (int)upperBound;
 	} // setUpperBound
@@ -144,7 +144,7 @@ public class Int extends Variable {
 	/**
 	 * Returns a string representing the object
 	 * @return The string
-	 */ 
+	 */
 	public String toString(){
 		return value_+"";
 	} // toString

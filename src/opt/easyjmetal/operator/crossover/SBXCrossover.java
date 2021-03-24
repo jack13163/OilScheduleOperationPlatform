@@ -26,7 +26,7 @@ import opt.easyjmetal.encodings.solutiontype.ArrayRealSolutionType;
 import opt.easyjmetal.encodings.solutiontype.RealSolutionType;
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 import opt.easyjmetal.util.wrapper.XReal;
 
 import java.util.Arrays;

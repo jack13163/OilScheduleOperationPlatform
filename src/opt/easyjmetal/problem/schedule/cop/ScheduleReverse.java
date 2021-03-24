@@ -2,7 +2,7 @@ package opt.easyjmetal.problem.schedule.cop;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.ParetoFrontUtil;
+import opt.easyjmetal.util.fileinput.ParetoFrontUtil;
 
 public class ScheduleReverse {
     public static void main(String[] args) {

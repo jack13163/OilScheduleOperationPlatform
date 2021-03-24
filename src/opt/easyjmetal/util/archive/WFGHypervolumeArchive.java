@@ -25,7 +25,7 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.qualityindicator.fastHypervolume.wfg.Point;
 import opt.easyjmetal.qualityindicator.fastHypervolume.wfg.WFGHV;
 import opt.easyjmetal.qualityindicator.util.MetricsUtil;
-import opt.easyjmetal.util.Distance;
+import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
 import opt.easyjmetal.util.comparators.one.DominanceComparator;
 import opt.easyjmetal.util.comparators.one.EqualSolutionsComparator;

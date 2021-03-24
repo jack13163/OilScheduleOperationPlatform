@@ -2,7 +2,7 @@ package opt.easyjmetal.algorithm.moeas.entrence;
 
 import opt.easyjmetal.statistics.*;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.ParetoFrontUtil;
+import opt.easyjmetal.util.fileinput.ParetoFrontUtil;
 
 /**
  * 分析多目标进化算法运行效果

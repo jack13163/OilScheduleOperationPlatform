@@ -3,7 +3,7 @@ package opt.easyjmetal.algorithm.moeas.impl;
 
 import opt.easyjmetal.util.fitness.StrengthRawFitness;
 import opt.easyjmetal.core.*;
-import opt.easyjmetal.util.Distance;
+import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.util.PlotObjectives;

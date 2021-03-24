@@ -15,7 +15,7 @@ import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.operator.crossover.DifferentialEvolutionCrossover;
 import opt.easyjmetal.operator.selection.SelectionFactory;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -45,7 +45,7 @@ public class DifferentialEvolutionOffspring extends Offspring {
       // Crossover operator
       parameters = new HashMap() ;
       parameters.put("CR", CR_) ;
-      parameters.put("F", F_) ;      
+      parameters.put("F", F_) ;
       crossover_ = new DifferentialEvolutionCrossover(parameters) ;
 
       // Selecion operator
@@ -84,7 +84,7 @@ public class DifferentialEvolutionOffspring extends Offspring {
   } // getOffpring
 
   /**
-   * 
+   *
    */
   public Solution getOffspring(Solution[] parentSolutions, Solution currentSolution) {
     Solution[] parents = new Solution[3] ;
@@ -103,7 +103,7 @@ public class DifferentialEvolutionOffspring extends Offspring {
     //Create a new solution, using DE
     return offspring ;
   } // getOffpring
-  
+
   public String configuration() {
     String result = "-----\n" ;
     result += "Operator: " + id_ + "\n" ;

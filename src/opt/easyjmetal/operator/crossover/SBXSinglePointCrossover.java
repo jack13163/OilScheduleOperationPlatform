@@ -2,7 +2,7 @@
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
-// 
+//
 //  Copyright (c) 2011 Antonio J. Nebro
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -25,7 +25,7 @@ import opt.easyjmetal.encodings.solutiontype.ArrayRealAndBinarySolutionType;
 import opt.easyjmetal.encodings.solutiontype.variable.Binary;
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 import opt.easyjmetal.util.wrapper.XReal;
 
 import java.util.Arrays;
@@ -44,7 +44,7 @@ public class SBXSinglePointCrossover extends Crossover {
 	private double distributionIndex_ = ETA_C_DEFAULT_;
 
 	/**
-	 * Valid solution types to apply this operator 
+	 * Valid solution types to apply this operator
 	 */
 	private static final List VALID_TYPES = Arrays.asList(ArrayRealAndBinarySolutionType.class) ;
 
@@ -55,16 +55,16 @@ public class SBXSinglePointCrossover extends Crossover {
 		super (parameters) ;
 
 		if (parameters.get("realCrossoverProbability") != null)
-			realCrossoverProbability_ = (Double) parameters.get("realCrossoverProbability") ;  		
+			realCrossoverProbability_ = (Double) parameters.get("realCrossoverProbability") ;
 		if (parameters.get("binaryrossoverProbability") != null)
-			binaryCrossoverProbability_ = (Double) parameters.get("binaryrossoverProbability") ;  		
+			binaryCrossoverProbability_ = (Double) parameters.get("binaryrossoverProbability") ;
 		if (parameters.get("distributionIndex") != null)
-			distributionIndex_ = (Double) parameters.get("distributionIndex") ;  		
+			distributionIndex_ = (Double) parameters.get("distributionIndex") ;
 	} // Constructor
 
 
 	/**
-	 * Perform the crossover operation. 
+	 * Perform the crossover operation.
 	 * @param realProbability Crossover probability
 	 * @param parent1 The first parent
 	 * @param parent2 The second parent
@@ -106,7 +106,7 @@ public class SBXSinglePointCrossover extends Crossover {
 						} else {
 							y1 = valueX2;
 							y2 = valueX1;
-						} // if                       
+						} // if
 
 						yL = x1.getLowerBound(i) ;
 						yu = x1.getUpperBound(i) ;
@@ -142,7 +142,7 @@ public class SBXSinglePointCrossover extends Crossover {
 							c1=yu;
 
 						if (c2>yu)
-							c2=yu;                        
+							c2=yu;
 
 						if (PseudoRandom.randDouble()<=0.5) {
 							offs1.setValue(i, c2) ;
@@ -151,7 +151,7 @@ public class SBXSinglePointCrossover extends Crossover {
 							offs1.setValue(i, c1) ;
 							offs2.setValue(i, c2) ;
 						} // if
-					} // if 
+					} // if
 					else {
 						offs1.setValue(i,valueX1) ;
 						offs2.setValue(i, valueX2) ;
@@ -183,7 +183,7 @@ public class SBXSinglePointCrossover extends Crossover {
 			} // for
 		} // if
 
-		return offSpring;      
+		return offSpring;
 	} // doCrossover
 
 	@Override
@@ -194,8 +194,8 @@ public class SBXSinglePointCrossover extends Crossover {
 			Configuration.logger_.severe("SBXSinglePointCrossover.execute: operator " +
 			"needs two parents");
 			Class cls = String.class;
-			String name = cls.getName(); 
-			throw new JMException("Exception in " + name + ".execute()") ;      
+			String name = cls.getName();
+			throw new JMException("Exception in " + name + ".execute()") ;
 		} // if
 
 		if (!(VALID_TYPES.contains(parents[0].getType().getClass())  &&
@@ -204,11 +204,11 @@ public class SBXSinglePointCrossover extends Crossover {
 					"type " + parents[0].getType() + " is not allowed with this operator");
 
 			Class cls = String.class;
-			String name = cls.getName(); 
+			String name = cls.getName();
 			throw new JMException("Exception in " + name + ".execute()") ;
-		} // if 
+		} // if
 		Solution [] offSpring;
-		offSpring = doCrossover(realCrossoverProbability_, 
+		offSpring = doCrossover(realCrossoverProbability_,
 				binaryCrossoverProbability_, parents[0], parents[1]);
 
 		return offSpring ;

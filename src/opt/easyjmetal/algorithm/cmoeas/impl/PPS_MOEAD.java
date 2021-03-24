@@ -5,7 +5,7 @@ package opt.easyjmetal.algorithm.cmoeas.impl;
 import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.io.BufferedReader;

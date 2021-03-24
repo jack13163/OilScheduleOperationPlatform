@@ -23,13 +23,13 @@ package opt.easyjmetal.util;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 
 /**
  * This class defines an adaptive grid over a SolutionSet as the one used the
  * algorithm PAES.
  */
 public class AdaptiveGrid {
-
 
     private int bisections_;
     private int objectives_;
@@ -74,7 +74,7 @@ public class AdaptiveGrid {
             lowerLimits_[obj] = Double.MAX_VALUE;
             //Set the upper limits to the min real
             upperLimits_[obj] = Double.MIN_VALUE;
-        } // for
+        }
 
         //Find the max and min limits of objetives into the population
         for (int ind = 0; ind < solutionSet.size(); ind++) {
@@ -112,7 +112,7 @@ public class AdaptiveGrid {
 
         //The grid has been updated, so also update ocuppied's hypercubes
         calculateOccupied();
-    } // addSolutionSet
+    }
 
 
     /**
@@ -352,7 +352,7 @@ public class AdaptiveGrid {
         } // for
 
         return total;
-    } //calculateOcuppied
+    }
 
     /**
      * Returns the number of hypercubes with more than zero solutions.
@@ -372,6 +372,5 @@ public class AdaptiveGrid {
     public int randomOccupiedHypercube() {
         int rand = PseudoRandom.randInt(0, occupied_.length - 1);
         return occupied_[rand];
-    } //randomOccupiedHypercube
-} //AdaptativeGrid
-
+    }
+}

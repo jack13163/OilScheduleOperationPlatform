@@ -6,7 +6,7 @@ package opt.easyjmetal.algorithm.cmoeas.impl;
 
 import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.*;
-import opt.easyjmetal.util.Distance;
+import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.comparators.one.CrowdingComparator;
@@ -32,13 +32,6 @@ public class NSGAII_CDP extends Algorithm {
     private SolutionSet external_archive_;
     private String dataDirectory_;
 
-    /**
-     * Runs the NSGA-II algorithm.
-     *
-     * @return a <code>SolutionSet</code> that is a set of non dominated solutions
-     * as a result of the algorithm execution
-     * @throws JMException
-     */
     @Override
     public SolutionSet execute() throws JMException, ClassNotFoundException {
 

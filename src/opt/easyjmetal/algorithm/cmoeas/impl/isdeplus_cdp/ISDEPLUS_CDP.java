@@ -3,7 +3,7 @@ package opt.easyjmetal.algorithm.cmoeas.impl.isdeplus_cdp;
 
 import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.core.*;
-import opt.easyjmetal.util.Distance;
+import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.sqlite.SqlUtils;

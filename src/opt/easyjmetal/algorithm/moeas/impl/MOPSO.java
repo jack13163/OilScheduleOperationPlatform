@@ -1,6 +1,5 @@
 package opt.easyjmetal.algorithm.moeas.impl;
 
-import opt.easyjmetal.util.PlotObjectives;
 import opt.easyjmetal.core.Algorithm;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.Solution;
@@ -8,15 +7,16 @@ import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.operator.mutation.NonUniformMutation;
 import opt.easyjmetal.operator.mutation.UniformMutation;
 import opt.easyjmetal.util.JMException;
+import opt.easyjmetal.util.PlotObjectives;
 import opt.easyjmetal.util.archive.CrowdingArchive;
 import opt.easyjmetal.util.archive.NonDominatedArchive;
 import opt.easyjmetal.util.comparators.one.CrowdingDistanceComparator;
 import opt.easyjmetal.util.comparators.one.DominanceComparator;
-import opt.easyjmetal.util.distance.impl.CrowdingDistance;
 import opt.easyjmetal.util.evaluator.SolutionListEvaluator;
 import opt.easyjmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 import opt.easyjmetal.util.pseudorandom.JMetalRandom;
 import opt.easyjmetal.util.sqlite.SqlUtils;
+import opt.jmetal.util.solutionattribute.impl.CrowdingDistance;
 
 import java.util.ArrayList;
 import java.util.Comparator;

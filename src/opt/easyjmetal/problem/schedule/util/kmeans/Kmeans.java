@@ -1,6 +1,6 @@
 package opt.easyjmetal.problem.schedule.util.kmeans;
 
-import opt.easyjmetal.util.ParetoFrontUtil;
+import opt.easyjmetal.util.fileinput.ParetoFrontUtil;
 import opt.easyjmetal.util.fileinput.VectorFileUtils;
 import org.deeplearning4j.clustering.algorithm.Distance;
 import org.deeplearning4j.clustering.cluster.ClusterSet;

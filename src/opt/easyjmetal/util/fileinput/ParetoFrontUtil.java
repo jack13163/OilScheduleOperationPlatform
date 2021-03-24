@@ -1,4 +1,4 @@
-package opt.easyjmetal.util;
+package opt.easyjmetal.util.fileinput;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
@@ -6,6 +6,7 @@ import opt.easyjmetal.qualityindicator.Epsilon;
 import opt.easyjmetal.qualityindicator.Hypervolume;
 import opt.easyjmetal.qualityindicator.InvertedGenerationalDistance;
 import opt.easyjmetal.qualityindicator.Spread;
+import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 import org.apache.commons.io.FileUtils;

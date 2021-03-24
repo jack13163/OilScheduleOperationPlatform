@@ -7,6 +7,7 @@ import opt.easyjmetal.algorithm.cmoeas.impl.nsgaiii_cdp.EnvironmentalSelection;
 import opt.easyjmetal.algorithm.common.ReferencePoint;
 import opt.easyjmetal.core.*;
 import opt.easyjmetal.util.*;
+import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 

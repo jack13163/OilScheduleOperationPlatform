@@ -29,7 +29,8 @@ import java.util.Comparator;
  * Interface representing constraint violation comparators.
  */
 public interface IConstraintViolationComparator extends Comparator {
-  @Override
-  int compare(Object o1, Object o2) ;
-  boolean needToCompare(Solution s1, Solution s2) ;
+    @Override
+    int compare(Object o1, Object o2);
+
+    boolean needToCompare(Solution s1, Solution s2);
 }

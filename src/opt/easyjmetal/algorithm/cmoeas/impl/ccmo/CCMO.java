@@ -2,7 +2,7 @@
 package opt.easyjmetal.algorithm.cmoeas.impl.ccmo;
 
 import opt.easyjmetal.core.*;
-import opt.easyjmetal.util.Distance;
+import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.MoeadUtils;
 import opt.easyjmetal.util.sqlite.SqlUtils;

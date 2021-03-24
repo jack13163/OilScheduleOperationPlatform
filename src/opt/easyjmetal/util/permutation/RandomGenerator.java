@@ -15,11 +15,11 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package opt.easyjmetal.util;
+package opt.easyjmetal.util.permutation;
 
 import java.util.Random;
 
@@ -30,8 +30,8 @@ import java.util.Random;
  *
  */
 
-public class RandomGenerator implements IRandomGenerator{
-    
+public class RandomGenerator implements IRandomGenerator {
+
   /* Definition of random number generation routines */
   double seed;
   double [] oldrand = new double[55];
@@ -116,7 +116,7 @@ public class RandomGenerator implements IRandomGenerator{
   synchronized public double nextDouble() {
   	return randomperc() ;
   }
-  
+
   /* Fetch a single random integer between low and high including the bounds */
   synchronized public int rndInt (int low, int high){
     int res;

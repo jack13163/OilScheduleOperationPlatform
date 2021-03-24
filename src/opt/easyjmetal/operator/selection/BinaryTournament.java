@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -23,7 +23,7 @@ package opt.easyjmetal.operator.selection;
 
 import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.core.SolutionSet;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 import opt.jmetal.util.comparator.DominanceComparator;
 
 import java.util.Comparator;
@@ -47,12 +47,12 @@ public class BinaryTournament extends Selection {
   public BinaryTournament(HashMap<String, Object> parameters){
   	super(parameters) ;
   	if ((parameters != null) && (parameters.get("comparator") != null))
-  		comparator_ = (Comparator) parameters.get("comparator") ;  	
+  		comparator_ = (Comparator) parameters.get("comparator") ;
   	else
       //comparator_ = new BinaryTournamentComparator();
       comparator_ = new DominanceComparator();
   } // BinaryTournament
-  
+
   /**
   * Performs the operation
   * @param object Object representing a SolutionSet
@@ -67,7 +67,7 @@ public class BinaryTournament extends Selection {
     if (solutionSet.size() >= 2)
     	while (solution1 == solution2)
         solution2 = solutionSet.get(PseudoRandom.randInt(0,solutionSet.size()-1));
-    
+
     int flag = comparator_.compare(solution1,solution2);
     if (flag == -1)
       return solution1;
@@ -77,6 +77,6 @@ public class BinaryTournament extends Selection {
       if (PseudoRandom.randDouble()<0.5)
         return solution1;
       else
-        return solution2;                       
+        return solution2;
   } // execute
 } // BinaryTournament

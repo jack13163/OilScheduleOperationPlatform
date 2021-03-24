@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -32,7 +32,6 @@ import opt.easyjmetal.operator.crossover.Crossover;
 import opt.easyjmetal.operator.crossover.CrossoverFactory;
 import opt.easyjmetal.operator.mutation.Mutation;
 import opt.easyjmetal.operator.mutation.MutationFactory;
-import opt.easyjmetal.util.Permutation;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -40,7 +39,7 @@ import java.util.Properties;
 import opt.easyjmetal.util.JMException;
 
 /**
- * Class representing Settings objects. 
+ * Class representing Settings objects.
  */
 public abstract class Settings {
 	protected Problem problem_ ;
@@ -79,14 +78,14 @@ public abstract class Settings {
 	 * @param settings
 	 * @return A problem with the experiments.settings indicated as argument
 	 * @throws JMException
-	 * @throws ClassNotFoundException 
+	 * @throws ClassNotFoundException
 	 */
 
 	public final Algorithm configure(HashMap settings) throws JMException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException {
 		if (settings != null) {
 			Field [] fields = this.getClass().getFields();
 			for (int i=0; i < fields.length; i++) {
-				if (fields[i].getName().endsWith("_")) { // it is a configuration field      
+				if (fields[i].getName().endsWith("_")) { // it is a configuration field
 					// The configuration field is an integer
 					if (fields[i].getType().equals(int.class) ||
 							fields[i].getType().equals(Integer.class)) {
@@ -94,7 +93,7 @@ public abstract class Settings {
 							Integer value = (Integer)settings.get(fields[i].getName());
 							fields[i].setInt(this, value.intValue());
 						}
-					}  
+					}
 					else if (fields[i].getType().equals(double.class) ||
 							fields[i].getType().equals(Double.class)) {
 						// The configuration field is a double

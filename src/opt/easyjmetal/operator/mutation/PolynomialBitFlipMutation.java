@@ -2,7 +2,7 @@
 //
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
-// 
+//
 //  Copyright (c) 2011 Antonio J. Nebro
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -25,7 +25,7 @@ import opt.easyjmetal.encodings.solutiontype.ArrayRealAndBinarySolutionType;
 import opt.easyjmetal.encodings.solutiontype.variable.Binary;
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 import opt.easyjmetal.util.wrapper.XReal;
 
 import java.util.Arrays;
@@ -35,13 +35,13 @@ import java.util.List;
 public class PolynomialBitFlipMutation extends Mutation {
 	private static final double ETA_M_DEFAULT_ = 20.0;
 	private final double eta_m_=ETA_M_DEFAULT_;
-	
+
   private Double realMutationProbability_ = null ;
   private Double binaryMutationProbability_ = null ;
   private double distributionIndex_ = eta_m_;
 
   /**
-   * Valid solution types to apply this operator 
+   * Valid solution types to apply this operator
    */
 	private static final List VALID_TYPES = Arrays.asList(ArrayRealAndBinarySolutionType.class) ;
 
@@ -51,13 +51,13 @@ public class PolynomialBitFlipMutation extends Mutation {
   public PolynomialBitFlipMutation(HashMap<String, Object> parameters) {
 		super(parameters) ;
   	if (parameters.get("realMutationProbability") != null)
-  		realMutationProbability_ = (Double) parameters.get("realMutationProbability") ;  		
+  		realMutationProbability_ = (Double) parameters.get("realMutationProbability") ;
   	if (parameters.get("binaryMutationProbability") != null)
-  		binaryMutationProbability_ = (Double) parameters.get("binaryMutationProbability") ;  		
+  		binaryMutationProbability_ = (Double) parameters.get("binaryMutationProbability") ;
   	if (parameters.get("distributionIndex") != null)
-  		distributionIndex_ = (Double) parameters.get("distributionIndex") ;  		
+  		distributionIndex_ = (Double) parameters.get("distributionIndex") ;
 	} // PolynomialBitFlipMutation
-	
+
 	@Override
   public Object execute(Object object) throws JMException {
 		Solution solution = (Solution)object;
@@ -67,9 +67,9 @@ public class PolynomialBitFlipMutation extends Mutation {
 					"type " + solution.getType() + " is not allowed with this operator");
 
 			Class cls = String.class;
-			String name = cls.getName(); 
+			String name = cls.getName();
 			throw new JMException("Exception in " + name + ".execute()") ;
-		} // if 
+		} // if
 
 		doMutation(realMutationProbability_, binaryMutationProbability_,solution);
 		return solution;
@@ -85,16 +85,16 @@ public class PolynomialBitFlipMutation extends Mutation {
 	public void doMutation(Double realProbability, Double binaryProbability, Solution solution) throws JMException {
 		double rnd, delta1, delta2, mut_pow, deltaq;
 		double y, yl, yu, val, xy;
-		
+
 		XReal x = new XReal(solution) ;
-		
+
 		Binary binaryVariable = (Binary)solution.getDecisionVariables()[1] ;
-		
+
 		// Polynomial mutation applied to the array real
-		for (int var=0; var < x.size(); var++) {	
+		for (int var=0; var < x.size(); var++) {
 			if (PseudoRandom.randDouble() <= realProbability) {
 				y      = x.getValue(var);
-				yl     = x.getLowerBound(var);                
+				yl     = x.getLowerBound(var);
 				yu     = x.getUpperBound(var);
 				delta1 = (y-yl)/(yu-yl);
 				delta2 = (yu-y)/(yu-yl);
@@ -117,13 +117,13 @@ public class PolynomialBitFlipMutation extends Mutation {
 					y = yl;
 				if (y>yu)
 					y = yu;
-				x.setValue(var, y);                           
-			} // if		
+				x.setValue(var, y);
+			} // if
 		} // for
 
 		// BitFlip mutation applied to the binary part
 		for (int i = 0; i < binaryVariable.getNumberOfBits(); i++)
-			if (PseudoRandom.randDouble() < binaryProbability) 
+			if (PseudoRandom.randDouble() < binaryProbability)
 				binaryVariable.bits_.flip(i) ;
 	} // doMutation
 } // PolynomialBitFlipMutation

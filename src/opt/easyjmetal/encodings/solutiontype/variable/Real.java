@@ -3,7 +3,7 @@
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
 //       Juan J. Durillo <durillo@lcc.uma.es>
-// 
+//
 //  Copyright (c) 2011 Antonio J. Nebro, Juan J. Durillo
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -24,7 +24,7 @@ package opt.easyjmetal.encodings.solutiontype.variable;
 import opt.easyjmetal.core.Variable;
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 
 
 /**
@@ -36,24 +36,24 @@ public class Real extends Variable{
    * Stores the value of the real encodings.variable
    */
   private double value_;
-  
+
   /**
    * Stores the lower bound of the real encodings.variable
    */
   private double lowerBound_;
-  
+
   /**
    * Stores the upper bound of the real encodings.variable
    */
   private double upperBound_;
-    
+
   /**
    * Constructor
    */
   public Real() {
   } // Real
-    
-  
+
+
   /**
    * Constructor
    * @param lowerBound Lower limit for the encodings.variable
@@ -76,8 +76,8 @@ public class Real extends Variable{
     upperBound_ = upperBound;
     value_ = value ;
   } //Real
-  
-  /** 
+
+  /**
    * Copy constructor.
    * @param variable The encodings.variable to copy.
    * @throws JMException
@@ -85,7 +85,7 @@ public class Real extends Variable{
   public Real(Variable variable) throws JMException {
     lowerBound_ = variable.getLowerBound();
     upperBound_ = variable.getUpperBound();
-    value_ = variable.getValue();        
+    value_ = variable.getValue();
   } //Real
 
   /**
@@ -95,7 +95,7 @@ public class Real extends Variable{
   public double getValue() {
     return value_;
   } // getValue
-  
+
   /**
    * Sets the value of the encodings.variable.
    * @param value The value.
@@ -103,8 +103,8 @@ public class Real extends Variable{
   public void setValue(double value) {
     value_ = value;
   } // setValue
-    
-  /** 
+
+  /**
    * Returns a exact copy of the <code>Real</code> encodings.variable
    * @return the copy
    */
@@ -117,7 +117,7 @@ public class Real extends Variable{
     }
   } // deepCopy
 
-  
+
   /**
    * Gets the lower bound of the encodings.variable.
    * @return the lower bound.
@@ -133,8 +133,8 @@ public class Real extends Variable{
   public double getUpperBound() {
     return upperBound_;
   } // getUpperBound
-    
-  
+
+
   /**
    * Sets the lower bound of the encodings.variable.
    * @param lowerBound The lower bound.
@@ -142,7 +142,7 @@ public class Real extends Variable{
   public void setLowerBound(double lowerBound)  {
     lowerBound_ = lowerBound;
   } // setLowerBound
-    
+
   /**
    * Sets the upper bound of the encodings.variable.
    * @param upperBound The upper bound.
@@ -150,8 +150,8 @@ public class Real extends Variable{
   public void setUpperBound(double upperBound) {
     upperBound_ = upperBound;
   } // setUpperBound
-  
-  
+
+
   /**
    * Returns a string representing the object
    * @return the string

@@ -3,7 +3,7 @@
 //  Author:
 //       Antonio J. Nebro <antonio@lcc.uma.es>
 //       Juan J. Durillo <durillo@lcc.uma.es>
-// 
+//
 //  Copyright (c) 2011 Antonio J. Nebro, Juan J. Durillo
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -25,7 +25,7 @@ import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.Variable;
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 
 
 /**
@@ -33,22 +33,22 @@ import opt.easyjmetal.util.PseudoRandom;
  * The integer values of the array have their own bounds.
  */
 public class ArrayInt extends Variable {
-	
+
 	/**
 	 * Problem using the type
 	 */
   private Problem problem_ ;
-	
+
 	/**
    * Stores an array of integer values
    */
   public int [] array_;
-  
+
   /**
    * Stores the length of the array
    */
   private int size_;
-    
+
   /**
    * Store the lower and upper bounds of each int value of the array in case of
    * having each one different limits
@@ -74,7 +74,7 @@ public class ArrayInt extends Variable {
   public ArrayInt(int size) {
 		size_   = size;
 		array_ = new int[size_];
-		
+
     lowerBounds_ = new int[size_] ;
     upperBounds_ = new int[size_] ;
   } // Constructor
@@ -99,7 +99,7 @@ public class ArrayInt extends Variable {
   } // Constructor
 
   /**
-   * Constructor 
+   * Constructor
    * @param size The size of the array
    * @param lowerBounds Lower bounds
    * @param upperBounds Upper bounds
@@ -107,28 +107,28 @@ public class ArrayInt extends Variable {
   public ArrayInt(int size, double[] lowerBounds, double [] upperBounds) {
 		size_   = size;
 		array_ = new int[size_];
-		
+
     lowerBounds_ = new int[size_] ;
     upperBounds_ = new int[size_] ;
-    
+
     for (int i = 0; i < size_ ; i++) {
     	lowerBounds_[i] = (int)lowerBounds[i] ;
     	upperBounds_[i] = (int)upperBounds[i] ;
     	array_[i] = PseudoRandom.randInt(lowerBounds_[i], upperBounds_[i]) ;
     } // for
   } // Constructor
-  
-  /** 
+
+  /**
    * Copy Constructor
    * @param arrayInt The arrayInt to copy
    */
   private ArrayInt(ArrayInt arrayInt) {
     size_   = arrayInt.size_;
     array_ = new int[size_];
-        	
+
     lowerBounds_ = new int[size_] ;
    	upperBounds_ = new int[size_] ;
-    	
+
     for (int i = 0; i < size_; i++) {
       array_[i] = arrayInt.array_[i];
       lowerBounds_[i] = arrayInt.lowerBounds_[i] ;
@@ -140,7 +140,7 @@ public class ArrayInt extends Variable {
   public Variable deepCopy() {
     return new ArrayInt(this);
   } // deepCopy
-  
+
   /**
    * Returns the length of the arrayInt.
    * @return The length
@@ -148,7 +148,7 @@ public class ArrayInt extends Variable {
   public int getLength(){
     return size_;
   } // getLength
- 	  
+
    /**
     * getValue
     * @param index Index of value to be returned
@@ -162,7 +162,7 @@ public class ArrayInt extends Variable {
       throw new JMException(ArrayInt.class+": index value (" + index + ") invalid") ;
     } // if
   } // getValue
-   
+
    /**
     * setValue
     * @param index Index of value to be returned
@@ -176,7 +176,7 @@ public class ArrayInt extends Variable {
      throw new JMException(ArrayInt.class+": index value (" + index + ") invalid") ;
     } // else
   } // setValue
-  
+
 
 	/**
 	 * Get the lower bound of a value
@@ -189,7 +189,7 @@ public class ArrayInt extends Variable {
 		else {
 			Configuration.logger_.severe(ArrayInt.class+".getLowerBound(): index value (" + index + ") invalid");
 			throw new JMException(ArrayInt.class+".getLowerBound: index value (" + index + ") invalid") ;
-		} // else	
+		} // else
 	} // getLowerBound
 
 	/**
@@ -206,18 +206,18 @@ public class ArrayInt extends Variable {
 		} // else
 	} // getLowerBound
 
-   
+
    /**
     * Returns a string representing the object
     * @return The string
-    */ 
+    */
    public String toString(){
      String string ;
-      
+
      string = "" ;
      for (int i = 0; i < size_ ; i ++)
        string += array_[i] + " " ;
-       
+
      return string ;
-   } // toString  
+   } // toString
 } // ArrayInt

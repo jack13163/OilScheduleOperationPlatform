@@ -1,4 +1,4 @@
-package opt.easyjmetal.util;
+package opt.easyjmetal.util.normalization;
 
 /**
  * 最大最小归一化【按列】

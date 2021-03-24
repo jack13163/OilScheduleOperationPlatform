@@ -4,7 +4,7 @@ import opt.easyjmetal.core.Solution;
 import opt.easyjmetal.problem.schedule.Config;
 import opt.easyjmetal.problem.schedule.operation.Operation;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.ParetoFrontUtil;
+import opt.easyjmetal.util.fileinput.ParetoFrontUtil;
 
 import java.util.List;
 

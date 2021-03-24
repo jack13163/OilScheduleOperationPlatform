@@ -24,7 +24,7 @@ package opt.easyjmetal.operator.selection;
 import opt.easyjmetal.core.Problem;
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.Configuration;
-import opt.easyjmetal.util.Distance;
+import opt.easyjmetal.util.distance.Distance;
 import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.ranking.impl.CDPRanking;
 import opt.easyjmetal.util.comparators.one.CrowdingComparator;

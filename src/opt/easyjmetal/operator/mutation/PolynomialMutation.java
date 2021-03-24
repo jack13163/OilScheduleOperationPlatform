@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -26,7 +26,7 @@ import opt.easyjmetal.encodings.solutiontype.ArrayRealSolutionType;
 import opt.easyjmetal.encodings.solutiontype.RealSolutionType;
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 import opt.easyjmetal.util.wrapper.XReal;
 
 import java.util.Arrays;
@@ -34,17 +34,17 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * This class implements a polynomial mutation operator. 
+ * This class implements a polynomial mutation operator.
  */
 public class PolynomialMutation extends Mutation {
 	private static final double ETA_M_DEFAULT_ = 20.0;
 	private final double eta_m_=ETA_M_DEFAULT_;
-	
+
   private Double mutationProbability_ = null ;
   private Double distributionIndex_ = eta_m_;
 
   /**
-   * Valid solution types to apply this operator 
+   * Valid solution types to apply this operator
    */
   private static final List VALID_TYPES = Arrays.asList(RealSolutionType.class, ArrayRealSolutionType.class) ;
 
@@ -55,9 +55,9 @@ public class PolynomialMutation extends Mutation {
 	public PolynomialMutation(HashMap<String, Object> parameters) {
 		super(parameters) ;
   	if (parameters.get("probability") != null)
-  		mutationProbability_ = (Double) parameters.get("probability") ;  		
+  		mutationProbability_ = (Double) parameters.get("probability") ;
   	if (parameters.get("distributionIndex") != null)
-  		distributionIndex_ = (Double) parameters.get("distributionIndex") ;  		
+  		distributionIndex_ = (Double) parameters.get("distributionIndex") ;
 	} // PolynomialMutation
 
 	/**
@@ -74,7 +74,7 @@ public class PolynomialMutation extends Mutation {
 			if (PseudoRandom.randDouble() <= probability)
 			{
 				y      = x.getValue(var);
-				yl     = x.getLowerBound(var);                
+				yl     = x.getLowerBound(var);
 				yu     = x.getUpperBound(var);
 				delta1 = (y-yl)/(yu-yl);
 				delta2 = (yu-y)/(yu-yl);
@@ -97,7 +97,7 @@ public class PolynomialMutation extends Mutation {
 					y = yl;
 				if (y>yu)
 					y = yu;
-				x.setValue(var, y);                           
+				x.setValue(var, y);
 			}
 		} // for
 
@@ -107,8 +107,8 @@ public class PolynomialMutation extends Mutation {
 	 * Executes the operation
 	 * @param object An object containing a solution
 	 * @return An object containing the mutated solution
-	 * @throws JMException 
-	 */  
+	 * @throws JMException
+	 */
 	public Object execute(Object object) throws JMException {
 		Solution solution = (Solution)object;
 
@@ -117,12 +117,12 @@ public class PolynomialMutation extends Mutation {
 					"type " + solution.getType() + " is not allowed with this operator");
 
 			Class cls = String.class;
-			String name = cls.getName(); 
+			String name = cls.getName();
 			throw new JMException("Exception in " + name + ".execute()") ;
-		} // if 
+		} // if
 
 		doMutation(mutationProbability_, solution);
-		return solution;      
+		return solution;
 	} // execute
 
 } // PolynomialMutation

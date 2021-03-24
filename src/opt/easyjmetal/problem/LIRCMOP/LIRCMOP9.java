@@ -11,7 +11,6 @@ import opt.easyjmetal.core.Variable;
 import opt.easyjmetal.encodings.solutiontype.BinaryRealSolutionType;
 import opt.easyjmetal.encodings.solutiontype.RealSolutionType;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.Permutation;
 
 /**
  * Class representing problem LIRCMOP9

@@ -15,7 +15,7 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -27,7 +27,7 @@ import opt.easyjmetal.encodings.solutiontype.BinarySolutionType;
 import opt.easyjmetal.encodings.solutiontype.variable.Binary;
 import opt.easyjmetal.util.Configuration;
 import opt.easyjmetal.util.JMException;
-import opt.easyjmetal.util.PseudoRandom;
+import opt.easyjmetal.util.permutation.PseudoRandom;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ import java.util.List;
 public class HUXCrossover extends Crossover{
 
 	/**
-   * Valid solution types to apply this operator 
+   * Valid solution types to apply this operator
    */
   private static final List VALID_TYPES = Arrays.asList(BinarySolutionType.class,
   		                                            BinaryRealSolutionType.class) ;
@@ -54,9 +54,9 @@ public class HUXCrossover extends Crossover{
    */
   public HUXCrossover(HashMap<String, Object> parameters) {
     super(parameters) ;
-    
+
   	if (parameters.get("probability") != null)
-  		probability_ = (Double) parameters.get("probability") ;  		
+  		probability_ = (Double) parameters.get("probability") ;
   } // HUXCrossover
 
 
@@ -78,13 +78,13 @@ public class HUXCrossover extends Crossover{
    * @return An array containing the two offsprings
    * @throws JMException
    */
-  public Solution[] doCrossover(double   probability, 
-                                Solution parent1, 
+  public Solution[] doCrossover(double   probability,
+                                Solution parent1,
                                 Solution parent2) throws JMException {
     Solution [] offSpring = new Solution[2];
     offSpring[0] = new Solution(parent1);
     offSpring[1] = new Solution(parent2);
-    try {         
+    try {
       if (PseudoRandom.randDouble() < probability) {
         for (int var = 0; var < parent1.getDecisionVariables().length; var++) {
           Binary p1 = (Binary)parent1.getDecisionVariables()[var];
@@ -100,40 +100,40 @@ public class HUXCrossover extends Crossover{
               }
             }
           }
-        }  
+        }
         //7. Decode the results
         for (int i = 0; i < offSpring[0].getDecisionVariables().length; i++)
         {
           ((Binary)offSpring[0].getDecisionVariables()[i]).decode();
           ((Binary)offSpring[1].getDecisionVariables()[i]).decode();
         }
-      }          
+      }
     }catch (ClassCastException e1) {
-      
+
       Configuration.logger_.severe("HUXCrossover.doCrossover: Cannot perfom " +
           "SinglePointCrossover ") ;
       Class cls = String.class;
-      String name = cls.getName(); 
+      String name = cls.getName();
       throw new JMException("Exception in " + name + ".doCrossover()") ;
-    }        
-    return offSpring;                                                                                      
+    }
+    return offSpring;
   } // doCrossover
 
-  
+
   /**
   * Executes the operation
-  * @param object An object containing an array of two solutions 
+  * @param object An object containing an array of two solutions
   * @return An object containing the offSprings
   */
   public Object execute(Object object) throws JMException {
     Solution [] parents = (Solution [])object;
-    
+
     if (parents.length < 2)
     {
       Configuration.logger_.severe("HUXCrossover.execute: operator needs two " +
           "parents");
       Class cls = String.class;
-      String name = cls.getName(); 
+      String name = cls.getName();
       throw new JMException("Exception in " + name + ".execute()") ;
     }
 
@@ -143,25 +143,25 @@ public class HUXCrossover extends Crossover{
       Configuration.logger_.severe("HUXCrossover.execute: the solutions " +
           "are not of the right type. The type should be 'Binary' of " +
           "'BinaryReal', but " +
-          parents[0].getType() + " and " + 
+          parents[0].getType() + " and " +
           parents[1].getType() + " are obtained");
 
       Class cls = String.class;
-      String name = cls.getName(); 
+      String name = cls.getName();
       throw new JMException("Exception in " + name + ".execute()") ;
 
-    } // if 
-        
+    } // if
+
     Solution [] offSpring = doCrossover(probability_,
                                         parents[0],
                                         parents[1]);
-    
+
     for (int i = 0; i < offSpring.length; i++)
     {
       offSpring[i].setCrowdingDistance(0.0);
       offSpring[i].setRank(0);
-    } 
-    
+    }
+
     return offSpring;
   } // execute
 } // HUXCrossover
