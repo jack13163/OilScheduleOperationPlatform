@@ -8,7 +8,7 @@ import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.permutation.PseudoRandom;
 import opt.easyjmetal.util.comparators.IConstraintViolationComparator;
 import opt.easyjmetal.util.comparators.line.ViolationThresholdComparator;
-import opt.easyjmetal.util.jmathplot.ScatterPlot;
+import opt.easyjmetal.util.plot.ScatterPlot;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
 import java.io.BufferedReader;
