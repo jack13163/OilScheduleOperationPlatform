@@ -1,4 +1,4 @@
-package opt.easyjmetal.util.jmathplot;
+package opt.easyjmetal.util.plot;
 
 import opt.easyjmetal.core.SolutionSet;
 import opt.easyjmetal.util.fileinput.FileUtils;

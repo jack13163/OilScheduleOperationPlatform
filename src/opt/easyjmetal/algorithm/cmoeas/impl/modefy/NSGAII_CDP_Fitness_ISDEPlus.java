@@ -6,7 +6,6 @@ import opt.easyjmetal.util.JMException;
 import opt.easyjmetal.util.comparators.line.CrowdingDistanceComparator;
 import opt.easyjmetal.util.comparators.line.FitnessComparator;
 import opt.easyjmetal.util.distance.Distance;
-import opt.easyjmetal.util.fitness.CCMO_Fitness;
 import opt.easyjmetal.util.fitness.ISDEPlus_Fitness;
 import opt.easyjmetal.util.permutation.RandomGenerator;
 import opt.easyjmetal.util.ranking.AbstractRanking;
@@ -14,13 +13,13 @@ import opt.easyjmetal.util.ranking.impl.RankingByCDP;
 import opt.easyjmetal.util.solution.MoeadUtils;
 import opt.easyjmetal.util.sqlite.SqlUtils;
 
-public class NSGAII_CDP_Fitness extends Algorithm {
+public class NSGAII_CDP_Fitness_ISDEPlus extends Algorithm {
 
     private SolutionSet population_;
     private SolutionSet external_archive_;
     private String dataDirectory_;
 
-    public NSGAII_CDP_Fitness(Problem problem) {
+    public NSGAII_CDP_Fitness_ISDEPlus(Problem problem) {
         super(problem);
     }
 
@@ -54,7 +53,7 @@ public class NSGAII_CDP_Fitness extends Algorithm {
 
         // creat database
         String dbName = dataDirectory_;
-        String tableName = "NSGAII_CDP_Fitness_" + runningTime;
+        String tableName = "NSGAII_CDP_Fitness_ISDEPlus_" + runningTime;
         SqlUtils.createTable(tableName, dbName);
         SqlUtils.clearTable(tableName, dbName);
 
@@ -114,7 +113,7 @@ public class NSGAII_CDP_Fitness extends Algorithm {
                 // 根据比例进行非支配排序
                 if (Math.random() < iterationRate) {
                     System.out.println("Iteration: " + evaluations_ / populationSize_ + ", CCMO,  depth: " + (maxIndex - index + 1) + ", " + remain + "<----" + remainSolutions.size());
-                    CCMO_Fitness.computeFitnessValue(remainSolutions, false);
+                    ISDEPlus_Fitness.computeFitnessValue(remainSolutions);
                     remainSolutions.sort(new FitnessComparator());
                 } else {
                     System.out.println("Iteration: " + evaluations_ / populationSize_ + ", CD,  depth: " + (maxIndex - index + 1) + ", " + remain + "<----" + remainSolutions.size());
